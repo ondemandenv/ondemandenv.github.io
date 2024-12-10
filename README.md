@@ -44,7 +44,7 @@ Ondemandenv is a revolutionary platform that transforms the development of distr
 
 - [Contracts Library](https://github.com/ondemandenv/odmd-contracts-sandbox)
 - [Sample Project](https://github.com/ondemandenv/coffee-shop--order-manager)
-- [Visualization GUI](http://vizuistack-bucket43879c71-hlpginonw2aa.s3-website-us-west-1.amazonaws.com/index.html)
+- [Visualization GUI](https://web.root.ondemandenv.link/)
 
 ## Contact & Collaboration
 
