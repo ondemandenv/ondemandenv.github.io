@@ -1,0 +1,23 @@
+main:
+  - title: Home
+    url: /
+
+  - title: About
+    url: /about
+
+  - title: Getting Started
+    url: /docs/getting-started
+
+  - title: Architecture
+    url: /docs/architecture
+
+  - title: Use Cases
+    url: /docs/use-cases
+
+  - title: GitHub Repo
+    url: https://github.com/ondemandenv/odmd-platform
+
+  - title: Contact
+    url: "#contact"
+
+Would you like me to generate the other new files (about.md, getting-started.md, etc.) with content as well?
