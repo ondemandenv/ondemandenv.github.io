@@ -52,6 +52,6 @@ We're actively seeking:
 
 Interested in our mission? We'd love to hear from you.
 
-Email: [contact email]
-GitHub: [GitHub organization link]
-LinkedIn: [Company LinkedIn]
+Email: (gary[dot]y[dot]7811 at gmail)
+GitHub: https://github.com/ondemandenv/
+LinkedIn: https://www.linkedin.com/in/garyy2011/

@@ -56,6 +56,4 @@
 - Review contract library implementation
 
 ## Support
-- Community forums
-- GitHub issues
 - Email support
