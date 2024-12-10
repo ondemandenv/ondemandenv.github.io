@@ -2,11 +2,15 @@
 
 ## Abstraction
 
-In today's distributed systems, the challenge isn't technology - it's actually maintaining clear boundaries and enabling rapid innovation. OnDemandEnv is the platform that revolutionizes service-oriented architecture by starting with contracts first, creating focused spaces for both engineers and AI agents to work effectively.
+In today's distributed systems, the challenge isn't technology - it's actually maintaining clear boundaries and enabling
+rapid innovation. OnDemandEnv is the platform that revolutionizes service-oriented architecture by starting with
+contracts first, creating focused spaces for both engineers and AI agents to work effectively.
 
-OnDemandEnv is a powerful platform that transforms how teams build and manage distributed systems. The platform enables developers to instantly create isolated environments with all infrastructure and dependencies.
+OnDemandEnv is a powerful platform that transforms how teams build and manage distributed systems. The platform enables
+developers to instantly create isolated environments with all infrastructure and dependencies.
 
-What sets this apart is our contract-first approach: services define clear boundaries and interfaces upfront, which the platform uses to manage environments and dependencies automatically.
+What sets this apart is our contract-first approach: services define clear boundaries and interfaces upfront, which the
+platform uses to manage environments and dependencies automatically.
 
 ## Key Capabilities
 
@@ -14,7 +18,8 @@ What sets this apart is our contract-first approach: services define clear bound
 - Automated dependency and configuration management
 - Full isolation between environments for safe experimentation and testing
 
-Because each service's context and boundaries are clearly defined, both engineers and AI agents can work more effectively within bounded contexts.
+Because each service's context and boundaries are clearly defined, both engineers and AI agents can work more
+effectively within bounded contexts.
 
 ## Platform Focus
 
@@ -68,6 +73,7 @@ We provide a concrete example using AWS, demonstrating:
 ## Real-World Example
 
 A coffee shop application demonstrating:
+
 - Order management service
 - Order processing service
 - Distributed system interactions
@@ -75,16 +81,17 @@ A coffee shop application demonstrating:
 ## Get Involved
 
 We're seeking:
+
 - Business partners
 - Engineers to refine the platform
 - Collaborators interested in distributed system innovation
 
-## Links
+## Example Links
 
-- [Contracts Library](https://github.com/ondemandenv/odmd-contracts-sandbox)
+- [Example Contracts Library](https://github.com/ondemandenv/odmd-contracts-sandbox)
 - [Example Services](https://github.com/ondemandenv/coffee-shop--order-manager)
-- [Visualization GUI](http://vizuistack-bucket43879c71-hlpginonw2aa.s3-website-us-west-1.amazonaws.com/index.html)
+- [Visualization GUI](https://web.root.ondemandenv.link/)
 
 ## Contact
 
-[Reach out for collaboration and inquiries]
+[Reach out for collaboration and inquiries](gary[dot]y[dot]7811 at gmail)
