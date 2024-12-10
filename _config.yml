@@ -1,6 +1,6 @@
 theme: jekyll-theme-minimal
-title: OnDemandEnv Platform
-description: Domain-Driven Design for Distributed Systems
+title: Ondemandenv Platform
+description: Revolutionizing Service-Oriented Architecture and Distributed Systems Development
 logo: /assets/images/logo.png
 show_downloads: false
 google_analytics: UA-000000-01
@@ -11,22 +11,20 @@ plugins:
 navigation:
   - title: Home
     url: /
-  - title: Domain Theory
-    url: /docs/theory
-  - title: AWS Implementation
-    url: /docs/implementations/aws
+  - title: Getting Started
+    url: /docs/getting-started
+  - title: Architecture
+    url: /docs/architecture
+  - title: Use Cases
+    url: /docs/use-cases
   - title: About
-    url: /docs/about
+    url: /about
 defaults:
   - scope:
       path: ""
     values:
       layout: default
   - scope:
-      path: "docs/theory"
+      path: "docs"
     values:
-      layout: theory
-  - scope:
-      path: "docs/implementations"
-    values:
-      layout: implementation
+      layout: page
