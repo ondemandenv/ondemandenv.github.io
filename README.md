@@ -53,6 +53,6 @@ Seeking partners for:
 - Platform engineering
 - AI agent integration
 
-## License
+## License 1
 
 [MIT License]
