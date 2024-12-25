@@ -534,3 +534,140 @@ footer a:hover {
         gap: 2rem;
     }
 }
+
+/* Developer workflow section styles */
+#developer {
+    background-color: #f8f9fa;
+    padding: 4rem 2rem;
+}
+
+.dev-workflow {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.dev-step {
+    background: var(--background-color);
+    padding: 2rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    transition: transform 0.3s ease;
+}
+
+.dev-step:hover {
+    transform: translateY(-5px);
+}
+
+.dev-step h3 {
+    color: var(--secondary-color);
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+}
+
+.dev-step ul {
+    list-style: disc;
+    margin-left: 1.5rem;
+    margin-top: 1rem;
+}
+
+.dev-step ul li {
+    margin-bottom: 0.5rem;
+    color: var(--text-color);
+}
+
+.dev-step p {
+    color: var(--text-color);
+    margin-bottom: 0.5rem;
+}
+
+.dev-benefits {
+    margin-top: 1rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+.benefit-group h4 {
+    color: var(--primary-color);
+    margin-bottom: 0.8rem;
+    font-size: 1.1rem;
+}
+
+.benefit-group ul {
+    margin-top: 0.5rem;
+}
+
+@media (max-width: 768px) {
+    .dev-benefits {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Add styles for AI benefits */
+.ai-benefits {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.ai-benefits h4 {
+    color: var(--primary-color);
+    margin-bottom: 0.8rem;
+    font-size: 1.1rem;
+}
+
+.ai-benefits ul {
+    list-style: disc;
+    margin-left: 1.5rem;
+}
+
+.ai-benefits ul li {
+    margin-bottom: 0.5rem;
+    color: var(--text-color);
+}
+
+.boundary-benefits {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.boundary-benefits h4 {
+    color: var(--primary-color);
+    margin-bottom: 0.8rem;
+    font-size: 1.1rem;
+}
+
+.boundary-benefits ul {
+    list-style: disc;
+    margin-left: 1.5rem;
+}
+
+.boundary-benefits ul li {
+    margin-bottom: 0.5rem;
+    color: var(--text-color);
+}
+
+.platform-response {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.platform-response h4 {
+    color: var(--primary-color);
+    margin-bottom: 0.8rem;
+    font-size: 1.1rem;
+}
+
+.platform-response ul {
+    list-style: disc;
+    margin-left: 1.5rem;
+}
+
+.platform-response ul li {
+    margin-bottom: 0.5rem;
+    color: var(--text-color);
+}
