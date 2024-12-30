@@ -37,8 +37,8 @@
                 <p>Decompose complex systems into service-oriented architecture using Domain-Driven Design principles, where contracts define clear boundaries and interfaces before implementation begins.</p>
             </div>
             <div class="philosophy-item">
-                <h3>Infrastructure as Code</h3>
-                <p>Multi-level abstraction from high-level code to declarative templates to deployments, enabling centralized configuration management in secure stores while ensuring least-privilege access for both resources and operators.</p>
+                <h3>Architecture as Code</h3>
+                <p>The contracts library defines the fundamental architecture of the system - the boundaries, interfaces, and relationships between services. This goes beyond infrastructure as code, capturing the essential contracts that govern how services interact and evolve together.</p>
             </div>
             <div class="philosophy-item">
                 <h3>Event-Driven Lifecycle</h3>
@@ -86,11 +86,12 @@
         <div class="features">
             <div class="feature">
                 <h3>Contracts Library</h3>
-                <p>Central repository that defines the boundaries and contracts for:</p>
+                <p>Core architectural definition layer that codifies:</p>
                 <ul>
-                    <li>Application/Service definitions</li>
-                    <li>Environment specifications</li>
-                    <li>Service boundaries and interfaces</li>
+                    <li>Service boundaries, interfaces, and contracts</li>
+                    <li>Inter-service relationships and dependencies</li>
+                    <li>Architectural constraints and patterns</li>
+                    <li>Environment specifications derived from architecture</li>
                 </ul>
             </div>
             <div class="feature">
@@ -253,6 +254,22 @@
             <div class="dev-step">
                 <h3>3. Automation & AI Assistance</h3>
                 <p>Unleash AI potential with isolated environments:</p>
+                <div class="implementation-details">
+                    <h4>Contract Abstraction</h4>
+                    <ul>
+                        <li>Contracts define abstract code models without concrete values</li>
+                        <li>Resources with concrete values are generated and mapped to code references during deployment</li>
+                        <li>Same logical structure across environments with isolated physical resources</li>
+                    </ul>
+
+                    <h4>AI Agent Integration</h4>
+                    <ul>
+                        <li>Platform generates precise context from contract library for each repository</li>
+                        <li>AI agents act as developers through the entire SDLC</li>
+                        <li>Direct integration with GitHub for code commits</li>
+                        <li>Build/test/deploy logs feed back into AI context for continuous improvement</li>
+                    </ul>
+                </div>
                 <ul>
                     <li>AI agents can safely experiment with full service implementations</li>
                     <li>Run complete SDLC iterations with mocked data</li>
@@ -277,12 +294,12 @@
         <div class="vis-container">
             <div class="vis-description">
                 <h3>Interactive Dependency Graph</h3>
-                <p>The <a href="https://web.root.ondemandenv.link" target="_blank">ONDEMANDENV Web Console</a> provides a visual representation of:</p>
+                <p>The <a href="https://web.root.ondemandenv.link" target="_blank">ONDEMANDENV Web Console</a> visualizes both the architectural contracts and their runtime manifestations:</p>
                 <ul>
-                    <li>Environment dependencies and relationships</li>
-                    <li>Service contracts and their connections</li>
-                    <li>Production/consumption relationships between services</li>
-                    <li>Stack configurations and parameters</li>
+                    <li>Architectural contracts from the contracts library</li>
+                    <li>Service boundaries and interface definitions</li>
+                    <li>Runtime environment states and relationships</li>
+                    <li>Dynamic mapping between contracts and deployed resources</li>
                 </ul>
 
                 <div class="vis-features">
@@ -290,20 +307,21 @@
                         <h4>Interactive Exploration</h4>
                         <p>Select nodes to view detailed information about:</p>
                         <ul>
+                            <li>Contract definitions</li>
                             <li>Stack IDs</li>
                             <li>Stack parameters</li>
                             <li>Environment outputs</li>
-                            <li>Contract relationships</li>
+                            <li>Runtime resource mappings</li>
                         </ul>
                     </div>
                     <div class="vis-feature">
-                        <h4>Dependency Visualization</h4>
-                        <p>The DAG (Directed Acyclic Graph) shows:</p>
+                        <h4>Architecture Visualization</h4>
+                        <p>The relationship graph shows:</p>
                         <ul>
-                            <li>Producer/Consumer relationships</li>
-                            <li>Environment hierarchies</li>
-                            <li>Cross-service dependencies</li>
-                            <li>Multiple environment versions (env1, env2, env3)</li>
+                            <li>Architectural contracts and dependencies</li>
+                            <li>Service interface relationships</li>
+                            <li>Runtime environment hierarchies</li>
+                            <li>Concrete resource mappings across environments</li>
                         </ul>
                     </div>
                 </div>
