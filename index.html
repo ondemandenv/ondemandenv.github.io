@@ -120,30 +120,41 @@
         <h2>Implementations</h2>
         <div class="setup-container">
             <div class="implementation-intro">
-                <p>The platform can be implemented using different cloud providers and infrastructure tools. Here's our reference implementation using AWS CDK:</p>
+                <p>The platform can be implemented using different cloud providers and infrastructure tools. Our reference AWS implementation demonstrates practical least-privilege security across multiple systems:</p>
             </div>
 
             <div class="implementation-tabs">
                 <div class="implementation active">
                     <h3>AWS CDK Implementation</h3>
+                    <div class="security-implementation">
+                        <h4>Cross-System Security Integration</h4>
+                        <ul>
+                            <li>Fine-grained IAM roles generated from contract definitions</li>
+                            <li>Least-privilege access across AWS accounts, services, and resources</li>
+                            <li>Secure GitHub integration with minimal required permissions</li>
+                            <li>Isolated artifact management with controlled access</li>
+                        </ul>
+                    </div>
+
                     <div class="setup-step">
                         <h4>One-Time Manual Setup</h4>
-                        <p>Deploy ODMD provided CloudFormation template which will create:</p>
+                        <p>Deploy ODMD provided CloudFormation template with secure defaults:</p>
                         <ol>
                             <li>The bootstrap S3 bucket</li>
-                            <li>A bootstrap user with full access to the bootstrap bucket</li>
+                            <li>A bootstrap user with minimal required permissions</li>
                             <li>Pipeline deploying from bootstrap S3 bucket</li>
                         </ol>
                         <div class="setup-note">
-                            <p>Create credentials for the bootstrap user and bucket name, pass to ODMD platform who will upload artifacts to deploy automatically</p>
+                            <p>Create scoped credentials for the bootstrap user and bucket name, enabling ODMD platform to securely manage artifact deployment</p>
                         </div>
                     </div>
 
                     <div class="setup-step">
                         <h3>Bootstrap AWS Accounts</h3>
                         <ol>
-                            <li>For central account, run one line CDK cli to bootstrap</li>
-                            <li>For all other accounts, assign admin role to trust Central account when running CDK cli</li>
+                            <li>Central account bootstrapped with minimal permissions needed for orchestration</li>
+                            <li>Workspace accounts configured with specific trust relationships to Central account</li>
+                            <li>Fine-grained IAM roles automatically generated from contract definitions</li>
                         </ol>
                     </div>
 
