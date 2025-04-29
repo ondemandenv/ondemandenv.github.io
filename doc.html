@@ -1,0 +1,1270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ONDEMANDENV.dev Documentation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link rel="icon" href="https://placehold.co/32x32/4a90e2/ffffff?text=OE" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        html { scroll-behavior: smooth; }
+        .nav-link-active { font-weight: 600; color: #3b82f6; }
+        /* Styles for documentation layout */
+        .docs-link {
+            display: block;
+            padding: 0.5rem 1rem;
+            border-left: 3px solid transparent;
+            color: #4b5563; /* text-gray-600 */
+            font-size: 0.875rem; /* text-sm */
+        }
+        .docs-link:hover {
+            color: #1f2937; /* text-gray-800 */
+            background-color: #f3f4f6; /* bg-gray-100 */
+            border-left-color: #d1d5db; /* border-gray-300 */
+        }
+        .docs-link-active { /* Note: Simple active state based on initial load, not scroll */
+            color: #2563eb; /* text-blue-600 */
+            border-left-color: #2563eb; /* border-blue-600 */
+            font-weight: 500; /* font-medium */
+            background-color: #eff6ff; /* bg-blue-50 */
+        }
+        /* Basic styling for code blocks within docs */
+        .docs-content pre {
+            background-color: #1f2937; /* bg-gray-800 */
+            color: #d1d5db; /* text-gray-300 */
+            padding: 1rem;
+            border-radius: 0.375rem; /* rounded-md */
+            overflow-x: auto;
+            font-size: 0.875rem;
+            line-height: 1.5;
+        }
+        .docs-content code {
+            background-color: #e5e7eb; /* bg-gray-200 */
+            color: #1f2937; /* text-gray-800 */
+            padding: 0.125rem 0.25rem;
+            border-radius: 0.25rem;
+            font-size: 0.875em; /* Slightly smaller than surrounding text */
+        }
+        .docs-content pre code {
+            background-color: transparent;
+            color: inherit;
+            padding: 0;
+            border-radius: 0;
+            font-size: inherit;
+        }
+        .docs-content h2 { margin-top: 2rem; margin-bottom: 1rem; font-size: 1.5rem; font-weight: 600; border-bottom: 1px solid #e5e7eb; padding-bottom: 0.5rem; }
+        .docs-content h3 { margin-top: 1.5rem; margin-bottom: 0.75rem; font-size: 1.25rem; font-weight: 600; }
+        .docs-content p { margin-bottom: 1rem; line-height: 1.6; }
+        .docs-content ul { list-style: disc; margin-left: 1.5rem; margin-bottom: 1rem; }
+        .docs-content ol { list-style: decimal; margin-left: 1.5rem; margin-bottom: 1rem; }
+        .docs-content li { margin-bottom: 0.5rem; }
+        .docs-content a { color: #2563eb; text-decoration: underline; }
+        .docs-content a:hover { color: #1d4ed8; }
+        .docs-content strong { font-weight: 600; color: #111827; } /* Bolder text */
+        .docs-content .concept-term { font-style: italic; color: #1d4ed8; } /* Italic blue for terms */
+        /* Custom styles for checkmark list items */
+        .solution-list-item {
+            display: flex;
+            align-items: flex-start; /* Align icon with the start of the text */
+            margin-bottom: 0.75rem; /* space-y-3 equivalent */
+        }
+        .solution-list-item svg {
+            flex-shrink: 0;
+            width: 1.5rem; /* w-6 */
+            height: 1.5rem; /* h-6 */
+            color: #22c55e; /* text-green-500 */
+            margin-right: 0.75rem; /* space-x-3 equivalent */
+            margin-top: 0.125rem; /* Adjust vertical alignment if needed */
+        }
+
+
+    </style>
+</head>
+<body class="bg-white text-gray-800 antialiased">
+
+<header x-data="{ mobileMenuOpen: false }" class="bg-white shadow-sm sticky top-0 z-50">
+    <nav class="container mx-auto px-4 sm:px-6 lg:px-8 py-3">
+        <div class="flex items-center justify-between h-16">
+            <div class="flex-shrink-0">
+                <a href="index.html#home" class="flex items-center space-x-2">
+                    <img src="https://placehold.co/40x40/4a90e2/ffffff?text=OE" alt="ONDEMANDENV.dev Logo" class="h-8 w-auto rounded-md">
+                    <span class="text-xl font-bold text-gray-900">ONDEMANDENV.dev</span>
+                </a>
+            </div>
+            <div class="hidden md:flex md:items-center md:space-x-6 lg:space-x-8">
+                <a href="index.html#problem" class="text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">The Problem</a>
+                <a href="index.html#solution" class="text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">Our Solution</a>
+                <a href="index.html#how-it-works" class="text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">How It Works</a>
+                <a href="index.html#articles" class="text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">Learn More</a>
+                <a href="doc.html" class="nav-link-active px-3 py-2 rounded-md text-sm font-medium">Docs</a>
+                <a href="https://github.com/ondemandenv" target="_blank" class="text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">GitHub Org</a>
+                <a href="mailto:gary.y.7811@gmail.com" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    Request Demo
+                </a>
+            </div>
+            <div class="md:hidden flex items-center">
+                <button @click="mobileMenuOpen = !mobileMenuOpen" type="button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500" aria-controls="mobile-menu" aria-expanded="false">
+                    <span class="sr-only">Open main menu</span>
+                    <svg x-show="!mobileMenuOpen" class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" /></svg>
+                    <svg x-show="mobileMenuOpen" class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+            </div>
+        </div>
+        <div x-show="mobileMenuOpen" x-transition class="md:hidden" id="mobile-menu">
+            <div class="pt-2 pb-3 space-y-1">
+                <a href="index.html#problem" @click="mobileMenuOpen = false" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50">The Problem</a>
+                <a href="index.html#solution" @click="mobileMenuOpen = false" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50">Our Solution</a>
+                <a href="index.html#how-it-works" @click="mobileMenuOpen = false" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50">How It Works</a>
+                <a href="index.html#articles" @click="mobileMenuOpen = false" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50">Learn More</a>
+                <a href="doc.html" @click="mobileMenuOpen = false" class="block px-3 py-2 rounded-md text-base font-medium text-blue-600 bg-blue-50">Docs</a>
+                <a href="https://github.com/ondemandenv" target="_blank" @click="mobileMenuOpen = false" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50">GitHub Org</a>
+            </div>
+            <div class="pt-4 pb-3 border-t border-gray-200">
+                <div class="flex items-center px-4">
+                    <a href="mailto:gary.y.7811@gmail.com" @click="mobileMenuOpen = false" class="w-full inline-flex items-center justify-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700">Request Demo</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+    <div class="flex flex-col md:flex-row -mx-4">
+
+        <aside class="w-full md:w-1/4 lg:w-1/5 px-4 mb-8 md:mb-0 md:sticky md:top-24 self-start" style="height: calc(100vh - 6rem);"> <nav class="space-y-1" x-data="{ activeSection: 'introduction' }" x-init="
+    // Initialize intersection observer to track which section is in view
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                activeSection = entry.target.id;
+            }
+        });
+    }, { rootMargin: '-5% 0px -90% 0px' }); // Adjust rootMargin as needed
+    
+    // Observe all sections
+    document.querySelectorAll('section[id]').forEach(section => {
+        observer.observe(section);
+    });
+">
+            <h3 class="px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Getting Started</h3>
+            <a href="#introduction" class="docs-link" :class="{ 'docs-link-active': activeSection === 'introduction' }">Introduction</a>
+            <a href="#philosophy" class="docs-link" :class="{ 'docs-link-active': activeSection === 'philosophy' }">Philosophy</a>
+            <a href="#installation" class="docs-link" :class="{ 'docs-link-active': activeSection === 'installation' }">Installation</a>
+            <a href="#quick-start" class="docs-link" :class="{ 'docs-link-active': activeSection === 'quick-start' }">Quick Start</a>
+
+            <h3 class="px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider mt-4 mb-2">Core Concepts</h3>
+            <a href="#envers" class="docs-link" :class="{ 'docs-link-active': activeSection === 'envers' }">Envers</a>
+            <a href="#contractslib" class="docs-link" :class="{ 'docs-link-active': activeSection === 'contractslib' }">contractsLib</a>
+            <a href="#builds-products-consumers" class="docs-link" :class="{ 'docs-link-active': activeSection === 'builds-products-consumers' }">Builds, Products & Consumers</a>
+            <a href="#cloning" class="docs-link" :class="{ 'docs-link-active': activeSection === 'cloning' }">On-Demand Cloning</a>
+            <a href="#deployment" class="docs-link" :class="{ 'docs-link-active': activeSection === 'deployment' }">Deployment Model</a>
+            <a href="#multi-account" class="docs-link" :class="{ 'docs-link-active': activeSection === 'multi-account' }">Multi-Account</a>
+            <a href="#config-store" class="docs-link" :class="{ 'docs-link-active': activeSection === 'config-store' }">Config Store</a>
+            <a href="#security" class="docs-link" :class="{ 'docs-link-active': activeSection === 'security' }">Security</a>
+            <a href="#cicd" class="docs-link" :class="{ 'docs-link-active': activeSection === 'cicd' }">CI/CD & Workflows</a>
+
+            <h3 class="px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider mt-4 mb-2">How-To Guides</h3>
+            <a href="#define-service" class="docs-link" :class="{ 'docs-link-active': activeSection === 'define-service' }">Define a New Service</a>
+            <a href="#consume-product" class="docs-link" :class="{ 'docs-link-active': activeSection === 'consume-product' }">Consume a Product</a>
+            <a href="#publish-product" class="docs-link" :class="{ 'docs-link-active': activeSection === 'publish-product' }">Publish a Product</a>
+            <a href="#clone-enver" class="docs-link" :class="{ 'docs-link-active': activeSection === 'clone-enver' }">Clone an Enver</a>
+            <a href="#use-platform-services" class="docs-link" :class="{ 'docs-link-active': activeSection === 'use-platform-services' }">Use Platform Services</a>
+            <a href="#blue-green" class="docs-link" :class="{ 'docs-link-active': activeSection === 'blue-green' }">Blue/Green Deployments</a>
+            <a href="#ab-testing" class="docs-link" :class="{ 'docs-link-active': activeSection === 'ab-testing' }">A/B Testing</a>
+
+            <h3 class="px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider mt-4 mb-2">Base Library Reference</h3>
+            <a href="#base-reference" class="docs-link" :class="{ 'docs-link-active': activeSection === 'base-reference' }">`odmd-contracts-base`</a>
+
+            <h3 class="px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider mt-4 mb-2">Examples</h3>
+            <a href="#example-docker-cdk" class="docs-link" :class="{ 'docs-link-active': activeSection === 'example-docker-cdk' }">Docker Image + CDK Service</a>
+            <a href="#example-shared-networking" class="docs-link" :class="{ 'docs-link-active': activeSection === 'example-shared-networking' }">Shared Networking (TGW)</a>
+            <a href="#example-eks-deployment" class="docs-link" :class="{ 'docs-link-active': activeSection === 'example-eks-deployment' }">Shared EKS Deployment</a>
+            <a href="#example-cross-account" class="docs-link" :class="{ 'docs-link-active': activeSection === 'example-cross-account' }">Cross-Account Dependency</a>
+        </nav>
+        </aside>
+
+        <article class="w-full md:w-3/4 lg:w-4/5 px-4 docs-content">
+            <section id="introduction">
+                <h2>Introduction</h2>
+                <p>Welcome to the official documentation for Ondemandenv. This documentation provides a comprehensive guide to understanding, installing, configuring, and using the Ondemandenv platform to manage your distributed systems on AWS effectively.</p>
+                <p>Ondemandenv aims to solve the inherent complexities of developing, testing, and deploying modern cloud-native applications, particularly microservices and serverless architectures, in multi-account AWS environments.</p>
+                <h3>The Challenge: Fragmentation and the YAML/Container-Centric Trap</h3>
+                <p>Traditional approaches, especially GitOps workflows focused heavily on YAML and individual container deployments (as discussed in <a href="articles/fragmentation-trap.html">The Fragmentation Trap</a>), often lead to significant challenges:</p>
+                <ul>
+                    <li><strong>Toolchain Sprawl & Complexity:</strong> Managing separate tools for IaC (like CloudFormation/Terraform), container orchestration (Kubernetes/Helm), and application deployment (Argo CD/Flux) increases overhead and requires diverse expertise.</li>
+                    <li><strong>Configuration Drift & Inconsistency:</strong> Maintaining configuration parity across environments (dev, staging, prod) becomes difficult when configurations are scattered across numerous YAML files, folders, and branches, leading to the "snowflake" problem described in <a href="articles/scope-localization-ambiguity.html">The Complexity Entanglement</a>.</li>
+                    <li><strong>Lack of Holistic View:</strong> It's hard to understand or manage a complete application environment (including non-containerized resources like databases, queues, Lambdas) when it's defined as fragmented, independent deployment units.</li>
+                    <li><strong>Limited Ephemeral Environments:</strong> Testing is often incomplete because ephemeral environments created by container-centric tools typically only include Kubernetes resources, omitting crucial external dependencies.</li>
+                    <li><strong>Brittle Advanced Deployments:</strong> Implementing strategies like Blue/Green or A/B testing becomes complex and error-prone due to the difficulty of coordinating configuration, traffic shifting, and versioning across fragmented YAML definitions.</li>
+                </ul>
+                <p>Ondemandenv addresses these issues by providing a unified, application-centric approach built on clear contracts and holistic environment management.</p>
+            </section>
+
+            <section id="philosophy">
+                <h2>Core Philosophy: Application-Centric, Contract-Driven</h2>
+                <p>Ondemandenv is built on several core principles aimed at improving the speed, reliability, and manageability of cloud-native development, moving beyond container-centric limitations:</p>
+                <ul>
+                    <li><strong>Enable Innovation via Experimentation:</strong> The primary goal is to empower developers to safely and easily experiment with new ideas. By allowing multiple versions (Envers) of services to coexist and be cloned instantly, Ondemandenv facilitates trying new approaches, comparing solutions (e.g., A/B testing), and performing deep research without disrupting stable environments.</li>
+                    <li><strong>Holistic Environment Management (Application-Centric):</strong> Treat the <i>entire</i> application slice—infrastructure (VPCs, DBs, buckets, queues), code (containers, Lambdas), configuration, dependencies, and security posture—as a single, manageable unit (<a href="#envers">"Enver"</a>). This contrasts with approaches that only manage containerized parts, ensuring a complete and consistent environment context.</li>
+                    <li><strong>Architecture as Code (`contractsLib`):</strong> Define system structure, service boundaries, dependencies, and organizational mappings (AWS accounts, GitHub repos) explicitly in version-controlled TypeScript code (<a href="#contractslib"><code>contractsLib</code></a>). This eliminates ambiguity, prevents configuration drift, and serves as a reviewable contract between teams.</li>
+                    <li><strong>Unified Infrastructure & Runtime Management (IaC):</strong> Leverage the power and expressiveness of AWS CDK using familiar programming languages to define <i>all</i> resources (AWS infrastructure and Kubernetes manifests via cdk8s) within a single codebase and toolchain, reducing fragmentation (<a href="articles/app-centric-infra1.html">See Comparison</a>).</li>
+                    <li><strong>Consistency & Reproducibility:</strong> Ensure environments are consistent across the SDLC (dev, test, prod) through parameterized CDK code and atomic CloudFormation deployments managed by the Enver lifecycle.</li>
+                    <li><strong>On-Demand Access & Cloning:</strong> Provide developers with instant access to high-fidelity, isolated, full-stack environments through <a href="#cloning">cloning</a>, drastically improving testing reliability and development velocity compared to container-only ephemeral environments.</li>
+                    <li><strong>Branch as Environment & Long-Term Ownership:</strong> Encourage using Git branches not just for short-lived features, but as potentially long-lived, owned environments (<a href="#envers">Branch Envers</a>). This fosters deeper research, experimentation, and ownership within a stable, consistent context defined by the Enver.</li>
+                    <li><strong>Enabling Advanced Deployment Strategies:</strong> The consistent, holistic nature of Envers makes implementing strategies like <a href="#blue-green">Blue/Green Deployments</a> (using two distinct Envers) and <a href="#ab-testing">A/B Testing</a> (using multiple cloned or distinct Envers) significantly more reliable and manageable compared to fragmented, YAML-based approaches.</li>
+                    <li><strong>Abstraction & Platform Services:</strong> Shield developers from underlying cloud complexity (multi-account networking, IAM, shared cluster management) through standardized platform Envers (e.g., for <a href="#example-shared-networking">Networking</a> or <a href="#example-eks-deployment">EKS</a>) and automated workflows.</li>
+                </ul>
+            </section>
+
+            <section id="installation">
+                <h2>Installation & Initial Setup</h2>
+                <p>Setting up Ondemandenv involves preparing your AWS environment and GitHub organization, then deploying a bootstrap template that communicates with the Ondemandenv root service to initialize your ecosystem.</p>
+
+                <h3>Prerequisites</h3>
+                <ul>
+                    <li>An AWS Organization structure (recommended for multi-account setup).</li>
+                    <li>Sufficient IAM permissions to create accounts, roles, Secrets Manager secrets, S3 buckets, SQS queues, CodePipelines, and deploy CloudFormation stacks within your organization.</li>
+                    <li>Node.js (LTS version recommended) and npm/yarn installed locally.</li>
+                    <li>AWS CLI installed and configured with appropriate credentials for your AWS management/master account.</li>
+                    <li>AWS CDK Toolkit installed globally (`npm install -g aws-cdk`).</li>
+                    <li>A GitHub Organization.</li>
+                    <li>Permissions to create repositories and GitHub Apps within your GitHub Organization.</li>
+                </ul>
+
+                <h3>Step 1: Create and Bootstrap AWS Accounts</h3>
+                <p>Establish the necessary AWS accounts within your Organization. The core structure involves:</p>
+                <ol>
+                    <li>
+                        <strong>Central Orchestration Account:</strong> This account hosts the core Ondemandenv platform components (deployment engine, central config store, secrets, GitHub App integration logic). It acts as the central point of control and **must be trusted** by other accounts to perform deployments.
+                    </li>
+                    <li>
+                        <strong>Workspace Accounts (`workspace0`, `workspace1`, ... `workspaceN`):</strong> These accounts are the deployment targets for all your application and service Envers.
+                        <ul>
+                            <li><strong>`workspace0` (Mandatory):</strong> This specific workspace account serves a special role. It is the designated deployment target for the mandatory <a href="#contractslib"><code>contractsLib</code></a> application, which defines your organization's architecture. Optionally, common platform service Envers (like Networking, EKS Clusters, User Authentication) can also be deployed here. Think of it as the primary "system drive" for your Ondemandenv setup.</li>
+                            <li><strong>Other Workspaces (`workspace1`...`N`):</strong> These are general-purpose accounts where your team's application/service Envers are deployed.</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>(Optional) Specialized Accounts:</strong> For larger setups, consider dedicated accounts for specific infrastructure like Networking (hosting shared VPCs, Transit Gateway) or Security tooling. These also need to trust the Central Orchestration Account.
+                    </li>
+                </ol>
+                <p>
+                    <strong>Trust Setup via CDK Bootstrap:</strong> The trust relationship allowing the Central Orchestration Account to deploy into the Workspace (`workspace0`, `workspace1`...) and Specialized accounts is established using `cdk bootstrap`. You must run this command targeting **each** Workspace and Specialized account, specifying the Central Orchestration Account as the trusted entity:
+                </p>
+                <pre><code class="language-bash"># Run this command targeting each Workspace/Specialized account
+# Replace <CENTRAL_ACCOUNT_ID> with the ID of your Central Orchestration account
+# Replace <TARGET_ACCOUNT_ID> and <TARGET_REGION> with the details of the account being bootstrapped
+# Replace <POLICY_ARNS> with required CloudFormation execution policies (e.g., arn:aws:iam::aws:policy/AdministratorAccess)
+
+cdk bootstrap aws://<TARGET_ACCOUNT_ID>/<TARGET_REGION> \
+    --trust <CENTRAL_ACCOUNT_ID> \
+    --cloudformation-execution-policies <POLICY_ARNS></code></pre>
+                <p>This configures the necessary IAM roles and policies in the target account so that the CDK (executed from the Central Orchestration Account) can manage resources there.</p>
+
+
+                <h3>Step 2: Set up GitHub Organization & Repository</h3>
+                <ol>
+                    <li><strong>Create GitHub Organization:</strong> If you don't have one, create a GitHub Organization.</li>
+                    <li><strong>Create `contractsLib` Repository:</strong> Create a dedicated private repository named `contractsLib` (or similar). This holds your architecture definitions. Initialize it with the Ondemandenv base structure (e.g., `odmd-contracts-base`). This repository contains the code that defines your specific AWS account structure, GitHub organization/repo mappings, and the Builds/Envers for your services.</li>
+                </ol>
+
+                <h3>Step 3: Create and Configure GitHub App</h3>
+                <p>Ondemandenv uses a GitHub App to enable the platform (running in your Central Orchestration Account) to interact with the GitHub API. This is necessary for actions like reading the `contractsLib`, triggering workflows based on commits, and potentially managing branches for the cloning feature. While GitHub OIDC allows GitHub Actions to authenticate *to* AWS, a GitHub App is required for the reverse: allowing your AWS-hosted platform to authenticate *as an application* back *to* GitHub.</p>
+                <ol>
+                    <li><strong>Register New GitHub App:</strong> In your GitHub Org settings, create a private App (e.g., "Ondemandenv Orchestrator").
+                        <ul>
+                            <li>Configure Homepage URL.</li>
+                            <li>Set required Repository Permissions (e.g., Read access to code and metadata; Read & Write access to checks, pull requests, contents if managing branches). Grant access only to necessary repos (start with `contractsLib`).</li>
+                            <li>Set Organization Permissions if required.</li>
+                            <li>Configure a Webhook pointing to your platform's API Gateway endpoint (created later) in the Central Orchestration Account, secured with a secret.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Generate & Secure Private Key:</strong> Generate the `.pem` key. **Download and secure it immediately.**</li>
+                    <li><strong>Install App:</strong> Install the App into your organization, granting access to `contractsLib` and other relevant repositories. Note the App ID and Installation ID.</li>
+                </ol>
+
+                <h3>Step 4: Secure GitHub App Key in AWS</h3>
+                <ol>
+                    <li><strong>Store Private Key in Secrets Manager:</strong> In your **Central Orchestration Account**, navigate to AWS Secrets Manager.</li>
+                    <li>Create a new secret. Choose "Other type of secret".</li>
+                    <li>Store the entire content of the downloaded `.pem` private key file as the secret value.</li>
+                    <li>Give the secret a specific, predictable name, for example: <code>ghAppPrivateKeySecretName</code> (or as specified by the bootstrap template documentation). This name will likely be referenced by the bootstrap CloudFormation template.</li>
+                    <li>Configure appropriate access policies so that only the Ondemandenv platform components (initially the bootstrap stack, later the deployed platform services) have permission to retrieve this secret.</li>
+                </ol>
+
+                <h3>Step 5: Deploy the Bootstrap CloudFormation Template</h3>
+                <p>The initial setup is driven by a provided CloudFormation template (`odmd--central-artifact`) deployed into the **Central Orchestration Account**. This template establishes the initial communication channel with the Ondemandenv root service.</p>
+                <ol>
+                    <li>Obtain the `odmd--central-artifact.yaml` (or similar) CloudFormation template provided by Ondemandenv.</li>
+                    <li>Deploy this template to your Central Orchestration Account via the AWS Console or AWS CLI. You will need to provide parameters, including the name of the GitHub App private key secret created in Step 4 (e.g., <code>ghAppPrivateKeySecretName</code>), the GitHub App ID, and Installation ID.</li>
+                    <li><strong>What it Creates:</strong> This stack typically provisions:
+                        <ul>
+                            <li>An S3 bucket for artifact exchange.</li>
+                            <li>An SQS queue for communication.</li>
+                            <li>Necessary IAM roles for the pipeline and communication components (including permission to read the GitHub App key secret).</li>
+                            <li>A self-mutating AWS CodePipeline named similar to `odmd-central-artifact-*`. This pipeline is initially basic but designed to be updated.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Communication with Root Service:</strong> The created S3 bucket and SQS queue allow secure communication with the external Ondemandenv root service (hosted at `ondemandenv.dev`).</li>
+                </ol>
+
+                <h3>Step 6: Ecosystem Initialization via CodePipeline</h3>
+                <ol>
+                    <li>Once the bootstrap stack (`odmd--central-artifact`) is successfully deployed, the Ondemandenv root service (potentially triggered by information sent via the SQS queue or manually initiated) will place a deployment package (a zip file containing CDK code or other artifacts) into the newly created S3 bucket.</li>
+                    <li>This action triggers the `odmd-central-artifact-*` CodePipeline.</li>
+                    <li>The pipeline executes, using the provided package to deploy or update the core Ondemandenv platform components within your Central Orchestration Account. This includes the core orchestration logic (Step Functions, Lambdas), API endpoints, event handling (EventBridge), and potentially deploys the mandatory `contractsLib` Enver to `workspace0`.</li>
+                    <li>This self-mutating pipeline mechanism allows Ondemandenv to manage the installation and future updates of the core platform within your AWS environment securely.</li>
+                    <li><strong>Outcome:** After this step, the platform is operational. It will typically deploy standardized GitHub Actions workflows into your declared repositories (including `contractsLib`) and begin monitoring for changes via GitHub webhooks received by its API endpoint.</li>
+                </ol>
+
+                <p>Your Ondemandenv platform is now installed and ready to manage Enver deployments based on your `contractsLib` definitions and repository changes.</p>
+            </section>
+
+            <section id="quick-start">
+                <h2>Quick Start</h2>
+                <p>A step-by-step guide to defining your first Build and Enver in `contractsLib`, writing a simple CDK application within your service repository, and triggering your first deployment using the Ondemandenv platform.</p>
+                <p><i>Content coming soon...</i></p>
+            </section>
+
+            <section id="envers">
+                <h2>Core Concepts: Envers</h2>
+                <p>An <strong class="concept-term">Enver (Environment Version)</strong> is the fundamental deployable unit in Ondemandenv. It represents a specific, versioned instance of a service or application stack, including its infrastructure, application code (via a linked <a href="#builds-products-consumers">Build</a>), configuration, and dependencies. Think of it as a complete, logical, deployable "slice" or "what-if" version of your service.</p>
+                <ul>
+                    <li><strong>Static Definition vs. Dynamic Instance:</strong> While the *definition* of an Enver type (e.g., `AuthServiceEnver`) and its base configurations (like which Build it uses and its target account alias) are defined statically in <a href="#contractslib"><code>contractsLib</code></a> and change infrequently, actual runnable instances, especially for development and testing, are often created dynamically.</li>
+                    <li><strong>Source Control Link:</strong> Each Enver instance is intrinsically linked to a specific point in a Git repository's history:
+                        <ul>
+                            <li><strong class="concept-term">Branch Enver:</strong> Represents the state of a specific Git branch (e.g., `main`, `develop`, `feature/xyz`). These are typically <strong>mutable</strong> and automatically redeployed incrementally when the associated branch changes. Their identifiers often follow the convention <code>b..&lt;branch-name&gt;</code> (e.g., <code>b..main</code>, <code>b..feature-xyz</code>). Ondemandenv encourages using these not just for short-lived features, but also as stable, long-lived environments owned by teams for ongoing development, research, or experimentation. This enables trying new approaches or features in parallel with stable versions.</li>
+                            <li><strong class="concept-term">Tag Enver:</strong> Represents the state of a specific Git tag (e.g., `v1.0.0`, `release-2025-04-28`). These are <strong>immutable</strong> – once created, their code and dependencies are fixed. Their identifiers often follow the convention <code>t..&lt;tag-name&gt;</code> (e.g., <code>t..v1.0.0</code>). Tag Envers can typically only depend on other Tag Envers to ensure immutability and prevent upstream changes from breaking a tagged release. They are ideal for representing release candidates or production versions.</li>
+                            <li><strong class="concept-term">Cloned Enver:</strong> A dynamically created copy of a static (usually tag-based or main branch-based) Enver, typically used for temporary development or testing purposes. See <a href="#cloning">On-Demand Cloning</a>.</li>
+                        </ul>
+                    </li>
+                    <li><strong>CDK Implementation:</strong> The actual infrastructure and configuration for an Enver are typically defined within an AWS CDK Stack in the corresponding service's source code repository. The Enver definition in `contractsLib` links to this implementation via the Build definition.</li>
+                    <li><strong>Deployment Unit:</strong> The entire Enver stack (all resources defined in its CDK code) is deployed and managed as a single atomic unit by CloudFormation, ensuring consistency and enabling transactional rollbacks.</li>
+                     <li><strong>Isolation:</strong> Envers of the same repo/build should not be aware of each other, but can share dependencies defined in `contractsLib`. Configurations are securely isolated, enabling teams (even offshore/outsourced) to collaborate via branching without accessing each other's specific configurations.</li>
+                </ul>
+            </section>
+
+            <section id="contractslib">
+                <h2>Core Concepts: `contractsLib`</h2>
+                <p>The `contractsLib` repository is the heart of your Ondemandenv setup, acting as the central, version-controlled definition of your system's architecture and organizational structure within the platform. It's essentially <strong>"Architecture as Code"</strong>.</p>
+                <h3>Key Responsibilities:</h3>
+                <ul>
+                    <li><strong>Extending the Base:</strong> Your organization's `contractsLib` is implemented as a TypeScript project that typically depends on and extends a base library (e.g., <code>odmd-contracts-base</code>). This base provides the core interfaces and classes (<code>Build</code>, <code>Enver</code>, <code>Product</code>, <code>Consumer</code>, <code>OdmdContracts</code>). You implement or extend these to define your specific setup. The base library typically defines Level 1 contracts (basic types, interfaces), while your implementation defines Level 2 contracts (concrete services, business logic, specific account/repo mappings).</li>
+                    <li><strong>Defining AWS & GitHub Structure:</strong> Within your specific implementation class (e.g., <code>MyOrgContracts extends OdmdContracts</code>), you **override** properties or implement getter methods to provide the concrete mapping of logical aliases (e.g., 'dev-workspace', 'prod-networking', 'central-orchestration', 'my-service-repo') to your actual AWS Account IDs, regions, and GitHub repository names/owners. This definition becomes the single source of truth for the platform's organizational context.</li>
+                    <li><strong>Defining Builds:</strong> Instantiate <code>BuildDefinition</code> classes within your `contractsLib` implementation, linking logical repository aliases to build configurations (commands, artifact types like CDK/Docker/Script, etc.). These definitions are relatively static.</li>
+                    <li><strong>Defining Static Envers:</strong> Instantiate specific <code>Enver</code> classes (which you'll likely create by extending the base <code>Enver</code> class), associating them with a <code>BuildDefinition</code>, a target AWS account alias, and defining their specific Products and Consumers. These definitions represent the stable, long-lived environments (like production, staging, or base development Envers) and are part of the core architecture, changing infrequently. The `contractsLib` Enver itself is mandatory, runs as a custom script build, is deployed to `workspace0`, and publishes the `contractsLib` package (e.g., to GitHub Packages).</li>
+                    <li><strong>Defining Products & Consumers:</strong> Within your custom <code>Enver</code> classes, declare the outputs (<code>Product</code> instances) that each Enver produces and the inputs (<code>Consumer</code> instances referencing other Envers' Products) that it requires. This creates the explicit, typed dependency graph, managed and versioned in code.</li>
+                    <li><strong>Governance - The "Congress" Analogy:</strong> Changes to system architecture (account structure, new services/Builds, static Enver definitions, dependency changes) are managed through standard Git workflows (branches, Pull Requests, code reviews) on the `contractsLib` repository. This ensures all architectural changes are deliberate, reviewed, and versioned. Think of `contractsLib` as the "congress" where teams negotiate interfaces and dependencies via PRs ("bills"), and the merged code represents the "law" governing the system architecture.</li>
+                    <li><strong>Integrity Checks:</strong> The TypeScript code and associated unit tests within `contractsLib` help ensure the integrity of the architecture (e.g., preventing a Tag Enver from depending on a Branch Enver).</li>
+                </ul>
+                <pre><code class="language-typescript">// Example: Defining Accounts, Repos, and Static Envers in contractsLib
+// File: lib/MyOrgContracts.ts (within your contractsLib repository)
+
+import { OdmdContracts, AccountDefinitionMap, GithubRepoMap, BuildDefinition, Enver, Product, Consumer } from 'ondemandenv-contracts-base';
+import { Construct } from 'constructs';
+// Import definitions for your specific Envers (e.g., AuthServiceEnver)
+// import { AuthServiceEnver } from './envers/AuthServiceEnver';
+// import { NetworkingPlatformEnver } from './envers/NetworkingPlatformEnver';
+// import { ContractsLibEnver } from './envers/ContractsLibEnver';
+
+// Define interfaces for your specific account and repo structures if needed
+interface MyAccounts extends AccountDefinitionMap {
+    'central-orchestration': { accountId: string; region: string; };
+    'workspace0': { accountId: string; region: string; };
+    'dev-workspace': { accountId: string; region: string; };
+    'prod-workspace': { accountId: string; region: string; };
+    'networking-prod': { accountId: string; region: string; };
+}
+interface MyGithubRepos extends GithubRepoMap {
+    'auth-service-repo': { owner: string; name: string; ghAppInstallID: number; };
+    'order-service-repo': { owner: string; name: string; ghAppInstallID: number; };
+    'contracts-repo': { owner: string; name: string; ghAppInstallID: number; };
+    'networking-repo': { owner: string; name: string; ghAppInstallID: number; };
+}
+
+
+// Define your organization's specific contracts by extending the base
+export class MyOrgContracts extends OdmdContracts {
+
+  // Override getters to provide concrete definitions for this organization
+  private _accounts?: MyAccounts;
+  override get accounts(): MyAccounts {
+      if (!this._accounts) {
+          this._accounts = {
+            'central-orchestration': { accountId: '111111111111', region: 'us-east-1' },
+            'workspace0': { accountId: '222222222222', region: 'us-east-1' }, // Mandatory contractsLib target
+            'dev-workspace': { accountId: '333333333333', region: 'us-west-2' },
+            'prod-workspace': { accountId: '444444444444', region: 'us-west-2' },
+            'networking-prod': { accountId: '555555555555', region: 'us-east-1' },
+          };
+      }
+      return this._accounts;
+  }
+
+  private _githubRepos?: MyGithubRepos;
+  override get githubRepos(): MyGithubRepos {
+      if (!this._githubRepos) {
+            // Define your GitHub organization and repository aliases/details
+            this._githubRepos = {
+                githubAppId: "YOUR_APP_ID_HERE", // Replace with your GitHub App ID
+                __contracts: { // Special key for contracts repo itself
+                    owner: 'my-github-org',
+                    name: 'contractsLib',
+                    ghAppInstallID: 12345678 // Replace with your installation ID
+                },
+                'auth-service-repo': {
+                    owner: 'my-github-org',
+                    name: 'my-auth-service',
+                    ghAppInstallID: 12345678
+                },
+                'order-service-repo': {
+                    owner: 'my-github-org',
+                    name: 'my-order-service',
+                    ghAppInstallID: 12345678
+                },
+                 'sampleApiEcs': { // Added for example
+                    owner: 'ondemandenv',
+                    name: 'spring-boot-swagger-3-example',
+                    ghAppInstallID: 41561130
+                 },
+                'networking-repo': {
+                    owner: 'my-github-org',
+                    name: 'my-networking-infra',
+                    ghAppInstallID: 12345678
+                },
+                // ... add other repos
+            };
+      }
+      return this._githubRepos;
+  }
+
+
+  constructor() {
+    // Base constructor might be simple
+    super();
+
+    // --- Define Builds (Relatively Static) ---
+    // Use the repo aliases defined in the getter above
+    const authServiceBuild = new BuildDefinition(this, 'AuthServiceBuild', {
+        githubRepoAlias: 'auth-service-repo', /* ... build config ... */
+    });
+    const orderServiceBuild = new BuildDefinition(this, 'OrderServiceBuild', {
+        githubRepoAlias: 'order-service-repo', /* ... */
+    });
+    const contractsLibBuild = new BuildDefinition(this, 'ContractsLibBuild', {
+        githubRepoAlias: '__contracts', // Use special key
+         /* ... */
+    });
+    const networkingBuild = new BuildDefinition(this, 'NetworkingBuild', {
+        githubRepoAlias: 'networking-repo', /* ... */
+    });
+    // Build definitions for the sample service (Docker and CDK)
+    const sampleApiImgBuild = new BuildDefinition(this, 'SampleApiImgBuild', {
+        githubRepoAlias: 'sampleApiEcs', buildType: 'docker', dockerBuildConfig: { dockerfilePath: 'Dockerfile' }
+    });
+    const sampleApiCdkBuild = new BuildDefinition(this, 'SampleApiCdkBuild', {
+        githubRepoAlias: 'sampleApiEcs', buildType: 'cdk'
+    });
+
+
+    // --- Define Static Envers (Relatively Static Architectural Components) ---
+    // Use the account aliases defined in the getter above
+
+    new ContractsLibEnver(this, 'ContractsLibProd', {
+        build: contractsLibBuild,
+        targetAccountAlias: 'workspace0',
+    });
+
+    const networkingProd = new NetworkingPlatformEnver(this, 'NetworkingProd', {
+        build: networkingBuild,
+        targetAccountAlias: 'networking-prod',
+    });
+
+    const authServiceProd = new AuthServiceEnver(this, 'AuthServiceProd', {
+        build: authServiceBuild,
+        targetAccountAlias: 'prod-workspace',
+        vpcIdConsumer: new Consumer(this, 'VpcId', networkingProd.vpcIdProduct),
+    });
+
+    const orderServiceProd = new OrderServiceEnver(this, 'OrderServiceProd', {
+        build: orderServiceBuild,
+        targetAccountAlias: 'prod-workspace',
+        authEndpointConsumer: new Consumer(this, 'AuthEndpoint', authServiceProd.apiEndpointProduct),
+        subnetIdsConsumer: new Consumer(this, 'SubnetIds', networkingProd.privateSubnetIdsProduct),
+    });
+
+    // Define Envers for the sample service
+    const sampleApiImgDev = new SampleSpringOpenApi3ImgEnver(this, 'SampleApiImgDev', {
+        build: sampleApiImgBuild, targetAccountAlias: 'dev-workspace'
+    });
+    new SampleSpringOpenApi3CdkEnver(this, 'SampleApiCdkDev', {
+        build: sampleApiCdkBuild, targetAccountAlias: 'dev-workspace',
+        appImgConsumer: new Consumer(this, 'AppImageUri', sampleApiImgDev.imageUriProduct, { triggerOnChange: true })
+    });
+
+
+  }
+}
+
+// Define Enver classes (can be in separate files)
+// Example for the Docker Image Enver
+class SampleSpringOpenApi3ImgEnver extends OdmdEnverCtnImg { // Assuming OdmdEnverCtnImg is the base
+    constructor(scope: Construct, id: string, props: { build: BuildDefinition; targetAccountAlias: string; }) {
+        super(scope, id, props);
+        // Base class likely handles defining ecrRepoUriProduct and imageUriProduct
+    }
+}
+
+// Example for the CDK Enver
+class SampleSpringOpenApi3CdkEnver extends OdmdEnverCdk { // Assuming OdmdEnverCdk is the base
+    public readonly apiEndpoint = new Product(this, 'ApiEndpoint');
+    // Consumer is defined directly during instantiation in MyOrgContracts
+
+    constructor(scope: Construct, id: string, props: { build: BuildDefinition; targetAccountAlias: string; appImgConsumer: Consumer; }) {
+        super(scope, id, props);
+    }
+}
+
+// Other Enver class definitions (ContractsLibEnver, NetworkingPlatformEnver, etc.) would go here or be imported
+</code></pre>
+            </section>
+
+            <section id="builds-products-consumers">
+                <h2>Core Concepts: Builds, Products & Consumers</h2>
+                <p>These concepts define how services are built, what they output, and how they depend on each other. A key aspect of Ondemandenv is its flexibility – what constitutes a "Build" or an "Enver" is subjective and decided by the engineer based on the logical unit they need to manage.</p>
+                <ul>
+                    <li>
+                        <strong class="concept-term">Build:</strong> Defined in <code>contractsLib</code>, a Build links a source code repository (via its alias) to a specific build process. It specifies <i>how</i> to create a deployable artifact. The scope is flexible and defined by the SDE: it could represent a complex multi-resource service (like an EKS cluster), a single microservice, a Lambda function, or even just a utility task like running a script or publishing a configuration value. The output type can vary:
+                        <ul>
+                            <li><strong>Docker Image:</strong> Builds source code into a container image and pushes it to ECR.</li>
+                            <li><strong>CDK Stack:</strong> Synthesizes an AWS CDK application into a CloudFormation template ready for deployment.</li>
+                            <li><strong>Custom Script:</strong> Executes a defined script (e.g., bash, python) for tasks like database schema migrations, deploying non-standard artifacts, or simply publishing a configuration value.</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong class="concept-term">Enver:</strong> A specific, versioned instance of a Build, tied to a concrete Git branch or tag. It represents a deployable unit with a specific configuration. An Enver could be a full application environment, a single microservice instance, a shared platform component (like networking), or even just a configuration-publishing task. When an Enver is deployed, it executes the process defined by its associated Build.
+                    </li>
+                    <li>
+                        <strong class="concept-term">Deployment:</strong> The actual result of executing an Enver's build and deployment process. This is the running CloudFormation stack, the Docker image available in ECR, or the outcome of the custom script.
+                    </li>
+                    <li>
+                        <strong class="concept-term">Product:</strong> A named output generated by a successful Enver Deployment. Products are typically configuration values needed by other services, such as API endpoints, ARNs, image URIs, database connection strings, etc. Products are <strong>declared</strong> within the Enver definition in <code>contractsLib</code> (e.g., <code>public readonly apiEndpoint = new Product(this, 'ApiEndpoint');</code>). The actual value is <strong>produced</strong> during the deployment process (see <a href="#publish-product">Publish a Product</a>) and stored in the central Config Store.
+                    </li>
+                    <li>
+                        <strong class="concept-term">Consumer:</strong> An Enver can declare a dependency on a Product from another Enver by defining a Consumer in its <code>contractsLib</code> definition (e.g., <code>appImgConsumer: new Consumer(this, 'AppImageUri', sampleApiImgDev.imageUriProduct)</code>). The Ondemandenv platform resolves this dependency at deployment time, fetching the current value of the consumed Product from the Config Store. How this value is actually <strong>consumed</strong> depends on the Enver type (see <a href="#consume-product">Consume a Product</a>).
+                    </li>
+                </ul>
+                <p>This flexible, yet explicit definition of Builds, Envers, Products, and Consumers allows engineers to model their system at the right level of granularity while maintaining a clear, manageable dependency graph managed centrally in `contractsLib`. Importantly, multiple Builds (e.g., one for Docker, one for CDK) can be defined for the same source code repository, allowing different deployment strategies or components from the same codebase.</p>
+            </section>
+
+            <section id="cloning">
+                <h2>Core Concepts: On-Demand Cloning</h2>
+                <p>While the Envers defined directly in `contractsLib` represent the static, core architecture (like production, staging, main development lines), developers need isolated environments for feature development and testing. Ondemandenv provides this through dynamic cloning.</p>
+                <ul>
+                    <li><strong>Trigger Mechanism:</strong> Developers trigger the cloning process by adding a specific comment to a Git commit in their service repository, typically on a feature branch. The comment format is: <code>odmd: create@&lt;static-enver-id&gt;</code>.
+                        <ul>
+                            <li><code>&lt;static-enver-id&gt;</code> refers to the ID of a static Enver defined in `contractsLib` (e.g., `OrderServiceDevMain`, `AuthServiceProd`). This defines the *baseline* configuration and dependencies for the clone.</li>
+                        </ul>
+                        Similarly, deletion can be triggered via <code>odmd: delete ...</code> comments.
+                    </li>
+                    <li><strong>Platform Action:</strong> The Ondemandenv platform (via webhook and central orchestration) detects this comment on a push event. It then initiates the creation of a new, temporary Enver instance based on the specified static Enver baseline but associated with the developer's current branch.</li>
+                    <li><strong>Naming Convention:</strong> Cloned Envers are automatically assigned identifiers based on their source branch or tag:
+                        <ul>
+                            <li><strong>Branch Clones:</strong> <code>b..&lt;branch-name&gt;</code> (e.g., <code>b..feature-new-payment</code>). The branch name is typically sanitized (e.g., replacing '/' with '-').</li>
+                            <li><strong>Tag Clones:</strong> <code>t..&lt;tag-name&gt;</code> (e.g., <code>t..v1.1.0-rc1</code>). Used less frequently for cloning but follows the same principle.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Isolation and Dependencies:</strong> The cloned Enver (e.g., <code>b..feature-new-payment</code>) deploys its own unique CloudFormation stack and resources. However, it inherits the *dependency configuration* of its baseline static Enver (`OrderServiceDevMain` in this example). It will consume the same Products from other Envers as its baseline does, ensuring it integrates correctly with the intended environment (e.g., development dependencies). Critically, cloning <strong>does not</strong> pin the dependency versions; the clone uses the *current* values of the consumed Products at the time of its deployment.</li>
+                    <li><strong>Use Cases:</strong> Feature development, bug fixing, integration testing, PR validation, temporary experiments, long-term research branches. Cloning enables developers to safely try new approaches or libraries in a full-stack, isolated environment that mirrors a known baseline.</li>
+                    <li><strong>Lifecycle:</strong> Cloned Envers are typically ephemeral and should be cleaned up manually (via <code>odmd: delete</code> comment) or via automated policies (e.g., deleting Envers associated with merged/deleted branches). There might be limits on the number of active clones per static Enver (e.g., up to 20).</li>
+                     <li><strong>Region Constraint:</strong> Cloned/dynamic Envers must reside in the same AWS region as their baseline static Enver.</li>
+                     <li><strong>Singleton Envers:</strong> Certain platform Envers, like `contractsLib` itself or a central User Auth Enver, are often configured as singletons and cannot be cloned.</li>
+                </ul>
+            </section>
+
+            <section id="deployment">
+                <h2>Core Concepts: Deployment Model</h2>
+                <p>The Ondemandenv deployment model orchestrates the process of turning code and configuration into running environments, managing dependencies along the way. The Central Orchestration Account drives this workflow based on the definitions in <code>contractsLib</code>.</p>
+                <p>When an Enver deployment is triggered (e.g., by a code push or a dependency update), the central workflow executes the following core steps:</p>
+                <ol>
+                    <li><strong>Resolve Dependencies (Consumers):</strong> The platform queries the central Config Store (Parameter Store) to retrieve the current values for all Products the target Enver consumes, based on its definition in <code>contractsLib</code>.</li>
+                    <li><strong>Run Build/Deployment Process:</strong> The platform assumes the necessary role into the target account and executes the process defined by the Enver's associated Build:
+                        <ul>
+                            <li><strong>CDK Stack:</strong> Synthesizes and deploys the CloudFormation template, passing resolved dependency values as context/parameters.</li>
+                            <li><strong>Docker Image:</strong> Builds and pushes the image to ECR.</li>
+                            <li><strong>Custom Script:</strong> Executes the script, passing resolved dependency values.</li>
+                        </ul>
+                        This step creates or updates the actual running resources.
+                    </li>
+                    <li><strong>Produce Outputs (Products):</strong> After a successful deployment, the platform collects the output values (CloudFormation outputs, image URIs, script results) defined as Products for this Enver.</li>
+                    <li><strong>Publish Products:</strong> These collected Product values are saved back into the central Config Store (Parameter Store), associated with the specific Enver instance (e.g., <code>b..my-feature</code>). This update might trigger dependent Envers via EventBridge (see <a href="#config-store">Config Store & Eventing</a>).</li>
+                </ol>
+                <p>This centrally managed, dependency-aware process ensures consistency and automates the flow of configuration between services.</p>
+            </section>
+
+            <section id="multi-account">
+                <h2>Core Concepts: Multi-Account Architecture</h2>
+                <p>Ondemandenv embraces the AWS best practice of using multiple accounts for strong resource isolation, blast radius reduction, and clear ownership boundaries, particularly in enterprise environments where different teams manage different services or infrastructure layers.</p>
+                <ul>
+                    <li><strong>Account Roles & Isolation:</strong> The platform relies on distinct account roles: the <strong class="concept-term">Central Orchestration Account</strong> (hosting the platform logic and dependency store), the mandatory <strong class="concept-term">`workspace0`</strong> (hosting `contractsLib` and potentially core platform services), general <strong class="concept-term">Workspace Accounts</strong> (hosting application Envers), and optional <strong class="concept-term">Specialized Accounts</strong> (e.g., for Networking). This structure provides robust isolation between different teams and environments.</li>
+                    <li><strong>Centralized Dependency Management:</strong> While deployments happen *in* workspace/specialized accounts, the dependency graph (Products and Consumers) is managed centrally via <code>contractsLib</code> and the Config Store in the Central Orchestration Account. This prevents teams from creating hidden or unmanaged dependencies directly between accounts.</li>
+                    <li><strong>Platform Services for Shared Resources:</strong> Ondemandenv facilitates providing common infrastructure components as standardized, reusable platform Envers. This is crucial for multi-account setups:
+                        <ul>
+                            <li><strong>Shared Networking (Transit Gateway):</strong> A platform Networking Enver can manage Transit Gateways, VPC attachments across accounts, and IPAM/CIDR allocation (using AWS IPAM). Application Envers in different workspace accounts consume VPC/subnet Products from this networking Enver to gain connectivity without needing direct peering or complex routing rules.</li>
+                            <li><strong>Shared EKS Clusters:</strong> A platform EKS Enver can manage a cluster in a dedicated account (or `workspace0`), publishing the cluster endpoint and OIDC provider ARN as Products. Application Envers consume these Products to deploy their workloads (pods, services) into specific namespaces within the shared cluster.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Simplified Cross-Account Interaction:</strong> The platform abstracts away the mechanics of cross-account deployments. When Enver 'A' (e.g., Payments) needs to deploy a resource that interacts with Enver 'B' (e.g., a shared EKS cluster), the developer simply:
+                        <ol>
+                            <li>Defines the resource (e.g., Kubernetes manifest) in Enver A's CDK code.</li>
+                            <li>Declares a Consumer dependency on Enver B's relevant Product (e.g., EKS cluster endpoint) in `contractsLib`.</li>
+                        </ol>
+                        The Ondemandenv deployment workflow automatically handles resolving the Product value from the Config Store and executing the deployment action (e.g., applying the manifest to the correct cluster using appropriate credentials obtained via assumed roles), regardless of which account Enver A or B resides in.
+                    </li>
+                </ul>
+            </section>
+
+            <section id="config-store">
+                <h2>Core Concepts: Config Store & Eventing</h2>
+                <p>The central Config Store (<strong>AWS Systems Manager Parameter Store</strong> in the Central Orchestration Account) and eventing mechanism (<strong>AWS EventBridge</strong>) are vital for managing dependencies and automating workflows between Envers.</p>
+                <ul>
+                    <li><strong>Product Storage:</strong> Successfully deployed Envers publish their output configurations (Products like ARNs, URLs, IDs) as versioned parameters in Parameter Store. This ensures a single source of truth for inter-service configuration.</li>
+                    <li><strong>Dependency Resolution:</strong> Before deploying an Enver, the platform queries Parameter Store to fetch the current values of all the Products declared as Consumers in its `contractsLib` definition.</li>
+                    <li><strong>Event-Driven Updates & Build Triggering:</strong>
+                        <ul>
+                            <li>When a parameter corresponding to an Enver Product is updated in Parameter Store (because the producing Enver was successfully redeployed), Parameter Store automatically emits an event to EventBridge.</li>
+                            <li>The Ondemandenv platform listens for these specific events using EventBridge rules.</li>
+                            <li>Upon detecting a relevant Product change, the platform identifies all downstream Envers that consume this Product (based on `contractsLib`).</li>
+                            <li><strong>Crucially, each Consumer definition in `contractsLib` can specify whether a change in the consumed Product should automatically trigger a build/deployment of the consuming Enver.</strong> If this configuration is enabled, the platform initiates the <a href="#deployment">Deployment Model</a> workflow for those consuming Envers.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Automated Consistency & Build Chains:</strong> This Parameter Store -> EventBridge -> Platform -> CI/CD loop enables automated propagation of configuration changes. If a shared database Enver updates its endpoint (Product), consuming application Envers configured to react can be automatically triggered to redeploy. This can create chains of builds across the dependency graph. Note that circular dependencies, while possible to define, require careful management (e.g., using placeholder values during initial deployment) to avoid infinite loops, especially if automatic triggering based on inconsistent Product values occurs.</li>
+                </ul>
+            </section>
+
+            <section id="security">
+                <h2>Core Concepts: Security Model</h2>
+                <p>Security is integrated throughout the Ondemandenv platform, emphasizing least privilege and secure practices.</p>
+                <ul>
+                    <li><strong>Least Privilege IAM Roles:</strong> Ondemandenv automatically provisions specific IAM roles for its operations:
+                        <ul>
+                            <li><strong class="concept-term">`buildrole` (in Workspace Accounts):</strong> Created per Build definition within each target Workspace account. This role is assumed by the deployment engine during the build/deploy phase for a specific Enver. It is granted fine-grained permissions necessary *only* to create/update the resources defined within that Enver's CDK stack (e.g., permissions for Lambda, API Gateway, DynamoDB if the Enver uses them).</li>
+                            <li><strong class="concept-term">`centerrole` (in Central Orchestration Account):</strong> Created per Build definition within the Central Account. This role is used by the central orchestration logic (e.g., Step Functions, Lambdas) when managing tasks related to that Build, such as reading/writing Products to the Config Store or assuming the corresponding `buildrole` in the target account. It also follows least privilege principles.</li>
+                        </ul>
+                        These auto-generated, fine-grained roles minimize the blast radius compared to using broad administrative roles for deployment.
+                    </li>
+                    <li><strong>Secure Cross-Account Access:</strong> Trust relationships established via `cdk bootstrap --trust` and the specific `buildrole`/`centerrole` mechanism ensure that the Central Account can only perform necessary actions in target accounts.</li>
+                    <li><strong>GitHub App Security:</strong> The GitHub App private key, required for API interactions, is securely stored in AWS Secrets Manager within the Central Orchestration Account and accessed only by authorized platform components.</li>
+                    <li><strong>Platform Resource Security:</strong> Shared platform resources provided by Ondemandenv Envers (like Transit Gateways, EKS clusters, VPCs) are provisioned following AWS security best practices (e.g., private subnets, security groups, network ACLs, encryption).</li>
+                    <li><strong>No Hardcoded Credentials:</strong> The core workflow relies on IAM roles (for AWS access) and the securely stored GitHub App key. Application-level secrets should also be managed securely within Envers, typically using AWS Secrets Manager and referencing secrets within the CDK code rather than hardcoding them.</li>
+                    <li><strong>Isolation:</strong> Envers are deployed into separate CloudFormation stacks, and often into separate AWS accounts (Workspaces), providing strong resource isolation. Cloned Envers also get their own stacks.</li>
+                </ul>
+            </section>
+
+            <section id="cicd">
+                <h2>Core Concepts: CI/CD & Workflows</h2>
+                <p>Ondemandenv integrates tightly with your Git workflow and AWS eventing to automate builds, deployments, and updates across your distributed system.</p>
+                <h3>GitHub Workflow Deployment</h3>
+                <p>Upon initialization (and potentially on updates), the Ondemandenv platform, running in the Central Orchestration Account, deploys standardized GitHub Actions workflow files (or integrates with other CI/CD providers) into each repository declared in your `contractsLib`. These workflows handle tasks like building artifacts (e.g., Docker images), running tests, and potentially notifying the Ondemandenv platform of successful builds.</p>
+                <h3>Change Detection and Orchestration</h3>
+                <p>The platform uses multiple triggers to initiate the <a href="#deployment">Deployment Model</a> workflow:</p>
+                <ul>
+                    <li><strong>Code Repository Change:</strong> A push to a branch in a service repository triggers a GitHub webhook. This webhook notifies a central Lambda function (or Step Function) in the Central Orchestration Account. This function evaluates the change context (repository, branch) and initiates the deployment workflow for the corresponding Branch Enver (e.g., <code>b..my-feature-branch</code>).</li>
+                    <li><strong>Config Store Change (Dependency Update):</strong> As described in <a href="#config-store">Config Store & Eventing</a>, an update to a consumed Product in the central Config Store (Parameter Store) dispatches an event via EventBridge. If a consuming Enver has configured its Consumer definition in `contractsLib` to react to this change (e.g., <code>triggerOnChange: true</code>), this event triggers the central orchestration logic to initiate the deployment workflow for that consuming Enver. This enables automated propagation of dependency updates.</li>
+                    <li><strong>`contractsLib` Change Workflow:</strong> Changes merged into the main branch of the `contractsLib` repository trigger a special, critical workflow to update the platform itself:
+                        <ol>
+                            <li>A dedicated CI/CD pipeline builds the `contractsLib` code (compile, package).</li>
+                            <li>Artifacts are uploaded to the bootstrap S3 bucket.</li>
+                            <li>This signals the external Ondemandenv root service.</li>
+                            <li>The root service rebuilds the core platform deployment package.</li>
+                            <li>The root service uploads the updated package back to the S3 bucket.</li>
+                            <li>This triggers the `odmd-central-artifact-*` CodePipeline in the Central Orchestration Account.</li>
+                            <li>The CodePipeline deploys the updates to the core Ondemandenv platform components.</li>
+                        </ol>
+                    </li>
+                </ul>
+                <p>This event-driven model ensures that changes in application code, dependencies (via Config Store events), or the core architecture automatically trigger the appropriate <strong>3-step Enver deployment process</strong> managed by the central orchestrator:</p>
+                <ol>
+                    <li><strong>Resolve Dependency Config Values:</strong> Fetch required inputs from the Config Store.</li>
+                    <li><strong>Run Build/Deploy Script:</strong> Execute the Enver's defined build type (CDK, Docker, Custom Script) in the target account.</li>
+                    <li><strong>Produce Config Values:</strong> Collect and save the Enver's outputs (Products) back to the Config Store.</li>
+                </ol>
+            </section>
+
+            <section id="define-service">
+                <h2>How-To: Define a New Service</h2>
+                <p>Adding a new service or component to your Ondemandenv ecosystem involves defining its build process and its initial static Enver(s) within your <code>contractsLib</code> repository.</p>
+                <ol>
+                    <li>
+                        <strong>Create Service Repository:</strong> Create a new Git repository for your service's source code (e.g., `my-new-service`). Add your application code and, if using CDK, your CDK stack definition (e.g., `infra/stack.ts`).
+                    </li>
+                    <li>
+                        <strong>Define Repository Alias in `contractsLib`:</strong> Open your organization's `contractsLib` implementation file (e.g., `lib/MyOrgContracts.ts`). Add a new entry to the <code>githubRepos</code> map:
+                        <pre><code class="language-typescript">  // In MyOrgContracts class
+  override get githubRepos(): MyGithubRepos {
+      if (!this._githubRepos) {
+            this._githubRepos = {
+                // ... existing repos ...
+                'my-new-service-repo': { owner: 'my-github-org', name: 'my-new-service', ghAppInstallID: 12345678 }, // Logical alias -> Repo details
+            };
+      }
+      return this._githubRepos;
+  }</code></pre>
+                    </li>
+                    <li>
+                        <strong>Define the Build(s) in `contractsLib`:</strong> Decide how this service will be built and deployed. You can define multiple builds for the same repository. Instantiate the corresponding <code>BuildDefinition</code>(s) within your `MyOrgContracts` class constructor.
+                        <pre><code class="language-typescript">    // In MyOrgContracts constructor
+    // Example: Build definition for a CDK stack deployment
+    const myNewServiceCdkBuild = new BuildDefinition(this, 'MyNewServiceCdkBuild', {
+      githubRepoAlias: 'my-new-service-repo', // Reference the alias defined above
+      buildType: 'cdk', // Specify the build type
+      // buildSpec: { commands: ['npm ci', 'npm run build', 'npx cdk synth'] } // Example build commands
+    });
+
+    // Example: Build definition for just building a Docker image from the same repo
+    const myNewServiceDockerBuild = new BuildDefinition(this, 'MyNewServiceDockerBuild', {
+      githubRepoAlias: 'my-new-service-repo',
+      buildType: 'docker',
+      dockerBuildConfig: { dockerfilePath: 'Dockerfile' }
+    });</code></pre>
+                    </li>
+                    <li>
+                        <strong>Define Static Enver(s) in `contractsLib`:</strong> Define at least one static Enver for this new service, typically representing its main development line or production state. You might have separate Envers for the CDK deployment and the Docker image build, even if they use the same repo. Extend the base <code>Enver</code> class (or specialized versions like <code>OdmdEnverCdk</code>, <code>OdmdEnverCtnImg</code>) and instantiate it within your `MyOrgContracts` class constructor.
+                        <pre><code class="language-typescript">// Example: Define a custom Enver class (can be in a separate file)
+import { OdmdEnverCdk, OdmdEnverCtnImg, Product, Consumer, BuildDefinition } from 'ondemandenv-contracts-base';
+import { Construct } from 'constructs';
+
+interface MyNewServiceEnverProps { build: BuildDefinition; targetAccountAlias: string; /* ... other props ... */ }
+
+// Enver class for the CDK deployment
+class MyNewServiceCdkEnver extends OdmdEnverCdk {
+  public readonly serviceEndpoint = new Product(this, 'ServiceEndpoint');
+  // public readonly someDependency = new Consumer(this, 'SomeDep', otherEnver.someProduct);
+  constructor(scope: Construct, id: string, props: MyNewServiceEnverProps) { super(scope, id, props); }
+}
+
+// Enver class for the Docker image build
+class MyNewServiceImgEnver extends OdmdEnverCtnImg {
+    // Inherits standard image products like ecrRepoUriProduct, imageUriProduct
+    constructor(scope: Construct, id: string, props: MyNewServiceEnverProps) { super(scope, id, props); }
+}
+
+
+// --- In MyOrgContracts.ts constructor ---
+    // Instantiate the static Enver for the CDK deployment (main branch)
+    const myNewServiceDevMain = new MyNewServiceCdkEnver(this, 'MyNewServiceDevMain', {
+        build: myNewServiceCdkBuild,
+        targetAccountAlias: 'dev-workspace', // Target the appropriate AWS account alias
+    });
+
+    // Instantiate the static Enver for the Docker image build (main branch)
+    const myNewServiceImgMain = new MyNewServiceImgEnver(this, 'MyNewServiceImgMain', {
+        build: myNewServiceDockerBuild,
+        targetAccountAlias: 'dev-workspace', // ECR repo will be created here
+    });
+</code></pre>
+                    </li>
+                    <li>
+                        <strong>Commit and Merge `contractsLib` Changes:</strong> Commit these changes to `contractsLib` and merge them (typically via a PR) into the main branch. This triggers the <a href="#cicd">`contractsLib` Change Workflow</a>, updating the platform's understanding of your architecture.
+                    </li>
+                    <li>
+                        <strong>Initial Deployment:</strong> Once the platform updates, the new static Enver(s) (e.g., `MyNewServiceDevMain`, `MyNewServiceImgMain`) will be deployed based on the corresponding branch/tag (e.g., `main` branch) of the service repository (`my-new-service`). Ensure the initial code/CDK stack/Dockerfile exists in that branch.
+                    </li>
+                </ol>
+                <p>Your new service is now integrated into the Ondemandenv ecosystem, ready for development, cloning, and dependency management.</p>
+            </section>
+            <section id="consume-product">
+                <h2>How-To: Consume a Product</h2>
+                <p>Consuming configuration values (Products) from other Envers involves two steps: declaring the dependency in <code>contractsLib</code> and using the resolved value in your service's implementation.</p>
+                <h3>1. Declare the Consumer in `contractsLib`</h3>
+                <p>Within the definition of your consuming Enver class in <code>contractsLib</code>, instantiate a <code>Consumer</code> object. Pass it a reference to the <code>Product</code> object of the Enver you want to depend on.</p>
+                <pre><code class="language-typescript">// In MyConsumingCdkEnver.ts (extends OdmdEnverCdk)
+import { Consumer, Product } from 'ondemandenv-contracts-base';
+import { MyProducingImgEnver } from './MyProducingImgEnver'; // Import the producing Enver definition
+
+// Assuming 'imgProdEnver' is an instance of MyProducingImgEnver defined in MyOrgContracts.ts
+// Consume the automatically produced image URI product using the standard property name
+public readonly appImageUriConsumer = new Consumer(this, 'AppImageUri', imgProdEnver.imageUriProduct);
+
+// Consume a custom product like an API endpoint
+public readonly dependencyApiEndpoint = new Consumer(this, 'DependencyApiEndpoint', otherApiEnver.apiEndpointProduct); // Assuming apiEndpointProduct is defined in otherApiEnver
+</code></pre>
+                <h3>2. Use the Consumed Value in Implementation</h3>
+                <p>How you access the value depends on the Build type of your consuming Enver:</p>
+                <ul>
+                    <li><strong>CDK Enver (`OdmdEnverCdk`):</strong> The platform injects resolved Consumer values into the CDK context. Access them within your CDK stack code using the static <code>getSharedValue</code> method provided by the base Enver class, referencing the <strong>Consumer ID</strong> you defined in `contractsLib`.
+                        <pre><code class="language-typescript">// In your service's CDK stack (e.g., infra/stack.ts)
+import * as ecs from 'aws-cdk-lib/aws-ecs';
+import { OdmdEnverCdk } from 'ondemandenv-contracts-base'; // Import base or your specific Enver base
+
+// Get the consumed Docker image URI using the Consumer ID 'AppImageUri'
+const imageUri = OdmdEnverCdk.getSharedValue('AppImageUri');
+const image = ecs.ContainerImage.fromRegistry(imageUri);
+
+// Get the consumed API endpoint using the Consumer ID 'DependencyApiEndpoint'
+const dependencyEndpoint = OdmdEnverCdk.getSharedValue('DependencyApiEndpoint');
+
+// Use the values in your resource definitions
+const taskDefinition = new ecs.FargateTaskDefinition(this, 'TaskDef');
+taskDefinition.addContainer('AppContainer', {
+    image: image,
+    environment: {
+        DEPENDENCY_API_URL: dependencyEndpoint, // Pass as env var
+    },
+    // ... other container config
+});
+</code></pre>
+                    </li>
+                    <li><strong>Docker Image Enver (`OdmdEnverCtnImg`):</strong> Consumed values are typically passed as environment variables to the Docker container during deployment orchestration. Access them within your application code using standard environment variable reading methods (e.g., <code>process.env.DEPENDENCY_API_ENDPOINT</code> in Node.js, <code>System.getenv("DEPENDENCY_API_ENDPOINT")</code> in Java). The environment variable name often corresponds to the Consumer ID.</li>
+                    <li><strong>Custom Script Enver:</strong> Consumed values are usually passed as environment variables to the script during execution. Access them within your script (e.g., <code>$DEPENDENCY_API_ENDPOINT</code> in bash).</li>
+                </ul>
+                <p>By declaring the dependency in <code>contractsLib</code>, you ensure the platform handles resolving and providing the necessary configuration value to your Enver at deployment time.</p>
+            </section>
+            <section id="publish-product">
+                <h2>How-To: Publish a Product</h2>
+                <p>Publishing configuration values (Products) for other Envers to consume involves declaring the Product in <code>contractsLib</code> and ensuring the deployment process outputs the value correctly.</p>
+                <h3>1. Declare the Product in `contractsLib`</h3>
+                <p>Within the definition of your producing Enver class in <code>contractsLib</code>, instantiate a <code>Product</code> object. Give it a logical ID. This ID is crucial as it's used by consumers and by the CDK stack to identify the output.</p>
+                <pre><code class="language-typescript">// In MyProducingCdkEnver.ts (extends OdmdEnverCdk)
+import { Product } from 'ondemandenv-contracts-base';
+
+// Declare the Products this Enver will produce
+public readonly apiEndpointProduct = new Product(this, 'ApiEndpointUrl'); // Logical ID: ApiEndpointUrl
+public readonly userTableArnProduct = new Product(this, 'UserTableArn'); // Logical ID: UserTableArn
+</code></pre>
+                <p>For Docker Image Envers (extending <code>OdmdEnverCtnImg</code>), standard products like <code>ecrRepoUriProduct</code> and <code>imageUriProduct</code> are often implicitly declared by the base class with standard IDs.</p>
+                <h3>2. Output the Value from the Deployment</h3>
+                <p>How the value is generated and made available depends on the Build type:</p>
+                <ul>
+                    <li><strong>CDK Enver (`OdmdEnverCdk`):</strong> Use the <code>OdmdShareOut</code> construct within your CDK stack code to wrap CloudFormation Outputs. The <strong><code>id</code></strong> of the <code>OdmdShareOut</code> **must exactly match** the logical <strong><code>id</code></strong> used when creating the <code>Product</code> instance in `contractsLib`. The platform automatically reads CloudFormation outputs tagged with this construct and publishes their values to the Config Store, associating them with the correct Product.
+                        <pre><code class="language-typescript">// In your service's CDK stack (e.g., infra/stack.ts)
+import * as cdk from 'aws-cdk-lib';
+import * as apigw from 'aws-cdk-lib/aws-apigateway';
+import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
+import { OdmdShareOut } from 'ondemandenv-contracts-base'; // Assuming base library provides this
+
+const api = new apigw.RestApi(this, 'MyApi');
+// ... api definition ...
+
+const userTable = new dynamodb.Table(this, 'UserTable', { /* ... */ });
+
+// Use OdmdShareOut to mark outputs as Products
+// The ID here ('ApiEndpointUrl') MUST match the Product ID in contractsLib
+new OdmdShareOut(this, 'ApiEndpointUrl', {
+    value: api.url,
+    description: 'The endpoint URL for the service API',
+});
+// The ID here ('UserTableArn') MUST match the Product ID in contractsLib
+new OdmdShareOut(this, 'UserTableArn', {
+    value: userTable.tableArn,
+    description: 'ARN of the user DynamoDB table',
+});</code></pre>
+                    </li>
+                    <li><strong>Docker Image Enver (`OdmdEnverCtnImg`):</strong> The platform automatically handles producing the standard <code>ecrRepoUriProduct</code> and <code>imageUriProduct</code> values. No specific action is needed in the service repository's code for these.</li>
+                    <li><strong>Custom Script Enver:</strong> Your script must explicitly write the output value for each declared Product to a specific file in the temporary directory provided by the runner environment (e.g., <code>$RUNNER_TEMP/&lt;productId&gt;.txt</code>). The filename **must match** the logical Product ID declared in `contractsLib`. The platform's deployment workflow reads these files and publishes the values to the central Config Store.
+                        <pre><code class="language-bash">#!/bin/bash
+# Example custom script
+
+# Perform some action that generates a value
+MY_CUSTOM_OUTPUT="value-generated-by-script"
+# This ID must match the ID used when creating the Product instance in contractsLib
+PRODUCT_ID_FROM_CONTRACTSLIB="MyCustomProduct"
+
+# Write the value to the file named after the Product ID
+echo "Writing value: $MY_CUSTOM_OUTPUT"
+# The filename 'MyCustomProduct.txt' corresponds to the Product ID
+echo -n "$MY_CUSTOM_OUTPUT" > "$RUNNER_TEMP/$PRODUCT_ID_FROM_CONTRACTSLIB.txt"
+
+echo "Script finished"
+</code></pre>
+                    </li>
+                </ul>
+                <p>By declaring Products in <code>contractsLib</code> and ensuring your build/deployment process outputs the corresponding values correctly using the matching IDs, you make configuration available to downstream consumers.</p>
+            </section>
+            <section id="clone-enver">
+                <h2>How-To: Clone an Enver</h2>
+                <p><i>Content coming soon...</i></p>
+            </section>
+            <section id="use-platform-services">
+                <h2>How-To: Use Platform Services</h2>
+                <p><i>Content coming soon...</i></p>
+            </section>
+            <section id="blue-green">
+                <h2>How-To: Blue/Green Deployments</h2>
+                <p><i>Content coming soon...</i></p>
+            </section>
+            <section id="ab-testing">
+                <h2>How-To: A/B Testing</h2>
+                <p><i>Content coming soon...</i></p>
+            </section>
+
+            <section id="base-reference">
+                <h2>Base Library Reference (`odmd-contracts-base`)</h2>
+                <p>Instead of a direct API or CLI, developers primarily interact with Ondemandenv by implementing and extending classes and interfaces provided by the base library (e.g., <code>odmd-contracts-base</code>) within their organization's <code>contractsLib</code> repository. This section provides reference details for those core building blocks.</p>
+                <h3>Key Classes & Interfaces:</h3>
+                <ul>
+                    <li><strong><code>OdmdContracts</code>:</strong> The base class your organization's main contracts definition class extends. Responsible for initializing the overall structure.</li>
+                    <li><strong><code>AccountDefinitionMap</code> / <code>GithubRepoMap</code>:</strong> Type definitions for structuring AWS account and GitHub repository mappings.</li>
+                    <li><strong><code>BuildDefinition</code>:</strong> Class used to define a build process linked to a source repository. Specifies build commands, artifact types (CDK, Docker, Script), etc.</li>
+                    <li><strong><code>Enver</code>:</strong> Base class for defining specific environment versions. Your service-specific or platform-specific Enver classes will extend this. Contains logic for associating with a Build, target account, and managing Products/Consumers. Specialized versions like <code>OdmdEnverCdk</code> and <code>OdmdEnverCtnImg</code> provide tailored functionality.</li>
+                    <li><strong><code>Product</code>:</strong> Class used within an Enver definition to declare an output configuration value that will be published to the central Config Store upon successful deployment.</li>
+                    <li><strong><code>Consumer</code>:</strong> Class used within an Enver definition to declare a dependency on a Product from another Enver. Includes options for configuring automatic triggering on updates.</li>
+                    <li><strong><code>OdmdShareOut</code> (for CDK Envers):</strong> A CDK construct used within your service's stack definition to mark CloudFormation outputs that correspond to declared Products in <code>contractsLib</code>.</li>
+                    <li><strong><code>OdmdUtils.getSharedValue(consumerId: string)</code> (for CDK Envers):</strong> Static utility method likely provided by the base library to retrieve consumed Product values within a CDK stack, using the Consumer ID defined in <code>contractsLib</code>.</li>
+                </ul>
+                <p>Refer to the specific documentation or source code of the <code>odmd-contracts-base</code> library for detailed API specifications, constructor options, and method signatures for each of these components.</p>
+            </section>
+
+            <section id="example-docker-cdk">
+                <h2>Example: Docker Image + CDK Service (Same Repo)</h2>
+                <p>This example demonstrates defining two separate build/deployment processes (one for a Docker image, one for a CDK stack) originating from the same source code repository (`spring-boot-swagger-3-example`). The CDK Enver consumes the Docker image produced by the Image Enver.</p>
+
+                <h3>1. Define Builds in `contractsLib`</h3>
+                <pre><code class="language-typescript">// In MyOrgContracts.ts constructor
+
+// Define the repo alias (assuming it's defined in the githubRepos getter)
+// 'sampleApiEcs': { owner: 'ondemandenv', name: 'spring-boot-swagger-3-example', ghAppInstallID: ... }
+
+// Build definition for creating the Docker image
+const sampleApiImgBuild = new BuildDefinition(this, 'SampleApiImgBuild', {
+  githubRepoAlias: 'sampleApiEcs',
+  buildType: 'docker',
+  dockerBuildConfig: {
+    dockerfilePath: 'Dockerfile', // Assumes Dockerfile is at the root
+  },
+});
+
+// Build definition for deploying the CDK stack
+const sampleApiCdkBuild = new BuildDefinition(this, 'SampleApiCdkBuild', {
+  githubRepoAlias: 'sampleApiEcs',
+  buildType: 'cdk',
+  // Assumes standard CDK build/synth commands in package.json or cdk app definition
+});
+</code></pre>
+
+                <h3>2. Define Envers in `contractsLib`</h3>
+                <pre><code class="language-typescript">// In MyOrgContracts.ts constructor
+
+// --- Define Enver Classes (Example) ---
+// (These would typically be in separate files and imported)
+import { OdmdEnverCdk, OdmdEnverCtnImg, Product, Consumer, BuildDefinition } from 'ondemandenv-contracts-base';
+import { Construct } from 'constructs';
+
+interface SampleApiEnverProps { build: BuildDefinition; targetAccountAlias: string; }
+interface SampleApiCdkEnverProps extends SampleApiEnverProps { appImgConsumer: Consumer; }
+
+class SampleSpringOpenApi3ImgEnver extends OdmdEnverCtnImg {
+    // Base class provides imageUriProduct implicitly
+    constructor(scope: Construct, id: string, props: SampleApiEnverProps) { super(scope, id, props); }
+}
+class SampleSpringOpenApi3CdkEnver extends OdmdEnverCdk {
+    public readonly apiEndpoint = new Product(this, 'ApiEndpoint'); // Declare Product
+    // Consumer is passed in props
+    constructor(scope: Construct, id: string, props: SampleApiCdkEnverProps) { super(scope, id, props); }
+}
+// --- End Enver Class Definitions ---
+
+
+// --- Instantiate Envers in MyOrgContracts.ts constructor ---
+const sampleApiImgDev = new SampleSpringOpenApi3ImgEnver(this, 'SampleApiImgDev', {
+    build: sampleApiImgBuild,
+    targetAccountAlias: 'dev-workspace',
+});
+
+const sampleApiCdkDev = new SampleSpringOpenApi3CdkEnver(this, 'SampleApiCdkDev', {
+    build: sampleApiCdkBuild,
+    targetAccountAlias: 'dev-workspace',
+    // Define the Consumer, linking it to the Product from the Image Enver
+    appImgConsumer: new Consumer(this, 'AppImageUri', sampleApiImgDev.imageUriProduct, {
+        triggerOnChange: true, // Redeploy CDK if image changes
+    }),
+});
+</code></pre>
+
+                <h3>3. Implement CDK Stack (in `spring-boot-swagger-3-example` repo)</h3>
+                <pre><code class="language-typescript">// In the CDK stack code (e.g., infra/sample-api-ecs-stack.ts)
+
+import * as cdk from 'aws-cdk-lib';
+import * as ecs from 'aws-cdk-lib/aws-ecs';
+import * as ecsp from 'aws-cdk-lib/aws-ecs-patterns';
+// Import base utilities, potentially including your specific Enver class if needed for typing
+import { OdmdShareOut, OdmdUtils, OdmdEnverCdk } from 'ondemandenv-contracts-base';
+
+export class SampleApiServiceStack extends cdk.Stack {
+  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+    super(scope, id, props);
+
+    // Consume the image URI using the Consumer ID defined in contractsLib
+    const imageUri = OdmdEnverCdk.getSharedValue('AppImageUri'); // Use static helper
+    const image = ecs.ContainerImage.fromRegistry(imageUri);
+
+    // Define ECS Fargate service using the consumed image
+    const fargateService = new ecsp.ApplicationLoadBalancedFargateService(this, 'ApiService', {
+        // ... other ECS config (cluster, cpu, memory) ...
+        taskImageOptions: {
+            image: image,
+            containerPort: 8080, // Port exposed by Spring Boot app
+        },
+        publicLoadBalancer: true,
+    });
+
+    // Produce the Load Balancer DNS name as a Product using OdmdShareOut
+    // The ID 'ApiEndpoint' MUST match the Product ID declared in the Enver definition in contractsLib
+    new OdmdShareOut(this, 'ApiEndpoint', {
+        value: fargateService.loadBalancer.loadBalancerDnsName,
+    });
+  }
+}
+</code></pre>
+                <h3>Workflow:</h3>
+                <ol>
+                    <li>A developer pushes code changes to a branch (e.g., `main`) in the `spring-boot-swagger-3-example` repository.</li>
+                    <li>Ondemandenv triggers the deployment for both <code>SampleApiImgDev</code> (<code>b..main</code>) and <code>SampleApiCdkDev</code> (<code>b..main</code>).</li>
+                    <li>The <code>SampleApiImgDev</code> workflow runs first (or in parallel if configured), builds the Docker image, pushes it to ECR, and publishes the new image URI as a Product (<code>imageUriProduct</code>) to the Config Store.</li>
+                    <li>The <code>SampleApiCdkDev</code> workflow starts. It resolves its dependency (<code>AppImageUri</code> consumer) by fetching the latest image URI Product value from the Config Store.</li>
+                    <li>It then runs `cdk deploy`, passing the image URI to the stack, which creates/updates the ECS service using the new image.</li>
+                    <li>Finally, it collects the Load Balancer endpoint from the CloudFormation outputs (via `OdmdShareOut`) and publishes it as its own Product (<code>ApiEndpoint</code>).</li>
+                    <li>If only the Dockerfile changes, only the Image Enver might run initially. Its Product update would then trigger the CDK Enver deployment because `triggerOnChange: true` was set for the consumer.</li>
+                </ol>
+            </section>
+            <section id="example-shared-networking">
+                <h2>Example: Shared Networking (TGW)</h2>
+                <p>This example illustrates how a central Networking team can provide shared VPCs, Transit Gateway connectivity, NAT, and IPAM using a platform Enver.</p>
+                <h3>1. Define Networking Build & Enver in `contractsLib`</h3>
+                <pre><code class="language-typescript">// In MyOrgContracts.ts constructor
+
+// Define the Build using the networking repo alias
+const networkingBuild = new BuildDefinition(this, 'NetworkingBuild', {
+    githubRepoAlias: 'networking-repo', // Defined in MyOrgContracts.githubRepos
+    buildType: 'cdk', // Assumes networking infra is defined via CDK
+});
+
+// Define the static platform Enver for production networking
+// Assume NetworkingPlatformEnver extends OdmdEnverCdk and defines these Products internally
+const networkingProd = new NetworkingPlatformEnver(this, 'NetworkingProd', {
+    build: networkingBuild,
+    targetAccountAlias: 'networking-prod', // Deploy into the specialized networking account
+    // Products are declared within the NetworkingPlatformEnver class definition
+    // e.g., public readonly sharedVpcIdProduct = new Product(this, 'SharedVpcId');
+    // e.g., public readonly privateSubnetIdsProduct = new Product(this, 'PrivateSubnetIds');
+});
+</code></pre>
+                <h3>2. Implement Networking CDK Stack (in `networking` repo)</h3>
+                <pre><code class="language-typescript">// In the Networking CDK stack code (e.g., infra/networking-stack.ts)
+import * as cdk from 'aws-cdk-lib';
+import * as ec2 from 'aws-cdk-lib/aws-ec2';
+import { OdmdShareOut } from 'ondemandenv-contracts-base';
+
+export class NetworkingStack extends cdk.Stack {
+  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+    super(scope, id, props);
+
+    // Provision Transit Gateway, IPAM Pool, VPC, Subnets, NAT Gateway...
+    const tgw = new ec2.CfnTransitGateway(this, 'Tgw', { /* ... TGW config ... */ });
+    const ipamPool = new ec2.CfnIpamPool(this, 'IpamPool', { /* ... IPAM config ... */ });
+    const vpc = new ec2.Vpc(this, 'SharedVpc', { /* ... VPC config ... */ });
+    const natGateway = vpc.addNatGateway(/* ... NAT config ... */); // Example
+
+    // Share outputs as Products using IDs matching Product IDs in NetworkingPlatformEnver
+    new OdmdShareOut(this, 'TgwId', { value: tgw.attrId });
+    new OdmdShareOut(this, 'IpamPoolId', { value: ipamPool.attrIpamPoolId });
+    new OdmdShareOut(this, 'SharedVpcId', { value: vpc.vpcId });
+    new OdmdShareOut(this, 'PrivateSubnetIds', { value: cdk.Fn.join(',', vpc.privateSubnets.map(s => s.subnetId)) });
+    new OdmdShareOut(this, 'NatGatewayId', { value: natGateway.gatewayId }); // Example NAT GW ID
+  }
+}</code></pre>
+                <h3>3. Consuming Networking Products</h3>
+                <p>An application Enver (e.g., `OrderServiceDev`) would declare Consumers for the needed networking Products in `contractsLib`:</p>
+                <pre><code class="language-typescript">// In MyOrgContracts.ts constructor, defining OrderServiceDev Enver
+const orderServiceDev = new OrderServiceEnver(this, 'OrderServiceDev', {
+    build: orderServiceBuild,
+    targetAccountAlias: 'dev-workspace',
+    // Consume products from the Networking Enver instance ('networkingProd')
+    vpcIdConsumer: new Consumer(this, 'VpcId', networkingProd.sharedVpcIdProduct),
+    subnetIdsConsumer: new Consumer(this, 'SubnetIds', networkingProd.privateSubnetIdsProduct),
+    // ... other consumers ...
+});</code></pre>
+                <p>The `OrderServiceDev` CDK stack would then use `OdmdUtils.getSharedValue('VpcId')` and `OdmdUtils.getSharedValue('SubnetIds')` to place its resources (like Lambdas or ECS tasks) into the correct shared VPC and subnets managed by the Networking team.</p>
+            </section>
+            <section id="example-eks-deployment">
+                <h2>Example: Shared EKS Deployment</h2>
+                <p>This example shows deploying an application's Kubernetes manifests onto a shared EKS cluster managed by a separate platform Enver.</p>
+                <h3>1. Define EKS Platform Build & Enver in `contractsLib`</h3>
+                <pre><code class="language-typescript">// In MyOrgContracts.ts constructor
+
+const eksBuild = new BuildDefinition(this, 'EksBuild', {
+    githubRepoAlias: 'eks-repo', // Alias for the repo containing EKS CDK code (e.g., ondemandenv/odmd-eks)
+    buildType: 'cdk',
+});
+
+// Assume EksPlatformEnver extends OdmdEnverCdk and declares these Products internally
+const sharedEksProd = new EksPlatformEnver(this, 'SharedEksProd', {
+    build: eksBuild,
+    targetAccountAlias: 'workspace0', // Or a dedicated EKS account
+    // Products like clusterNameProduct, clusterEndpointProduct etc. are defined inside EksPlatformEnver
+});
+</code></pre>
+                <h3>2. Define Application Build & Enver in `contractsLib`</h3>
+                <pre><code class="language-typescript">// In MyOrgContracts.ts constructor
+
+// Build for the application (could be Docker or CDK/cdk8s)
+const myAppBuild = new BuildDefinition(this, 'MyAppBuild', {
+    githubRepoAlias: 'my-app-repo',
+    buildType: 'cdk', // Example using cdk8s
+});
+
+// Enver for the application deployment
+const myAppEksDev = new MyAppEksEnver(this, 'MyAppEksDev', { // Assuming MyAppEksEnver extends OdmdEnverCdk
+    build: myAppBuild,
+    targetAccountAlias: 'dev-workspace',
+    // Consume Products from the shared EKS cluster Enver instance ('sharedEksProd')
+    clusterNameConsumer: new Consumer(this, 'ClusterName', sharedEksProd.clusterNameProduct),
+    clusterEndpointConsumer: new Consumer(this, 'ClusterEndpoint', sharedEksProd.clusterEndpointProduct),
+    clusterOidcArnConsumer: new Consumer(this, 'ClusterOidcArn', sharedEksProd.clusterOidcArnProduct),
+    // Consume the image URI from an Image Enver (defined elsewhere, e.g., myAppImgDev)
+    appImageUriConsumer: new Consumer(this, 'AppImageUri', myAppImgDev.imageUriProduct),
+    // This Enver might produce its own products, like a service URL
+    serviceUrlProduct: new Product(this, 'ServiceUrl'),
+});
+</code></pre>
+                <h3>3. Implement Application CDK/cdk8s Stack (in `my-app-repo`)</h3>
+                <pre><code class="language-typescript">// In the App's CDK stack (e.g., infra/app-eks-stack.ts)
+import * as cdk from 'aws-cdk-lib';
+import * as iam from 'aws-cdk-lib/aws-iam';
+import * as cdk8s from 'cdk8s';
+import * as kplus from 'cdk8s-plus-25'; // Example using cdk8s-plus
+import { OdmdUtils, OdmdShareOut, OdmdEnverCdk } from 'ondemandenv-contracts-base';
+
+export class MyAppEksStack extends cdk.Stack {
+  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+    super(scope, id, props);
+
+    // Consume shared EKS cluster details using the Consumer IDs defined in contractsLib
+    const clusterName = OdmdEnverCdk.getSharedValue('ClusterName');
+    const clusterOidcArn = OdmdEnverCdk.getSharedValue('ClusterOidcArn');
+    const imageUri = OdmdEnverCdk.getSharedValue('AppImageUri'); // Consume image URI
+
+    // Define IAM Role for the application pod (IRSA)
+    const podRole = new iam.Role(this, 'PodRole', {
+        assumedBy: new iam.FederatedPrincipal(
+            clusterOidcArn, // Use consumed OIDC ARN
+            { /* Conditions based on namespace/service account */ },
+            'sts:AssumeRoleWithWebIdentity'
+        ),
+    });
+    // Grant permissions to the pod role, e.g., S3 access
+    // podRole.addToPolicy(...)
+
+    // Define Kubernetes manifests using cdk8s
+    const app = new cdk8s.App();
+    const chart = new cdk8s.Chart(app, 'MyAppChart');
+    const namespace = 'my-app-ns'; // Define namespace
+
+    const deployment = new kplus.Deployment(chart, 'AppDeployment', {
+        metadata: { namespace: namespace },
+        replicas: 2,
+        containers: [{
+            image: imageUri, // Use consumed image URI
+            portNumber: 8080,
+        }],
+        // Link to Service Account annotated for IRSA
+        serviceAccount: new kplus.ServiceAccount(chart, 'AppServiceAccount', {
+            metadata: {
+                namespace: namespace,
+                name: 'my-app-sa',
+                annotations: {
+                    // Standard K8s annotation for IRSA
+                    'eks.amazonaws.com/role-arn': podRole.roleArn
+                }
+            }
+        }),
+    });
+
+    const service = deployment.exposeViaService({
+        name: 'my-app-service',
+        serviceType: kplus.ServiceType.LOAD_BALANCER, // Example
+        ports: [{ port: 80, targetPort: 8080 }],
+    });
+
+    // Produce the service endpoint - ID must match Product ID in contractsLib
+    // new OdmdShareOut(this, 'ServiceUrl', { value: service.loadBalancerIp }); // Example
+
+    app.synth(); // Synthesize the K8s manifests
+  }
+}
+</code></pre>
+                <h3>Key Takeaways:</h3>
+                <ul>
+                    <li>The Platform EKS Enver owns the cluster lifecycle and publishes connection details.</li>
+                    <li>The Application Enver consumes these details and defines its Kubernetes manifests and required IAM permissions (via IRSA).</li>
+                    <li>The Ondemandenv deployment workflow bridges the gap, applying the manifests to the correct cluster using appropriate cross-account roles, abstracting complexity from the application team.</li>
+                </ul>
+            </section>
+            <section id="example-cross-account">
+                <h2>Example: Cross-Account Dependency</h2>
+                <p><i>Content coming soon...</i></p>
+            </section>
+
+
+        </article>
+
+    </div>
+</div>
+
+<footer class="bg-gray-800 text-gray-400">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="flex flex-col md:flex-row justify-between items-center">
+            <div class="text-center md:text-left mb-4 md:mb-0">
+                <p>© 2025 Ondemandenv. All rights reserved.</p>
+                <p class="text-sm">Built with passion in Edison, NJ.</p>
+            </div>
+            <div class="flex space-x-6">
+                <a href="#" class="hover:text-gray-300 text-sm">Privacy Policy</a>
+                <a href="#" class="hover:text-gray-300 text-sm">Terms of Service</a>
+                <a href="index.html#home" class="hover:text-gray-300 text-sm">Home</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+</body>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.docs-link');
+        
+        function highlightNavLink() {
+            const scrollY = window.pageYOffset;
+            
+            // Find current section by checking which one is in view
+            sections.forEach(section => {
+                const sectionHeight = section.offsetHeight;
+                const sectionTop = section.offsetTop - 100; // Offset for header
+                const sectionId = section.getAttribute('id');
+                
+                if (scrollY >= sectionTop && scrollY < sectionTop + sectionHeight) {
+                    // Remove active class from all links
+                    navLinks.forEach(link => {
+                        link.classList.remove('docs-link-active');
+                    });
+                    
+                    // Add active class to current section link
+                    const activeLink = document.querySelector(`.docs-link[href="#${sectionId}"]`);
+                    if (activeLink) {
+                        activeLink.classList.add('docs-link-active');
+                    }
+                }
+            });
+        }
+        
+        // Call on load and scroll
+        highlightNavLink();
+        window.addEventListener('scroll', highlightNavLink);
+    });
+</script>
+</html>

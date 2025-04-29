@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ONDEMANDENV.dev - Contract-First Platform for Distributed Systems</title>
+    <title>ONDEMANDENV.dev - Holistic Environment Management for Distributed Systems</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -11,410 +11,176 @@
     <nav>
         <div class="logo">ONDEMANDENV.dev</div>
         <ul>
-            <li><a href="#philosophy">Philosophy</a></li>
-            <li><a href="#challenges">Challenges</a></li>
-            <li><a href="#overview">Platform</a></li>
-            <li><a href="#setup">Implementation</a></li>
-            <li><a href="#developer">Developer</a></li>
-            <li><a href="#visualization">Console</a></li>
-            <li><a href="#examples">Example</a></li>
-            <li><a href="https://github.com/ondemandenv" target="_blank">GitHub</a></li>
+            <li><a href="#problem">The Problem</a></li>
+            <li><a href="#solution">Our Solution</a></li>
+            <li><a href="#how-it-works">How It Works</a></li>
+            <li><a href="#articles">Learn More</a></li>
+            <li><a href="doc.html">Documentation</a></li>
+            <li><a href="https://github.com/ondemandenv" target="_blank">GitHub Org</a></li>
+            <li><a href="mailto:gary.y.7811@gmail.com">Request Demo</a></li>
         </ul>
     </nav>
 </header>
 
 <main>
     <section id="hero">
-        <h1>Transform Your Distributed Systems</h1>
-        <p>Define your service interfaces and dependencies - we handle the rest. A contract-first platform that
-            automatically manages infrastructure and environment lifecycles.</p>
-    </section>
-
-    <section id="philosophy">
-        <h2>Philosophy & Theory</h2>
-        <div class="philosophy-grid">
-            <div class="philosophy-item">
-                <h3>Contract-First Development</h3>
-                <p>Decompose complex systems into service-oriented architecture using Domain-Driven Design principles,
-                    where contracts define clear boundaries and interfaces before implementation begins. These
-                    boundaries enable context-driven testing for improved consistency and quality.</p>
-            </div>
-            <div class="philosophy-item">
-                <h3>Architecture as Code</h3>
-                <p>The contracts library defines the fundamental architecture of the system - the boundaries,
-                    interfaces, and relationships between services. This goes beyond infrastructure as code, capturing
-                    the essential contracts that govern how services interact and evolve together.</p>
-            </div>
-            <div class="philosophy-item">
-                <h3>Event-Driven Lifecycle</h3>
-                <p>By managing complete environment lifecycles, the platform enables on-demand environments for
-                    development, testing, and AI-assisted iterations, triggered by natural development events.</p>
-            </div>
-            <div class="philosophy-item">
-                <h3>Environment as Resources</h3>
-                <p>Environments are managed sets of infrastructure resources that engineers and AI agents can create
-                    on-demand for exploration and experimentation, while the platform maintains consistency and
-                    lifecycle management.</p>
-            </div>
+        <h1>Tame Distributed System Complexity</h1>
+        <p>Stop fighting fragmented tooling and inconsistent environments. Define your architecture as code, and let ONDEMANDENV manage the entire lifecycle.</p>
+        <div class="cta-buttons">
+            <a href="doc.html" class="btn btn-primary">View Documentation</a>
+            <a href="mailto:gary.y.7811@gmail.com" class="btn btn-secondary">Request Demo</a>
         </div>
     </section>
 
-    <section id="challenges">
-        <h2>Challenges We Solve</h2>
+    <section id="problem">
+        <h2>The Problem: Fragmentation & Inconsistency</h2>
+        <p>Modern distributed systems promise agility but often deliver complexity. Teams struggle with:</p>
         <div class="challenges-grid">
             <div class="challenge">
-                <h3>Service Consistency</h3>
-                <p>Managing consistency between service parts and dependencies</p>
+                <img src="placeholder.png" alt="Fragmentation Icon"> <!-- Placeholder: Replace with actual icon -->
+                <h3>Fragmentation</h3>
+                <p>Disjointed tools (IaC, CI/CD, K8s), processes, and information across teams lead to toolchain sprawl, integration overhead, and slow feedback loops. <a href="articles/scope-localization-ambiguity.html">(Learn more)</a></p>
             </div>
             <div class="challenge">
-                <h3>Configuration Management</h3>
-                <p>Handling complex configurations across distributed systems</p>
+                <img src="placeholder.png" alt="Inconsistency Icon"> <!-- Placeholder: Replace with actual icon -->
+                <h3>Inconsistency ("Snowflaking")</h3>
+                <p>Manual tweaks and configuration drift create unique, hard-to-reproduce environments, hindering testing, deployment reliability, and scalability. <a href="articles/scope-localization-ambiguity.html">(Learn more)</a></p>
             </div>
             <div class="challenge">
-                <h3>GitOps Limitations</h3>
-                <p>Addressing the limitations of traditional GitOps approaches</p>
+                <img src="placeholder.png" alt="Ambiguity Icon"> <!-- Placeholder: Replace with actual icon -->
+                <h3>Ambiguity</h3>
+                <p>Unclear dependencies, responsibilities, and configurations between services lead to miscommunication, rework, and integration issues. <a href="articles/scope-localization-ambiguity.html">(Learn more)</a></p>
             </div>
             <div class="challenge">
-                <h3>Authentication & Authorization</h3>
-                <p>Simplifying service-level security management</p>
+                <img src="placeholder.png" alt="GitOps Trap Icon"> <!-- Placeholder: Replace with actual icon -->
+                <h3>The YAML/Container-Centric Trap</h3>
+                <p>Traditional GitOps often focuses narrowly on container deployments via YAML, ignoring holistic environment needs, leading to brittle pipelines and organizational inefficiencies. <a href="articles/fragmentation-trap.html">(Learn more)</a></p>
+            </div>
+        </div>
+        <p class="root-cause">These issues often stem from "Scope Localization" - teams optimizing locally without a holistic, system-wide view enforced by the platform.</p>
+    </section>
+
+    <section id="solution">
+        <h2>Our Solution: Holistic, Contract-Driven Environments</h2>
+        <p>ONDEMANDENV provides a unified platform to manage the entire lifecycle of your distributed systems based on clear, codified contracts.</p>
+        <div class="philosophy-grid">
+            <div class="philosophy-item">
+                <h3>Contracts Library (`contractsLib`)</h3>
+                <p>Define your system's architecture, service interfaces, dependencies, and deployment targets as code (TypeScript). This becomes the single source of truth, eliminating ambiguity. <a href="articles/odmd-arc.html">(Technical details)</a></p>
+            </div>
+            <div class="philosophy-item">
+                <h3>Enver (Environment Version)</h3>
+                <p>Manage complete, versioned, logical environments (infra, config, dependencies) as atomic units. Supports mutable (branch-based) and immutable (tag-based) envers for consistency and reproducibility. <a href="articles/app-centric-infra1.html">(Concept)</a></p>
+            </div>
+            <div class="philosophy-item">
+                <h3>On-Demand Cloning</h3>
+                <p>Instantly create high-fidelity, isolated clones of any enver (e.g., via a git commit comment). Perfect for development, testing, and experimentation without dependency conflicts. <a href="articles/odmd-arc.html">(Technical details)</a></p>
+            </div>
+            <div class="philosophy-item">
+                <h3>Application-Centric Management</h3>
+                <p>Treats the entire vertical slice (infra, runtime, security) as the application unit, managed cohesively, overcoming limitations of container-only approaches. <a href="articles/app-centric-infra1.html">(Learn more)</a></p>
             </div>
         </div>
     </section>
 
-    <section id="overview">
-        <h2>Platform Abstraction</h2>
+    <section id="how-it-works">
+        <h2>How It Works: Platform Overview</h2>
         <div class="architecture-diagram">
             <img src="https://raw.githubusercontent.com/ondemandenv/.github/main/profile/img_4.png"
                  alt="ONDEMANDENV Platform Architecture"
                  class="arch-image">
             <div class="diagram-caption">
-                <p>High-level architecture showing how Contracts Library, ODMD Control Layer, and ODMD Central work
-                    together to manage distributed services and their environments.</p>
+                <p>Define contracts, and the platform orchestrates infrastructure, dependencies, and deployments across your AWS accounts.</p>
             </div>
         </div>
         <div class="features">
             <div class="feature">
-                <h3>Contracts Library</h3>
-                <p>Core architectural definition layer that codifies:</p>
-                <ul>
-                    <li>Service boundaries, interfaces, and contracts</li>
-                    <li>Inter-service relationships and dependencies</li>
-                    <li>Architectural constraints and patterns</li>
-                    <li>Environment specifications derived from architecture</li>
-                </ul>
+                <h4>1. Define Contracts</h4>
+                <p>Specify service interfaces, producers/consumers, and target environments (account/region) in the `contractsLib` repository.</p>
             </div>
             <div class="feature">
-                <h3>ODMD Control Layer</h3>
-                <p>Service-specific control plane that manages:</p>
-                <ul>
-                    <li>IAM roles and permissions</li>
-                    <li>Building jobs configuration</li>
-                    <li>Environment-specific deployments</li>
-                </ul>
+                <h4>2. Platform Orchestration</h4>
+                <p>ODMD Central interprets `contractsLib`, updates the central config store, manages dependencies, and provisions required infra (IAM, pipelines via CDK).</p>
             </div>
             <div class="feature">
-                <h3>ODMD Central</h3>
-                <p>Core orchestration engine that:</p>
-                <ul>
-                    <li>Interprets Contract Library definitions</li>
-                    <li>Creates infrastructure (IAM/jobs)</li>
-                    <li>Manages service deployment across environments</li>
-                    <li>Ensures correct service-to-service communication</li>
-                </ul>
+                <h4>3. Automated Lifecycle</h4>
+                <p>Changes trigger automated builds, deployments, and updates for affected `Envers`. Cloning provides instant, isolated environments.</p>
             </div>
+        </div>
+        <div class="cta-buttons">
+            <a href="doc.html#core-concepts" class="btn btn-secondary">Explore Core Concepts</a>
         </div>
     </section>
 
-    <section id="setup">
-        <h2>Implementations</h2>
-        <div class="setup-container">
-            <div class="implementation-intro">
-                <p>The platform can be implemented using different cloud providers and infrastructure tools. Our
-                    reference AWS implementation demonstrates practical least-privilege security across multiple
-                    systems:</p>
-            </div>
-
-            <div class="implementation-tabs">
-                <div class="implementation active">
-                    <h3>AWS CDK Implementation</h3>
-                    <div class="security-implementation">
-                        <h4>Cross-System Security Integration</h4>
-                        <ul>
-                            <li>Fine-grained IAM roles generated from contract definitions</li>
-                            <li>Least-privilege access across AWS accounts, services, and resources</li>
-                            <li>Secure GitHub integration with minimal required permissions</li>
-                            <li>Isolated artifact management with controlled access</li>
-                        </ul>
-                    </div>
-
-                    <div class="setup-step">
-                        <h4>One-Time Manual Setup</h4>
-                        <p>Deploy ODMD provided CloudFormation template with secure defaults:</p>
-                        <ol>
-                            <li>The bootstrap S3 bucket</li>
-                            <li>A bootstrap user with minimal required permissions</li>
-                            <li>Pipeline deploying from bootstrap S3 bucket</li>
-                        </ol>
-                        <div class="setup-note">
-                            <p>Create scoped credentials for the bootstrap user and bucket name, enabling ODMD platform
-                                to securely manage artifact deployment</p>
-                        </div>
-                    </div>
-
-                    <div class="setup-step">
-                        <h3>Bootstrap AWS Accounts</h3>
-                        <ol>
-                            <li>Central account bootstrapped with minimal permissions needed for orchestration</li>
-                            <li>Workspace accounts configured with specific trust relationships to Central account</li>
-                            <li>Fine-grained IAM roles automatically generated from contract definitions</li>
-                        </ol>
-                    </div>
-
-                    <div class="setup-step">
-                        <h3>GitHub Integration</h3>
-                        <ol>
-                            <li>Create GitHub App</li>
-                            <li>Copy private key into Central account's secret</li>
-                            <li>Set the API gateway URL created by ODMD as GitHub App's webhook</li>
-                        </ol>
-                    </div>
-
-                    <div class="setup-architecture">
-                        <img src="https://raw.githubusercontent.com/ondemandenv/.github/main/profile/img_5.png"
-                             alt="ONDEMANDENV Setup Architecture"
-                             class="setup-image">
-                        <div class="setup-caption">
-                            <p>Architecture showing the relationship between Customer domain, AWS Organization, and
-                                ONDEMANDENV domain</p>
-                        </div>
-                    </div>
-
-                    <div class="setup-details">
-                        <div class="setup-detail-item">
-                            <h4>Customer Domain Contains</h4>
-                            <ul>
-                                <li>GitHub organization repositories</li>
-                                <li>Contracts defining app/service, repo, branch/tag</li>
-                                <li>Infrastructure repositories (networking, vpc/rds, eks)</li>
-                                <li>Multiple app/service repositories</li>
-                            </ul>
-                        </div>
-                        <div class="setup-detail-item">
-                            <h4>AWS Organization Structure</h4>
-                            <ul>
-                                <li>Central AWS account with GitHub app integration</li>
-                                <li>Networking AWS account for shared resources</li>
-                                <li>Multiple workspace AWS accounts for different environments</li>
-                                <li>CFN stacks managed by the platform</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="implementation future">
-                    <h3>Future Implementations</h3>
-                    <div class="future-implementations">
-                        <div class="future-impl">
-                            <h4>Terraform Implementation</h4>
-                            <p>Coming soon: Implementation using Terraform with support for multiple cloud providers</p>
-                        </div>
-                        <div class="future-impl">
-                            <h4>Kubernetes Native</h4>
-                            <p>Planned: Pure Kubernetes implementation using Custom Resource Definitions (CRDs)</p>
-                        </div>
-                        <div class="future-impl">
-                            <h4>Cloud Agnostic</h4>
-                            <p>Future: Platform-agnostic implementation supporting any infrastructure provider</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <section id="benefits">
+        <h2>Key Benefits</h2>
+        <div class="benefits-grid">
+            <div class="benefit-item">Consistency & Reproducibility</div>
+            <div class="benefit-item">Automated Dependency Management</div>
+            <div class="benefit-item">On-Demand, High-Fidelity Environments</div>
+            <div class="benefit-item">Simplified Configuration</div>
+            <div class="benefit-item">Enhanced Security (Least Privilege)</div>
+            <div class="benefit-item">Streamlined Collaboration</div>
+            <div class="benefit-item">Facilitates Advanced Deployments (B/G, A/B)</div>
+            <div class="benefit-item">Reduced Toolchain Complexity</div>
         </div>
     </section>
 
-    <section id="developer">
-        <h2>Developer & AI Experience</h2>
-        <div class="dev-workflow">
-            <div class="dev-step">
-                <h3>1. Define in Contracts Library</h3>
-                <p>Simply describe your service interfaces in the contracts library:</p>
-                <ul>
-                    <li>Dependencies required from other services</li>
-                    <li>Resources produced for other services</li>
-                    <li>Service interfaces and boundaries</li>
-                </ul>
-                <div class="platform-response">
-                    <h4>Platform Automatically:</h4>
-                    <ul>
-                        <li>Interprets contract definitions</li>
-                        <li>Provisions required infrastructure</li>
-                        <li>Manages dependencies between services</li>
-                        <li>Manages service versions and releases</li>
-                        <li>Controls environment lifecycles</li>
-                        <li>Ensures secure service communication</li>
-                        <li>Maintains consistency across environments</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="dev-step">
-                <h3>2. Focus on Core Logic</h3>
-                <p>Well-defined boundaries and contracts enable:</p>
-                <ul>
-                    <li>Clear understanding of service responsibilities</li>
-                    <li>Precise interface definitions for both humans and AI</li>
-                    <li>Simplified reasoning about service behaviors</li>
-                    <li>Efficient collaboration between teams and AI agents</li>
-                    <li>Context-driven testing with consistent boundaries</li>
-                </ul>
-                <div class="boundary-benefits">
-                    <h4>Benefits of Clear Boundaries</h4>
-                    <ul>
-                        <li>Humans can focus on business logic without infrastructure complexity</li>
-                        <li>AI agents can understand and work within defined contexts</li>
-                        <li>Reduced cognitive load through clear separation of concerns</li>
-                        <li>Enhanced maintainability and evolvability</li>
-                        <li>Improved test reliability through consistent contexts</li>
-                        <li>Predictable test environments across deployments</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="dev-step">
-                <h3>3. Automation & AI Assistance</h3>
-                <p>Unleash AI potential through clear context boundaries:</p>
-                <div class="implementation-details">
-                    <h4>Contract Abstraction</h4>
-                    <ul>
-                        <li>Contracts define abstract code models without concrete values</li>
-                        <li>Resources with concrete values are generated and mapped to code references during
-                            deployment
-                        </li>
-                        <li>Same logical structure across environments with isolated physical resources</li>
-                    </ul>
-
-                    <h4>AI Agent Integration</h4>
-                    <ul>
-                        <li>Platform decomposes complex systems into clear, bounded contexts for AI agents</li>
-                        <li>AI operates effectively within well-defined service boundaries</li>
-                        <li>Like skilled mid-senior developers, AI excels with clear scope and context</li>
-                        <li>Contract boundaries prevent context overload and maintain system clarity</li>
-                        <li>Build/test/deploy feedback helps AI iterate within its bounded context</li>
-                    </ul>
-                </div>
-                <div class="ai-benefits">
-                    <h4>AI Agent Benefits</h4>
-                    <ul>
-                        <li>Focus on implementation details within clear boundaries</li>
-                        <li>Operate effectively with limited but precise context</li>
-                        <li>Avoid complexity overload through bounded contexts</li>
-                        <li>Contribute effectively as part of a larger system</li>
-                    </ul>
-                </div>
-            </div>
+    <section id="articles">
+        <h2>Learn More: Deep Dives & Concepts</h2>
+        <div class="articles-grid">
+            <article class="article-card">
+                <h4><a href="articles/scope-localization-ambiguity.html">The Complexity Entanglement</a></h4>
+                <p>Understanding Fragmentation, Inconsistency, and Ambiguity in modern SDLC.</p>
+            </article>
+            <article class="article-card">
+                <h4><a href="articles/fragmentation-trap.html">The Fragmentation Trap</a></h4>
+                <p>How YAML/Container-Centric GitOps hinders evolution and breeds inefficiency.</p>
+            </article>
+             <article class="article-card">
+                <h4><a href="articles/app-centric-infra1.html">Application-Centric Infrastructure (Part 1)</a></h4>
+                <p>Moving beyond fragmented tools towards unified application stacks with CDK.</p>
+            </article>
+            <article class="article-card">
+                <h4><a href="articles/app-centric-infra2.html">Application-Centric Infrastructure (Part 2)</a></h4>
+                <p>Addressing multi-account EKS limitations and the role of the platform.</p>
+            </article>
+            <article class="article-card">
+                <h4><a href="articles/odmd-arc.html">Platform Architecture & Concepts</a></h4>
+                <p>Technical notes on Envers, ContractsLib, cloning, and platform components.</p>
+            </article>
+             <article class="article-card">
+                <h4><a href="articles/offload-to-platform.html">Abstracting & Offloading Infrastructure</a></h4>
+                <p>The power of IaC, OOP/DDD, and platform abstractions in transforming the SDLC.</p>
+            </article>
         </div>
     </section>
 
-    <section id="visualization">
-        <h2>Environment Visualization Console</h2>
-        <div class="vis-container">
-            <div class="vis-description">
-                <h3>Interactive Dependency Graph</h3>
-                <p>The <a href="https://web.auth.ondemandenv.link" target="_blank">ONDEMANDENV Web Console</a>
-                    visualizes both the architectural contracts and their runtime manifestations:</p>
-                <ul>
-                    <li>Architectural contracts from the contracts library</li>
-                    <li>Service boundaries and interface definitions</li>
-                    <li>Runtime environment states and relationships</li>
-                    <li>Dynamic mapping between contracts and deployed resources</li>
-                </ul>
-
-                <div class="vis-features">
-                    <div class="vis-feature">
-                        <h4>Interactive Exploration</h4>
-                        <p>Select nodes to view detailed information about:</p>
-                        <ul>
-                            <li>Contract definitions</li>
-                            <li>Stack IDs</li>
-                            <li>Stack parameters</li>
-                            <li>Environment outputs</li>
-                            <li>Runtime resource mappings</li>
-                        </ul>
-                    </div>
-                    <div class="vis-feature">
-                        <h4>Architecture Visualization</h4>
-                        <p>The relationship graph shows:</p>
-                        <ul>
-                            <li>Architectural contracts and dependencies</li>
-                            <li>Service interface relationships</li>
-                            <li>Runtime environment hierarchies</li>
-                            <li>Concrete resource mappings across environments</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="vis-screenshot">
-                <img src="https://raw.githubusercontent.com/ondemandenv/.github/main/profile/img_15.png"
-                     alt="ONDEMANDENV Web Console Screenshot"
-                     class="console-image">
-                <div class="screenshot-caption">
-                    <p>Web console visualization showing service dependencies, environments, and contract relationships.
-                        When selecting a node, you can view detailed stack information including IDs, parameters, and
-                        outputs.</p>
-                </div>
-            </div>
+    <section id="implementation-summary">
+         <h2>Implementation & Setup</h2>
+         <p>ONDEMANDENV utilizes a multi-account AWS strategy and integrates tightly with GitHub. The reference implementation uses AWS CDK for Infrastructure as Code.</p>
+         <div class="setup-architecture">
+             <img src="https://raw.githubusercontent.com/ondemandenv/.github/main/profile/img_5.png"
+                  alt="ONDEMANDENV Setup Architecture"
+                  class="setup-image">
+             <div class="setup-caption">
+                 <p>Typical setup involves a Central orchestration account and multiple Workspace accounts within an AWS Organization.</p>
+             </div>
+         </div>
+         <div class="cta-buttons">
+            <a href="doc.html#installation" class="btn btn-secondary">View Setup Guide</a>
         </div>
     </section>
 
-    <section id="examples">
-        <h2>Usage Example: ondemandenv Organization</h2>
-        <p>The <a href="https://github.com/ondemandenv">ondemandenv GitHub organization</a> demonstrates a complete
-            working example of how the platform manages multiple services and their environments. This example includes:
-        </p>
+    <!-- Removed original #philosophy, #challenges, #overview, #setup, #developer sections -->
+    <!-- Removed #visualization section for now, can be added back when ready -->
 
-        <div class="examples-container">
-            <div class="example">
-                <h3>Contracts Definition</h3>
-                <ul>
-                    <li><a href="https://github.com/ondemandenv/odmd-contracts-sandbox">odmd-contracts-sandbox</a>:
-                        Defines contracts and boundaries for all services in this example
-                    </li>
-                </ul>
-            </div>
-            <div class="example">
-                <h3>Example Use Cases</h3>
-                <ul>
-                    <li>Springboot services on EKS with cross-VPC deployment</li>
-                    <li>Springboot OpenAPI services running on ECS</li>
-                    <li>Serverless Step Functions (no VPC requirements)</li>
-                </ul>
-            </div>
-            <div class="example">
-                <h3>Environment Structure</h3>
-                <ul>
-                    <li>Multiple environments per service (env1, env2, env3)</li>
-                    <li>Cross-account deployments</li>
-                    <li>Contract-based service communication</li>
-                    <li>Automated environment provisioning</li>
-                </ul>
-            </div>
-        </div>
-        <div class="example-note">
-            <p><strong>Note:</strong> This organization demonstrates a complete usage example of the platform. The
-                actual platform implementation is maintained in a separate, currently private repository.</p>
-        </div>
-    </section>
 </main>
 
 <footer>
-    <div class="footer-content">
-        <p>&copy; 2024 ONDEMANDENV.dev</p>
-        <div class="footer-links">
-            <a href="https://github.com/ondemandenv" target="_blank">GitHub</a>
-            <span class="separator">|</span>
-            <a href="https://www.linkedin.com/in/garyy2011/" target="_blank">LinkedIn</a>
-            <span class="separator">|</span>
-            <a href="mailto:gary.y.7811@gmail.com">Email</a>
-        </div>
-    </div>
+    <p>&copy; 2024 ONDEMANDENV.dev. All rights reserved.</p>
+    <!-- Add any other footer links if needed -->
 </footer>
+
 </body>
 </html>
