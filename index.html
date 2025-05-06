@@ -11,11 +11,11 @@
     <nav>
         <div class="logo">ONDEMANDENV.dev</div>
         <ul>
-            <li><a href="#problem">The Problem</a></li>
-            <li><a href="#solution">Our Solution</a></li>
-            <li><a href="#how-it-works">How It Works</a></li>
-            <li><a href="#articles">Learn More</a></li>
-            <li><a href="doc.html">Documentation</a></li>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="concepts.html">Core Concepts</a></li>
+            <li><a href="patterns.html">Patterns & Use Cases</a></li>
+            <li><a href="documentation.html">Documentation</a></li>
+            <li><a href="articles.html">Articles</a></li>
             <li><a href="https://github.com/ondemandenv" target="_blank">GitHub Org</a></li>
             <li><a href="mailto:gary.y.7811@gmail.com">Request Demo</a></li>
         </ul>
@@ -25,66 +25,43 @@
 <main>
     <section id="hero">
         <h1>Tame Distributed System Complexity</h1>
-        <p>Stop fighting fragmented tooling and inconsistent environments. Define your architecture as code, and let ONDEMANDENV manage the entire lifecycle.</p>
+        <p>Unlock true microservice agility. ONDEMANDENV frees services from shared environments with isolated, on-demand lifecycles defined entirely by code.</p>
         <div class="cta-buttons">
-            <a href="doc.html" class="btn btn-primary">View Documentation</a>
-            <a href="mailto:gary.y.7811@gmail.com" class="btn btn-secondary">Request Demo</a>
+            <a href="documentation.html" class="btn btn-primary">Get Started</a>
+            <a href="concepts.html" class="btn btn-secondary">Learn Core Concepts</a>
         </div>
     </section>
 
-    <section id="problem">
-        <h2>The Problem: Fragmentation & Inconsistency</h2>
-        <p>Modern distributed systems promise agility but often deliver complexity. Teams struggle with:</p>
-        <div class="challenges-grid">
+    <section id="introduction">
+        <h2>The Challenge: Complexity in Distributed Systems</h2>
+        <p>Modern systems often suffer from fragmentation, inconsistency, ambiguity, and inefficient GitOps practices. ONDEMANDENV addresses these head-on.</p>
+         <div class="challenges-grid">
             <div class="challenge">
-                <img src="placeholder.png" alt="Fragmentation Icon"> <!-- Placeholder: Replace with actual icon -->
-                <h3>Fragmentation</h3>
-                <p>Disjointed tools (IaC, CI/CD, K8s), processes, and information across teams lead to toolchain sprawl, integration overhead, and slow feedback loops. <a href="articles/scope-localization-ambiguity.html">(Learn more)</a></p>
+                <img src="images/fragmentation-icon.svg" alt="Fragmentation Icon"> <!-- Placeholder: Replace with actual icon -->
+                <h3>Fragmentation & Monolithic Environments</h3>
+                <p>Services might be small, but they often share rigid dev/qa/prod environments, hindering independent deployment and creating bottlenecks. Infrastructure and application configurations become scattered and disconnected.</p>
             </div>
             <div class="challenge">
-                <img src="placeholder.png" alt="Inconsistency Icon"> <!-- Placeholder: Replace with actual icon -->
-                <h3>Inconsistency ("Snowflaking")</h3>
-                <p>Manual tweaks and configuration drift create unique, hard-to-reproduce environments, hindering testing, deployment reliability, and scalability. <a href="articles/scope-localization-ambiguity.html">(Learn more)</a></p>
+                <img src="images/inconsistency-icon.svg" alt="Inconsistency Icon"> <!-- Placeholder: Replace with actual icon -->
+                <h3>Inconsistency</h3>
+                <p>Configuration drift between environments and services leads to unreliable deployments and "works on my machine" issues.</p>
             </div>
             <div class="challenge">
-                <img src="placeholder.png" alt="Ambiguity Icon"> <!-- Placeholder: Replace with actual icon -->
+                <img src="images/ambiguity-icon.svg" alt="Ambiguity Icon"> <!-- Placeholder: Replace with actual icon -->
                 <h3>Ambiguity</h3>
-                <p>Unclear dependencies, responsibilities, and configurations between services lead to miscommunication, rework, and integration issues. <a href="articles/scope-localization-ambiguity.html">(Learn more)</a></p>
+                <p>Implicit dependencies and unclear ownership between services and infrastructure cause confusion and slow down development.</p>
             </div>
             <div class="challenge">
-                <img src="placeholder.png" alt="GitOps Trap Icon"> <!-- Placeholder: Replace with actual icon -->
-                <h3>The YAML/Container-Centric Trap</h3>
-                <p>Traditional GitOps often focuses narrowly on container deployments via YAML, ignoring holistic environment needs, leading to brittle pipelines and organizational inefficiencies. <a href="articles/fragmentation-trap.html">(Learn more)</a></p>
-            </div>
-        </div>
-        <p class="root-cause">These issues often stem from "Scope Localization" - teams optimizing locally without a holistic, system-wide view enforced by the platform.</p>
-    </section>
-
-    <section id="solution">
-        <h2>Our Solution: Holistic, Contract-Driven Environments</h2>
-        <p>ONDEMANDENV provides a unified platform to manage the entire lifecycle of your distributed systems based on clear, codified contracts.</p>
-        <div class="philosophy-grid">
-            <div class="philosophy-item">
-                <h3>Contracts Library (`contractsLib`)</h3>
-                <p>Define your system's architecture, service interfaces, dependencies, and deployment targets as code (TypeScript). This becomes the single source of truth, eliminating ambiguity. <a href="articles/odmd-arc.html">(Technical details)</a></p>
-            </div>
-            <div class="philosophy-item">
-                <h3>Enver (Environment Version)</h3>
-                <p>Manage complete, versioned, logical environments (infra, config, dependencies) as atomic units. Supports mutable (branch-based) and immutable (tag-based) envers for consistency and reproducibility. <a href="articles/app-centric-infra1.html">(Concept)</a></p>
-            </div>
-            <div class="philosophy-item">
-                <h3>On-Demand Cloning</h3>
-                <p>Instantly create high-fidelity, isolated clones of any enver (e.g., via a git commit comment). Perfect for development, testing, and experimentation without dependency conflicts. <a href="articles/odmd-arc.html">(Technical details)</a></p>
-            </div>
-            <div class="philosophy-item">
-                <h3>Application-Centric Management</h3>
-                <p>Treats the entire vertical slice (infra, runtime, security) as the application unit, managed cohesively, overcoming limitations of container-only approaches. <a href="articles/app-centric-infra1.html">(Learn more)</a></p>
+                <img src="images/gitops-trap-icon.svg" alt="GitOps Trap Icon"> <!-- Placeholder: Replace with actual icon -->
+                <h3>YAML/GitOps Trap</h3>
+                <p>Over-reliance on static YAML and container-centric tools often fails to manage the complete application lifecycle and its dependencies effectively.</p>
             </div>
         </div>
     </section>
 
-    <section id="how-it-works">
-        <h2>How It Works: Platform Overview</h2>
+     <section id="how-it-works-overview">
+        <h2>How ONDEMANDENV Helps</h2>
+         <p>ONDEMANDENV provides a unified platform based on codified contracts (`contractsLib`), versioned environments (`Envers`), and on-demand cloning.</p>
         <div class="architecture-diagram">
             <img src="https://raw.githubusercontent.com/ondemandenv/.github/main/profile/img_4.png"
                  alt="ONDEMANDENV Platform Architecture"
@@ -93,93 +70,39 @@
                 <p>Define contracts, and the platform orchestrates infrastructure, dependencies, and deployments across your AWS accounts.</p>
             </div>
         </div>
-        <div class="features">
-            <div class="feature">
-                <h4>1. Define Contracts</h4>
-                <p>Specify service interfaces, producers/consumers, and target environments (account/region) in the `contractsLib` repository.</p>
-            </div>
-            <div class="feature">
-                <h4>2. Platform Orchestration</h4>
-                <p>ODMD Central interprets `contractsLib`, updates the central config store, manages dependencies, and provisions required infra (IAM, pipelines via CDK).</p>
-            </div>
-            <div class="feature">
-                <h4>3. Automated Lifecycle</h4>
-                <p>Changes trigger automated builds, deployments, and updates for affected `Envers`. Cloning provides instant, isolated environments.</p>
-            </div>
-        </div>
         <div class="cta-buttons">
-            <a href="doc.html#core-concepts" class="btn btn-secondary">Explore Core Concepts</a>
+             <a href="concepts.html" class="btn btn-secondary">Explore Core Concepts</a>
+             <a href="patterns.html" class="btn btn-secondary">See Use Cases</a>
         </div>
     </section>
 
-    <section id="benefits">
-        <h2>Key Benefits</h2>
-        <div class="benefits-grid">
-            <div class="benefit-item">Consistency & Reproducibility</div>
-            <div class="benefit-item">Automated Dependency Management</div>
-            <div class="benefit-item">On-Demand, High-Fidelity Environments</div>
-            <div class="benefit-item">Simplified Configuration</div>
-            <div class="benefit-item">Enhanced Security (Least Privilege)</div>
-            <div class="benefit-item">Streamlined Collaboration</div>
-            <div class="benefit-item">Facilitates Advanced Deployments (B/G, A/B)</div>
-            <div class="benefit-item">Reduced Toolchain Complexity</div>
+    <section id="next-steps">
+        <h2>Ready to Dive Deeper?</h2>
+        <div class="next-steps-grid">
+             <div class="next-step-item">
+                 <h3>Understand the Concepts</h3>
+                 <p>Learn about Envers, ContractsLib, Cloning, and the Application-Centric approach.</p>
+                 <a href="concepts.html" class="btn btn-primary">Read Concepts</a>
+            </div>
+             <div class="next-step-item">
+                 <h3>See Practical Patterns</h3>
+                 <p>Explore how ONDEMANDENV solves common challenges like shared infrastructure and cross-account deployments.</p>
+                 <a href="patterns.html" class="btn btn-primary">View Patterns</a>
+            </div>
+             <div class="next-step-item">
+                 <h3>Get Started</h3>
+                 <p>Follow the setup guide, explore the code examples on GitHub, and start managing your environments.</p>
+                 <a href="documentation.html" class="btn btn-primary">View Documentation</a>
+            </div>
         </div>
     </section>
 
-    <section id="articles">
-        <h2>Learn More: Deep Dives & Concepts</h2>
-        <div class="articles-grid">
-            <article class="article-card">
-                <h4><a href="articles/scope-localization-ambiguity.html">The Complexity Entanglement</a></h4>
-                <p>Understanding Fragmentation, Inconsistency, and Ambiguity in modern SDLC.</p>
-            </article>
-            <article class="article-card">
-                <h4><a href="articles/fragmentation-trap.html">The Fragmentation Trap</a></h4>
-                <p>How YAML/Container-Centric GitOps hinders evolution and breeds inefficiency.</p>
-            </article>
-             <article class="article-card">
-                <h4><a href="articles/app-centric-infra1.html">Application-Centric Infrastructure (Part 1)</a></h4>
-                <p>Moving beyond fragmented tools towards unified application stacks with CDK.</p>
-            </article>
-            <article class="article-card">
-                <h4><a href="articles/app-centric-infra2.html">Application-Centric Infrastructure (Part 2)</a></h4>
-                <p>Addressing multi-account EKS limitations and the role of the platform.</p>
-            </article>
-            <article class="article-card">
-                <h4><a href="articles/odmd-arc.html">Platform Architecture & Concepts</a></h4>
-                <p>Technical notes on Envers, ContractsLib, cloning, and platform components.</p>
-            </article>
-             <article class="article-card">
-                <h4><a href="articles/offload-to-platform.html">Abstracting & Offloading Infrastructure</a></h4>
-                <p>The power of IaC, OOP/DDD, and platform abstractions in transforming the SDLC.</p>
-            </article>
-        </div>
-    </section>
-
-    <section id="implementation-summary">
-         <h2>Implementation & Setup</h2>
-         <p>ONDEMANDENV utilizes a multi-account AWS strategy and integrates tightly with GitHub. The reference implementation uses AWS CDK for Infrastructure as Code.</p>
-         <div class="setup-architecture">
-             <img src="https://raw.githubusercontent.com/ondemandenv/.github/main/profile/img_5.png"
-                  alt="ONDEMANDENV Setup Architecture"
-                  class="setup-image">
-             <div class="setup-caption">
-                 <p>Typical setup involves a Central orchestration account and multiple Workspace accounts within an AWS Organization.</p>
-             </div>
-         </div>
-         <div class="cta-buttons">
-            <a href="doc.html#installation" class="btn btn-secondary">View Setup Guide</a>
-        </div>
-    </section>
-
-    <!-- Removed original #philosophy, #challenges, #overview, #setup, #developer sections -->
-    <!-- Removed #visualization section for now, can be added back when ready -->
 
 </main>
 
 <footer>
     <p>&copy; 2024 ONDEMANDENV.dev. All rights reserved.</p>
-    <!-- Add any other footer links if needed -->
+    <!-- Add links to concepts, patterns, docs if desired -->
 </footer>
 
 </body>

@@ -3,131 +3,142 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ONDEMANDENV Architecture & Concepts - ONDEMANDENV.dev</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="icon" href="https://placehold.co/32x32/4a90e2/ffffff?text=OE" type="image/png">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>ONDEMANDENV Architecture Deep Dive - ONDEMANDENV.dev</title>
+    <link rel="stylesheet" href="../styles.css"> <!-- Adjusted path -->
     <style>
-        body { font-family: 'Inter', sans-serif; }
-        .prose h1 { @apply text-3xl font-bold mb-4 border-b pb-2; }
-        .prose h2 { @apply text-2xl font-semibold mt-8 mb-3 border-b pb-1; }
-        .prose h3 { @apply text-xl font-semibold mt-6 mb-2; }
-        .prose p { @apply mb-4 leading-relaxed; }
-        .prose ul { @apply list-disc pl-6 mb-4; }
-        .prose li { @apply mb-2; }
-        .prose pre { @apply bg-gray-800 text-gray-300 p-4 rounded-md overflow-x-auto text-sm mb-4; }
-        .prose code:not(pre > code) { @apply bg-gray-200 text-gray-800 px-1 py-0.5 rounded text-sm; }
-        .prose a { @apply text-blue-600 hover:text-blue-800 underline; }
-        .prose strong { @apply font-semibold; }
+        /* Basic article styling */
+        main { max-width: 800px; margin: 2rem auto; padding: 0 1rem; }
+        h1, h2, h3 { color: var(--primary-color); }
+        h2 { margin-top: 2rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; }
+        h3 { margin-top: 1.5rem; color: var(--secondary-color); }
+        p, ul { line-height: 1.7; margin-bottom: 1rem; }
+        ul { margin-left: 1.5rem; }
+        li { margin-bottom: 0.5rem; }
+        pre { background-color: #f0f0f0; padding: 1rem; border-radius: 5px; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word; }
+        code { font-family: monospace; font-size: 0.9em; }
+        pre > code { background-color: transparent; padding: 0; }
+        blockquote { border-left: 4px solid var(--border-color); padding-left: 1rem; margin-left: 0; font-style: italic; color: #555; }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-800 antialiased">
-    <header class="bg-white shadow-sm sticky top-0 z-50">
-        <nav class="container mx-auto px-4 sm:px-6 lg:px-8 py-3">
-            <div class="flex items-center justify-between h-16">
-                 <div class="flex-shrink-0">
-                     <a href="../index.html#home" class="flex items-center space-x-2">
-                         <img src="https://placehold.co/40x40/4a90e2/ffffff?text=OE" alt="ONDEMANDENV.dev Logo" class="h-8 w-auto rounded-md">
-                         <span class="text-xl font-bold text-gray-900">ONDEMANDENV.dev</span>
-                     </a>
-                 </div>
-                 <div class="flex items-center">
-                     <a href="../index.html#articles" class="text-sm font-medium text-gray-600 hover:text-blue-600">&larr; Back to Articles</a>
-                 </div>
-            </div>
-        </nav>
-    </header>
+<body>
+<header>
+    <nav>
+        <div class="logo">ONDEMANDENV.dev</div>
+        <ul>
+            <li><a href="../index.html">Home</a></li> <!-- Adjusted path -->
+            <li><a href="../concepts.html">Core Concepts</a></li> <!-- Adjusted path -->
+            <li><a href="../patterns.html">Patterns & Use Cases</a></li> <!-- Adjusted path -->
+            <li><a href="../documentation.html">Documentation</a></li> <!-- Adjusted path -->
+            <li><a href="../articles.html">Articles</a></li> <!-- Added link with adjusted path -->
+            <li><a href="https://github.com/ondemandenv" target="_blank">GitHub Org</a></li>
+            <li><a href="mailto:contacts@ondemandenv.dev">Request Demo</a></li>
+        </ul>
+    </nav>
+</header>
 
-    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
-        <article class="prose lg:prose-lg max-w-4xl mx-auto bg-white p-6 md:p-8 rounded-lg shadow">
+<main>
+    <h1>ONDEMANDENV Architecture Deep Dive</h1>
 
-            <h1>ONDEMANDENV Architecture & Concepts (Technical Notes)</h1>
+    <p>The ONDEMANDENV platform aims to solve challenges in the Software Development Lifecycle (SDLC) for distributed systems like microservices, particularly focusing on dependencies between services and collaboration across teams using different repositories.</p>
 
-            <p>The Ondemandenv platform aims to solve challenges in the Software Development Lifecycle (SDLC) for Service-Oriented Architectures (SOA), particularly microservice dependencies and team collaboration across repositories.</p>
+    <p>Here's a breakdown of the core architectural concepts:</p>
 
-            <h2>Core Concepts</h2>
-            <ul>
-                <li><strong>Builds & Envers:</strong> Each repository can have different builds. Each build can have multiple "envers" (environment versions) tied to different branches or tags. An enver represents a holistic, logical environment version.</li>
-                <li><strong>ContractsLib:</strong> A special repository defining dependencies between envers. Envers can consume products (outputs) from other envers.</li>
-                <li><strong>Products:</strong> Outputs from an enver deployment, such as Docker image URIs/SHAs, CDK deployment outputs, or general resource URIs produced by custom scripts. These are stored and versioned in a config store.</li>
-                <li><strong>Enver Types:</strong>
-                    <ul>
-                        <li><strong>Mutable (Branch-based):</strong> Corresponds to a source repository branch. Changes trigger incremental deployments.</li>
-                        <li><strong>Immutable (Tag-based):</strong> Corresponds to a source repository tag. Can only depend on other immutable envers.</li>
-                    </ul>
-                </li>
-                <li><strong>On-Demand Cloning:</strong> New branches/tags can be created referring to an original enver's branch/tag. The platform automatically clones the enver, reusing dependencies but creating isolated resources with unique names while maintaining logical/functional consistency. This uses CDK code parameterized by branch/tag to load configurations.</li>
-                <li><strong>Config Store:</strong> Stores versioned product values from enver deployments. Dispatches events on changes. Consumers react based on their configuration. (Currently uses AWS SSM Parameter Store and EventBridge).</li>
-                <li><strong>Secrets:</strong> Stored in AWS Secrets Manager.</li>
-            </ul>
+    <h2>Builds, Envers, and ContractsLib</h2>
+    <p>Each repository (`repo`) can have different `builds`. Each build can have multiple `envers` (Environment Versions) associated with different Git branches or tags. An `enver` represents a holistic, logical environment for a specific version of a service or component.</p>
+    <p>A special repository, `contractsLib`, defines the dependencies between different envers. An enver can consume `products` (outputs) from other envers. For example, a networking enver might produce an IPAM reference (its product), and an EKS cluster enver consumes this reference, forming a dependency.</p>
+    <p>A build can output several types of products:</p>
+    <ol>
+        <li>A Docker image, producing an image repository URI and image SHA.</li>
+        <li>A CDK (Cloud Development Kit) deployment, which implements the enver's products and consumes products from other envers.</li>
+        <li>General resources with URIs, managed via customized scripts.</li>
+    </ol>
 
-            <h2>Platform Mechanics</h2>
-            <ul>
-                <li><strong>Deployment:</strong> Builds and target deployment accounts/regions are defined in the enver definition within `ContractsLib`. The platform automatically deploys to the target.</li>
-                <li><strong>Dependency Management:</strong> Cycles are acceptable but require placeholders during initialization (e.g., networking needs logging, logging needs networking hostzone). Consumer reaction to dependency changes is configurable.</li>
-                <li><strong>Isolation & Consistency:</strong> Cloned envers are fully isolated but share dependencies. CDK code on different branches/tags can be identical, generating different CloudFormation/HCL with unique resource names/URIs but consistent logic/function.</li>
-                <li><strong>Contracts & Collaboration:</strong> `ContractsLib` acts like a central agreement point. Teams negotiate product/consumer relationships via Pull Requests. Deployment only occurs upon agreement. This enforces architecture-as-code.</li>
-                <li><strong>Access Control:</strong> Primarily managed through the `ContractsLib` agreement process; direct access control on products is less emphasized.</li>
-                <li><strong>Cross-Account Operations:</strong> The platform runs in a central account and uses IAM/STS to assume roles across other accounts (networking, logging, security, workspaces).</li>
-                <li><strong>CI/CD:</strong> Each enver has its own CI/CD (CodePipeline, GitHub Workflow, Step Functions). Integration/E2E tests can be part of the enver or a separate dependent enver. CloudFormation handles rollbacks for CDK deployments.</li>
-            </ul>
+    <h2>Enver Types: Branch vs. Tag</h2>
+    <p>Envers correspond to source repository branches or tags:</p>
+    <ul>
+        <li><strong>Branch Envers (Mutable):</strong> Associated with a Git branch. When the source code changes, the enver is incrementally deployed.</li>
+        <li><strong>Tag Envers (Immutable):</strong> Built from a specific Git tag. These envers can only depend on other immutable (tag) envers, ensuring stability and reproducibility.</li>
+    </ul>
+    <p>The platform automatically deploys envers to their designated target accounts based on definitions in the `contractsLib`.</p>
 
-            <h2>`ContractsLib` Details</h2>
-            <ul>
-                <li><strong>Versioning:</strong> `ContractsLib` itself is semantically versioned and managed as an enver with custom scripts.</li>
-                <li><strong>Integrity:</strong> Uses TypeScript with typing and unit tests to enforce rules (e.g., immutable envers cannot depend on mutable ones).</li>
-                <li><strong>Architecture as Code:</strong> Changes are deliberate and represent architectural decisions agreed upon by teams.</li>
-                <li><strong>Two Levels:</strong>
-                    <ul>
-                        <li><strong>Level 1:</strong> Defines basic types/interfaces (`Build`, `Enver`, `Producer`, `Consumer`) and contracts with the central platform account. Maintained by the Ondemandenv platform team.</li>
-                        <li><strong>Level 2:</strong> Extends Level 1, defining concrete business services, builds, envers, target accounts/regions. Maintained by user teams.</li>
-                    </ul>
-                </li>
-                <li><strong>Workflow:</strong> Changes to Level 2 `ContractsLib` trigger its build/deploy pipeline, publishing an npm package (e.g., <a href="https://github.com/orgs/ondemandenv/packages">ondemandenv packages</a>) and updating the config store. This triggers downstream consumers and platform synchronization.</li>
-            </ul>
+    <h2>On-Demand Cloning</h2>
+    <p>A key feature is the ability to create on-demand environments through cloning. By creating a new branch/tag in the `contractsLib` and referencing an existing enver's branch/tag, the platform automatically creates a clone. This clone reuses the original enver's dependency definitions but deploys resources with different names, maintaining the same logic/functionality. This allows developers to test and experiment with high consistency in isolated environments.</p>
+    <p>The CDK code is designed to take the branch/tag name as a parameter to load configurations. This ensures that the code defining envers can be identical across branches/tags, while the generated CloudFormation/HCL differs in resource names/URIs to avoid conflicts, yet maintains logical consistency.</p>
 
-            <h2>Built-in Builds/Envers</h2>
-            <ul>
-                <li><strong>ContractsLib Build:</strong> Cmd build; compiles/deploys `ContractsLib` repo (runs in workspace0).</li>
-                <li><strong>Networking Build (Optional):</strong> CDK build; deploys networking repo (runs in networking account). Manages multiple networking envers (IPAM, VPC, TGW, NAT) shared with workspace accounts.</li>
-                <li><strong>User Auth Build (Optional):</strong> CDK build; deploys user-auth repo (runs in workspace0). Provides a web console (via AppSync) for visualizing service contracts.</li>
-                <li><strong>EKS Cluster Build (Optional):</strong> CDK build; deploys EKS repo (runs in workspace0). Hosts EKS clusters, using shared networking resources. Workloads deployed to these clusters define their own namespaces for isolation. Manifests deployed via central account VPC. IAM mapping via OIDC.</li>
-            </ul>
+    <h2>Configuration Store and Dependency Management</h2>
+    <p>When an enver is deployed, it outputs the concrete values of its products to a configuration store (e.g., AWS SSM Parameter Store). Consumers can calculate the URI to retrieve these values. The config store versions all values and dispatches events (e.g., via EventBridge) upon changes.</p>
+    <p>Dependency cycles are permitted but require placeholder values during initialization. For instance, if networking provides a hosted zone but requires central logging, and central logging requires the hosted zone:</p>
+    <ol>
+        <li>Initialize networking, providing the hosted zone but using a placeholder for central logging.</li>
+        <li>Set up central logging using the hosted zone provided by networking.</li>
+        <li>Update the networking enver to use the actual central logging product.</li>
+    </ol>
+    <p>How consumers react to product changes is configurable. Consumers can also be defined with initial placeholder values.</p>
+    <p>Envers can deterministically define their stack names. For globally unique resources, the platform relies on CloudFormation's physical name generation or allows user definition based on branch/tag names.</p>
+    <p>Cloning an enver doesn't pin dependency versions by default. However, immutable (tag) envers enforce that their dependencies must also be immutable when created.</p>
+    <p>There's a limit on the number of clones per enver (e.g., 20), and developers manage deletion, which is largely automated. Cloned envers are fully isolated but share the same dependency definitions.</p>
 
-            <h2>CI/CD Generation & Monitoring</h2>
-            <ul>
-                <li>The central account uses a GitHub App to:</li>
-                <li>1) Generate identical GitHub workflow files for each enver across all its branches.</li>
-                <li>2) Monitor config store changes and act based on consumer config (trigger downstream workflows, alert).</li>
-                <li>A web graph GUI (AppSync-based) visualizes enver dependencies.</li>
-            </ul>
+    <h2>ContractsLib as "Architecture as Code"</h2>
+    <p>All definitions reside in code. The `contractsLib` provides built-in interfaces and typing for build and enver definitions. It acts like a "congress" where teams owning envers negotiate the web of producers and consumers through Pull Requests. Deployments only occur upon agreement, removing the need for complex access control on products themselves.</p>
+    <p>Upstream dependency changes can potentially break downstream envers; developers must manage this. The `contractsLib` itself uses semantic versioning and is also treated as an enver, built with custom scripts. Its TypeScript code includes typing and unit tests to ensure integrity (e.g., enforcing that immutable envers cannot depend on mutable ones).</p>
+    <p>Since the `contractsLib` code defines the contracts between services, it essentially represents the architecture of the entire system – "Architecture as Code". Changes are expected to be deliberate and well-reasoned.</p>
 
-            <h2>Lifecycle & Workflow</h2>
-            <ul>
-                <li><strong>Adding a Service:</strong> Define the build/enver in Level 2 `ContractsLib`. Publish `ContractsLib`. Use the updated library in the service repo to consume/publish dependency values.</li>
-                <li><strong>Cloning an Enver (On-Demand):</strong> Use a specific commit comment format (<code>odmd: create@&lt;target_branch&gt;</code>) on a source branch. The platform clones the target enver, reusing dependencies.</li>
-                <li><strong>Deleting a Clone:</strong> Use commit comment (<code>odmd: delete ...</code>). Mostly automated.</li>
-                <li><strong>Permissions:</strong> Each enver has a `buildRole` and `centralRole` defining least privilege for CI/CD and runtime access (config store, assets, assuming other roles).</li>
-                <li><strong>Ambiguity Resolution:</strong> Resources/dependencies must be defined in `ContractsLib` to be deployed.</li>
-            </ul>
+    <h2>Platform Implementation Details</h2>
+    <p>The platform leverages IAM/STS to assume roles across multiple AWS accounts. A central account runs the platform implementation/deployment. Other accounts might exist for specific concerns like networking, logging, security, and multiple `workspace` accounts run the actual application workloads.</p>
+    <p>Currently, the config store uses AWS SSM Parameter Store, EventBridge acts as the event bus triggering Lambda functions, and secrets are stored in AWS Secrets Manager.</p>
 
-            <h2>Key Innovations Summary</h2>
-            <ul>
-                <li><strong>Enver:</strong> Immutable/mutable environment-as-code units with versioned dependencies.</li>
-                <li><strong>ContractsLib:</strong> Codified service contracts for dependency resolution (architecture-as-code).</li>
-                <li><strong>On-Demand Cloning:</strong> Branch-based environment replication with dependency isolation.</li>
-            </ul>
+    <h2>CI/CD and Testing</h2>
+    <p>All envers have their own CI/CD pipelines for unit tests. Integration and End-to-End (E2E) tests, which depend on deployed resources, can be part of the application enver itself or defined as separate envers that depend on the target enver.</p>
+    <p>The platform can integrate with various CI/CD tools like CodePipeline, GitHub Actions, or Step Functions. For AWS CDK deployments, CloudFormation handles automatic rollbacks.</p>
 
-        </article>
-    </main>
+    <h2>Enver Definition and Isolation</h2>
+    <p>An "Enver" is a versioned, logical deployment unit containing all resources (infrastructure to container) for at least one vertical slice of business functionality. It represents a "what-if" version of code.</p>
+    <p>Envers from the same repo/build should generally be unaware of each other but can share dependencies from envers of different repos/builds.</p>
+    <p>Enver configurations are securely isolated, enabling different teams (even offshore/outsourced) to work on separate branches collaboratively without exposing sensitive configuration data.</p>
+    <p>Products are versioned configuration values (URIs, JSON, endpoints, etc.), potentially including URIs to traditional build artifacts.</p>
+    <p>Ideally, all inputs/contexts an Enver uses for contracting with other services are defined in `contractsLib`, ensuring consistent and predictable behavior.</p>
 
-    <footer class="bg-gray-800 text-gray-400 mt-12">
-        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center">
-            <p>© 2025 Ondemandenv. All rights reserved.</p>
-        </div>
-    </footer>
+    <h2>Built-in Builds</h2>
+    <p>The platform includes several optional, pre-defined builds:</p>
+    <ul>
+        <li><strong>ContractsLib Build:</strong> Compiles and deploys the `contractsLib` repo itself (runs in workspace0).</li>
+        <li><strong>Networking Build:</strong> Deploys networking resources (IPAM, VPCs, TGW, NAT) across networking and workspace accounts.</li>
+        <li><strong>User Auth Build:</strong> Deploys a user authentication service and potentially a web console for visualizing contracts (runs in workspace0).</li>
+        <li><strong>EKS Cluster Build:</strong> Deploys EKS clusters, using shared networking resources, allowing workload envers to deploy applications into isolated namespaces within the cluster (runs in workspace0, deploys manifests via central account VPC). IAM mapping uses OIDC federation.</li>
+    </ul>
+
+    <h2>Platform Automation and Visualization</h2>
+    <p>The central account uses a GitHub App to:</p>
+    <ol>
+        <li>Generate identical GitHub Actions workflow files for each enver across all branches.</li>
+        <li>Monitor the config store for changes and react based on consumer configurations (e.g., trigger downstream CI/CD, send alarms).</li>
+    </ol>
+    <p>A web graph GUI, powered by AppSync syncing from the config store, provides an interactive visualization of enver dependencies – an interactive architecture diagram.</p>
+
+    <h2>Contracts Base and Extensibility</h2>
+    <p>A base repository (<a href="https://github.com/ondemandenv/odmd-contracts-base" target="_blank">`ondemandenv/odmd-contracts-base`</a>) defines core types and interfaces (Build, Enver, Producer, Consumer) and contracts with the central account. Each organization creates its own specific `contractsLib` extending this base, defining their concrete services, builds, enver targets (account/region), etc. The ONDEMANDENV platform team maintains the central account deployment and the base library.</p>
+
+    <h2>Workflow Summary</h2>
+    <ul>
+        <li><strong>Adding a Service:</strong> Define the service (as a build/enver) in the organization's `contractsLib`. Once published, services use this library to retrieve dependencies and publish their own products.</li>
+        <li><strong>Cloning an Enver:</strong> Add a comment like <code>odmd: create@&lt;target_branch&gt;</code> to a commit on the source branch. The platform detects this and creates the clone. Use <code>odmd: delete ...</code> to remove clones.</li>
+        <li><strong>Updating ContractsLib:</strong> Pushing code to the `contractsLib` repo triggers its CI/CD, publishing a new package version. This update is detected by the platform, which syncs build/enver infrastructure (CI/CD pipelines, etc.). Downstream envers consuming the library are also triggered based on their configuration.</li>
+    </ul>
+    <p>The platform enforces explicitness: if it's not defined in `contractsLib`, it won't be deployed, resolving ambiguity.</p>
+
+    <h2>Key Innovations Recap</h2>
+    <ul>
+        <li><strong>Enver:</strong> Immutable/mutable environment-as-code units with versioned dependencies.</li>
+        <li><strong>ContractsLib:</strong> Codified service contracts for dependency resolution (architecture-as-code).</li>
+        <li><strong>On-Demand Cloning:</strong> Branch-based environment replication with dependency isolation.</li>
+    </ul>
+
+</main>
+
+<footer>
+    <p>&copy; 2024 ONDEMANDENV.dev. All rights reserved.</p>
+    <!-- Add footer links if needed -->
+</footer>
 
 </body>
-</html>
+</html> 

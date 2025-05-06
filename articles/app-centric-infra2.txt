@@ -1,10 +1,7 @@
 Embracing Application-Centric Infrastructure in the Cloud 2
-Gary Yang
-Gary Yang
-Decompose complexity with abstraction, modeling and coding. Microservice/SOA architecture as code with AWS/Terraform CDK, CDK8s. Event driven async distributed system with Spring Boot and serverless TS/Golang.
 
 
-February 28, 2025
+
 AWS CDK for EKS: Falling Short in Real-World, Multi-Account Kubernetes Deployments
 AWS Cloud Development Kit (CDK) aims to simplify cloud infrastructure provisioning using familiar programming languages. While its EKS module promises to streamline Kubernetes cluster creation and management, a closer look reveals significant shortcomings, especially when considering practical, multi-account EKS deployments. This article will delve into these limitations, arguing that AWS CDK's current EKS implementation, particularly the Cluster.addManifest function, is not truly useful for organizations adopting a shared, multi-account EKS strategy.
 

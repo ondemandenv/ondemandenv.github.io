@@ -1,10 +1,8 @@
 Embracing Application-Centric Infrastructure in the Cloud 1
-Gary Yang
-Gary Yang
-Decompose complexity with abstraction, modeling and coding. Microservice/SOA architecture as code with AWS/Terraform CDK, CDK8s. Event driven async distributed system with Spring Boot and serverless TS/Golang.
 
 
-February 16, 2025
+
+
 In the world of cloud computing, managing infrastructure and applications has often been a tale of two philosophies. On one side, we have tools like AWS CloudFormation, born from an engineering mindset focused on certainty and consistency. CloudFormation excels at defining infrastructure as code, ensuring predictable deployments and automated rollbacks. On the other side, Kubernetes emerged from the operations world, emphasizing ad-hoc operations and mitigation for dynamic, containerized applications. While Kubernetes is unparalleled in container orchestration, it traditionally lacked the broader infrastructure management capabilities of CloudFormation.
 
 This divergence has led to toolchain sprawl, inconsistencies, and operational complexities. However, as the definition of "application" evolves to encompass a wider range of tightly coupled resources, a new paradigm is emerging: Application-Centric Infrastructure. This approach, enabled by tools like AWS Cloud Development Kit (CDK), aims to unify infrastructure and runtime management, bringing consistency, manageability, and a domain-driven perspective to cloud deployments.

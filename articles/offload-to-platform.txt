@@ -1,10 +1,6 @@
 Abstracting and Offloading Infrastructure: Transforming the Software Development Lifecycle
-Gary Yang
-Gary Yang
-Decompose complexity with abstraction, modeling and coding. Microservice/SOA architecture as code with AWS/Terraform CDK, CDK8s. Event driven async distributed system with Spring Boot and serverless TS/Golang.
 
 
-April 19, 2025
 The Power of Abstraction: How Offloading Infrastructure Logic Transforms the Entire SDLC
 In today’s cloud-native world, the separation of infrastructure management from application development is not just a convenience—it’s a necessity for agility, scalability, and innovation. This transformation is driven by Infrastructure as Code (IaC), which allows organizations to model, provision, and manage complex IT environments through code. However, while the benefits are immense, the journey to effective infrastructure abstraction is challenging and requires a unique blend of deep infrastructure knowledge and advanced software engineering skills, particularly in Object-Oriented Programming (OOP) and Domain-Driven Design (DDD).
 
