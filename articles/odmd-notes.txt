@@ -1,0 +1,63 @@
+I have a platform  ondemandenv to solve SOA distributed system SDLC like microservice's dependency between different services and collaboration between teams thru repos:
+each repo can have different build, each build can have multiple envers on different branches( enver: holistic/logical environment of a version ), I have a special repo contractsLib to define the dependencies between different envers, each enver can consumer products from other envers, for example network enver produce ipam ref, and eks cluster enver will consume it forming the dependency, so each build can be output 1) a docker image producing image repo uri and image sha; 2) a deployment of CDK in which we implement the products of the enver and consume other enver's products; 3) general resources with uri with customized  scripts
+
+we define build repo, deployment target account in enver, the platform will automatically deploy to the target.  there are two types of enver corresponding to src repo's branch and tag, branch is the mutable enver when src change, it will incrementally deploy; tag is the immutable enver that will build the source from a tag and its dependencies can only come from immutable enver.
+the key feature is to have on demand environment, meaning when an enver is defined in contractsLib, we can just create a clone of it by create a new branch/tag and refer it to original enver's branch/tag, the platform automatically create the clone, by reusing the original enver's dependency with different resource names but same logic/function for developer to test, experiment with high consistency.  It's CDK code taking its branch/tag as a parameter to load configurations, so build’s envers’ code on branches/tags can be identical, but generated CFN/HCL are different on resource names/uri to avoid conflict while maintaining logic/function consistency.
+
+when enver deployed, it will output it's product concrete value to a config store at uri its consumers can calculate; config store will version all value, dispatch events on change;
+dependency cycles are fine but need some placeholder at initializing:  networking provides hostzone, require central logging and central logging require hostzone, so 1) init networking provides hostzone with no central logging( placeholder) 2) set up central logging using hostzone from networking and 3) update networking to use central logging
+how each consumer react to product change is configurable;
+consumer can defined with initial placeholder value;
+there is an interface letting enver define its own stack name deterministically;
+for global unique resources we depend on CFN's physical name generation, also let user define by branch/tag name;
+cloning an enver does not pin dependency's version, but tag/immutable enver can only depend on tag/immutable enver when creating.
+each enver can have a limited number of clones like up to 20, developer has to manually delete, the deleting process is mostly automatically.
+cloned envers are fully isolated from each other, but share the same dependencies.
+all defined in code, the contractsLib has built-in interface/typing for build and enver definitions to implement.
+the contractsLib is like congress, teams ownering envers will negotiate the product/consumer web with PRs, only deploy on agreement, so no access control on products;
+upstream dependency change can break enver, developers should be aware;
+platform leverages IAM/STS to assume roles across accounts, there is a central account  where the platform implementation/deployment run, and other accounts of different aspects like networking, logging, security, and workspace[num] accounts to run workloads
+
+All envers have their own CI/CD to run unit tests; Integration and E2E tests that depend on deployment can be part of enver also can be a seperated enver depending on target enver; the platform can use codepipeline, github workflow or even step functions as CI/CD, for deployments of aws CDK, cloudformation can automatically rollback deployment.
+
+The contractsLib is  semantic versioning also a enver with customized scripts, its typescript code with typing and unit tests to guarantee integrity, ex. a tag/immutable enver can’t depend on branch/mutable enver. But the ContractsLib  is like congress, pr is like bills and the code is like the law passed; so teams have to prove and argue to fight each other, because these code are contracts between different services, are not  suppose to change easily, these code are literally architecture of the whole system —- app architecture as code!
+
+For now the config store is using aws ssm param store and event bridge as event bus triggering Lambda to run code; all secrets are saved in aws secret secret manager.
+
+“Enver” is a version of environment, it’s a unit for deployment which is a logical environment containing all resources for at least one vertical of business, from infrastructure to container, regardless of where the resource is or what type it is, the platform is responsible to deploy and maintain dependencies.
+“Enver” is a “what if” version of code; envers of the same repo/build should not be aware of each other, but can share dependencies from different repo/build’s enver.
+envers’ configure are securely isolated, so secure that we can have different teams working on different branches for testing or offshore outsourcing, they can collaborate thru branching, but never see each other’s concrete config data.
+Products are versioned configuration values like uri, json string, endpoints, very different to traditional artifacts, could be traditional artifacts uri.
+Ideally engineers and teams  are supposed to define all the inputs/contexts of a “Enver” that are used for contracting with other services in contractsLib, so that Enver’s code can behave consistently/predictablably.
+
+
+
+Based on the above, we have four built in builds:
+ContractsLib build. A cmd build that compile and deploy the contractsLib repo, running in workspace0 account.
+Optional Networking build. A CDK build that compile and deploy networking repo, running in networking account deploying multiple networking envers, each networking enver contains and shares IPAM, VPC with transit gateway and NAT to workspace accounts, that will get a range of CIDR from shared IPAM and share NAT and internal naming system when deploying vpcs in workload envers. Each VPC can only connect to one Transite GateWay, so VPCs and their resources inside are connected thru TGW, but different TGW’s connected VPCs are physically disconnected, central account will create VPCs to each networking enver/tgw/ipam for hosting resources in VPCs.
+Optional User Auth build. A CDK build that deploy user-auth repo, running in workspace0 account. Will connect to the central account’s appsync to provide a web console to visualize contracts inbetween services.
+Optional EKS cluster build. A CDK build that compile and deploy EKS repo, running in workspace0 account.  EKS Enver is special for hosting EKS clusters as workload deployed in workspace0 account,  it will use networking resources shared from networking enver in networking account, each Eks enver can only host one eks cluster, so that we can refer to the eks cluster by enver,  and eks enver share its endpoints for workloads accounts thru central account’s vpc connected by transit gateway, each enver deploying to eks cluster
+will define a namespace of its own to guarantee isolation, all manifests are deployed thru central account VPC.
+deploy all resources in local workspace account with IAM mapping to eks service account thru OIDC "Federated": "arn:aws:iam::<workspce>:oidc-provider/<eks cluster oidc>"
+
+For CI/CD,  the central account use GithubApp to 1) generate a github workflow for each enver, guarantee its identical across all branches; 2) will monitor changes from config store and act according to consumer config, like triggering downstream enver CI/CD workflow or alarming only.
+
+A web graph gui based on appsync syncing from the config store to show how envers depend on each other, it’s an interactive architecture diagram!
+
+There is a https://github.com/ondemandenv/odmd-contracts-base defines the basic typing and interfaces( Build, Enver, Producer, Consumer … ) and contracting with the central account, and the each center/org will have a specific contractsLib extends the odmd-contracts-base, are concrete services defining all business functions/logics( github app installation, build’s repo, enver target aws account/region).  Odmd platform team will maintain the central account’s deployment and contractsLibBase. User need to maintain github app installation, all accounts trust central accounts. When platform user engineers change their contractsLib which is also an Enver, the sha change will trigger platform pipelines to build and deploy with updated contractsLib, each team will maintain their own repo’s contractsLib version to be consistent.
+
+To add a new service, the owner team defines the service as build and enver in contractsLib 1st, after the contractsLib published, use it in each services to retrieve enver dependency value and also publish dependency value.
+To clone an Ever, just use a single line comment in commit on branch: odmd: create@<target branch> so central account will create a clone from commit branch as clone of the <target branch>.
+The whole process will be visible in the web console thru appsync deploy in the central account.
+
+
+The platform also resolves the ambiguity problem: either defined in contractsLib, or won’t be deployed.
+
+
+
+
+let's focus on: "Key Innovations: Enver: Immutable/mutable environment-as-code units with versioned dependencies. ContractsLib: Codified service contracts for dependency resolution (architecture-as-code). On-Demand Cloning: Branch-based environment replication with dependency isolation." for now: when user defined build/enver in contractsLib, we define build's repo, enver's target account/region,
+
+
+
+and pushing code into contractsLib repo, the singleton built-in contractsLib build/enver's CICD will be triggered and output the npm package into github package, for example https://github.com/ondemandenv/odmd-contracts-sandbox is the repo for org ondemandenv, defining all builds/envers inside, its cicd is repo's workflow which publish npm pacakge to https://github.com/orgs/ondemandenv/packages, also update config store which will trigger all downstream consuming envers and the platform which will run CICD to interprets contractsLib's published package to sync all builds/envers to their infrastructures like CICD, ext. https://github.com/ondemandenv/odmd-contracts-sandbox/blob/main/.github/workflows/ODMD_odmd-contracts-npm-CmdsGHus-east-1-workspace0.yaml is the generated CICD for odmd-contracts-sandbox. Each enver will also have a buildRole and a centralRole to define the least priviliges for CICD and running application, to access config store, load assets like image or assuming another self defined role.  This is how the platform maintain the build/envers defined in contractsLib. the plaform also detects the comments of each build's commit comment, when encounter "odmd: create <orgBuild>@<orgBranch>" the  platform will clone enver of <orgBuild>@<orgBranch> as dynamic enver reusing <orgBuild>@<orgBranch>'s dependencies, "odmd: delete ..." to delete . Dynamic enver has to be the same region/region as org enver. That's the lifecycle of a dynamic enver. The platform is deployed per central account. for each central account, user-auth enver and contractsLib enver are singleton meaning only one instance can exist for the platform, no clone or dynamic possible.  other envers can all have clones, for example https://github.com/ondemandenv/coffee-shop--order-manager is a CDK enver  will output a CDK deployment, https://github.com/ondemandenv/spring-boot-swagger-3-example's build: .github/workflows/ODMD_sampleSpringOpenAPI3img-ContainerImageEcrus-west-1-workspace1.yaml's output is ECR repo and image.

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patterns & Use Cases - ONDEMANDENV.dev</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Basic styling for patterns page -->
+    <style>
+        .pattern-section { margin-bottom: 3rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border-color); }
+        .pattern-section h2 { font-size: 2rem; margin-bottom: 1rem; color: var(--primary-color); }
+        .pattern-section h3 { font-size: 1.5rem; margin-top: 1.5rem; margin-bottom: 0.75rem; color: var(--secondary-color); }
+        .pattern-section p { margin-bottom: 1rem; line-height: 1.7; }
+        .pattern-section ul { list-style: disc; margin-left: 1.5rem; margin-bottom: 1rem; }
+        .pattern-section li { margin-bottom: 0.5rem; }
+        .pattern-section pre { background-color: #f8f9fa; border: 1px solid var(--border-color); padding: 1rem; border-radius: 5px; overflow-x: auto; margin-bottom: 1rem; }
+        .pattern-section code { font-family: monospace; font-size: 0.9em; }
+        .pattern-section pre code { background-color: transparent; padding: 0; }
+        .pattern-section .code-caption { font-size: 0.9em; color: #6c757d; margin-top: -0.5rem; margin-bottom: 1rem; text-align: center; }
+        .problem-statement { background-color: #fff3cd; border-left: 4px solid #ffeeba; padding: 1rem; margin-bottom: 1rem; }
+        .solution-statement { background-color: #d1e7dd; border-left: 4px solid #badbcc; padding: 1rem; margin-bottom: 1rem; }
+    </style>
+</head>
+<body>
+<header>
+    <nav>
+        <div class="logo">ONDEMANDENV.dev</div>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="concepts.html">Core Concepts</a></li>
+            <li><a href="patterns.html">Patterns & Use Cases</a></li>
+            <li><a href="documentation.html">Documentation</a></li>
+            <li><a href="articles.html">Articles</a></li>
+            <li><a href="https://github.com/ondemandenv" target="_blank">GitHub Org</a></li>
+            <li><a href="mailto:gary.y.7811@gmail.com">Request Demo</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main>
+    <h1>Common Patterns & Use Cases</h1>
+    <p>Explore how ONDEMANDENV's core concepts are applied to solve common challenges in managing distributed systems. Note that these patterns inherently involve secure cross-account interactions, orchestrated by the platform based on contracts defined in `contractsLib`.</p>
+
+    <section class="pattern-section" id="isolated-testing">
+        <h2>Pattern: Isolated Full SDLC Environments per Service Branch</h2>
+        <div class="problem-statement">
+            <p><strong>Problem:</strong> Traditional development often relies on a few shared, static environments (e.g., Dev, QA, Staging) which leads to contention, configuration drift, and deployment bottlenecks. Even modern containerized approaches using ephemeral namespaces often only provide isolated runtime environments, lacking the full context of infrastructure dependencies, versioned configurations, and cross-service interactions inherent in the complete SDLC. This forces rapid merging of small changes, hindering the development of complex features in true isolation.</p>
+        </div>
+        <div class="solution-statement">
+            <p><strong>ONDEMANDENV Solution:</strong> ONDEMANDENV promotes a shift towards <strong>isolated, full SDLC environments</strong> for each meaningful branch of a service. By cloning a stable base Enver (representing a complete Bounded Context), developers get a high-fidelity replica encompassing not just the service's code, but its specific infrastructure definition, versioned configuration, and resolved dependencies – essentially, an entire, independent lifecycle instance. This contrasts sharply with shared static environments or simple container/namespace isolation. It enables <strong>deep, meaningful branching strategies</strong> where complex features can be developed, deployed, and tested holistically over time within their own dedicated, consistent, and fully isolated SDLC environment, preventing conflicts and providing rapid, reliable feedback loops.</p>
+        </div>
+
+        <h3>Conceptual Workflow:</h3>
+        <ol>
+            <li><strong>Developer Creates Feature Branch:</strong> A developer starts work on a new feature or bug fix by creating a new Git branch (e.g., `feature/new-auth-flow`) from a base branch (e.g., `dev`).</li>
+            <li><strong>Code & Commit with Clone Command:</strong> The developer makes code changes in their branch. When ready to test within its own lifecycle, they commit the changes including the special command <span class="inline-code">odmd: create@dev</span> (or the relevant base Enver branch name) in the commit message body.</li>
+            <li><strong>Platform Provisions Full SDLC Clone:</strong> ONDEMANDENV detects the command upon push. It automatically:
+                <ul>
+                    <li>Creates a new dynamic Enver associated with the `feature/new-auth-flow` branch.</li>
+                    <li>Resolves dependencies based on the state of the `dev` Enver (as specified in the command).</li>
+                    <li>Deploys a full-stack SDLC clone (infrastructure, configuration, application) using the code from the `feature/new-auth-flow` branch into the designated target account/region, ensuring resource names are unique to this clone.</li>
+                </ul>
+            </li>
+            <li><strong>Isolated SDLC Testing & Iteration:</strong> The developer receives the endpoint or access details for their dedicated clone Enver. They can perform integration tests, manual testing, or further iteration within their dedicated SDLC environment without impacting any other developer or shared environment.</li>
+            <li><strong>Merge & Delete Clone Environment:</strong> Once testing is complete and the feature is merged, the developer can trigger the clone environment's destruction by pushing an empty commit with <span class="inline-code">odmd: delete</span> in the message body on the feature branch. The platform cleans up all resources associated with the clone.</li>
+        </ol>
+        <p>This pattern fundamentally changes the development dynamic, moving beyond shared bottlenecks and superficial ephemeral testing. It enables true parallel development of complex features within complete, isolated SDLC environments managed as code, allowing teams to innovate faster and more reliably.</p>
+    </section>
+
+    <section class="pattern-section" id="shared-networking">
+        <h2>Pattern: Managing Shared Networking Resources (VPC/TGW)</h2>
+        <div class="problem-statement">
+            <p><strong>Problem:</strong> A dedicated networking team manages core infrastructure (VPCs, TGW, IPAM) in a central account. Application teams in separate workspace accounts need to consume these resources consistently and securely without managing the networking infrastructure themselves.</p>
+        </div>
+        <div class="solution-statement">
+            <p><strong>ONDEMANDENV Solution:</strong> Define networking infrastructure as a dedicated "Platform Enver" (e.g., `networkingProd`) in the networking account. This Enver publishes network details (VPC IDs, Subnet IDs, TGW ID) as `Products` in `contractsLib`. Application Envers in workspace accounts declare `Consumers` for these Products. The platform securely resolves these cross-account dependencies using the contracts and handles necessary resource sharing (e.g., RAM) and IAM permissions, providing the application Enver's CDK code with the required values.</p>
+        </div>
+
+        <h3>1. Define Networking Platform Enver (`contractsLib`)</h3>
+        <p>The networking team defines their Enver and explicitly declares the <span class="inline-code">Outputs</span> Product.</p>
+        <pre><code class="language-typescript">// In MyOrgContracts.ts (contractsLib)
+import { OdmdBuild, OdmdEnverCdk, Product } from '@ondemandenv/odmd-contracts-base';
+// Assuming NetworkingPlatformEnver extends OdmdEnverCdk
+
+// Define the build configuration for the Networking Enver type
+const networkingBuild = new OdmdBuild<NetworkingPlatformEnver>(this, 'NetworkingBuild', {
+    githubRepoAlias: 'networking-infra-repo',
+    buildType: 'cdk',
+    /* ... potentially sourcePath ... */
+});
+
+// Define the specific "prod" instance (Enver)
+const networkingProd = new NetworkingPlatformEnver(this, 'NetworkingProd', {
+    build: networkingBuild, // Link to build config
+    targetAccountAlias: 'networking-account',
+    immutable: true, // Assuming prod is immutable
+    // Declare the single 'Outputs' product this Enver will publish
+    outputsProduct: new Product(this, 'Outputs'),
+});</code></pre>
+
+        <h3>2. Implement Networking CDK Stack (in `networking-infra-repo`)</h3>
+        <p>The networking team's CDK code provisions resources and uses the single `OdmdShareOut` construct to publish a JSON string containing all outputs.</p>
+        <pre><code class="language-typescript">// Simplified example in networking-infra-repo/lib/networking-stack.ts
+import * as cdk from 'aws-cdk-lib';
+import { OdmdEnverCdk, OdmdShareOut } from '@ondemandenv/odmd-contracts-base';
+// ... provision VPC, TGW, Subnets ...
+
+// Structure outputs
+const outputs = {
+    sharedVpcId: vpc.vpcId,
+    privateSubnetIds: vpc.privateSubnets.map(s => s.subnetId),
+    // ... other outputs ...
+};
+
+// Share outputs via the single 'Outputs' Product ID
+new OdmdShareOut(this, 'Outputs', { value: cdk.Stack.of(this).toJsonString(outputs) });
+
+// Platform might also configure AWS RAM sharing here based on consumers in contractsLib
+</code></pre>
+
+        <h3>3. Consume Networking Products in Application Enver (`contractsLib`)</h3>
+        <p>An application team declares a `Consumer` for the networking Enver's `Outputs` Product.</p>
+        <pre><code class="language-typescript">// In MyOrgContracts.ts (contractsLib)
+import { OdmdBuild, Consumer, Product } from '@ondemandenv/odmd-contracts-base';
+// Assuming OrderServiceEnver extends OdmdEnverCdk
+
+// Define the build for the Order Service
+const orderServiceBuild = new OdmdBuild<OrderServiceEnver>(this, 'OrderServiceBuild', { /* ... */ });
+
+// Define the dev instance of the Order Service
+const orderServiceDev = new OrderServiceEnver(this, 'OrderServiceDev', {
+    build: orderServiceBuild,
+    targetAccountAlias: 'dev-workspace-account',
+    outputsProduct: new Product(this, 'Outputs'), // Its own outputs
+    // Consume the single 'Outputs' product published by the networkingProd Enver
+    // Consumers retrieve the JSON string and parse it in their CDK code
+    networkingOutputsConsumer: new Consumer(this, 'NetworkingOutputs', networkingProd.outputsProduct),
+});</code></pre>
+        <p>The platform ensures the `OrderServiceDev` CDK stack receives the correct JSON string containing VPC/Subnet IDs from the networking account, allowing it to parse and deploy resources correctly.</p>
+    </section>
+
+    <section class="pattern-section" id="shared-eks">
+        <h2>Pattern: Deploying Applications to a Shared EKS Cluster</h2>
+        <div class="problem-statement">
+            <p><strong>Problem:</strong> A platform team manages shared EKS clusters in a dedicated account (`workspace0` or `eks-account`). Application teams need to deploy workloads securely onto these clusters from their own workspace accounts, requiring cluster details, cross-account IAM permissions (IRSA), and manifest deployment capabilities.</p>
+        </div>
+         <div class="solution-statement">
+            <p><strong>ONDEMANDENV Solution:</strong> Define the shared EKS cluster as a Platform Enver (`sharedEksProd`) publishing cluster details (OIDC ARN, Kubectl Role ARN) as `Products`. Application Envers (`myAppEksDev`) in workspace accounts consume these `Products`. The application's CDK stack uses the consumed OIDC ARN to define pod-specific IAM Roles (IRSA) in the application's account. The platform uses the consumed Kubectl Role ARN to assume permissions into the EKS cluster account and deploy the cdk8s-generated manifests defined within the application's CDK stack. This keeps infrastructure (IAM) and runtime (k8s) definitions together, managed atomically within the application Enver, while facilitating secure cross-account deployment.</p>
+        </div>
+
+        <h3>1. Define EKS Platform Enver (`contractsLib`)</h3>
+         <p>The platform team defines the EKS Enver, publishing necessary details within its single `Outputs` Product.</p>
+        <pre><code class="language-typescript">// In MyOrgContracts.ts (contractsLib)
+import { OdmdBuild, OdmdEnverCdk, Product } from '@ondemandenv/odmd-contracts-base';
+// Assuming EksPlatformEnver extends OdmdEnverCdk
+
+const eksBuild = new OdmdBuild<EksPlatformEnver>(this, 'EksBuild', { /* ... */ });
+
+const sharedEksProd = new EksPlatformEnver(this, 'SharedEksProd', {
+    build: eksBuild,
+    targetAccountAlias: 'platform-workspace-account',
+    immutable: true, // Assuming prod EKS is immutable
+    // Products enabling cross-account deployment & IRSA are nested within Outputs
+    outputsProduct: new Product(this, 'Outputs'), // Contains ClusterName, OidcArn, KubectlRoleArn etc.
+});</code></pre>
+
+         <h3>2. Define Application Enver Consuming EKS Details (`contractsLib`)</h3>
+         <p>The application team defines their Enver, consuming the `Outputs` Product from the EKS Enver.</p>
+         <pre><code class="language-typescript">// In MyOrgContracts.ts (contractsLib)
+import { OdmdBuild, Consumer, Product } from '@ondemandenv/odmd-contracts-base';
+// Assuming MyAppEksEnver extends OdmdEnverCdk
+// Assuming myAppImgEnver is defined elsewhere and has an outputsProduct containing imageUri
+
+const myAppBuild = new OdmdBuild<MyAppEksEnver>(this, 'MyAppBuild', { /* ... CDK/cdk8s build ... */ });
+
+const myAppEksDev = new MyAppEksEnver(this, 'MyAppEksDev', {
+    build: myAppBuild,
+    targetAccountAlias: 'app-dev-workspace-account',
+    outputsProduct: new Product(this, 'Outputs'), // Its own outputs
+    // Consume the single 'Outputs' product from the EKS Enver
+    eksOutputsConsumer: new Consumer(this, 'EksOutputs', sharedEksProd.outputsProduct),
+    // Consume image URI (potentially from another Enver's Outputs product)
+    appImageOutputsConsumer: new Consumer(this, 'AppImageOutputs', myAppImgEnver.outputsProduct),
+});</code></pre>
+
+        <h3>3. Implement Application CDK Stack (IAM + k8s Manifests)</h3>
+        <p>The application's CDK stack consumes the EKS outputs JSON, parses it, defines the app-specific IAM role, and the Kubernetes manifests.</p>
+        <pre><code class="language-typescript">// Simplified example in my-app-repo/lib/app-eks-stack.ts
+import * as cdk from 'aws-cdk-lib';
+import * as iam from 'aws-cdk-lib/aws-iam';
+import * as cdk8s from 'cdk8s';
+import { OdmdEnverCdk } from '@ondemandenv/odmd-contracts-base';
+
+// Interfaces for parsed outputs
+interface EksOutputs { clusterOidcArn: string; /* ... other fields ... */ }
+interface AppImageOutputs { imageUri: string; /* ... */ }
+
+export class MyAppEksStack extends OdmdEnverCdk {
+  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+    super(scope, id, props);
+    // --- Consume and Parse shared values ---
+    const eksOutputsJson = OdmdEnverCdk.getSharedValue('EksOutputs');
+    const appImageOutputsJson = OdmdEnverCdk.getSharedValue('AppImageOutputs');
+    const eksOutputs: EksOutputs = JSON.parse(eksOutputsJson || '{}');
+    const appImageOutputs: AppImageOutputs = JSON.parse(appImageOutputsJson || '{}');
+
+    // --- Define App-Specific IAM Role (IRSA) in App Account ---
+    const podRole = new iam.Role(this, 'PodRole', {
+        // Trust policy uses OIDC ARN parsed from consumed EKS Outputs
+        assumedBy: new iam.FederatedPrincipal(eksOutputs.clusterOidcArn, { /* ... conditions ... */ }, 'sts:AssumeRoleWithWebIdentity'),
+    });
+    // Grant permissions to podRole as needed
+
+    // --- Define Kubernetes Manifests using cdk8s ---
+    const app = new cdk8s.App();
+    const chart = new cdk8s.Chart(app, 'MyAppChart');
+    // ... Define Deployment (using appImageOutputs.imageUri), ServiceAccount (annotated with podRole.roleArn) ...
+
+    // Platform deployment logic implicitly uses the KubectlRoleArn (parsed from EksOutputs)
+    // to assume role in the EKS cluster account and apply these manifests.
+    // Note: OdmdShareOut for this stack's outputs is omitted for brevity
+  }
+}</code></pre>
+         <p>ONDEMANDENV orchestrates the cross-account deployment securely, ensuring the application team manages their IAM and K8s configurations together within their Enver.</p>
+    </section>
+
+    <section class="pattern-section" id="advanced-deployments">
+        <h2>Pattern: Enabling Advanced Deployments (Blue/Green, A/B)</h2>
+         <div class="problem-statement">
+            <p><strong>Problem:</strong> Implementing Blue/Green or A/B testing often involves duplicating configurations, managing complex traffic shifting logic, and ensuring consistency across potentially different accounts or infrastructure variants.</p>
+        </div>
+         <div class="solution-statement">
+            <p><strong>ONDEMANDENV Solution:</strong> Leverage distinct Envers for each application version and a dedicated <strong>Routing/Traffic Management Enver</strong> to control user traffic flow.
+             <ul>
+                 <li><strong>Application Versions as Envers:</strong>
+                    <ul>
+                        <li><strong>Blue/Green:</strong> Maintain two distinct, stable Envers (e.g., `myApp-blue` and `myApp-green`), potentially targeting different accounts or the same one. Each publishes its unique endpoint URL or service identifier as a `Product`.</li>
+                        <li><strong>A/B Testing / Experimentation:</strong> Create `Clones` of a base Enver or define distinct feature Envers. Each variant publishes its endpoint `Product`.</li>
+                    </ul>
+                 </li>
+                 <li><strong>Dedicated Routing Enver:</strong> Create a separate Enver specifically to manage traffic distribution. This Enver would:
+                    <ul>
+                        <li>`Consume` the endpoint `Products` published by the relevant application Envers (e.g., blue endpoint, green endpoint, variant A endpoint, variant B endpoint).</li>
+                        <li>Control the traffic shifting mechanism, such as:
+                            <ul>
+                                <li>Updating weighted DNS records (e.g., Route 53 CNAME weights).</li>
+                                <li>Configuring API Gateway stages or routes.</li>
+                                <li>Modifying Load Balancer target group weights or listener rules.</li>
+                            </ul>
+                        </li>
+                        <li>Deployments to this Routing Enver directly control the user traffic percentage split or cutover between application versions.</li>
+                    </ul>
+                </li>
+             </ul>
+             This separation ensures the application deployment lifecycle (managed by app Envers) is decoupled from the traffic routing lifecycle (managed by the Routing Enver). Because Envers manage their respective stacks consistently, even across accounts, creating and managing these multiple versions and controlling traffic flow becomes significantly more reliable and manageable. The platform handles the underlying cross-account complexity for both application deployments and routing configurations based on the definitions in `contractsLib`.
+         </p>
+    </section>
+
+</main>
+
+<footer>
+    <p>&copy; 2024 ONDEMANDENV.dev. All rights reserved.</p>
+    <!-- Add footer links if needed -->
+</footer>
+
+</body>
+</html> 
