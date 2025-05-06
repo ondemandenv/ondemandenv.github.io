@@ -60,7 +60,7 @@
              <li><strong>Instance of a Build:</strong> Each Enver definition in `contractsLib` is an instance of a specific `BuildDefinition`, representing one particular version (tied to a Git branch or tag) deployed to a specific target environment (AWS Account/Region).</li>
             <li><strong>Composite Versioning via Git & Dependencies:</strong> Envers link environment state directly to versioned dependencies:
                 <ul>
-                    <li><strong>Branch Envers (Mutable Composite Versions):</strong> Associated with a Git branch. These represent evolving versions that can change due to:
+                    <li><strong>Branch Envers (Incremental Composite Versions):</strong> Associated with a Git branch. These represent evolving versions that can change due to:
                         <ol>
                             <li>New code commits pushed to the Enver's source branch (defined in the `BuildDefinition`).</li>
                             <li>Updates to the `Products` consumed from dependency Envers (which may themselves be Branch Envers).</li>
@@ -87,7 +87,7 @@
             <li><strong>Eliminating Ambiguity:</strong> If a dependency or configuration isn't defined in `contractsLib`, it effectively doesn't exist for the platform. This forces clarity and explicit agreement on service interactions.</li>
             <li><strong>Governance ("Congress"):</strong> Changes to `contractsLib` (declarations, contracts, dependencies) are managed via standard code review processes (Pull Requests). This acts as a governance mechanism where teams negotiate and agree upon architectural changes and inter-service contracts before they are implemented.</li>
             <li><strong>Platform Integration:</strong> The ONDEMANDENV platform monitors `contractsLib`. Changes trigger updates to the central configuration store and downstream deployment pipelines (defined in the implementation repos) for affected Envers.</li>
-            <li><strong>Typing and Validation:</strong> Uses TypeScript for strong typing and includes base interfaces/classes (`ondemandenv-contracts-base`) to ensure consistency and correctness in definitions. Unit tests can further guarantee integrity (e.g., preventing immutable Envers from depending on mutable ones).</li>
+            <li><strong>Typing and Validation:</strong> Uses TypeScript for strong typing and includes base interfaces/classes (`ondemandenv-contracts-base`) to ensure consistency and correctness in definitions. Unit tests can further guarantee integrity (e.g., preventing immutable Envers from depending on incremental ones).</li>
         </ul>
         <p>Within `contractsLib`, these concepts define the Bounded Contexts and how they interact.</p>
         <ul>
