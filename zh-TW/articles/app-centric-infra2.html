@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>適用於 EKS 的 AWS CDK：在真實世界多帳戶 Kubernetes 部署中的不足 - ONDEMANDENV.dev</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <style>
+        /* Basic article styling */
+        main { max-width: 800px; margin: 2rem auto; padding: 0 1rem; }
+        h1, h2, h3 { color: var(--primary-color); }
+        h2 { margin-top: 2rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; }
+        h3 { margin-top: 1.5rem; color: var(--secondary-color); }
+        p, ul, ol { line-height: 1.7; margin-bottom: 1rem; }
+        ul, ol { margin-left: 1.5rem; }
+        li { margin-bottom: 0.5rem; }
+        pre { background-color: #f0f0f0; padding: 1rem; border-radius: 5px; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word; }
+        code { font-family: monospace; font-size: 0.9em; }
+        pre > code { background-color: transparent; padding: 0; }
+        .code-term { background-color: #f0f0f0; padding: 0.1em 0.4em; border-radius: 3px; font-family: monospace; font-size: 0.9em; }
+
+        /* Language switcher styles */
+        .language-switcher {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 5px;
+            display: flex;
+            gap: 5px;
+        }
+        .language-switcher a, .language-switcher span {
+            padding: 5px 10px;
+            text-decoration: none;
+            color: var(--primary-color);
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+        .language-switcher a:hover {
+            background-color: #e9ecef;
+            color: var(--secondary-color);
+        }
+        .language-switcher .active {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <nav>
+        <div class="logo">ONDEMANDENV.dev</div>
+        <ul>
+            <li><a href="../../index.html">首頁</a></li>
+            <li><a href="../../concepts.html">核心概念</a></li>
+            <li><a href="../../patterns.html">模式與使用案例</a></li>
+            <li><a href="../../documentation.html">文件</a></li>
+            <li><a href="../../articles.html">文章</a></li>
+            <li><a href="https://github.com/ondemandenv" target="_blank">GitHub 組織</a></li>
+            <li><a href="mailto:contacts@ondemandenv.dev">請求演示</a></li>
+        </ul>
+        <div class="language-switcher">
+            <a href="../../articles/app-centric-infra2.html">EN</a>
+            <a href="../../ja/articles/app-centric-infra2.html">JA</a>
+            <a href="#" class="active">繁體中文</a>
+        </div>
+    </nav>
+</header>
+
+<main>
+    <h1>適用於 EKS 的 AWS CDK：在真實世界多帳戶 Kubernetes 部署中的不足</h1>
+
+    <p>AWS Cloud Development Kit (CDK) 旨在利用熟悉的程式語言簡化雲端基礎架構的佈建。雖然其 EKS 模組承諾簡化 Kubernetes 叢集的建立和管理，但仔細審視後會發現其重大缺陷，尤其是在考慮實際的多帳戶 EKS 部署時。本文將深入探討這些限制，並主張 AWS CDK 目前的 EKS 實作，特別是 <span class="code-term">Cluster.addManifest</span> 函數，對於採用共享多帳戶 EKS 策略的組織而言並非真正實用。</p>
+
+    <h2>簡單的假象：Cluster.addManifest 及其帳戶邊界</h2>
+    <p>CDK 中的 <span class="code-term">Cluster.addManifest(id: string, ...manifest: Record&lt;string, any&gt;[]): KubernetesManifest</span> 函數似乎提供了一種將 Kubernetes 清單部署到 EKS 叢集的直接方法。然而，在考慮到 EKS 叢集設計為在多個 AWS 帳戶之間共享的真實世界情境時，這種簡單性具有欺騙性。</p>
+
+    <p>在實務中，中央 EKS 叢集通常由位於不同 AWS 帳戶中的各個團隊或應用程式共享。這種多帳戶方法對於安全性、隔離性和成本管理至關重要。然而，<span class="code-term">Cluster.addManifest</span> 是在單一帳戶和區域部署的隱含假設下運作的。</p>
+
+    <h3>此限制的證據：</h3>
+    <ul>
+        <li><strong>CDK 設計中隱含的同帳戶假設：</strong> AWS CDK 的核心建構和 IAM 角色管理本質上是為單一 AWS 帳戶內的部署而設計的。雖然 <span class="code-term">KubernetesManifest</span> 的 CDK 文件並未明確禁止跨帳戶部署，但其範例和底層機制均針對單一帳戶使用案例。</li>
+        <li><strong>跨帳戶 IAM 的複雜性：</strong> 將清單部署到不同帳戶中的 EKS 叢集需要複雜的跨帳戶 IAM 角色組態。正如 Stack Overflow 上關於 CDK 中跨帳戶資源存取的討論所強調的那樣，依賴 CloudFormation 的 CDK 在跨帳戶管理資源方面面臨固有的挑戰。<span class="code-term">Cluster.addManifest</span> 不會自動處理必要的跨帳戶 IAM 角色假設，這使得在共享 EKS 環境中使用起來很麻煩。</li>
+        <li><strong>AWS 最佳實務提倡多帳戶 EKS：</strong> AWS 本身建議針對 EKS 採用多帳戶策略，如其關於 Amazon EKS 多帳戶策略的官方文件中所述。該文件詳細說明了如何共享 VPC 子網路並利用 IAM Roles for Service Accounts (IRSA) 實現安全的跨帳戶存取。這些最佳實務與 <span class="code-term">Cluster.addManifest</span> 的限制之間的鮮明對比，突顯了該工具在真實世界 EKS 部署中的不足。</li>
+    </ul>
+
+    <h2>忽略網路基礎：沒有適當管線的房屋</h2>
+    <p>一個真正實用的 EKS 解決方案，尤其是在多帳戶設定中，取決於穩固的網路基礎。這通常涉及：</p>
+    <ul>
+        <li><strong>Transit Gateway：</strong> 在不同帳戶的 VPC 之間建立安全且可擴展的連線。</li>
+        <li><strong>VPC 共享：</strong> 允許多個帳戶共享一個中央 VPC 及其子網路，通常用於託管 EKS 叢集。</li>
+        <li><strong>私有子網路：</strong> 增強安全性，確保清單部署和應用程式工作負載在私有網路區段內運作。</li>
+    </ul>
+    <p>然而，AWS CDK 的 EKS 實作，包括像 <span class="code-term">aws-quickstart/cdk-eks-blueprints</span> 這樣的藍圖，通常忽略或簡化了這個關鍵的網路層。雖然這些工具可以自動化 EKS 叢集的建立甚至 VPC 的佈建，但它們往往無法提供全面、自動化的解決方案來設定 Transit Gateway 或 VPC 共享，作為 EKS 部署過程中不可或缺的一部分。</p>
+    <p>在真實世界的 EKS 架構中，網路層並非事後考量；它是建構安全、可擴展且多帳戶 Kubernetes 環境的基礎。CDK 專注於簡化叢集建立，同時抽象化網路複雜性，導致產生的解決方案不適合生產等級的共享 EKS 部署。</p>
+
+    <h2>權杖解析失敗：CDK 的承諾受損</h2>
+    <p>CDK 的優勢在於其使用權杖——在部署期間解析的預留位置，允許動態組態和資源參考。然而，<span class="code-term">Cluster.addManifest</span> 無法正確解析這些權杖，進一步阻礙了其實用性。</p>
+    <p>CDK 權杖設計為在單一 CDK 應用程式和 CloudFormation 堆疊的範圍內解析。當嘗試使用 <span class="code-term">Cluster.addManifest</span> 將清單部署到叢集中的資源的權杖時，權杖解析通常會失敗。CDK 的預設權杖解析機制根本不是為跨越帳戶邊界而設計的。</p>
+    <p>此限制迫使用戶放棄 CDK 優雅的基於權杖的方法，轉而手動將具體值（例如 VPC ID、子網路 ID 和安全群組 ID）作為內容參數或環境變數傳遞給其 CDK 應用程式。這種手動傳遞值不僅不夠優雅，而且還引入了更多錯誤的機會，並降低了最初使用 CDK 的整體效益。</p>
+
+    <h2>解決方案始於網路：</h2>
+    <p>先決條件：在雲端擁抱以應用程式為中心的基礎架構 1</p>
+    <ul>
+        <li><strong>環境：</strong> 所有緊密耦合的邏輯資源作為一個有界上下文——一個自足的垂直切片，包含提供商業能力所需的所有資源，無論其在何處或屬於何種類型。</li>
+        <li><strong>Enver：</strong> 環境版本，不同的 enver 在邏輯/功能上一致，但具有不同的組態值。一個 enver 將作為一個單元進行部署和復原。</li>
+        <li><strong>網路即服務：</strong> 網路團隊透過程式碼和程式庫管理所有 VPC 相關資源（在原始文本/圖表中標記為紅色）。網路帳戶執行多個網路 enver，每個網路 enver 包含並共享 IPAM、具有 Transit Gateway 和 NAT 的 VPC 給工作負載帳戶，這些帳戶將從共享 IPAM 獲得 CIDR 範圍，並在工作負載 enver 中部署 VPC 時共享 NAT 和內部命名系統。每個 VPC 只能連接到一個 Transit Gateway，因此 VPC 及其內部資源透過 TGW 連接，但連接到不同 TGW 的 VPC 在實體上是斷開的。</li>
+        <li><strong>RDS 即服務：</strong> 資料庫團隊擁有資料庫叢集，為其他定義/擁有/控制資料庫/結構描述/角色/使用者的 enver 託管資料庫。</li>
+        <li><strong>EKS 即服務：</strong> Kubernetes 團隊擁有 EKS 叢集，為其他定義/擁有/控制 Kubernetes 清單和服務帳戶到 IAM 角色對應的 enver 託管容器編排。</li>
+        <li>EC2、MSK、Opensearch、ECS、ElasticCache、Redshift、私有連結等也是如此...</li>
+    </ul>
+
+    <h3>在此圖中：</h3>
+    <p>（原始文本參考此處未顯示的圖表）</p>
+    <p>AWS 帳戶網路執行兩個隔離的 enver：NT Enver LE 和 NT Enver Prod，以 NT Enver Prod 為例：</p>
+    <ol>
+        <li>一個 Transit Gateway 連接多個帳戶中的多個 VPC（同一區域）；</li>
+        <li>一個 NAT 與所有連接的 VPC 共享網際網路；</li>
+        <li>一個 IPAM 和 CIDR 集區，供所有連接的 VPC 的子網路使用，以避免 IP 衝突；</li>
+        <li>未顯示：子網路、路由、安全群組、DNS、託管區域、組織、管理員委派、憑證等...</li>
+    </ol>
+
+    <h3>中央 VPC 作為跨 VPC 部署資源的代理：</h3>
+    <ol>
+        <li>執行 Lambda 將 Kubernetes 清單部署到來自不同 enver 的不同 EKS 叢集。</li>
+        <li>執行 Lambda 將資料庫/結構描述/角色/使用者部署到來自不同 enver 的不同 RDS 叢集。</li>
+    </ol>
+
+    <h3>中央 VPC 作為跨 VPC 連接的代理/中樞：EKS 中的 Pod、ECS 中的任務連接到來自不同 enver 的不同 RDS 叢集中的不同資料庫：</h3>
+
+    <h4>Enver 1：</h4>
+    <p>在邏輯上聲明/控制內部所有資源（標記為綠色），包括 Kubernetes 清單和資料庫相關資源（資料庫、結構描述、角色等），並以交易方式部署或復原。</p>
+    <ol>
+        <li>清單部署到 EKS Enver1 的叢集，Pod 擔任 Iam 角色 1（透過 SA/OIDC）存取 DynamoDB。</li>
+        <li>資料庫、結構描述、角色/使用者部署到 RDS Enver Prod，ECS 任務內部擔任 IAM 角色 2 透過 TGW 存取託管的資料庫。</li>
+    </ol>
+
+    <h4>Enver 2：</h4>
+     <p>同樣在邏輯上聲明/控制內部所有資源（標記為紫色），在清單部署到 EKS Enver1 的叢集後，Pod 將：</p>
+    <ol>
+        <li>擔任 IAM 角色 A 透過 Transit Gateway 存取資料庫（Enver 2 中不需要 VPC！）。</li>
+        <li>擔任 IAM 角色 B 存取 S3 儲存貯體中的檔案。</li>
+    </ol>
+
+    <h3>平台負責部署，因此應用程式和服務只需專注於商業邏輯/功能：</h3>
+    <ol>
+        <li>在 Enver 1 和 Enver 2 中聲明的 Kubernetes 清單將透過中央帳戶 VPC-Prod 中的 Lambda 函數傳送到 EKS 叢集。</li>
+        <li>在 Enver 1 和 Enver 2 中聲明的資料庫結構描述/角色/使用者將透過中央帳戶 VPC-Prod 中的 Lambda 函數傳送到 RDS 叢集。</li>
+    </ol>
+
+    <h2>以 Enver 為中心的設計工作範例</h2>
+    <p><a href="https://github.com/ondemandenv/spring-boot-swagger-3-example" target="_blank">https://github.com/ondemandenv/spring-boot-swagger-3-example</a></p>
+    <p>此專案例證了以應用程式為中心的雲端原生開發方法，其中所有資源（應用程式程式碼、基礎架構、相依性）都定義為單一垂直的「enver」——一個自足的有界上下文，作為一個單元進行部署/復原。</p>
+
+    <h3>1. 垂直資源所有權</h3>
+     <p>提供此教學 API 功能所需的所有資源都位於同一位置：</p>
+    <ul>
+        <li>應用程式程式碼 (<span class="code-term">src/</span>)</li>
+        <li>容器定義 (<span class="code-term">Dockerfile</span>)</li>
+        <li>基礎架構即程式碼 (CDK，位於 <span class="code-term">cdk/</span> 中)</li>
+        <li>IAM 角色和策略</li>
+        <li>資料庫結構描述定義</li>
+        <li>服務網路需求</li>
+    </ul>
+
+    <h3>2. 作為版本化單元的環境</h3>
+    <p>每個「enver」包含：</p>
+    <ul>
+        <li>邏輯資源 (S3 儲存貯體、IAM 角色)</li>
+        <li>實體資源參考 (VPC ID、EKS 叢集名稱)</li>
+        <li>組態值 (S3 儲存貯體名稱、OIDC 提供者 ARN)</li>
+        <li>跨服務相依性 (資料庫結構描述、訊息佇列)</li>
+    </ul>
+
+    <h3>3. 平台服務抽象化</h3>
+    <p>(原始文本可能包含更多內容)</p>
+
+    <h3>關鍵整合點</h3>
+    <h4>1. IAM 角色繫結 (CDK 堆疊)</h4>
+    <pre><code>// cdk/lib/cdk-stack.ts
+const podSaRole = new Role(this, 'podSaRole', {
+    assumedBy: new FederatedPrincipal(
+        myEnver.oidcProvider.getSharedValue(this), // From platform enver
+        {
+            StringEquals: {
+                [`${oidcProvider}:aud`]: 'sts.amazonaws.com',
+                [`${oidcProvider}:sub`]: `system:serviceaccount:${namespace}:${serviceAccountName}`
+            }
+        },
+        'sts:AssumeRoleWithWebIdentity'
+    )
+});</code></pre>
+
+    <h4>2. 環境感知組態</h4>
+    <pre><code>// src/main/java/com/bezkoder/spring/swagger/config/OpenAPIConfig.java
+@Value("${aws.s3.bucket-name}")
+private String bucketName; // Injected from enver-specific config
+
+@Bean
+public S3Client s3Client() {
+    return S3Client.builder()
+        .credentialsProvider(WebIdentityTokenFileCredentialsProvider.create())
+        .build(); // Auto-utilizes IRSA credentials
+}</code></pre>
+
+    <h4>3. 基礎架構一致性</h4>
+    <pre><code>// cdk/lib/cdk-stack.ts
+new cdk8splus.Deployment(chart, 'to-eks', {
+    containers: [{
+        image: ContainerImage.fromEcrRepository(
+            Repository.fromRepositoryName(this, 'repo',
+                myEnver.appImgRepoRef.getSharedValue(this)), // Shared ECR
+            Fn.select(0, Fn.split(',', // Git SHA-based tagging
+                myEnver.appImgLatestRef.getSharedValue(this)))
+        ),
+        envVariables: {
+            bucket_arn: {value: bucket.bucketArn}, // Enver-owned bucket
+            region: {value: this.region} // Inherited from platform
+        }
+    }]
+});</code></pre>
+
+    <h3>主要優點</h3>
+    <ul>
+        <li><strong>原子部署：</strong> 所有資源（應用程式 + 基礎架構）使用 CloudFormation 堆疊更新一起部署/復原。</li>
+        <li><strong>帳戶無關：</strong> enver 的 CDK 程式碼在部署到沙箱/生產帳戶時保持不變——實體帳戶詳細資料透過 enver 上下文解析。</li>
+        <li><strong>預設安全並具有最低權限。</strong></li>
+    </ul>
+    <p>顯然，整個設計和實作將取決於平台：</p>
+
+</main>
+
+<footer>
+    <p>&copy; 2024 ONDEMANDENV.dev. 保留所有權利。</p>
+    <!-- 如有需要，請在此處新增頁尾連結 -->
+</footer>
+
+</body>
+</html> 

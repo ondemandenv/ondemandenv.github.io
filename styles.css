@@ -694,3 +694,46 @@ footer a:hover {
     margin-bottom: 0.5rem;
     color: var(--text-color);
 }
+
+/* Language Switcher Styles */
+.language-switcher {
+    margin-left: auto; /* Pushes switcher to the right in the nav bar */
+    padding: 0 15px; /* Adjust padding as needed */
+    display: flex;
+    align-items: center;
+}
+
+.language-switcher a {
+    text-decoration: none;
+    padding: 0 5px; /* Space between language links */
+    color: #ccc; /* Light gray, or choose a color that fits your theme */
+    font-size: 0.9em; /* Slightly smaller than main nav links */
+}
+
+.language-switcher a:hover {
+    color: #fff; /* White or a highlight color on hover */
+    text-decoration: underline;
+}
+
+.language-switcher a.lang-active {
+    font-weight: bold;
+    color: #fff; /* White or a distinct color for the active language */
+    cursor: default;
+}
+
+.language-switcher a.lang-active:hover {
+    text-decoration: none;
+}
+
+/* Responsive adjustments for nav if needed */
+@media (max-width: 768px) {
+    header nav ul {
+        flex-direction: column;
+        align-items: center;
+    }
+    .language-switcher {
+        margin-left: 0;
+        margin-top: 10px; /* Add some space above if nav items stack */
+        justify-content: center; /* Center switcher on smaller screens */
+    }
+}

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ONDEMANDENV アーキテクチャ詳細解説 - ONDEMANDENV.dev</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <style>
+        /* Basic article styling */
+        main { max-width: 800px; margin: 2rem auto; padding: 0 1rem; }
+        h1, h2, h3 { color: var(--primary-color); }
+        h2 { margin-top: 2rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; }
+        h3 { margin-top: 1.5rem; color: var(--secondary-color); }
+        p, ul, ol { line-height: 1.7; margin-bottom: 1rem; }
+        ul, ol { margin-left: 1.5rem; }
+        li { margin-bottom: 0.5rem; }
+        pre { background-color: #f0f0f0; padding: 1rem; border-radius: 5px; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word; }
+        code { font-family: monospace; font-size: 0.9em; }
+        pre > code { background-color: transparent; padding: 0; }
+        blockquote { border-left: 4px solid var(--border-color); padding-left: 1rem; margin-left: 0; font-style: italic; color: #555; }
+
+        /* Language switcher styles */
+        .language-switcher {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 5px;
+            display: flex;
+            gap: 5px;
+        }
+        .language-switcher a, .language-switcher span {
+            padding: 5px 10px;
+            text-decoration: none;
+            color: var(--primary-color);
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+        .language-switcher a:hover {
+            background-color: #e9ecef;
+            color: var(--secondary-color);
+        }
+        .language-switcher .active {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <nav>
+        <div class="logo">ONDEMANDENV.dev</div>
+        <ul>
+            <li><a href="../../index.html">ホーム</a></li>
+            <li><a href="../../concepts.html">コアコンセプト</a></li>
+            <li><a href="../../patterns.html">パターンとユースケース</a></li>
+            <li><a href="../../documentation.html">ドキュメンテーション</a></li>
+            <li><a href="../../articles.html">記事</a></li>
+            <li><a href="https://github.com/ondemandenv" target="_blank">GitHub組織</a></li>
+            <li><a href="mailto:contacts@ondemandenv.dev">デモをリクエスト</a></li>
+        </ul>
+        <div class="language-switcher">
+            <a href="../../articles/odmd-arc.html">English</a> |
+            <a href="odmd-arc.html" class="lang-active">日本語</a> |
+            <a href="../../zh-TW/articles/odmd-arc.html">繁體中文</a>
+        </div>
+    </nav>
+</header>
+
+<main>
+    <h1>ONDEMANDENV アーキテクチャ詳細解説</h1>
+
+    <p>ONDEMANDENVプラットフォームは、マイクロサービスのような分散システムのソフトウェア開発ライフサイクル（SDLC）における課題、特にサービス間の依存関係や異なるリポジトリを使用するチーム間のコラボレーションに焦点を当てて解決することを目指しています。</p>
+
+    <p>以下に、コアとなるアーキテクチャコンセプトを解説します。</p>
+
+    <h2>ビルド、Enver、ContractsLib</h2>
+    <p>各リポジトリ（`repo`）は異なる`builds`を持つことができます。各ビルドは、異なるGitブランチやタグに関連付けられた複数の`envers`（環境バージョン）を持つことができます。`enver`は、サービスやコンポーネントの特定バージョンに対する包括的で論理的な環境を表します。</p>
+    <p>特別なリポジトリである`contractsLib`は、異なるenver間の依存関係を定義します。enverは、他のenverからの`products`（出力）を消費することができます。例えば、ネットワーキングenverがIPAM参照（そのプロダクト）を生成し、EKSクラスターenverがこの参照を消費して依存関係を形成します。</p>
+    <p>ビルドは、いくつかのタイプのプロダクトを出力できます。</p>
+    <ol>
+        <li>Dockerイメージ。イメージリポジトリURIとイメージSHAを生成します。</li>
+        <li>CDK（Cloud Development Kit）デプロイメント。enverのプロダクトを実装し、他のenverからのプロダクトを消費します。</li>
+        <li>カスタマイズされたスクリプトを介して管理される、URIを持つ一般的なリソース。</li>
+    </ol>
+
+    <h2>Enverタイプ：ブランチ vs. タグ</h2>
+    <p>Enverは、ソースリポジトリのブランチまたはタグに対応します。</p>
+    <ul>
+        <li><strong>ブランチEnver（可変）：</strong> Gitブランチに関連付けられています。ソースコードが変更されると、enverは増分的にデプロイされます。</li>
+        <li><strong>タグEnver（不変）：</strong> 特定のGitタグからビルドされます。これらのenverは、他の不変（タグ）enverにのみ依存でき、安定性と再現性を保証します。</li>
+    </ul>
+    <p>プラットフォームは、`contractsLib`の定義に基づいて、enverを指定されたターゲットアカウントに自動的にデプロイします。</p>
+
+    <h2>オンデマンドクローニング</h2>
+    <p>重要な機能は、クローニングを通じてオンデマンド環境を作成する機能です。`contractsLib`で新しいブランチ/タグを作成し、既存のenverのブランチ/タグを参照することで、プラットフォームは自動的にクローンを作成します。このクローンは、元のenverの依存関係定義を再利用しますが、リソースを異なる名前でデプロイし、同じロジック/機能を維持します。これにより、開発者は分離された環境で高い一貫性を持ってテストや実験を行うことができます。</p>
+    <p>CDKコードは、ブランチ/タグ名をパラメータとして受け取り、構成をロードするように設計されています。これにより、enverを定義するコードはブランチ/タグ間で同一である一方、生成されるCloudFormation/HCLはリソース名/URIが異なり競合を避けつつ、論理的な一貫性を維持します。</p>
+
+    <h2>構成ストアと依存関係管理</h2>
+    <p>enverがデプロイされると、そのプロダクトの具体的な値を構成ストア（例：AWS SSM Parameter Store）に出力します。コンシューマーは、これらの値を取得するためのURIを計算できます。構成ストアはすべての値をバージョン管理し、変更時にイベント（例：EventBridge経由）をディスパッチします。</p>
+    <p>依存関係サイクルは許可されますが、初期化中にプレースホルダー値が必要です。例えば、ネットワーキングがホストゾーンを提供するが中央ロギングを必要とし、中央ロギングがホストゾーンを必要とする場合：</p>
+    <ol>
+        <li>ネットワーキングを初期化し、ホストゾーンを提供するが、中央ロギングにはプレースホルダーを使用します。</li>
+        <li>ネットワーキングが提供するホストゾーンを使用して中央ロギングを設定します。</li>
+        <li>ネットワーキングenverを更新して、実際の中央ロギングプロダクトを使用するようにします。</li>
+    </ol>
+    <p>コンシューマーがプロダクトの変更にどのように反応するかは構成可能です。コンシューマーは、初期プレースホルダー値で定義することもできます。</p>
+    <p>Enverは、スタック名を決定論的に定義できます。グローバルに一意なリソースについては、プラットフォームはCloudFormationの物理名生成に依存するか、ブランチ/タグ名に基づいてユーザー定義を許可します。</p>
+    <p>enverをクローンしても、デフォルトでは依存関係のバージョンは固定されません。ただし、不変（タグ）enverは、作成時にその依存関係も不変でなければならないことを強制します。</p>
+    <p>enverごとのクローン数には制限があります（例：20）。開発者は削除を管理し、これは大部分が自動化されています。クローンされたenverは完全に分離されていますが、同じ依存関係定義を共有します。</p>
+
+    <h2>「コードとしてのアーキテクチャ」としてのContractsLib</h2>
+    <p>すべての定義はコード内に存在します。`contractsLib`は、ビルドとenver定義のための組み込みインターフェースと型付けを提供します。これは、enverを所有するチームがプルリクエストを通じてプロデューサーとコンシューマーのウェブを交渉する「議会」のように機能します。デプロイメントは合意があった場合にのみ行われ、プロダクト自体に対する複雑なアクセス制御の必要性を取り除きます。</p>
+    <p>上流の依存関係の変更は、下流のenverを破壊する可能性があります。開発者はこれを管理する必要があります。`contractsLib`自体はセマンティックバージョニングを使用し、カスタムスクリプトでビルドされるenverとしても扱われます。そのTypeScriptコードには、型付けと単体テストが含まれており、整合性（例：不変enverが可変enverに依存できないことの強制）を保証します。</p>
+    <p>`contractsLib`コードはサービス間の契約を定義するため、本質的にシステム全体のアーキテクチャ、つまり「コードとしてのアーキテクチャ」を表します。変更は慎重かつ十分に検討されることが期待されます。</p>
+
+    <h2>プラットフォーム実装の詳細</h2>
+    <p>プラットフォームは、IAM/STSを利用して複数のAWSアカウント間でロールを引き受けます。中央アカウントがプラットフォームの実装/デプロイメントを実行します。ネットワーキング、ロギング、セキュリティなどの特定の懸念事項に対して他のアカウントが存在する場合があり、複数の`workspace`アカウントが実際のアプリケーションワークロードを実行します。</p>
+    <p>現在、構成ストアはAWS SSM Parameter Storeを使用し、EventBridgeがイベントバスとして機能してLambda関数をトリガーし、シークレットはAWS Secrets Managerに保存されています。</p>
+
+    <h2>CI/CDとテスト</h2>
+    <p>すべてのenverには、単体テスト用の独自のCI/CDパイプラインがあります。デプロイされたリソースに依存する統合テストおよびエンドツーエンド（E2E）テストは、アプリケーションenver自体の一部であるか、ターゲットenverに依存する別のenverとして定義できます。</p>
+    <p>プラットフォームは、CodePipeline、GitHub Actions、Step FunctionsなどのさまざまなCI/CDツールと統合できます。AWS CDKデプロイメントの場合、CloudFormationが自動ロールバックを処理します。</p>
+
+    <h2>Enverの定義と分離</h2>
+    <p>「Enver」とは、少なくとも1つのビジネス機能の垂直スライスに対するすべてのリソース（インフラストラクチャからコンテナまで）を含む、バージョン管理された論理的なデプロイメントユニットです。これは、コードの「もしも」のバージョンを表します。</p>
+    <p>同じリポジトリ/ビルドのEnverは、一般にお互いを認識すべきではありませんが、異なるリポジトリ/ビルドのenverからの依存関係を共有できます。</p>
+    <p>Enver構成は安全に分離されており、異なるチーム（オフショア/アウトソースチームを含む）が機密構成データを公開することなく、別々のブランチで共同作業できます。</p>
+    <p>プロダクトは、バージョン管理された構成値（URI、JSON、エンドポイントなど）であり、従来のビルドアーティファクトへのURIを含む可能性があります。</p>
+    <p>理想的には、Enverが他のサービスとの契約に使用するすべての入力/コンテキストは`contractsLib`で定義され、一貫性のある予測可能な動作を保証します。</p>
+
+    <h2>組み込みビルド</h2>
+    <p>プラットフォームには、いくつかのオプションの事前定義済みビルドが含まれています。</p>
+    <ul>
+        <li><strong>ContractsLibビルド：</strong> `contractsLib`リポジトリ自体をコンパイルしてデプロイします（workspace0で実行）。</li>
+        <li><strong>ネットワーキングビルド：</strong> ネットワーキングおよびワークスペースアカウント全体にネットワーキングリソース（IPAM、VPC、TGW、NAT）をデプロイします。</li>
+        <li><strong>ユーザー認証ビルド：</strong> ユーザー認証サービスと、契約を視覚化するためのWebコンソール（オプション）をデプロイします（workspace0で実行）。</li>
+        <li><strong>EKSクラスタービルド：</strong> 共有ネットワーキングリソースを使用してEKSクラスターをデプロイし、ワークロードenverがクラスター内の分離された名前空間にアプリケーションをデプロイできるようにします（workspace0で実行し、中央アカウントVPC経由でマニフェストをデプロイ）。IAMマッピングはOIDCフェデレーションを使用します。</li>
+    </ul>
+
+    <h2>プラットフォームの自動化と視覚化</h2>
+    <p>中央アカウントはGitHubアプリを使用して以下を実行します。</p>
+    <ol>
+        <li>すべてのブランチにわたる各enverに対して同一のGitHub Actionsワークフローファイルを生成します。</li>
+        <li>構成ストアの変更を監視し、コンシューマー構成に基づいて対応します（例：下流のCI/CDをトリガー、アラームを送信）。</li>
+    </ol>
+    <p>構成ストアから同期するAppSyncを利用したWebグラフGUIは、enver依存関係のインタラクティブな視覚化、つまりインタラクティブなアーキテクチャ図を提供します。</p>
+
+    <h2>Contracts Baseと拡張性</h2>
+    <p>ベースリポジトリ（<a href="https://github.com/ondemandenv/odmd-contracts-base" target="_blank">`ondemandenv/odmd-contracts-base`</a>）は、コアタイプとインターフェース（Build、Enver、Producer、Consumer）および中央アカウントとの契約を定義します。各組織は、このベースを拡張して独自の特定の`contractsLib`を作成し、具体的なサービス、ビルド、enverターゲット（アカウント/リージョン）などを定義します。ONDEMANDENVプラットフォームチームは、中央アカウントのデプロイメントとベースライブラリを維持します。</p>
+
+    <h2>ワークフロー概要</h2>
+    <ul>
+        <li><strong>サービスの追加：</strong> 組織の`contractsLib`でサービスを（ビルド/enverとして）定義します。公開されると、サービスはこのライブラリを使用して依存関係を取得し、独自のプロダクトを公開します。</li>
+        <li><strong>Enverのクローン：</strong> ソースブランチのコミットに<code>odmd: create@&lt;target_branch&gt;</code>のようなコメントを追加します。プラットフォームはこれを検出し、クローンを作成します。クローンを削除するには<code>odmd: delete ...</code>を使用します。</li>
+        <li><strong>ContractsLibの更新：</strong> `contractsLib`リポジトリにコードをプッシュすると、そのCI/CDがトリガーされ、新しいパッケージバージョンが公開されます。この更新はプラットフォームによって検出され、ビルド/enverインフラストラクチャ（CI/CDパイプラインなど）が同期されます。ライブラリを消費する下流のenverも、その構成に基づいてトリガーされます。</li>
+    </ul>
+    <p>プラットフォームは明示性を強制します：`contractsLib`で定義されていないものはデプロイされず、あいまいさを解決します。</p>
+
+    <h2>主要なイノベーションのまとめ</h2>
+    <ul>
+        <li><strong>Enver：</strong> バージョン管理された依存関係を持つ、不変/可変のコードとしての環境ユニット。</li>
+        <li><strong>ContractsLib：</strong> 依存関係解決のためのコード化されたサービス契約（コードとしてのアーキテクチャ）。</li>
+        <li><strong>オンデマンドクローニング：</strong> 依存関係の分離を伴うブランチベースの環境レプリケーション。</li>
+    </ul>
+
+</main>
+
+<footer>
+    <p>&copy; 2024 ONDEMANDENV.dev. 全著作権所有。</p>
+    <!-- ONDEMANDENV.dev は、動的で忠実度の高いエフェメラル環境の作成と管理を簡素化するプラットフォームのデモンストレーションです。 -->
+</footer>
+
+</body>
+</html> 

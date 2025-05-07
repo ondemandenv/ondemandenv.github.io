@@ -30,11 +30,6 @@
             <li><a href="https://github.com/ondemandenv" target="_blank">GitHub Org</a></li>
             <li><a href="mailto:contacts@ondemandenv.dev">Request Demo</a></li>
         </ul>
-        <div class="language-switcher">
-            <a href="concepts.html" class="lang-active">English</a> | 
-            <a href="ja/concepts.html">日本語</a> | 
-            <a href="zh-TW/concepts.html">繁體中文</a>
-        </div>
     </nav>
 </header>
 
@@ -55,14 +50,14 @@
             <li><strong>Unified Management:</strong> Leveraging tools like AWS CDK allows defining both infrastructure and runtime components (including Kubernetes manifests via cdk8s) within a single codebase and toolchain. This reduces fragmentation and toolchain sprawl.</li>
             <li><strong>Benefits:</strong> This approach leads to improved consistency, enhanced manageability (atomic deployments/rollbacks), clear ownership, better cost attribution, and a stronger security posture through embedded least-privilege principles.</li>
         </ul>
-        <p>Crucially, the scope defined by an Application-Centric approach (and therefore the scope of a <a href="#contractslib"><code>BuildDefinition</code></a> and its <a href="#enver"><code>Envers</code></a>) is subjective and <strong>user-determined, guided by Domain-Driven Design principles</strong>. It can range from a single deployable artifact like a container image or shared library package, to a specific frontend deployment, a full-stack vertical slice, or even complex platform infrastructure like a dedicated EKS cluster Enver.</p>
+        <p>Crucially, the scope defined by an Application-Centric approach (and therefore the scope of a <a href="#products-consumers"><code>BuildDefinition</code></a> and its <a href="#enver"><code>Envers</code></a>) is subjective and <strong>user-determined, guided by Domain-Driven Design principles</strong>. It can range from a single deployable artifact like a container image or shared library package, to a specific frontend deployment, a full-stack vertical slice, or even complex platform infrastructure like a dedicated EKS cluster Enver.</p>
     </section>
 
     <section class="concept-section" id="enver">
         <h2>Enver (Environment Version)</h2>
-        <p>An <span class="concept-term">Enver</span> represents a specific, deployable <strong>composite version</strong> of an application's Bounded Context, as defined by a <a href="#contractslib"><code>BuildDefinition</code></a> in `contractsLib`. It acts as a holistic, logical environment managed as an atomic unit. Its version encompasses <strong>both its source code commit and the exact versions of all dependency Products it consumes</strong>.</p>
+        <p>An <span class="concept-term">Enver</span> represents a specific, deployable <strong>composite version</strong> of an application's Bounded Context, as defined by a <a href="#products-consumers"><code>BuildDefinition</code></a> in `contractsLib`. It acts as a holistic, logical environment managed as an atomic unit. Its version encompasses <strong>both its source code commit and the exact versions of all dependency Products it consumes</strong>.</p>
         <ul>
-             <li><strong>Instance of a Build:</strong> Each Enver definition in `contractsLib` is an instance of a specific <a href="#contractslib"><code>BuildDefinition</code></a>, representing one particular version (tied to a Git branch or tag) deployed to a specific target environment (AWS Account/Region).</li>
+             <li><strong>Instance of a Build:</strong> Each Enver definition in `contractsLib` is an instance of a specific `BuildDefinition`, representing one particular version (tied to a Git branch or tag) deployed to a specific target environment (AWS Account/Region).</li>
             <li><strong>Composite Versioning via Git & Dependencies:</strong> Envers link environment state directly to versioned dependencies:
                 <ul>
                     <li><strong>Branch Envers (Incremental Composite Versions):</strong> Associated with a Git branch. These represent evolving versions that can change due to:
@@ -85,9 +80,9 @@
 
     <section class="concept-section" id="contractslib">
         <h2>Contracts Library (`contractsLib`)</h2>
-        <p>The <span class="concept-term">contractsLib</span> is a dedicated, version-controlled repository (typically TypeScript) that serves as the central <strong>declaration hub</strong> and single source of truth for your entire distributed system\'s architecture and dependencies. It focuses solely on the <strong>contracts and boundaries</strong> between different services (Bounded Contexts) and teams, <strong>not their internal implementation details</strong>. This repository is the source that gets packaged (e.g., via <span class=\"code\">npm pack</span>) and provided to the platform during the initial <a href=\"documentation.html#platform-deployment\">setup process</a>.</p>
+        <p>The <span class="concept-term">contractsLib</span> is a dedicated, version-controlled repository (typically TypeScript) that serves as the central <strong>declaration hub</strong> and single source of truth for your entire distributed system's architecture and dependencies. It focuses solely on the <strong>contracts and boundaries</strong> between different services (Bounded Contexts) and teams, <strong>not their internal implementation details</strong>. This repository is the source that gets packaged (e.g., via <span class="code">npm pack</span>) and provided to the platform during the initial <a href="documentation.html#platform-deployment">setup process</a>.</p>
         <ul>
-            <li><strong>Architecture as Code (Declarations):</strong> Defines service boundaries (mapping to Bounded Contexts via <a href="#contractslib"><code>BuildDefinition</code></a>s), environment instances (<a href="#enver"><code>Enver</code></a> definitions), inter-service dependencies (<a href="#contractslib"><code>Products</code> and <code>Consumers</code></a>), and organizational mappings (target AWS accounts, source GitHub repos). It declares <em>what</em> services exist, <em>where</em> their code lives, <em>what</em> they produce/consume, and <em>where</em> their different versions (Envers) should be deployed.</li>
+            <li><strong>Architecture as Code (Declarations):</strong> Defines service boundaries (mapping to Bounded Contexts via <a href="#products-consumers"><code>BuildDefinition</code></a>s), environment instances (<a href="#enver"><code>Enver</code></a> definitions), inter-service dependencies (<a href="#products-consumers"><code>Products</code> and <code>Consumers</code></a>), and organizational mappings (target AWS accounts, source GitHub repos). It declares <em>what</em> services exist, <em>where</em> their code lives, <em>what</em> they produce/consume, and <em>where</em> their different versions (Envers) should be deployed.</li>
             <li><strong>Dependency Management:</strong> Explicitly defines which `Products` (outputs like ARNs, URIs, configuration values) an Enver publishes and which Products other Envers `Consume` (inputs). The platform uses this graph to orchestrate deployments and manage dependencies effectively.</li>
             <li><strong>Eliminating Ambiguity:</strong> If a dependency or configuration isn't defined in `contractsLib`, it effectively doesn't exist for the platform. This forces clarity and explicit agreement on service interactions.</li>
             <li><strong>Governance ("Congress"):</strong> Changes to `contractsLib` (declarations, contracts, dependencies) are managed via standard code review processes (Pull Requests). This acts as a governance mechanism where teams negotiate and agree upon architectural changes and inter-service contracts before they are implemented.</li>
@@ -138,30 +133,30 @@
     </section>
 
     <section class="concept-section" id="platform-abstraction">
-        <h2>Platform Abstraction: Enabling Unified Control</h2>
-        <p>A core goal of ONDEMANDENV is to abstract away underlying infrastructure and system interaction complexity, allowing developers to define and control their entire Application-Centric Bounded Context via their Enver, regardless of where resources physically reside.</p>
+        <h2>プラットフォーム抽象化：統一された制御の実現</h2>
+        <p>ONDEMANDENV の中核的な目標は、基盤となるインフラストラクチャとシステムの相互作用の複雑さを抽象化し、開発者がリソースが物理的にどこに存在するかに関係なく、Enver を介してアプリケーション中心の境界付けられたコンテキスト全体を定義および制御できるようにすることです。</p>
         <ul>
-            <li><strong>Unified Resource Ownership Across Boundaries:</strong> The platform provides the mechanisms to make the Application-Centric approach practical, even across AWS accounts, GitHub, or potentially other clouds. It handles the complex authentication, authorization, and interaction logic required for an Enver's deployment process (e.g., its CDK code or associated scripts) to manage all resources logically belonging to its Bounded Context. This includes:
+            <li><strong>境界を越えた統一されたリソース所有権：</strong> プラットフォームは、AWS アカウント、GitHub、または潜在的に他のクラウドを越えても、アプリケーション中心のアプローチを実用的にするためのメカニズムを提供します。Enver のデプロイメントプロセス（例：CDK コードまたは関連スクリプト）が、その境界付けられたコンテキストに論理的に属するすべてのリソースを管理するために必要な複雑な認証、認可、および相互作用ロジックを処理します。これには以下が含まれます：
                 <ul>
-                    <li>Assuming the correct cross-account IAM roles for deploying AWS resources (defined via `contractsLib` targets).</li>
-                    <li>Authenticating as the organization's GitHub App (using the centrally stored private key) to manage workflows, checks, or repository settings defined within an Enver.</li>
-                    <li>Executing `kubectl` commands against shared EKS clusters in other accounts (using appropriate consumed roles/endpoints).</li>
-                    <li>Potentially orchestrating deployments to other cloud platforms (e.g., GCP GKE via custom CDK resources) using centrally managed credentials and platform logic.</li>
+                    <li>AWS リソースをデプロイするための正しいクロスアカウント IAM ロールの引き受け（`contractsLib` ターゲット経由で定義）。</li>
+                    <li>Enver 内で定義されたワークフロー、チェック、またはリポジトリ設定を管理するための組織の GitHub アプリとしての認証（中央に保存された秘密鍵を使用）。</li>
+                    <li>他のアカウントの共有 EKS クラスターに対する `kubectl` コマンドの実行（適切な消費ロール/エンドポイントを使用）。</li>
+                    <li>中央管理された認証情報とプラットフォームロジックを使用して、他のクラウドプラットフォーム（例：カスタム CDK リソースを介した GCP GKE）へのデプロイメントを潜在的に調整。</li>
                 </ul>
-                This allows developers to define *all* resources logically belonging to their Bounded Context within their Enver's implementation (e.g., CDK stack), trusting the platform to handle the cross-boundary execution complexity securely.</li>
-            <li><strong>Platform Services via Standard Contracts:</strong> Common infrastructure components (Networking, EKS, CI/CD runners, Monitoring Agents, etc.) can be provided as standardized "Platform Envers". Application teams consume these foundational services via the normal Product/Consumer mechanism in `contractsLib`, simplifying access to complex shared resources without needing deep operational expertise for those specific domains.</li>
-            <li><strong>Automated Workflows & Dependency Management:</strong> Beyond resource deployment, the platform automates critical background tasks such as dependency resolution (fetching the correct versioned Product values from the config store based on `contractsLib` definitions), event handling based on Product changes (triggering downstream Enver pipelines), and managing access to secrets, further reducing the operational burden on application teams.</li>
+                これにより、開発者は、境界を越えた実行の複雑さをプラットフォームが安全に処理することを信頼して、Enver の実装（例：CDK スタック）内で境界付けられたコンテキストに論理的に属する*すべて*のリソースを定義できます。</li>
+            <li><strong>標準契約によるプラットフォームサービス：</strong> 一般的なインフラストラクチャコンポーネント（ネットワーキング、EKS、CI/CD ランナー、監視エージェントなど）は、標準化された「プラットフォーム Enver」として提供できます。アプリケーションチームは、`contractsLib` の通常の Product/Consumer メカニズムを介してこれらの基盤サービスを利用し、これらの特定ドメインに関する深い運用専門知識を必要とせずに複雑な共有リソースへのアクセスを簡素化します。</li>
+            <li><strong>自動化されたワークフローと依存関係管理：</strong> リソースのデプロイメント以外にも、プラットフォームは、依存関係の解決（`contractsLib` 定義に基づいて構成ストアから正しいバージョン管理された Product 値を取得）、Product の変更に基づくイベント処理（下流の Enver パイプラインのトリガー）、およびシークレットへのアクセスの管理など、重要なバックグラウンドタスクを自動化し、アプリケーションチームの運用負担をさらに軽減します。</li>
         </ul>
-        <p>By abstracting the complexities of cross-boundary interactions and infrastructure management, ONDEMANDENV empowers developers to focus on their core domain logic while maintaining true, unified ownership over their entire application slice, wherever its components may run.</p>
+        <p>境界を越えた相互作用とインフラストラクチャ管理の複雑さを抽象化することにより、ONDEMANDENV は、開発者がコンポーネントがどこで実行されるかに関係なく、アプリケーションスライス全体に対する真の統一された所有権を維持しながら、コアとなるドメインロジックに集中できるようにします。</p>
     </section>
 
 
 </main>
 
 <footer>
-    <p>&copy; 2024 ONDEMANDENV.dev. All rights reserved.</p>
-    <!-- Add footer links if needed -->
+    <p>&copy; 2024 ONDEMANDENV.dev. 無断複写・転載を禁じます。</p>
+    <!-- 必要に応じてフッターリンクを追加 -->
 </footer>
 
 </body>
-</html> 
+</html>

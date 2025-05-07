@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EKS向けAWS CDK：現実世界のマルチアカウントKubernetesデプロイメントにおける不備 - ONDEMANDENV.dev</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <style>
+        /* Basic article styling */
+        main { max-width: 800px; margin: 2rem auto; padding: 0 1rem; }
+        h1, h2, h3 { color: var(--primary-color); }
+        h2 { margin-top: 2rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; }
+        h3 { margin-top: 1.5rem; color: var(--secondary-color); }
+        p, ul, ol { line-height: 1.7; margin-bottom: 1rem; }
+        ul, ol { margin-left: 1.5rem; }
+        li { margin-bottom: 0.5rem; }
+        pre { background-color: #f0f0f0; padding: 1rem; border-radius: 5px; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word; }
+        code { font-family: monospace; font-size: 0.9em; }
+        pre > code { background-color: transparent; padding: 0; }
+        .code-term { background-color: #f0f0f0; padding: 0.1em 0.4em; border-radius: 3px; font-family: monospace; font-size: 0.9em; }
+
+        /* Language switcher styles */
+        .language-switcher {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 5px;
+            display: flex;
+            gap: 5px;
+        }
+        .language-switcher a, .language-switcher span {
+            padding: 5px 10px;
+            text-decoration: none;
+            color: var(--primary-color);
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+        .language-switcher a:hover {
+            background-color: #e9ecef;
+            color: var(--secondary-color);
+        }
+        .language-switcher .active {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <nav>
+        <div class="logo">ONDEMANDENV.dev</div>
+        <ul>
+            <li><a href="../../index.html">ホーム</a></li>
+            <li><a href="../../concepts.html">コアコンセプト</a></li>
+            <li><a href="../../patterns.html">パターンとユースケース</a></li>
+            <li><a href="../../documentation.html">ドキュメンテーション</a></li>
+            <li><a href="../../articles.html">記事</a></li>
+            <li><a href="https://github.com/ondemandenv" target="_blank">GitHub組織</a></li>
+            <li><a href="mailto:contacts@ondemandenv.dev">デモのリクエスト</a></li>
+        </ul>
+        <div class="language-switcher">
+            <a href="../../articles/app-centric-infra2.html">EN</a>
+            <a href="#" class="active">JA</a>
+            <a href="../../zh-TW/articles/app-centric-infra2.html">ZH-TW</a>
+        </div>
+    </nav>
+</header>
+
+<main>
+    <h1>EKS向けAWS CDK：現実世界のマルチアカウントKubernetesデプロイメントにおける不備</h1>
+
+    <p>AWS Cloud Development Kit (CDK) は、使い慣れたプログラミング言語を使用してクラウドインフラストラクチャのプロビジョニングを簡素化することを目的としています。そのEKSモジュールはKubernetesクラスターの作成と管理を合理化することを約束していますが、詳しく見ると、特に実用的なマルチアカウントEKSデプロイメントを考慮する場合、重大な欠点が明らかになります。この記事では、これらの制限について詳しく説明し、AWS CDKの現在のEKS実装、特に <span class="code-term">Cluster.addManifest</span> 関数が、共有マルチアカウントEKS戦略を採用する組織にとって真に役立たないと主張します。</p>
+
+    <h2>単純さの幻想：Cluster.addManifestとそのアカウント境界</h2>
+    <p>CDKの <span class="code-term">Cluster.addManifest(id: string, ...manifest: Record&lt;string, any&gt;[]): KubernetesManifest</span> 関数は、KubernetesマニフェストをEKSクラスターにデプロイするための簡単な方法を提供しているように見えます。しかし、EKSクラスターが複数のAWSアカウント間で共有されるように設計されている現実世界のシナリオを考慮すると、この単純さは欺瞞的です。</p>
+
+    <p>実際には、中央のEKSクラスターは、別々のAWSアカウントに存在するさまざまなチームやアプリケーションによって共有されることがよくあります。このマルチアカウントアプローチは、セキュリティ、分離、およびコスト管理にとって不可欠です。しかし、<span class="code-term">Cluster.addManifest</span> は、単一のアカウントとリージョンでのデプロイメントという暗黙の仮定の下で動作します。</p>
+
+    <h3>この制限の証拠：</h3>
+    <ul>
+        <li><strong>CDK設計における暗黙の同一アカウントの仮定：</strong> AWS CDKのコアコンストラクトとIAMロール管理は、本質的に単一のAWSアカウント内でのデプロイメント用に設計されています。<span class="code-term">KubernetesManifest</span> のCDKドキュメントではクロスアカウントデプロイメントを明示的に禁止していませんが、その例と基礎となるメカニズムは単一アカウントのユースケース向けです。</li>
+        <li><strong>クロスアカウントIAMの複雑さ：</strong> 異なるアカウントのEKSクラスターにマニフェストをデプロイするには、複雑なクロスアカウントIAMロール構成が必要です。CDKでのクロスアカウントリソースアクセスに関するStack Overflowの議論で強調されているように、CloudFormationに依存するCDKは、アカウント間でリソースを管理する際に固有の課題に直面します。<span class="code-term">Cluster.addManifest</span> は、必要なクロスアカウントIAMロールの引き受けを自動的に処理しないため、共有EKS環境での使用が面倒になります。</li>
+        <li><strong>AWSのベストプラクティスはマルチアカウントEKSを推奨：</strong> AWS自体が、Amazon EKSのマルチアカウント戦略に関する公式ドキュメントで概説されているように、EKSのマルチアカウント戦略を推奨しています。このドキュメントでは、VPCサブネットを共有し、IAM Roles for Service Accounts (IRSA) を活用して安全なクロスアカウントアクセスを実現する方法について詳しく説明しています。これらのベストプラクティスと<span class="code-term">Cluster.addManifest</span>の制限との間の著しい対照は、現実世界のEKSデプロイメントに対するツールの不備を浮き彫りにしています。</li>
+    </ul>
+
+    <h2>ネットワーク基盤の無視：適切な配管のない家</h2>
+    <p>真に実用的なEKSソリューション、特にマルチアカウント設定では、堅牢なネットワーク基盤が不可欠です。これには通常、以下が含まれます。</p>
+    <ul>
+        <li><strong>トランジットゲートウェイ：</strong> 異なるアカウント間でVPC間の安全でスケーラブルな接続を確立するため。</li>
+        <li><strong>VPC共有：</strong> 複数アカウントが中央のVPCとそのサブネット（多くの場合EKSクラスターをホストする）を共有できるようにするため。</li>
+        <li><strong>プライベートサブネット：</strong> セキュリティを強化し、マニフェストのデプロイメントとアプリケーションのワークロードがプライベートネットワークセグメント内で動作するようにするため。</li>
+    </ul>
+    <p>しかし、<span class="code-term">aws-quickstart/cdk-eks-blueprints</span>のようなブループリントを含むAWS CDKのEKS実装は、この重要なネットワークレイヤーを見落としたり単純化したりすることがよくあります。これらのツールはEKSクラスターの作成やVPCプロビジョニングを自動化するかもしれませんが、EKSデプロイメントプロセスの不可欠な部分としてトランジットゲートウェイやVPC共有を設定するための包括的で自動化されたソリューションを提供するという点では、しばしば不十分です。</p>
+    <p>現実世界のEKSアーキテクチャでは、ネットワークレイヤーは後付けではありません。それは、安全でスケーラブルなマルチアカウントKubernetes環境を構築するための基盤です。CDKがネットワークの複雑さを抽象化しながらクラスター作成の簡素化に重点を置いているため、本番環境グレードの共有EKSデプロイメントには不向きなソリューションが生まれます。</p>
+
+    <h2>トークン解決の失敗：損なわれたCDKの約束</h2>
+    <p>CDKの強みは、トークンの使用にあります。トークンはデプロイメント中に解決されるプレースホルダーであり、動的な構成とリソース参照を可能にします。しかし、<span class="code-term">Cluster.addManifest</span> はこれらのトークンを適切に解決できず、その実用性をさらに妨げています。</p>
+    <p>CDKトークンは、単一のCDKアプリケーションとCloudFormationスタックのスコープ内で解決されるように設計されています。<span class="code-term">Cluster.addManifest</span> を使用してクラスターにデプロイされたマニフェスト内のリソースからトークンを使用しようとすると、トークン解決がしばしば失敗します。CDKのデフォルトのトークン解決メカニズムは、アカウント境界を越えるようには設計されていません。</p>
+    <p>この制限により、ユーザーはCDKのエレガントなトークンベースのアプローチを放棄し、VPC ID、サブネットID、セキュリティグループIDなどの具体的な値をコンテキストパラメータまたは環境変数としてCDKアプリケーションに手動で渡すという手段に頼らざるを得なくなります。この手動の値の受け渡しは、エレガントでないだけでなく、エラーの機会を増やし、そもそもCDKを使用する全体的な利点を減少させます。</p>
+
+    <h2>解決策はネットワーキングから始まる：</h2>
+    <p>前提条件：クラウドにおけるアプリケーション中心のインフラストラクチャの採用 1</p>
+    <ul>
+        <li><strong>環境：</strong> 物理的な場所や種類に関係なく、ビジネス機能を提供するために必要なすべてのリソースを持つ、境界付けられたコンテキストとしてのすべての密結合された論理リソース—自己完結型の垂直スライス。</li>
+        <li><strong>Enver：</strong> 環境バージョン。異なるenverは、異なる構成値を持つ論理的/機能的に一貫しています。enverはユニットとしてデプロイおよびロールバックされます。</li>
+        <li><strong>サービスとしてのネットワーキング：</strong> ネットワークチームは、コードとライブラリを介して管理することにより、すべてのVPC関連リソース（元のテキスト/図では赤でマークされています）を所有します。ネットワーキングアカウントは複数のネットワーキングenverを実行し、各ネットワーキングenverはIPAM、トランジットゲートウェイとNATを備えたVPCをワークスペースアカウントと共有し、共有IPAMからCIDRの範囲を取得し、ワークロードenverにVPCをデプロイする際にNATと内部ネーミングシステムを共有します。各VPCは1つのトランジットゲートウェイにのみ接続できるため、VPCとその内部のリソースはTGWを介して接続されますが、異なるTGWに接続されたVPCは物理的に切断されます。</li>
+        <li><strong>サービスとしてのRDS：</strong> DBチームは、DB/スキーマ/ロール/ユーザーを定義/所有/制御する他のenverのDBをホストするDBクラスターを所有します。</li>
+        <li><strong>サービスとしてのEKS：</strong> k8sチームは、k8sマニフェストとサービスアカウントからIAMロールへのマッピングを定義/所有/制御する他のenverのコンテナオーケストレーションをホストするEksクラスターを所有します。</li>
+        <li>EC2、MSK、Opensearch、ECS、ElasticCache、Redshift、プライベートリンクなども同様です...</li>
+    </ul>
+
+    <h3>この図では：</h3>
+    <p>（元のテキストはここにはない図を参照しています）</p>
+    <p>AWSアカウントネットワーキングは、NT Enver LEとNT Enver Prodという2つの分離されたenverを実行しています。NT Enver Prodを例にとると：</p>
+    <ol>
+        <li>複数のアカウント（同じリージョン）にまたがる複数のVPCを接続する1つのトランジットゲートウェイ。</li>
+        <li>接続されているすべてのVPCとインターネットを共有するための1つのNAT。</li>
+        <li>IPの競合を避けるために、接続されているすべてのVPCのサブネット用の1つのIPAMとCIDRプール。</li>
+        <li>表示されていないもの：サブネット、ルーティング、SG、DNS、ホストゾーン、組織、管理者委任、証明書など...</li>
+    </ol>
+
+    <h3>VPCをまたいでリソースをデプロイするためのプロキシとしての中央VPC：</h3>
+    <ol>
+        <li>異なるenverから異なるEKSクラスターにk8sマニフェストをデプロイするためのLambdaを実行します。</li>
+        <li>異なるenverから異なるRDSクラスターにDB/スキーマ/ロール/ユーザーをデプロイするためのLambdaを実行します。</li>
+    </ol>
+
+    <h3>VPCをまたいで接続するためのプロキシ/ハブとしての中央VPC：EKS内のポッド、ECS内のタスクが異なるenverから異なるRDSクラスター内の異なるデータベースに接続します：</h3>
+
+    <h4>Enver 1：</h4>
+    <p>k8sマニフェストやデータベース関連リソース（DB、スキーマ、ロールなど）を含むすべてのリソース（緑色でマーク）を論理的に内部で宣言/制御し、トランザクションでデプロイまたはロールバックします。</p>
+    <ol>
+        <li>マニフェストはEKS Enver1のクラスターにデプロイされ、ポッドはIamロール1（SA/oidc経由）を引き受けてDynamoDBにアクセスします。</li>
+        <li>データベース、スキーマ、ロール/ユーザーはRDS Enver Prodにデプロイされ、内部のECSタスクはiamロール2を引き受けてTGW経由でホストされているDBにアクセスします。</li>
+    </ol>
+
+    <h4>Enver 2：</h4>
+     <p>すべてのリソース（紫色でマーク）も論理的に内部で宣言/制御し、マニフェストがEKS Enver1のクラスターにデプロイされた後、ポッドは次のようになります。</p>
+    <ol>
+        <li>IAMロールAを引き受けてトランジットゲートウェイ経由でDBにアクセスします（Enver 2ではVPCは不要です！）。</li>
+        <li>IAMロールBを引き受けてファイル用のS3バケットにアクセスします。</li>
+    </ol>
+
+    <h3>プラットフォームがデプロイメントを処理するため、アプリとサービスはビジネスロジック/機能に集中できます：</h3>
+    <ol>
+        <li>Enver 1とEnver 2で宣言されたk8sマニフェストは、中央アカウントのVPC-Prod内のLambda関数を介してEKSクラスターに送信されます。</li>
+        <li>Enver 1とEnver 2で宣言されたDBスキーマ/ロール/ユーザーは、中央アカウントのVPC-Prod内のLambda関数を介してRDSクラスターに送信されます。</li>
+    </ol>
+
+    <h2>Enver中心設計の実用例</h2>
+    <p><a href="https://github.com/ondemandenv/spring-boot-swagger-3-example" target="_blank">https://github.com/ondemandenv/spring-boot-swagger-3-example</a></p>
+    <p>このプロジェクトは、クラウドネイティブ開発に対するアプリケーション中心のアプローチを例示しており、すべてのリソース（アプリケーションコード、インフラストラクチャ、依存関係）が単一の垂直な「enver」として定義されています。これは、ユニットとしてデプロイ/ロールバックされる自己完結型の境界付けられたコンテキストです。</p>
+
+    <h3>1. 垂直リソース所有権</h3>
+     <p>このチュートリアルAPI機能を提供するために必要なすべてのリソースは同じ場所に配置されています。</p>
+    <ul>
+        <li>アプリケーションコード（<span class="code-term">src/</span>）</li>
+        <li>コンテナ定義（<span class="code-term">Dockerfile</span>）</li>
+        <li>Infrastructure-as-Code（CDK、<span class="code-term">cdk/</span>内）</li>
+        <li>IAMロールとポリシー</li>
+        <li>データベーススキーマ定義</li>
+        <li>サービスネットワーキング要件</li>
+    </ul>
+
+    <h3>2. バージョン管理されたユニットとしての環境</h3>
+    <p>各「enver」には以下が含まれます。</p>
+    <ul>
+        <li>論理リソース（S3バケット、IAMロール）</li>
+        <li>物理リソース参照（VPC ID、EKSクラスター名）</li>
+        <li>構成値（S3バケット名、OIDCプロバイダーARN）</li>
+        <li>サービス間依存関係（DBスキーマ、メッセージキュー）</li>
+    </ul>
+
+    <h3>3. プラットフォームサービス抽象化</h3>
+    <p>（元のテキストにはここにさらに多くのコンテンツが含まれている可能性があります）</p>
+
+    <h3>重要な統合ポイント</h3>
+    <h4>1. IAMロールバインディング（CDKスタック）</h4>
+    <pre><code>// cdk/lib/cdk-stack.ts
+const podSaRole = new Role(this, 'podSaRole', {
+    assumedBy: new FederatedPrincipal(
+        myEnver.oidcProvider.getSharedValue(this), // From platform enver
+        {
+            StringEquals: {
+                [`${oidcProvider}:aud`]: 'sts.amazonaws.com',
+                [`${oidcProvider}:sub`]: `system:serviceaccount:${namespace}:${serviceAccountName}`
+            }
+        },
+        'sts:AssumeRoleWithWebIdentity'
+    )
+});</code></pre>
+
+    <h4>2. 環境対応構成</h4>
+    <pre><code>// src/main/java/com/bezkoder/spring/swagger/config/OpenAPIConfig.java
+@Value("${aws.s3.bucket-name}")
+private String bucketName; // Injected from enver-specific config
+
+@Bean
+public S3Client s3Client() {
+    return S3Client.builder()
+        .credentialsProvider(WebIdentityTokenFileCredentialsProvider.create())
+        .build(); // Auto-utilizes IRSA credentials
+}</code></pre>
+
+    <h4>3. インフラストラクチャの一貫性</h4>
+    <pre><code>// cdk/lib/cdk-stack.ts
+new cdk8splus.Deployment(chart, 'to-eks', {
+    containers: [{
+        image: ContainerImage.fromEcrRepository(
+            Repository.fromRepositoryName(this, 'repo',
+                myEnver.appImgRepoRef.getSharedValue(this)), // Shared ECR
+            Fn.select(0, Fn.split(',', // Git SHA-based tagging
+                myEnver.appImgLatestRef.getSharedValue(this)))
+        ),
+        envVariables: {
+            bucket_arn: {value: bucket.bucketArn}, // Enver-owned bucket
+            region: {value: this.region} // Inherited from platform
+        }
+    }]
+});</code></pre>
+
+    <h3>主な利点</h3>
+    <ul>
+        <li><strong>アトミックなデプロイメント：</strong> すべてのリソース（アプリ+インフラ）はCloudFormationスタックの更新を使用して一緒にデプロイ/ロールバックされます。</li>
+        <li><strong>アカウントに依存しない：</strong> enverのCDKコードは、サンドボックス/本番アカウントにデプロイする場合でも変更されません。物理的なアカウントの詳細はenverコンテキストを通じて解決されます。</li>
+        <li><strong>デフォルトで最小権限によるセキュリティ。</strong></li>
+    </ul>
+    <p>明らかに、設計と実装全体がプラットフォームに依存します。</p>
+
+</main>
+
+<footer>
+    <p>&copy; 2024 ONDEMANDENV.dev. 無断複写・転載を禁じます。</p>
+    <!-- 必要に応じてフッターリンクを追加 -->
+</footer>
+
+</body>
+</html> 

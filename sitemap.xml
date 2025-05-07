@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
+  <!-- index.html -->
+  <url>
+    <loc>https://ondemandenv.dev/index.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ondemandenv.dev/index.html" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://ondemandenv.dev/ja/index.html" />
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://ondemandenv.dev/zh-TW/index.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ondemandenv.dev/index.html" />
+    <lastmod>2024-07-30</lastmod> <!-- Assuming today's date, update as needed -->
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://ondemandenv.dev/ja/index.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ondemandenv.dev/index.html" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://ondemandenv.dev/ja/index.html" />
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://ondemandenv.dev/zh-TW/index.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ondemandenv.dev/index.html" />
+  </url>
+  <url>
+    <loc>https://ondemandenv.dev/zh-TW/index.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ondemandenv.dev/index.html" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://ondemandenv.dev/ja/index.html" />
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://ondemandenv.dev/zh-TW/index.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ondemandenv.dev/index.html" />
+  </url>
+
+  <!-- articles.html -->
+  <url>
+    <loc>https://ondemandenv.dev/articles.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ondemandenv.dev/articles.html" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://ondemandenv.dev/ja/articles.html" />
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://ondemandenv.dev/zh-TW/articles.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ondemandenv.dev/articles.html" />
+    <lastmod>2024-07-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ondemandenv.dev/ja/articles.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ondemandenv.dev/articles.html" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://ondemandenv.dev/ja/articles.html" />
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://ondemandenv.dev/zh-TW/articles.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ondemandenv.dev/articles.html" />
+  </url>
+  <url>
+    <loc>https://ondemandenv.dev/zh-TW/articles.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ondemandenv.dev/articles.html" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://ondemandenv.dev/ja/articles.html" />
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://ondemandenv.dev/zh-TW/articles.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ondemandenv.dev/articles.html" />
+  </url>
+
+  <!-- concepts.html -->
+  <url>
+    <loc>https://ondemandenv.dev/concepts.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ondemandenv.dev/concepts.html" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://ondemandenv.dev/ja/concepts.html" />
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://ondemandenv.dev/zh-TW/concepts.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ondemandenv.dev/concepts.html" />
+    <lastmod>2024-07-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://ondemandenv.dev/ja/concepts.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ondemandenv.dev/index.html" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://ondemandenv.dev/ja/concepts.html" />
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://ondemandenv.dev/zh-TW/concepts.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ondemandenv.dev/concepts.html" />
+  </url>
+  <url>
+    <loc>https://ondemandenv.dev/zh-TW/concepts.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ondemandenv.dev/concepts.html" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://ondemandenv.dev/ja/concepts.html" />
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://ondemandenv.dev/zh-TW/concepts.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ondemandenv.dev/concepts.html" />
+  </url>
+
+  <!-- documentation.html -->
+  <url>
+    <loc>https://ondemandenv.dev/documentation.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ondemandenv.dev/documentation.html" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://ondemandenv.dev/ja/documentation.html" />
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://ondemandenv.dev/zh-TW/documentation.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ondemandenv.dev/documentation.html" />
+    <lastmod>2024-07-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://ondemandenv.dev/ja/documentation.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ondemandenv.dev/documentation.html" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://ondemandenv.dev/ja/documentation.html" />
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://ondemandenv.dev/zh-TW/documentation.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ondemandenv.dev/documentation.html" />
+  </url>
+  <url>
+    <loc>https://ondemandenv.dev/zh-TW/documentation.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ondemandenv.dev/documentation.html" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://ondemandenv.dev/ja/documentation.html" />
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://ondemandenv.dev/zh-TW/documentation.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ondemandenv.dev/documentation.html" />
+  </url>
+
+  <!-- patterns.html -->
+  <url>
+    <loc>https://ondemandenv.dev/patterns.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ondemandenv.dev/patterns.html" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://ondemandenv.dev/ja/patterns.html" />
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://ondemandenv.dev/zh-TW/patterns.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ondemandenv.dev/patterns.html" />
+    <lastmod>2024-07-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ondemandenv.dev/ja/patterns.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ondemandenv.dev/patterns.html" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://ondemandenv.dev/ja/patterns.html" />
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://ondemandenv.dev/zh-TW/patterns.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ondemandenv.dev/patterns.html" />
+  </url>
+  <url>
+    <loc>https://ondemandenv.dev/zh-TW/patterns.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ondemandenv.dev/patterns.html" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://ondemandenv.dev/ja/patterns.html" />
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://ondemandenv.dev/zh-TW/patterns.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ondemandenv.dev/patterns.html" />
+  </url>
+
+</urlset> 

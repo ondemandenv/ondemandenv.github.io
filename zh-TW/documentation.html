@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文件 - ONDEMANDENV.dev</title>
+    <link rel="stylesheet" href="../styles.css">
+    <!-- Basic styling for documentation page -->
+    <style>
+        /* Main layout */
+        body { display: flex; flex-direction: column; min-height: 100vh; }
+        .docs-container { display: flex; flex-grow: 1; }
+
+        /* Sidebar (Table of Contents) */
+        .docs-sidebar {
+            width: 260px; /* Fixed width for the sidebar */
+            flex-shrink: 0; /* Prevent sidebar from shrinking */
+            height: calc(100vh - 60px); /* Adjust 60px based on actual header height */
+            position: sticky;
+            top: 60px; /* Adjust based on actual header height */
+            overflow-y: auto; /* Allow scrolling within sidebar */
+            padding: 2rem 1rem 2rem 0; /* Add padding */
+            border-right: 1px solid var(--border-color);
+            background-color: #fdfdfd; /* Slightly off-white background */
+        }
+        .docs-sidebar h2 {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+            padding-left: 1rem; /* Indent heading */
+        }
+        .docs-sidebar ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        .docs-sidebar ul ul { /* Nested lists for sub-sections */
+           padding-left: 1.5rem; /* Indent sub-items */
+           margin-top: 0.25rem;
+           margin-bottom: 0.5rem;
+        }
+        .docs-sidebar li {
+            margin-bottom: 0.25rem;
+        }
+        .docs-sidebar a {
+            display: block;
+            text-decoration: none;
+            color: var(--secondary-color);
+            padding: 0.4rem 1rem; /* Padding for clickable area */
+            border-radius: 4px;
+            font-size: 0.9rem;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+        .docs-sidebar a:hover {
+            background-color: #f0f0f0;
+            color: var(--primary-color);
+        }
+        /* Consider adding an 'active' state later with JS if needed */
+
+        /* Main Content Area */
+        .docs-content-area {
+            flex-grow: 1; /* Allow content to take remaining space */
+            padding: 2rem 3rem; /* Add padding around content */
+            max-width: 900px; /* Optional: Limit content width for readability */
+            margin-left: auto;  /* Center the content area if max-width is set */
+            margin-right: auto; /* Center the content area if max-width is set */
+        }
+
+        /* Doc Section Styling (minor adjustments might be needed) */
+        .doc-section {
+             margin-bottom: 3rem;
+             padding-bottom: 1.5rem;
+             border-bottom: 1px solid var(--border-color);
+             scroll-margin-top: 70px; /* Adjust offset for sticky header */
+         }
+        .doc-section:last-child { border-bottom: none; } /* Remove border from last section */
+
+        .doc-section h1 { font-size: 2.5rem; margin-bottom: 1.5rem; color: var(--text-color); } /* Specific H1 style for content */
+        .doc-section h2 { font-size: 2rem; margin-bottom: 1rem; color: var(--primary-color); padding-top: 1rem; border-top: 1px dashed var(--border-color); } /* Add top border to separate sections visually */
+        .doc-section h2:first-of-type { border-top: none; padding-top: 0;} /* No top border for the very first H2 */
+
+        .doc-section h3 { font-size: 1.5rem; margin-top: 1.5rem; margin-bottom: 0.75rem; color: var(--secondary-color); }
+        .doc-section h4 { font-size: 1.1rem; margin-top: 1.25rem; margin-bottom: 0.5rem; font-weight: bold; }
+        .doc-section p { margin-bottom: 1rem; line-height: 1.7; }
+        .doc-section ul { list-style: disc; margin-left: 1.5rem; margin-bottom: 1rem; }
+        .doc-section ol { list-style: decimal; margin-left: 1.5rem; margin-bottom: 1rem; }
+        .doc-section li { margin-bottom: 0.5rem; }
+        .doc-section pre { background-color: #f8f9fa; border: 1px solid var(--border-color); padding: 1rem; border-radius: 5px; overflow-x: auto; margin-bottom: 1rem; font-size: 0.9em;}
+        .doc-section code { font-family: monospace; font-size: 0.9em; }
+        .doc-section pre code { background-color: transparent; padding: 0; }
+        .doc-section strong { font-weight: bold; }
+        .doc-section .inline-code { background-color: #f0f0f0; padding: 0.1em 0.4em; border-radius: 3px; font-family: monospace; font-size: 0.9em; color: #343a40; }
+        .setup-architecture { margin: 2rem auto; text-align: center; max-width: 100%; /* Let it fill content area width */ padding: 1rem; background: #f8f9fa; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .setup-image { max-width: 100%; height: auto; border: 1px solid var(--border-color); }
+        .setup-caption { padding-top: 1rem; font-size: 0.9rem; color: #555; }
+        .repo-link { display: inline-block; background-color: var(--primary-color); color: white; padding: 0.5rem 1rem; text-decoration: none; border-radius: 5px; margin-top: 0.5rem; }
+        .repo-link:hover { background-color: var(--secondary-color); }
+
+        /* Footer adjustment */
+        footer { width: 100%; text-align: center; padding: 1rem 0; margin-top: auto; background-color: #f8f9fa; border-top: 1px solid var(--border-color);}
+
+        /* Responsive: Hide sidebar on smaller screens (example) */
+        @media (max-width: 768px) {
+            .docs-container { flex-direction: column; }
+            .docs-sidebar {
+                width: 100%;
+                height: auto; /* Allow height to adjust */
+                position: static; /* Remove sticky positioning */
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
+                padding: 1rem;
+                overflow-y: visible;
+            }
+            .docs-content-area {
+                padding: 1.5rem; /* Reduce padding */
+                 margin-left: 0;
+                 margin-right: 0;
+                 max-width: none; /* Allow full width */
+            }
+            .doc-section { scroll-margin-top: 60px; } /* Adjust scroll margin if header is still fixed */
+        }
+
+    </style>
+</head>
+<body>
+<header>
+    <nav>
+        <div class="logo">ONDEMANDENV.dev</div>
+        <ul>
+            <li><a href="../index.html">首頁</a></li>
+            <li><a href="../concepts.html">核心概念</a></li>
+            <li><a href="../patterns.html">模式與使用案例</a></li>
+            <li><a href="../documentation.html">文件</a></li>
+            <li><a href="../articles.html">文章</a></li>
+            <li><a href="https://github.com/ondemandenv" target="_blank">GitHub 組織</a></li>
+            <li><a href="mailto:contacts@ondemandenv.dev">請求演示</a></li>
+        </ul>
+        <div class="language-switcher">
+            <a href="../documentation.html">English</a> |
+            <a href="../ja/documentation.html">日本語</a> |
+            <a href="documentation.html" class="lang-active">繁體中文</a>
+        </div>
+    </nav>
+</header>
+
+<div class="docs-container">
+
+    <aside class="docs-sidebar" aria-labelledby="toc-heading">
+        <h2 id="toc-heading">目錄</h2>
+        <ul>
+            <li><a href="#setup">安裝與設定</a>
+                <ul>
+                    <li><a href="#prerequisites">先決條件</a></li>
+                    <li><a href="#account-structure">AWS 帳戶結構</a></li>
+                    <li><a href="#bootstrapping">啟動信任與 CDK</a></li>
+                    <li><a href="#github-setup">GitHub 設定</a></li>
+                    <li><a href="#platform-deployment">部署平台</a></li>
+                </ul>
+            </li>
+            <li><a href="#core-workflow">核心工作流程與指南</a>
+                <ul>
+                    <li><a href="#define-in-contractslib">1. 在 `contractsLib` 中定義</a></li>
+                    <li><a href="#implement-service">2. 實作服務</a></li>
+                    <li><a href="#deploy-iterate">3. 部署與迭代</a></li>
+                    <li><a href="#clone-enver">4. 複製 Enver</a></li>
+                    <li><a href="#delete-clone">5. 刪除複製</a></li>
+                    <li><a href="#use-platform-services">使用平台服務</a></li>
+                </ul>
+            </li>
+            <li><a href="#deployment-model">部署模型</a></li>
+            <li><a href="#security">安全考量</a></li>
+            <li><a href="#cicd">CI/CD 整合</a></li>
+            <li><a href="#base-library">基礎程式庫</a></li>
+            <li><a href="#explore-code">探索程式碼</a></li>
+            <li><a href="#platform-internals">平台內部機制</a></li>
+        </ul>
+    </aside>
+
+    <main class="docs-content-area">
+        <section class="doc-section" id="top"> <!-- Added id=top for potential skip link -->
+             <h1>文件與入門指南</h1>
+             <p>本文件將引導您設定和使用 ONDEMANDENV，提供必要的詳細資訊以使平台運作並整合您的服務。</p>
+         </section>
+
+        <section class="doc-section" id="setup">
+            <h2>安裝與設定</h2>
+            <p>請依照以下步驟在您的環境中設定 ONDEMANDENV 平台。</p>
+
+            <h3 id="prerequisites">1. 環境準備</h3>
+
+            <h4>AWS 環境：</h4>
+            <ul>
+                <li>
+                    <strong>AWS Organization：</strong> 設定 <a href="https://aws.amazon.com/organizations/" target="_blank" rel="noopener noreferrer">AWS Organization</a>。
+                </li>
+                <li>
+                    <strong>兩個 AWS 帳戶：</strong> 在您的組織內，指定或建立：
+                    <ul>
+                        <li>一個<strong>中央帳戶</strong>：這是核心 ONDEMANDENV 平台引擎將執行的地方。</li>
+                        <li>一個<strong>工作區帳戶 (<span class="inline-code">workspace0</span>)</strong>：部署的初始目標，包括強制性的 <span class="inline-code">contractsLib</span> enver。</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>託管區域：</strong> 在<strong>中央帳戶</strong>的 Route 53 中建立一個公用託管區域。選擇一個合適的網域名稱，例如：<span class="inline-code">&lt;your-chosen-name&gt;.root.ondemandenv.link</span>。請記下此名稱，稍後將會用到。
+                </li>
+                <li>
+                    <strong>區域：</strong> 決定主要的 AWS 區域（例如 <span class="inline-code">us-east-1</span>）。所有初始設定資源都應位於此區域。
+                </li>
+                <li>
+                    <strong>AWS CDK 啟動：</strong> 在您選擇的區域中，同時在中央帳戶和 <span class="inline-code">workspace0</span> 帳戶中啟動 CDK。執行：
+                    <pre><code class="language-bash"># 在中央帳戶內容中
+aws configure set region YOUR_REGION
+cdk bootstrap aws://CENTRAL_ACCOUNT_ID/YOUR_REGION
+
+# 在 workspace0 帳戶內容中
+aws configure set region YOUR_REGION
+cdk bootstrap aws://WORKSPACE0_ACCOUNT_ID/YOUR_REGION</code></pre>
+                </li>
+                <li>
+                    <strong>跨帳戶信任：</strong> 設定 <span class="inline-code">workspace0</span> 帳戶以信任中央帳戶。在 <span class="inline-code">workspace0</span> 中建立一個 IAM 角色（例如 <span class="inline-code">OndemandenvDeployerRole</span>），賦予其 AdministratorAccess（或稍後基於最低權限的更嚴格原則）權限，以便中央帳戶可以擔任該角色。信任原則應明確允許 ONDEMANDENV 平台將在中央帳戶中使用的角色 ARN（這將由平台範本定義）。
+                </li>
+                 <li>
+                    <strong>GitHub 應用程式私鑰密碼：</strong> 在<strong>中央帳戶</strong>的 AWS Secrets Manager 中建立一個密碼。為此密碼選擇一個特定的名稱（例如 <span class="inline-code">ondemandenv/github-app-private-key</span>）。您將在下一步中將 GitHub 應用程式的私鑰儲存在此處。記下此密碼名稱 (<span class="inline-code">ghAppPrivateKeySecretName</span>)。ONDEMANDENV 平台範本將需要此名稱。
+                 </li>
+            </ul>
+
+            <h4>GitHub 環境：</h4>
+            <ul>
+                 <li>
+                    <strong>GitHub 組織：</strong> 確保您已設定 GitHub 組織。
+                 </li>
+                 <li>
+                    <strong>私有 GitHub 應用程式：</strong> 建立一個由您的組織擁有的新的私有 GitHub 應用程式。
+                    <ul>
+                        <li>下載產生的私鑰（.pem 檔案）。</li>
+                        <li><strong>重要：</strong> 將此私鑰檔案的內容安全地儲存為新版本，存入您在中央帳戶中建立的 AWS Secrets Manager 密碼 (<span class="inline-code">ghAppPrivateKeySecretName</span>) 中。</li>
+                        <li>為應用程式設定必要的權限（請參閱 ONDEMANDENV 文件以取得詳細資訊，通常包括對程式碼、中繼資料的讀取權限，以及對問題、提取請求、工作流程、檢查、狀態、部署的寫入權限）。</li>
+                        <li>目前將 Webhook URL 留空；您將在部署平台後更新此 URL。</li>
+                        <li>將此 GitHub 應用程式安裝到您打算用於 `contractsLib` 的特定儲存庫。</li>
+            </ul>
+                 </li>
+                 <li>
+                    <strong>`contractsLib` 儲存庫：</strong> 在您的 GitHub 組織內建立一個儲存庫來定義您的服務合約。此儲存庫將包含您的 ONDEMANDENV 建置和 enver 定義。
+                    <ul>
+                        <li>您可以使用 <a href="https://github.com/ondemandenv/odmd-contracts-sandbox/blob/main/lib/repos/_contracts/odmd-build-contracts-sbx.ts" target="_blank" rel="noopener noreferrer">`ondemandenv/odmd-contracts-sandbox`</a> 作為範例結構。</li>
+                        <li>確保您的儲存庫包含必要的相依性（例如 `@ondemandenv/odmd-contracts-base`）和建置指令碼（例如在 `package.json` 中）以編譯您的 TypeScript 定義。</li>
+                        <li>您需要使用 <span class="inline-code">npm pack</span> 來封裝已編譯的 `contractsLib` 定義。這會產生一個 <span class="inline-code">.tgz</span> 檔案。</li>
+                    </ul>
+                </li>
+            </ul>
+
+            <h3 id="platform-deployment">2. 平台部署</h3>
+            <ol>
+                <li>
+                    <strong>向 ONDEMANDENV 服務提交資訊：</strong>
+                    <p>您需要向 ONDEMANDENV 團隊（或指定的聯絡人）提供以下資訊，以進行平台的初始設定並產生 CloudFormation 範本。這通常涉及一個上線流程。</p>
+                    <ul>
+                        <li><strong>中央帳戶 ID</strong></li>
+                        <li><strong>工作區帳戶 ID (<span class="inline-code">workspace0</span>)</strong></li>
+                        <li><strong>主要 AWS 區域</strong></li>
+                        <li><strong>Route 53 託管區域名稱</strong>（例如 <span class="inline-code">&lt;your-chosen-name&gt;.root.ondemandenv.link</span>）</li>
+                        <li><strong>GitHub 應用程式 ID</strong></li>
+                        <li><strong>GitHub 應用程式安裝 ID</strong>（將應用程式安裝到 `contractsLib` 儲存庫後）</li>
+                        <li><strong>GitHub 組織名稱</strong></li>
+                        <li><strong>`contractsLib` 儲存庫名稱</strong></li>
+                        <li><strong>`contractsLib` 定義的 <span class="inline-code">.tgz</span> 檔案</strong>（例如 `my-org-contractslib-1.0.0.tgz`）——這需要透過安全的方式共用。</li>
+                        <li><strong>`contractsLib` 的建置定義名稱</strong>（例如 <span class="inline-code">MyOrgContractsLibSbx</span> - `contractsLib` 程式碼中 `OdmdBuildContracts` 實例的名稱）</li>
+                        <li><strong>`contractsLib` 的 enver 定義名稱</strong>（例如 <span class="inline-code">contractsLibSbx</span> - `contractsLib` 程式碼中 `OdmdEnverContracts` 實例的名稱）</li>
+                        <li><strong>GitHub 應用程式私鑰密碼名稱</strong> (<span class="inline-code">ghAppPrivateKeySecretName</span>)</li>
+                        <li>（選用）<strong>初始管理員使用者電子郵件地址</strong>（用於存取平台 UI/API）</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>部署 CloudFormation 堆疊：</strong>
+                    <p>使用從 ONDEMANDENV 團隊收到的 CloudFormation 範本和參數，在您的<strong>中央帳戶</strong>中部署堆疊。</p>
+                    <ul>
+                        <li>這將佈建核心平台引擎、API、Webhook 處理常式以及相關的 IAM 角色。</li>
+                        <li>部署完成後，將輸出平台 API 端點和 Webhook URL。</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>設定 GitHub 應用程式 Webhook：</strong>
+                    <ul>
+                        <li>從 CloudFormation 堆疊輸出中取得 Webhook URL。</li>
+                        <li>前往 GitHub 應用程式設定頁面，並使用此 URL 更新 Webhook URL。同時設定 Webhook 密碼（由平台提供或在設定時指定）。</li>
+                        <li>訂閱事件（例如推送、提取請求）。</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>`contractsLib` Enver 的初始部署：</strong>
+                    <p>平台通常會在首次推送到 `contractsLib` 儲存庫時（或透過手動觸發），自動嘗試將 `contractsLib` enver 部署到 <span class="inline-code">workspace0</span> 帳戶。這包括：</p>
+                    <ul>
+                        <li>從 `contractsLib` 儲存庫簽出程式碼。</li>
+                        <li>使用 `npm ci` 和 `npm run build`（或在 `package.json` 中定義的建置指令碼）建置程式碼。</li>
+                        <li>使用 CDK 將在 `contractsLib` 中定義的基礎架構（例如 S3 儲存貯體、CodePipeline）部署到 <span class="inline-code">workspace0</span> 帳戶。</li>
+                    </ul>
+                    <p>此步驟成功後，ONDEMANDENV 平台的基礎即已建立。</p>
+                </li>
+            </ol>
+            <div class="setup-architecture">
+                 <img src="../assets/odmd-setup-architecture.png" alt="ONDEMANDENV 設定架構" class="setup-image">
+                 <p class="setup-caption">圖 1：ONDEMANDENV 概念性設定架構。中央帳戶託管平台引擎，而工作區帳戶（例如 workspace0）託管 `contractsLib` enver 及其後的服務 enver。</p>
+            </div>
+        </section>
+
+        <section class="doc-section" id="core-workflow">
+            <h2>核心工作流程與指南</h2>
+            <p>平台設定完成後，開發人員將遵循以下一般工作流程來定義、部署和管理服務。</p>
+
+            <h3 id="define-in-contractslib">1. 在 `contractsLib` 中定義</h3>
+            <p>所有服務及其環境 (Envers) 首先在 `contractsLib` 儲存庫中以宣告方式定義。這可確保集中控制和一致性。</p>
+            <h4>a. 定義建置組態 (`OdmdBuild`)</h4>
+            <p>對於每種類型的服務（例如 Node.js Lambda、Spring Boot Fargate 服務、靜態網站），建立一個 `OdmdBuild` 實例。這定義了如何建置和封裝服務。</p>
+            <pre><code class="language-typescript">// 範例：my-org-contractslib/lib/builds/my-service-builds.ts
+import { OdmdBuild } from '@ondemandenv/odmd-contracts-base';
+import { MyOrgAppEnver } from '../envers/my-org-app-enver'; // 匯入 Enver 類型
+
+export const MyNodeJsLambdaBuild = new OdmdBuild<MyOrgAppEnver>(this, 'MyNodeJsLambdaBuild', {
+    githubRepoAlias: 'my-nodejs-lambda-service-repo', // 服務程式碼所在的儲存庫
+    buildType: 'lambda_nodejs', // 或 'cdk', 'container_image' 等
+    sourcePath: 'src', // 根據 buildType 的來源路徑
+    // 特定於 buildType 的其他參數
+});</code></pre>
+            <p><span class="inline-code">githubRepoAlias</span> 指向在 ONDEMANDENV 平台設定中對應的儲存庫（例如 GitHub 應用程式安裝）。</p>
+
+            <h4>b. 定義 Enver 定義 (擴充 `OdmdEnver`)</h4>
+            <p>對於每個服務，建立一個擴充 `OdmdEnverCdk`（用於基於 CDK 的部署）或 `OdmdEnverGeneric` 的類別。這可讓您模型化特定的環境實例（例如開發、預備、生產）。</p>
+            <pre><code class="language-typescript">// 範例：my-org-contractslib/lib/envers/my-org-app-enver.ts
+import { OdmdEnverCdk, Product, Consumer } from '@ondemandenv/odmd-contracts-base';
+import { Construct } from 'constructs';
+
+// 定義此 Enver 類型將發佈和使用的產品/消費者的介面
+export interface MyOrgAppEnverProps {
+    // 此 Enver 將發佈的產品範例
+    readonly outputsProduct?: Product;
+    // 此 Enver 將使用的產品範例
+    readonly userDatabaseConsumer?: Consumer;
+}
+
+export class MyOrgAppEnver extends OdmdEnverCdk implements MyOrgAppEnverProps {
+    readonly outputsProduct?: Product;
+    readonly userDatabaseConsumer?: Consumer;
+
+    constructor(scope: Construct, id: string, props: OdmdEnverCdkProps & MyOrgAppEnverProps) {
+        super(scope, id, props);
+        this.outputsProduct = props.outputsProduct;
+        this.userDatabaseConsumer = props.userDatabaseConsumer;
+    }
+}</code></pre>
+
+            <h4>c. 實例化特定的 Enver 實例</h4>
+            <p>使用建置和 Enver 類型來實例化特定的環境實例（例如 `myServiceDev`、`myServiceProd`）。定義產品（此 Enver 將發佈的輸出）和消費者（此 Enver 所需的相依性）。</p>
+            <pre><code class="language-typescript">// 範例：my-org-contractslib/lib/envers/service-instances.ts
+import { MyNodeJsLambdaBuild } from '../builds/my-service-builds';
+import { MyOrgAppEnver } from './my-org-app-enver';
+import { Product } from '@ondemandenv/odmd-contracts-base';
+// 匯入其他 Enver 實例以定義相依性
+// import { sharedDatabaseProd } from './shared-services';
+
+export const myServiceDev = new MyOrgAppEnver(this, 'MyServiceDev', {
+    build: MyNodeJsLambdaBuild, // 連結到相關的建置定義
+    targetAccountAlias: 'dev-account', // 在平台設定中定義的帳戶別名
+    targetRegion: 'us-east-1', // 選用，預設為平台的主要區域
+    outputsProduct: new Product(this, 'Outputs'), // 此 Enver 將發佈輸出
+    // userDatabaseConsumer: new Consumer(this, 'UserDb', sharedDatabaseProd.outputsProduct), // 使用來自另一個 Enver 的產品
+    // enverSpecificConfig: { key: 'devValue' } // 特定於環境的組態
+});
+
+export const myServiceProd = new MyOrgAppEnver(this, 'MyServiceProd', {
+    build: MyNodeJsLambdaBuild,
+    targetAccountAlias: 'prod-account',
+    immutable: true, // 生產環境通常標記為不可變
+    outputsProduct: new Product(this, 'Outputs'),
+    // userDatabaseConsumer: new Consumer(this, 'UserDb', sharedDatabaseProd.outputsProduct),
+    // enverSpecificConfig: { key: 'prodValue' }
+});</code></pre>
+            <p>提交並推送對 `contractsLib` 的變更後，平台將自動處理這些定義。</p>
+
+            <h3 id="implement-service">2. 實作服務</h3>
+            <p>在 `OdmdBuild` 定義中指定的儲存庫（例如 `my-nodejs-lambda-service-repo`）中，實作服務的商業邏輯。根據部署類型（CDK、Lambda、容器），建立相關檔案（例如 `cdk-stack.ts`、`lambda-handler.js`、`Dockerfile`）。</p>
+
+            <h4>對於基於 CDK 的服務 (`buildType: 'cdk'`)</h4>
+            <p>CDK 堆疊可以透過 `OdmdEnverCdk`（或其子類別）的 `getSharedValue('consumerName')` 存取已使用的值，並透過 `getEnverSpecificConfig()` 存取特定於環境的組態。</p>
+            <pre><code class="language-typescript">// 範例：my-nodejs-lambda-service-repo/lib/my-service-stack.ts
+import * as cdk from 'aws-cdk-lib';
+import { Construct } from 'constructs';
+import { OdmdEnverCdk, OdmdShareOut } from '@ondemandenv/odmd-contracts-base'; // 從基礎程式庫匯入
+import * as lambda from 'aws-cdk-lib/aws-lambda';
+// ... 其他 CDK 匯入
+
+// 在 MyOrgAppEnver 中定義的 enverSpecificConfig 介面
+interface MyServiceConfig {
+    key: string;
+    // 其他組態屬性
+}
+
+export class MyServiceStack extends OdmdEnverCdk { // 擴充 OdmdEnverCdk
+    constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+        super(scope, id, props);
+
+        // 取得已使用的值 (在 contractsLib 中定義)
+        // const userDbDetailsJson = OdmdEnverCdk.getSharedValue('UserDb');
+        // const userDbDetails = JSON.parse(userDbDetailsJson || '{}');
+
+        // 取得特定於環境的組態 (在 contractsLib 中定義)
+        const config = OdmdEnverCdk.getEnverSpecificConfig<MyServiceConfig>();
+
+        const myFunction = new lambda.Function(this, 'MyLambdaFunction', {
+            runtime: lambda.Runtime.NODEJS_18_X,
+            handler: 'index.handler',
+            code: lambda.Code.fromAsset('src'), // 符合在 MyNodeJsLambdaBuild 中定義的 sourcePath
+            environment: {
+                // DB_HOST: userDbDetails.host,
+                CONFIG_KEY: config?.key || 'defaultValue',
+            },
+        });
+
+        // 發佈此堆疊的輸出 (符合 contractsLib 中的 Outputs 產品)
+        new OdmdShareOut(this, 'Outputs', {
+            value: cdk.Stack.of(this).toJsonString({
+                lambdaFunctionName: myFunction.functionName,
+                // 其他輸出
+            }),
+        });
+    }
+}</code></pre>
+            <p>在 `package.json` 中包含服務程式碼所需的相依性（例如 `@ondemandenv/odmd-contracts-base`）。</p>
+
+
+            <h3 id="deploy-iterate">3. 部署與迭代</h3>
+            <p>將變更提交並推送到服務儲存庫（例如 `my-nodejs-lambda-service-repo`）。</p>
+            <ul>
+                <li>平台會偵測到推送事件，並觸發在 `contractsLib` 中定義的相關 Enver（例如 `myServiceDev`）的建置和部署。</li>
+                <li>可以透過 ONDEMANDENV 平台 UI 或 API 監控建置日誌和部署狀態。</li>
+                <li>已部署服務的端點或資源詳細資料通常可以透過平台 UI 或使用 `Product` 來取得。</li>
+            </ul>
+            <p>重複此週期以開發和更新您的服務。</p>
+
+            <h3 id="clone-enver">4. 複製 Enver (動態環境)</h3>
+            <p>ONDEMANDENV 支援現有 Enver 的隨選複製，非常適合隔離測試、功能開發或臨時沙箱。</p>
+            <p>若要建立複製，請提交到服務儲存庫的目標分支（例如 `feature/new-feature`），並在提交訊息本文中包含特殊指令。</p>
+            <pre><code class="plaintext">git commit -m "功能：實作新的驗證流程
+
+odmd: create@myServiceDev"</code></pre>
+            <ul>
+                <li><span class="inline-code">odmd: create@BASE_ENVER_ID</span>：建立 `BASE_ENVER_ID`（例如 `myServiceDev`）的複製，並使用目前分支的程式碼進行部署。</li>
+                <li>複製的 Enver 將繼承基礎 Enver 的組態（相依性、目標帳戶等），但會使用目前分支的程式碼進行部署。</li>
+                <li>資源名稱將為複製唯一產生，以避免衝突。</li>
+                <li>可以透過平台 UI 或 API 存取複製 Enver 的詳細資料。</li>
+            </ul>
+            <p>或者，您也可以在 `contractsLib` 中靜態定義 `ClonedEnver` 實例。</p>
+
+            <h3 id="delete-clone">5. 刪除複製</h3>
+            <p>當不再需要動態建立的複製 Enver 時，您可以將其刪除以釋放資源。</p>
+            <p>提交到與複製 Enver 相關聯的分支，並在提交訊息本文中包含特殊指令。</p>
+            <pre><code class="plaintext">git commit --allow-empty -m "刪除功能分支複製
+
+odmd: delete"</code></pre>
+            <ul>
+                <li><span class="inline-code">odmd: delete</span>：銷毀與目前分支相關聯的複製 Enver。</li>
+                <li>平台將清除與複製 Enver 相關聯的所有已佈建資源。</li>
+            </ul>
+
+
+            <h3 id="use-platform-services">使用平台服務 (產品與消費者)</h3>
+            <p>Enver 可以透過發佈 `Product` 並使用其他 Enver 發佈的 `Product` 作為 `Consumer` 來進行互動。這實現了基於合約的相依性管理。</p>
+            <ul>
+                <li><strong>發佈產品：</strong> 在您的 CDK 堆疊中使用 `OdmdShareOut` 建構，將 Enver 的輸出作為 JSON 字串發佈。它必須符合在 `contractsLib` 中定義的 `Product` ID。</li>
+                <li><strong>使用產品：</strong> 在 `contractsLib` 中定義一個 `Consumer`，以另一個 Enver 的 `Product` 為目標。在您的 CDK 堆疊中，使用 `OdmdEnverCdk.getSharedValue('ConsumerName')` 作為 JSON 字串取得產品的值，然後進行解析和使用。</li>
+            </ul>
+            <p>平台將協調這些跨 Enver 和跨帳戶相依性的安全解析。</p>
+        </section>
+
+        <section class="doc-section" id="deployment-model">
+            <h2>部署模型</h2>
+            <p>ONDEMANDENV 支援彈性的部署模型。</p>
+            <ul>
+                <li><strong>多帳戶：</strong> Enver 可以根據 `contractsLib` 中定義的 `targetAccountAlias` 部署到不同的 AWS 帳戶。平台管理跨帳戶角色擔任和資源共用。</li>
+                <li><strong>多區域：</strong> 可以透過指定 `targetRegion` 將 Enver 部署到不同的 AWS 區域。</li>
+                <li><strong>建置類型：</strong>
+                    <ul>
+                        <li><span class="inline-code">cdk</span>：使用 AWS CDK 部署基礎架構和應用程式。</li>
+                        <li><span class="inline-code">lambda_nodejs</span> / <span class="inline-code">lambda_python</span> / <span class="inline-code">lambda_java</span> 等：直接部署指定執期的 AWS Lambda 函數（平台可能會產生必要的包裝函式或 CDK 程式碼）。</li>
+                        <li><span class="inline-code">container_image</span>：建置容器映像並將其部署到 ECS 或 EKS 等服務。</li>
+                        <li><span class="inline-code">static_site</span>：將靜態網站內容部署到 S3/CloudFront。</li>
+                    </ul>
+                </li>
+                <li><strong>不可變性：</strong> Enver 可以標記為 `immutable: true`，以防止意外修改。變更需要建立新的 Enver 版本或複製。</li>
+            </ul>
+        </section>
+
+        <section class="doc-section" id="security">
+            <h2>安全考量</h2>
+            <p>ONDEMANDENV 的設計考量到安全性。</p>
+            <ul>
+                <li><strong>最低權限 IAM 角色：</strong> 平台元件和已部署的 Enver 使用遵循最低權限原則設計的 IAM 角色。</li>
+                <li><strong>基於合約的安全性：</strong> `contractsLib` 中產品和消費者之間的連線構成了管理跨帳戶存取權限的信任基礎。平台會根據這些合約自動設定必要的 IAM 原則和資源共用（例如 AWS RAM）。</li>
+                <li><strong>密碼管理：</strong> 敏感資料（例如 GitHub 應用程式私鑰）會安全地儲存在 AWS Secrets Manager 中。</li>
+                <li><strong>網路隔離：</strong> Enver 可以利用標準的 AWS 網路建構（VPC、安全群組等）進行隔離。共享網路模式允許安全地連線到集中管理的網路資源。</li>
+                <li><strong>稽核與記錄：</strong> 平台動作和 Enver 部署會透過 AWS CloudTrail 和 CloudWatch Logs 進行記錄，提供稽核功能。</li>
+            </ul>
+        </section>
+
+        <section class="doc-section" id="cicd">
+            <h2>CI/CD 整合</h2>
+            <p>ONDEMANDENV 補充並增強了現有的 CI/CD 實務。</p>
+            <ul>
+                <li><strong>以 GitOps 為中心：</strong> 核心工作流程圍繞 Git 操作（推送、提交訊息）展開，自然符合 GitOps 原則。</li>
+                <li><strong>Webhook 整合：</strong> GitHub (或其他 VCS) Webhook 會根據對 `contractsLib` 和服務儲存庫的變更觸發平台動作。</li>
+                <li><strong>平台 API：</strong> ONDEMANDENV API 可用於從外部 CI/CD 管線（例如 Jenkins、GitLab CI、GitHub Actions）以程式設計方式觸發建置、部署和複製操作。</li>
+                <li><strong>環境進程：</strong> 在 `contractsLib` 中定義不同的 Enver（開發、預備、生產）並結合指定來源提交雜湊的功能，可在 CI/CD 管線中實現受控的環境進程。</li>
+            </ul>
+        </section>
+
+
+        <section class="doc-section" id="base-library">
+            <h2>基礎程式庫 (`@ondemandenv/odmd-contracts-base`)</h2>
+            <p><span class="inline-code">@ondemandenv/odmd-contracts-base</span> 程式庫提供與 ONDEMANDENV 平台互動所需的核心建構和公用程式。</p>
+            <h4>主要建構：</h4>
+            <ul>
+                <li><span class="inline-code">OdmdBuild</span>：定義如何建置服務成品。</li>
+                <li><span class="inline-code">OdmdEnverCdk</span>：使用 AWS CDK 部署的環境基礎類別。提供對特定於環境的組態和共用值的存取。</li>
+                <li><span class="inline-code">OdmdEnverGeneric</span>：用於非 CDK 部署情境的通用環境基礎類別。</li>
+                <li><span class="inline-code">OdmdBuildContracts</span> / <span class="inline-code">OdmdEnverContracts</span>：用於定義和部署 `contractsLib` 本身的特殊類型。</li>
+                <li><span class="inline-code">Product</span>：定義 Enver 發佈的輸出或資源。</li>
+                <li><span class="inline-code">Consumer</span>：定義對另一個 Enver 的 Product 的相依性。</li>
+                <li><span class="inline-code">OdmdShareOut</span>：用於從 CDK 堆疊內發佈 Product 的值。</li>
+            </ul>
+            <h4>公用程式：</h4>
+            <ul>
+                <li><span class="inline-code">OdmdEnverCdk.getSharedValue(consumerName)</span>：在 CDK 堆疊中取得已使用的 Product 值。</li>
+                <li><span class="inline-code">OdmdEnverCdk.getEnverSpecificConfig()</span>：在 CDK 堆疊中取得特定於 Enver 的組態。</li>
+            </ul>
+            <p>有關這些建構的詳細 API 文件和使用範例，請參閱程式庫的原始碼和相關的類型定義。</p>
+        </section>
+
+        <section class="doc-section" id="explore-code">
+            <h2>探索程式碼</h2>
+            <p>為了更深入地了解 ONDEMANDENV 的功能，建議探索以下儲存庫：</p>
+            <ul>
+                <li>
+                    <strong><a href="https://github.com/ondemandenv/odmd-contracts-base" target="_blank" rel="noopener noreferrer" class="repo-link">`odmd-contracts-base`</a></strong>
+                    <p>核心 TypeScript 程式庫。包含 `OdmdBuild`、`OdmdEnverCdk`、`Product`、`Consumer` 等基本建構。這是建置您自己的 `contractsLib` 和服務 CDK 程式碼的基礎。</p>
+                </li>
+                <li>
+                    <strong><a href="https://github.com/ondemandenv/odmd-contracts-sandbox" target="_blank" rel="noopener noreferrer" class="repo-link">`odmd-contracts-sandbox`</a></strong>
+                    <p>範例 `contractsLib` 儲存庫。展示了各種建置類型、Enver 定義、產品/消費者使用方式以及資料夾結構的最佳實務。是開始建置您自己的 `contractsLib` 的絕佳起點。</p>
+                </li>
+                <li>
+                    <strong><a href="https://github.com/ondemandenv/odmd-example-services" target="_blank" rel="noopener noreferrer" class="repo-link">`odmd-example-services`</a></strong> (若有，或個別服務範例)
+                    <p>可使用 ONDEMANDENV 部署的各種類型範例服務（例如 Node.js Lambda、Python Fargate 服務）。這些範例展示了它們如何與 `odmd-contracts-sandbox` 中定義的合約互動。</p>
+                </li>
+                 <li>
+                    <strong>平台引擎儲存庫</strong> (若可存取)
+                    <p>包含 ONDEMANDENV 平台本身核心邏輯的私有儲存庫（通常無法存取）。包括 Webhook 處理常式、API、部署協調和狀態管理。</p>
+                </li>
+            </ul>
+        </section>
+
+         <section class="doc-section" id="platform-internals">
+            <h2>平台內部機制 (進階概觀)</h2>
+            <p>ONDEMANDENV 平台由數個主要元件組成：</p>
+            <ul>
+                <li><strong>合約儲存 (`contractsLib`):</strong> 所有環境和服務定義的信任來源。它作為在專用 AWS 帳戶（例如 `workspace0`）中執行的特殊 Enver 進行管理。其主要輸出是包含已處理合約定義的 S3 儲存貯體。</li>
+                <li><strong>Webhook 處理常式:</strong> 監聽來自 GitHub (或其他 VCS 供應商) 的 Webhook 事件 (例如推送、提交訊息指令) 的 API Gateway 和 Lambda 函數。它們會解析這些事件並觸發相應的平台動作。</li>
+                <li><strong>API 端點:</strong> 用於與平台互動的 RESTful API。用於觸發建置、查詢 Enver 狀態、管理複製等。</li>
+                <li><strong>協調引擎 (Step Functions / Lambda):</strong> 管理複雜工作流程 (例如建置、部署、複製建立、刪除) 的 AWS Step Functions 狀態機器和 Lambda 函數。這些工作流程包括簽出程式碼、解析相依性 (Products/Consumers)、合成和部署 CDK，以及更新狀態。</li>
+                <li><strong>狀態資料庫 (DynamoDB):</strong> 追蹤 Enver、建置、部署及其關係狀態的 DynamoDB 資料表。</li>
+                <li><strong>身分識別管理:</strong> 管理 API 和 UI 存取的使用者身分識別和驗證 (例如 Amazon Cognito)。</li>
+                <li><strong>CDK 工具組整合:</strong> 平台與 AWS CDK 工具組深度整合，以在指定的目標帳戶和區域中合成和部署 CDK 堆疊。利用跨帳戶部署角色。</li>
+                <li><strong>通知服務 (SNS/SES):</strong> (選用) 就重要事件 (例如部署完成或錯誤) 通知使用者。</li>
+            </ul>
+            <p>當平台收到指令 (例如 `odmd: create@baseEnver`) 時，會發生以下一般順序：</p>
+            <ol>
+                <li>Webhook 處理常式驗證指令並觸發協調引擎。</li>
+                <li>協調引擎從合約儲存讀取基礎 Enver 定義。</li>
+                <li>從指定的分支簽出服務程式碼。</li>
+                <li>在目標帳戶和區域中，使用基礎 Enver 的組態和分支的程式碼合成新 Enver (複製) 的 CDK 堆疊。</li>
+                <li>部署合成的範本，確保資源名稱是唯一的。</li>
+                <li>更新狀態資料庫，並透過平台 UI 提供詳細資料。</li>
+            </ol>
+            <p>此架構能夠以可擴展、具彈性且安全的方式，隨選建立和管理高擬真度的環境。</p>
+        </section>
+
+    </main>
+</div>
+
+<footer>
+    <p>&copy; 2024 ONDEMANDENV.dev. 保留所有權利。</p>
+    <!-- ONDEMANDENV.dev 是一個演示平台，旨在簡化動態、高擬真度臨時環境的建立与管理。 -->
+</footer>
+
+</body>
+</html> 

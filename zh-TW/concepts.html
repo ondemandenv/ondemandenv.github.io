@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>核心概念 - ONDEMANDENV.dev</title>
+    <link rel="stylesheet" href="../styles.css">
+    <!-- Basic styling for concept page -->
+    <style>
+        .concept-section { margin-bottom: 3rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border-color); }
+        .concept-section h2 { font-size: 2rem; margin-bottom: 1rem; color: var(--primary-color); }
+        .concept-section h3 { font-size: 1.5rem; margin-top: 1.5rem; margin-bottom: 0.75rem; color: var(--secondary-color); }
+        .concept-section p { margin-bottom: 1rem; line-height: 1.7; }
+        .concept-section ul { list-style: disc; margin-left: 1.5rem; margin-bottom: 1rem; }
+        .concept-section li { margin-bottom: 0.5rem; }
+        .concept-section code { background-color: #f0f0f0; padding: 0.1em 0.4em; border-radius: 3px; font-family: monospace; font-size: 0.9em; }
+        .concept-term { font-weight: bold; font-style: italic; color: var(--primary-color); }
+    </style>
+</head>
+<body>
+<header>
+     <nav>
+        <div class="logo">ONDEMANDENV.dev</div>
+        <ul>
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="../concepts.html">Core Concepts</a></li>
+            <li><a href="../patterns.html">Patterns & Use Cases</a></li>
+            <li><a href="../documentation.html">Documentation</a></li>
+            <li><a href="../articles.html">Articles</a></li>
+            <li><a href="https://github.com/ondemandenv" target="_blank">GitHub Org</a></li>
+            <li><a href="mailto:contacts@ondemandenv.dev">Request Demo</a></li>
+        </ul>
+        <div class="language-switcher">
+            <a href="../concepts.html">English</a> |
+            <a href="../ja/concepts.html">日本語</a> |
+            <a href="concepts.html" class="lang-active">繁體中文</a>
+        </div>
+    </nav>
+</header>
+
+<main>
+    <h1>ONDEMANDENV 的核心概念</h1>
+    <p>ONDEMANDENV 引入了幾個核心概念，旨在為複雜分散式系統的管理帶來秩序、一致性和敏捷性。理解這些概念是發揮平台力量的關鍵。更深入的技術概述，請參閱 <a href="../articles/odmd-arc.html">ONDEMANDENV 架構深入探討</a>文章。</p>
+
+    <p style="margin-top: 1.5rem; margin-bottom: 2rem; font-style: italic; background-color: #eef; padding: 1rem; border-left: 4px solid #aac;">
+        <strong>實施說明：</strong> 雖然目前的範例和參考實施大量使用 <strong>AWS CDK</strong> 和 CloudFormation 來定義和部署資源，但 ONDEMANDENV 的核心原則——以應用程式為中心、Envers、contractsLib、複製和平台抽象化——與工具無關。相同的概念框架可以使用其他基礎設施即程式碼工具（如 <strong>Terraform CDK</strong>、<strong>Pulumi</strong>）來實現，甚至在高度專注於 Kubernetes 編排的環境中，主要使用 <strong>cdk8s</strong> 也可以實現。關鍵在於編碼合約、版本化環境和平台自動化的模式。
+    </p>
+
+    <section class="concept-section" id="application-centric">
+        <h2>以應用程式為中心的基礎設施</h2>
+        <p>ONDEMANDENV 採用<span class="concept-term">以應用程式為中心</span>的方法，而非將基礎設施和應用程式視為由不同工具（如用於基礎設施的 CloudFormation、用於執行階段的 Kubernetes/Helm）管理的獨立實體。</p>
+        <ul>
+            <li><strong>以垂直切片為單位：</strong> 現代「應用程式」被視為一個完整的業務功能垂直切片。這不僅包括容器，還包括資料庫（RDS、DynamoDB）、儲存（S3）、網路（VPC、負載平衡器）、無伺服器功能（Lambda）、API 閘道，以及至關重要的相關安全態勢（IAM 角色、政策）。</li>
+            <li><strong>界限上下文：</strong> 這整個垂直切片作為一個單一、內聚的單元進行管理，反映了領域驅動設計（DDD）中「界限上下文」的概念。資源根據其與業務能力的關係進行邏輯分組，而不僅僅是其實體類型。</li>
+            <li><strong>統一管理：</strong> 利用 AWS CDK 等工具，可以在單一程式碼庫和工具鏈中定義基礎設施和執行階段元件（包括透過 cdk8s 的 Kubernetes 清單）。這減少了零散化和工具鏈的過度擴展。</li>
+            <li><strong>優點：</strong> 這種方法可以提高一致性、增強可管理性（原子化部署/回滾）、明確所有權、改善成本歸屬，並透過嵌入式最小權限原則增強安全態勢。</li>
+        </ul>
+        <p>關鍵的是，以應用程式為中心的方法所定義的範圍（因此也是 <a href="#products-consumers"><code>BuildDefinition</code></a> 及其 <a href="#enver"><code>Envers</code></a> 的範圍）是主觀的，並且是<strong>由使用者根據領域驅動設計原則決定的</strong>。它可以從像容器映像或共享程式庫套件這樣的單一部署成品，到特定的前端部署、全端垂直切片，甚至是像專用 EKS 叢集 Enver 這樣的複雜平台基礎設施。</p>
+    </section>
+
+    <section class="concept-section" id="enver">
+        <h2>Enver (環境版本)</h2>
+        <p><span class="concept-term">Enver</span> 代表應用程式界限上下文的一個特定的、可部署的<strong>複合版本</strong>，此版本由 `contractsLib` 中的 <a href="#products-consumers"><code>BuildDefinition</code></a> 定義。它作為一個整體性的邏輯環境，以原子單元的形式進行管理。其版本包含<strong>其原始碼提交以及其使用的所有相依性產品的確切版本</strong>。</p>
+        <ul>
+             <li><strong>建置實例：</strong> `contractsLib` 中的每個 Enver 定義都是特定 `BuildDefinition` 的實例，代表部署到特定目標環境（AWS 帳戶/區域）的特定版本（綁定到 Git 分支或標籤）。</li>
+            <li><strong>透過 Git 和相依性的複合版本控制：</strong> Enver 將環境狀態直接連結到版本化的相依性：
+                <ul>
+                    <li><strong>分支 Enver (增量複合版本)：</strong> 與 Git 分支相關聯。這些代表不斷演進的版本，可能會因以下原因而變更：<ol><li>推送到 Enver 原始碼分支（在 `BuildDefinition` 中定義）的新程式碼提交。</li><li>從相依性 Enver (其本身也可能是分支 Enver) 使用的 `Products` 更新。</li></ol> 非常適合程式碼和相依性都可能演進的開發、功能作業和迭代測試。平台會追蹤每次部署所使用的特定相依性版本。
+                    </li>
+                    <li><strong>標籤 Enver (不可變複合版本)：</strong> 與 Git 標籤相關聯。這些代表固定的特定時間點版本，其中<strong>原始碼和所有使用的相依性版本均已鎖定</strong>。這是透過標籤 Enver <i>只能</i>宣告對其他標籤 Enver 發佈的 `Products` 的相依性 (`Consume`) 的規則來強制執行的。這會建立一個完全不可變的相依性鏈，保證絕對的可重現性。非常適合預備環境、生產版本或關鍵的特定時間點驗證。</li>
+                </ul>
+            </li>
+            <li><strong>整體性定義：</strong> Enver 封裝了其特定複合版本所需的一切——基礎設施（根據其原始碼版本透過 CDK 定義）、設定值（包括已解析的使用產品版本）、程式碼成品的參考（如 Docker 映像檔 URI）、相依性宣告 (`Consumers`) 以及部署的目標 AWS 帳戶/區域。</li>
+            <li><strong>原子部署單元：</strong> 每個 Enver (代表 BuildDefinition 的特定複合版本) 都作為單一交易進行部署和回滾 (利用 CloudFormation)。這可確保基礎設施、執行階段設定和應用程式元件始終與該特定複合版本保持一致。</li>
+            <li><strong>版本化設定存放區：</strong> 底層設定存放區 (例如 AWS SSM Parameter Store) 自然會對 Enver 發佈的 `Product` 值進行版本控制，使平台能夠解析和追蹤每個 Enver 部署所使用的特定相依性版本。</li>
+            <li><strong>隔離：</strong> 相同 BuildDefinition 的不同 Enver 版本 (無論是基於分支還是標籤) 在邏輯上都是隔離的。</li>
+            <li><strong>為求一致性而參數化：</strong> CDK 程式碼使用 Enver 的識別碼 (分支/標籤) 來參數化資源，以維持不同版本之間的功能一致性。</li>
+        </ul>
+    </section>
+
+    <section class="concept-section" id="contractslib">
+        <h2>合約庫 (`contractsLib`)</h2>
+        <p><span class="concept-term">contractsLib</span> 是一個專用的、版本控制的儲存庫 (通常是 TypeScript)，作為整個分散式系統架構和相依性的中央<strong>宣告中心</strong>和單一事實來源。它僅專注於不同服務 (界限上下文) 和團隊之間的<strong>合約和邊界</strong>，而<strong>非其內部實作細節</strong>。此儲存庫是在初始<a href="../documentation.html#platform-deployment">設定過程</a>中打包 (例如，透過 <span class="code">npm pack</span>) 並提供給平台的來源。</p>
+        <ul>
+            <li><strong>程式碼即架構 (宣告)：</strong> 定義服務邊界 (透過 <a href="#products-consumers"><code>BuildDefinition</code></a> 對應到界限上下文)、環境實例 (<a href="#enver"><code>Enver</code></a> 定義)、服務間相依性 (<a href="#products-consumers"><code>Products</code> 和 <code>Consumers</code></a>) 以及組織對應 (目標 AWS 帳戶、來源 GitHub 儲存庫)。它宣告<em>哪些</em>服務存在、其程式碼位於<em>何處</em>、它們產生/使用<em>什麼</em>，以及其不同版本 (Envers) 應部署到<em>何處</em>。</li>
+            <li><strong>相依性管理：</strong> 明確定義 Enver 發佈哪些 `Products` (例如 ARN、URI、設定值等輸出) 以及其他 Enver `Consume` (輸入) 哪些 Products。平台使用此圖表來協調部署並有效地管理相依性。</li>
+            <li><strong>消除模糊性：</strong> 如果相依性或設定未在 `contractsLib` 中定義，則平台實際上不會知道它的存在。這迫使在服務互動上達成清晰和明確的協議。</li>
+            <li><strong>治理 (「議會」)：</strong> 對 `contractsLib` (宣告、合約、相依性) 的變更透過標準的程式碼審查流程 (提取請求) 進行管理。這充當治理機制，團隊在實施之前協商並同意架構變更和服務間合約。</li>
+            <li><strong>平台整合：</strong> ONDEMANDENV 平台會監控 `contractsLib`。變更會觸發對受影響 Enver 的中央設定存放區和下游部署管線 (在實作儲存庫中定義) 的更新。</li>
+            <li><strong>類型指定與驗證：</strong> 使用 TypeScript 進行強類型指定，並包含基礎介面/類別 (`ondemandenv-contracts-base`) 以確保定義的一致性和正確性。單元測試可以進一步保證完整性 (例如，防止不可變的 Enver 依賴於增量的 Enver)。</li>
+        </ul>
+        <p>在 `contractsLib` 中，這些概念定義了界限上下文以及它們如何互動。</p>
+        <ul>
+            <li>
+                <strong><code>OdmdBuild&lt;T extends OdmdEnver&gt;</code>：</strong> 代表特定類型 Enver (例如 `OdmdBuild<OdmdEnverCdk>`) 的建置組態。在 `contractsLib` 中定義，它將 Enver 類型與其原始碼和建置流程相關聯：
+                <ul>
+                    <li>通常使用原始碼儲存庫別名 (<span class="code-term">githubRepoAlias</span>)、建置類型 (<span class="code-term">buildType</span>: 'cdk', 'docker', 'cmd') 以及選擇性的原始碼路徑或指令進行設定。</li>
+                    <li>此結構定義了如何從給定來源建置特定*類型*的 Enver。</li>
+                </ul>
+            </li>
+            <li>
+                <strong><code>OdmdEnverCdk | OdmdEnverCmd | OdmdEnverDocker</code> (或自訂子類別)：</strong> 代表綁定到 Git 分支/標籤和目標環境的服務/元件的特定可部署實例或版本。使用其特定類別在 `contractsLib` 中定義：
+                <ul>
+                    <li>連結到其對應的 `OdmdBuild` 實例。</li>
+                    <li>指定部署目標 (`targetAccountAlias`, `targetRegion`)。</li>
+                    <li>包含其發佈的 `Product`(s) 和其所需相依性的 `Consumer`(s) 的宣告。</li>
+                    <li>對於標籤 Enver，標記為 `immutable: true`。</li>
+                </ul>
+            </li>
+            <li><strong>Product：</strong> (通常命名為 <span class="code">'Outputs'</span>) Enver 提供的一個單一的、具名輸出值 (通常是包含多個輸出的 JSON 字串)。在 `contractsLib` 中作為 Enver 定義的一部分宣告 (例如 `outputsProduct: new Product(this, 'Outputs')`)。代表該特定 Enver 實例的公開介面。</li>
+            <li><strong>Consumer：</strong> `contractsLib` 中 Enver 定義內的一個宣告，說明其需要來自另一個 Enver 的 `Outputs` Product (例如 `new Consumer(this, 'LocalConsumerName', otherEnver.outputsProduct, '{...defaultJson...}')`)。平台會解析此相依性，向消費端 Enver 的實作程式碼提供相依性已發佈 Outputs 的具體 JSON 字串值。可以提供預設值。</li>
+        </ul>
+        <p>這種明確的結構定義了架構和相依性，將特定的 Enver 實例 (如 `OrderManagerDev`) 連結到其建置來源 (`OdmdBuild<OdmdEnverCdk>`) 和目標環境，同時透過 Products 和 Consumers 管理互動。</p>
+    </section>
+
+    <section class="concept-section" id="cloning">
+        <h2>按需複製 (動態/臨時 Enver)</h2>
+        <p>實現開發人員敏捷性的一個關鍵功能是能夠建立在 <strong>`contractsLib` 中宣告的靜態 Enver</strong> 的動態、臨時複製。</p>
+        <ul>
+            <li><strong>複製靜態分支 Enver：</strong> 開發人員通常會複製在 `contractsLib` 中定義的靜態<em>分支 Enver</em> (例如，與 `dev` 或 `main` 分支相關聯的 Enver)。這會建立一個連結到開發人員功能分支的新的、臨時的、動態的 Enver。</li>
+            <li><strong>動態生命週期 (臨時)：</strong> 這些複製的 Enver 設計為短期存在 (臨時)。它們通常透過簡單的 Git 提交註解動態建立和銷毀：
+                <ul>
+                    <li><code>odmd: create@&lt;source_branch_enver_id&gt;</code> (例如 <code>odmd: create@MyServiceDev</code>)：建立複製，連結到提交的功能分支。</li>
+                    <li><code>odmd: delete</code>：銷毀與提交功能分支相關聯的複製。</li>
+                </ul>
+            </li>
+            <li><strong>相依性重複使用：</strong> 複製的 (動態) Enver 會重複使用其來源靜態 Enver 在<em>處理複製指令時</em>所擁有的<em>完全相同的</em>已解析相依性產品版本。這可確保複製在其來源的基礎上，在一致且可預測的相依性內容中運作。</li>
+            <li><strong>資源隔離：</strong> 雖然相依性版本會被繼承，但平台可確保<em>由複製本身部署</em>的實際基礎設施資源 (使用其功能分支程式碼) 具有唯一的名稱，並與來源靜態 Enver 和其他複製隔離，以防止衝突。</li>
+            <li><strong>靜態 Enver 保持不變：</strong> 複製作業*不會影響*在 `contractsLib` 中宣告的原始靜態 Enver。這些 Enver 與其定義保持一致，並根據對其相關分支/標籤的提交繼續其自身的生命週期。</li>
+            <li><strong>使用案例：</strong> 非常適合功能開發、錯誤修復、安全實驗、PR 的 CI 驗證、效能測試，或執行臨時的 E2E 測試，而不會影響共享的靜態環境或冒相依性衝突的風險。</li>
+        </ul>
+        <p>複製讓開發人員能夠以已知良好的靜態基線為基礎，幾乎立即存取隔離的、全端的、高擬真度的環境，從而大大加快測試和迭代週期。</p>
+    </section>
+
+    <section class="concept-section" id="platform-abstraction">
+        <h2>平台抽象化：實現統一控制</h2>
+        <p>ONDEMANDENV 的一個核心目標是抽象化底層基礎設施和系統互動的複雜性，讓開發人員可以透過其 Enver 定義和控制其整個以應用程式為中心的界限上下文，無論資源實際位於何處。</p>
+        <ul>
+            <li><strong>跨邊界的統一資源所有權：</strong> 平台提供了使以應用程式為中心的方法切實可行的機制，即使跨 AWS 帳戶、GitHub 或潛在的其他雲端也是如此。它處理 Enver 部署流程 (例如其 CDK 程式碼或相關腳本) 所需的複雜驗證、授權和互動邏輯，以管理邏輯上屬於其界限上下文的所有資源。這包括：
+                <ul>
+                    <li>擔任部署 AWS 資源的正確跨帳戶 IAM 角色 (透過 `contractsLib` 目標定義)。</li>
+                    <li>以組織的 GitHub 應用程式身分進行驗證 (使用集中儲存的私密金鑰)，以管理 Enver 中定義的工作流程、檢查或儲存庫設定。</li>
+                    <li>針對其他帳戶中的共享 EKS 叢集執行 `kubectl` 指令 (使用適當的已取用角色/端點)。</li>
+                    <li>使用集中管理的憑證和平台邏輯，潛在地協調對其他雲端平台 (例如透過自訂 CDK 資源的 GCP GKE) 的部署。</li>
+                </ul>
+                這使開發人員能夠在其 Enver 的實作 (例如 CDK 堆疊) 中定義邏輯上屬於其界限上下文的*所有*資源，並相信平台能夠安全地處理跨邊界執行的複雜性。</li>
+            <li><strong>透過標準合約提供的平台服務：</strong> 常見的基礎設施元件 (網路、EKS、CI/CD 執行器、監控代理程式等) 可以作為標準化的「平台 Enver」提供。應用程式團隊透過 `contractsLib` 中的正常 Product/Consumer 機制使用這些基礎服務，從而簡化對複雜共享資源的存取，而無需具備這些特定領域的深入操作專業知識。</li>
+            <li><strong>自動化工作流程和相依性管理：</strong> 除了資源部署之外，平台還會自動執行關鍵的背景任務，例如相依性解析 (根據 `contractsLib` 定義從設定存放區擷取正確的版本化產品值)、基於產品變更的事件處理 (觸發下游 Enver 管線) 以及管理對秘密的存取，從而進一步減輕應用程式團隊的操作負擔。</li>
+        </ul>
+        <p>透過抽象化跨邊界互動和基礎設施管理的複雜性，ONDEMANDENV 使開發人員能夠專注於其核心領域邏輯，同時對其整個應用程式切片 (無論其元件在何處執行) 保持真正的統一所有權。</p>
+    </section>
+
+
+</main>
+
+<footer>
+    <p>&copy; 2024 ONDEMANDENV.dev. 版權所有。</p>
+    <!-- 可視需要添加頁腳鏈接 -->
+</footer>
+
+</body>
+</html> 

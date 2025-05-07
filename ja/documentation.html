@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ドキュメンテーション - ONDEMANDENV.dev</title>
+    <link rel="stylesheet" href="../styles.css">
+    <!-- Basic styling for documentation page -->
+    <style>
+        /* Main layout */
+        body { display: flex; flex-direction: column; min-height: 100vh; }
+        .docs-container { display: flex; flex-grow: 1; }
+
+        /* Sidebar (Table of Contents) */
+        .docs-sidebar {
+            width: 260px; /* Fixed width for the sidebar */
+            flex-shrink: 0; /* Prevent sidebar from shrinking */
+            height: calc(100vh - 60px); /* Adjust 60px based on actual header height */
+            position: sticky;
+            top: 60px; /* Adjust based on actual header height */
+            overflow-y: auto; /* Allow scrolling within sidebar */
+            padding: 2rem 1rem 2rem 0; /* Add padding */
+            border-right: 1px solid var(--border-color);
+            background-color: #fdfdfd; /* Slightly off-white background */
+        }
+        .docs-sidebar h2 {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+            padding-left: 1rem; /* Indent heading */
+        }
+        .docs-sidebar ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        .docs-sidebar ul ul { /* Nested lists for sub-sections */
+           padding-left: 1.5rem; /* Indent sub-items */
+           margin-top: 0.25rem;
+           margin-bottom: 0.5rem;
+        }
+        .docs-sidebar li {
+            margin-bottom: 0.25rem;
+        }
+        .docs-sidebar a {
+            display: block;
+            text-decoration: none;
+            color: var(--secondary-color);
+            padding: 0.4rem 1rem; /* Padding for clickable area */
+            border-radius: 4px;
+            font-size: 0.9rem;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+        .docs-sidebar a:hover {
+            background-color: #f0f0f0;
+            color: var(--primary-color);
+        }
+        /* Consider adding an 'active' state later with JS if needed */
+
+        /* Main Content Area */
+        .docs-content-area {
+            flex-grow: 1; /* Allow content to take remaining space */
+            padding: 2rem 3rem; /* Add padding around content */
+            max-width: 900px; /* Optional: Limit content width for readability */
+            margin-left: auto;  /* Center the content area if max-width is set */
+            margin-right: auto; /* Center the content area if max-width is set */
+        }
+
+        /* Doc Section Styling (minor adjustments might be needed) */
+        .doc-section {
+             margin-bottom: 3rem;
+             padding-bottom: 1.5rem;
+             border-bottom: 1px solid var(--border-color);
+             scroll-margin-top: 70px; /* Adjust offset for sticky header */
+         }
+        .doc-section:last-child { border-bottom: none; } /* Remove border from last section */
+
+        .doc-section h1 { font-size: 2.5rem; margin-bottom: 1.5rem; color: var(--text-color); } /* Specific H1 style for content */
+        .doc-section h2 { font-size: 2rem; margin-bottom: 1rem; color: var(--primary-color); padding-top: 1rem; border-top: 1px dashed var(--border-color); } /* Add top border to separate sections visually */
+        .doc-section h2:first-of-type { border-top: none; padding-top: 0;} /* No top border for the very first H2 */
+
+        .doc-section h3 { font-size: 1.5rem; margin-top: 1.5rem; margin-bottom: 0.75rem; color: var(--secondary-color); }
+        .doc-section h4 { font-size: 1.1rem; margin-top: 1.25rem; margin-bottom: 0.5rem; font-weight: bold; }
+        .doc-section p { margin-bottom: 1rem; line-height: 1.7; }
+        .doc-section ul { list-style: disc; margin-left: 1.5rem; margin-bottom: 1rem; }
+        .doc-section ol { list-style: decimal; margin-left: 1.5rem; margin-bottom: 1rem; }
+        .doc-section li { margin-bottom: 0.5rem; }
+        .doc-section pre { background-color: #f8f9fa; border: 1px solid var(--border-color); padding: 1rem; border-radius: 5px; overflow-x: auto; margin-bottom: 1rem; font-size: 0.9em;}
+        .doc-section code { font-family: monospace; font-size: 0.9em; }
+        .doc-section pre code { background-color: transparent; padding: 0; }
+        .doc-section strong { font-weight: bold; }
+        .doc-section .inline-code { background-color: #f0f0f0; padding: 0.1em 0.4em; border-radius: 3px; font-family: monospace; font-size: 0.9em; color: #343a40; }
+        .setup-architecture { margin: 2rem auto; text-align: center; max-width: 100%; /* Let it fill content area width */ padding: 1rem; background: #f8f9fa; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .setup-image { max-width: 100%; height: auto; border: 1px solid var(--border-color); }
+        .setup-caption { padding-top: 1rem; font-size: 0.9rem; color: #555; }
+        .repo-link { display: inline-block; background-color: var(--primary-color); color: white; padding: 0.5rem 1rem; text-decoration: none; border-radius: 5px; margin-top: 0.5rem; }
+        .repo-link:hover { background-color: var(--secondary-color); }
+
+        /* Footer adjustment */
+        footer { width: 100%; text-align: center; padding: 1rem 0; margin-top: auto; background-color: #f8f9fa; border-top: 1px solid var(--border-color);}
+
+        /* Responsive: Hide sidebar on smaller screens (example) */
+        @media (max-width: 768px) {
+            .docs-container { flex-direction: column; }
+            .docs-sidebar {
+                width: 100%;
+                height: auto; /* Allow height to adjust */
+                position: static; /* Remove sticky positioning */
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
+                padding: 1rem;
+                overflow-y: visible;
+            }
+            .docs-content-area {
+                padding: 1.5rem; /* Reduce padding */
+                 margin-left: 0;
+                 margin-right: 0;
+                 max-width: none; /* Allow full width */
+            }
+            .doc-section { scroll-margin-top: 60px; } /* Adjust scroll margin if header is still fixed */
+        }
+
+    </style>
+</head>
+<body>
+<header>
+    <nav>
+        <div class="logo">ONDEMANDENV.dev</div>
+        <ul>
+            <li><a href="../index.html">ホーム</a></li>
+            <li><a href="../concepts.html">コアコンセプト</a></li>
+            <li><a href="../patterns.html">パターンとユースケース</a></li>
+            <li><a href="../documentation.html">ドキュメンテーション</a></li>
+            <li><a href="../articles.html">記事</a></li>
+            <li><a href="https://github.com/ondemandenv" target="_blank">GitHub組織</a></li>
+            <li><a href="mailto:contacts@ondemandenv.dev">デモをリクエスト</a></li>
+        </ul>
+        <div class="language-switcher">
+            <a href="../documentation.html">English</a> |
+            <a href="documentation.html" class="lang-active">日本語</a> |
+            <a href="../zh-TW/documentation.html">繁體中文</a>
+        </div>
+    </nav>
+</header>
+
+<div class="docs-container">
+
+    <aside class="docs-sidebar" aria-labelledby="toc-heading">
+        <h2 id="toc-heading">目次</h2>
+        <ul>
+            <li><a href="#setup">インストールとセットアップ</a>
+                <ul>
+                    <li><a href="#prerequisites">前提条件</a></li>
+                    <li><a href="#account-structure">AWSアカウント構造</a></li>
+                    <li><a href="#bootstrapping">信頼とCDKのブートストラップ</a></li>
+                    <li><a href="#github-setup">GitHubセットアップ</a></li>
+                    <li><a href="#platform-deployment">プラットフォームのデプロイ</a></li>
+                </ul>
+            </li>
+            <li><a href="#core-workflow">コアワークフローとハウツー</a>
+                <ul>
+                    <li><a href="#define-in-contractslib">1. `contractsLib`での定義</a></li>
+                    <li><a href="#implement-service">2. サービスの実装</a></li>
+                    <li><a href="#deploy-iterate">3. デプロイとイテレーション</a></li>
+                    <li><a href="#clone-enver">4. Enverのクローン</a></li>
+                    <li><a href="#delete-clone">5. クローンの削除</a></li>
+                    <li><a href="#use-platform-services">プラットフォームサービスの利用</a></li>
+                </ul>
+            </li>
+            <li><a href="#deployment-model">デプロイメントモデル</a></li>
+            <li><a href="#security">セキュリティに関する考慮事項</a></li>
+            <li><a href="#cicd">CI/CD統合</a></li>
+            <li><a href="#base-library">ベースライブラリ</a></li>
+            <li><a href="#explore-code">コードの探索</a></li>
+            <li><a href="#platform-internals">プラットフォーム内部</a></li>
+        </ul>
+    </aside>
+
+    <main class="docs-content-area">
+        <section class="doc-section" id="top"> <!-- Added id=top for potential skip link -->
+             <h1>ドキュメンテーションと開始方法</h1>
+             <p>このドキュメンテーションは、ONDEMANDENVのセットアップと使用方法を案内し、プラットフォームを運用可能にし、サービスを統合するために必要な詳細を提供します。</p>
+         </section>
+
+        <section class="doc-section" id="setup">
+            <h2>インストールとセットアップ</h2>
+            <p>以下の手順に従って、ONDEMANDENVプラットフォームを環境にセットアップします。</p>
+
+            <h3 id="prerequisites">1. 環境準備</h3>
+
+            <h4>AWS環境：</h4>
+            <ul>
+                <li>
+                    <strong>AWS Organization：</strong> <a href="https://aws.amazon.com/organizations/" target="_blank" rel="noopener noreferrer">AWS Organization</a>をセットアップします。
+                </li>
+                <li>
+                    <strong>2つのAWSアカウント：</strong> 組織内で、以下を指定または作成します：
+                    <ul>
+                        <li><strong>中央アカウント</strong>：コアONDEMANDENVプラットフォームエンジンが実行される場所です。</li>
+                        <li><strong>ワークスペースアカウント (<span class="inline-code">workspace0</span>)</strong>：必須の<span class="inline-code">contractsLib</span> enverを含む、デプロイの初期ターゲットです。</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>ホストゾーン：</strong> <strong>中央アカウント</strong>内のRoute 53にパブリックホストゾーンを作成します。適切なドメイン名を選択します（例：<span class="inline-code">&lt;your-chosen-name&gt;.root.ondemandenv.link</span>）。この名前は後で必要になるため、メモしておいてください。
+                </li>
+                <li>
+                    <strong>リージョン：</strong> プライマリAWSリージョンを決定します（例：<span class="inline-code">us-east-1</span>）。すべての初期セットアップリソースはこのリージョンにある必要があります。
+                </li>
+                <li>
+                    <strong>AWS CDKブートストラップ：</strong> 選択したリージョンに対して、中央アカウントと<span class="inline-code">workspace0</span>アカウントの両方でCDKをブートストラップします。以下を実行します：
+                    <pre><code class="language-bash"># 中央アカウントのコンテキストで
+aws configure set region YOUR_REGION
+cdk bootstrap aws://CENTRAL_ACCOUNT_ID/YOUR_REGION
+
+# workspace0アカウントのコンテキストで
+aws configure set region YOUR_REGION
+cdk bootstrap aws://WORKSPACE0_ACCOUNT_ID/YOUR_REGION</code></pre>
+                </li>
+                <li>
+                    <strong>クロスアカウント信頼：</strong> <span class="inline-code">workspace0</span>アカウントが中央アカウントを信頼するように構成します。<span class="inline-code">workspace0</span>にIAMロール（例：<span class="inline-code">OndemandenvDeployerRole</span>）を作成し、AdministratorAccess（または後で最小権限に基づくより制限されたポリシー）を付与し、中央アカウントがそのロールを引き受けられるようにします。信頼ポリシーは、ONDEMANDENVプラットフォームが中央アカウントで使用するロールARNを明示的に許可する必要があります（これはプラットフォームテンプレートによって定義されます）。
+                </li>
+                 <li>
+                    <strong>GitHubアプリの秘密鍵シークレット：</strong> <strong>中央アカウント</strong>内のAWS Secrets Managerにシークレットを作成します。このシークレットに特定の名前を選択します（例：<span class="inline-code">ondemandenv/github-app-private-key</span>）。次のステップでGitHubアプリの秘密鍵をここに保存します。このシークレット名（<span class="inline-code">ghAppPrivateKeySecretName</span>）をメモしておいてください。ONDEMANDENVプラットフォームテンプレートでこの名前が必要になります。
+                 </li>
+            </ul>
+
+            <h4>GitHub環境：</h4>
+            <ul>
+                 <li>
+                    <strong>GitHub組織：</strong> GitHub組織がセットアップされていることを確認します。
+                 </li>
+                 <li>
+                    <strong>プライベートGitHubアプリ：</strong> 組織が所有する新しいプライベートGitHubアプリを作成します。
+                    <ul>
+                        <li>生成された秘密鍵（.pemファイル）をダウンロードします。</li>
+                        <li><strong>重要：</strong> この秘密鍵ファイルの内容を、中央アカウントで作成したAWS Secrets Managerシークレット（<span class="inline-code">ghAppPrivateKeySecretName</span>）に新しいバージョンとして安全に保存します。</li>
+                        <li>アプリに必要な権限を構成します（詳細についてはONDEMANDENVのドキュメントを参照してください。通常、コード、メタデータへの読み取りアクセス、および課題、プルリクエスト、ワークフロー、チェック、ステータス、デプロイメントへの書き込みアクセスが含まれます）。</li>
+                        <li>Webhook URLは今のところ空白のままにしておきます。プラットフォームをデプロイした後に更新します。</li>
+                        <li>このGitHubアプリを、`contractsLib`に使用する特定のリポジトリにインストールします。</li>
+            </ul>
+                 </li>
+                 <li>
+                    <strong>`contractsLib`リポジトリ：</strong> GitHub組織内にリポジトリを作成し、サービスコントラクトを定義します。このリポジトリには、ONDEMANDENVのビルドとenver定義が含まれます。
+                    <ul>
+                        <li><a href="https://github.com/ondemandenv/odmd-contracts-sandbox/blob/main/lib/repos/_contracts/odmd-build-contracts-sbx.ts" target="_blank" rel="noopener noreferrer">`ondemandenv/odmd-contracts-sandbox`</a>をサンプル構造として使用できます。</li>
+                        <li>リポジトリに必要な依存関係（`@ondemandenv/odmd-contracts-base`など）とビルドスクリプト（例：`package.json`内）が含まれていることを確認し、TypeScript定義をコンパイルします。</li>
+                        <li><span class="inline-code">npm pack</span>を使用して、コンパイルされた`contractsLib`定義をパッケージ化する必要があります。これにより、<span class="inline-code">.tgz</span>ファイルが生成されます。</li>
+                    </ul>
+                </li>
+            </ul>
+
+            <h3 id="platform-deployment">2. プラットフォームのデプロイ</h3>
+            <ol>
+                <li>
+                    <strong>ONDEMANDENVサービスへの情報送信：</strong>
+                    <p>ONDEMANDENVチーム（または指定された連絡先）に以下の情報を提供し、プラットフォームの初期設定とCloudFormationテンプレートの生成を依頼します。これには通常、オンボーディングプロセスが含まれます。</p>
+                    <ul>
+                        <li><strong>中央アカウントID</strong></li>
+                        <li><strong>ワークスペースアカウントID (<span class="inline-code">workspace0</span>)</strong></li>
+                        <li><strong>プライマリAWSリージョン</strong></li>
+                        <li><strong>Route 53ホストゾーン名</strong>（例：<span class="inline-code">&lt;your-chosen-name&gt;.root.ondemandenv.link</span>）</li>
+                        <li><strong>GitHubアプリID</strong></li>
+                        <li><strong>GitHubアプリのインストールID</strong>（アプリを`contractsLib`リポジトリにインストールした後）</li>
+                        <li><strong>GitHub組織名</strong></li>
+                        <li><strong>`contractsLib`リポジトリ名</strong></li>
+                        <li><strong>`contractsLib`定義の<span class="inline-code">.tgz</span>ファイル</strong>（例：`my-org-contractslib-1.0.0.tgz`） - これは安全な方法で共有する必要があります。</li>
+                        <li><strong>`contractsLib`のビルド定義名</strong>（例：<span class="inline-code">MyOrgContractsLibSbx</span> - `contractsLib`コード内の`OdmdBuildContracts`インスタンスの名前）</li>
+                        <li><strong>`contractsLib`のenver定義名</strong>（例：<span class="inline-code">contractsLibSbx</span> - `contractsLib`コード内の`OdmdEnverContracts`インスタンスの名前）</li>
+                        <li><strong>GitHubアプリの秘密鍵シークレット名</strong>（<span class="inline-code">ghAppPrivateKeySecretName</span>）</li>
+                        <li>（オプション）<strong>初期管理ユーザーのメールアドレス</strong>（プラットフォームUI/APIへのアクセス用）</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>CloudFormationスタックのデプロイ：</strong>
+                    <p>ONDEMANDENVチームから受け取ったCloudFormationテンプレートとパラメータを使用して、<strong>中央アカウント</strong>にスタックをデプロイします。</p>
+                    <ul>
+                        <li>これにより、コアプラットフォームエンジン、API、Webhookハンドラー、および関連するIAMロールがプロビジョニングされます。</li>
+                        <li>デプロイメントが完了すると、プラットフォームAPIエンドポイントとWebhook URLが出力されます。</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>GitHubアプリのWebhookの設定：</strong>
+                    <ul>
+                        <li>CloudFormationスタックの出力からWebhook URLを取得します。</li>
+                        <li>GitHubアプリの設定に移動し、このURLでWebhook URLを更新します。Webhookシークレットも設定してください（プラットフォームから提供されるか、設定時に指定します）。</li>
+                        <li>イベント（プッシュ、プルリクエストなど）をサブスクライブします。</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>`contractsLib` Enverの初期デプロイ：</strong>
+                    <p>プラットフォームは、通常、`contractsLib`リポジトリへの最初のプッシュ時に（または手動トリガーを介して）、`contractsLib` enverを<span class="inline-code">workspace0</span>アカウントに自動的にデプロイしようとします。これには以下が含まれます。</p>
+                    <ul>
+                        <li>`contractsLib`リポジトリからコードをチェックアウトします。</li>
+                        <li>`npm ci`および`npm run build`（または`package.json`で定義されたビルドスクリプト）を使用してコードをビルドします。</li>
+                        <li>CDKを使用して、`contractsLib`で定義されたインフラストラクチャ（例：S3バケット、CodePipeline）を<span class="inline-code">workspace0</span>アカウントにデプロイします。</li>
+                    </ul>
+                    <p>このステップが成功すると、ONDEMANDENVプラットフォームの基盤が整います。</p>
+                </li>
+            </ol>
+            <div class="setup-architecture">
+                 <img src="../assets/odmd-setup-architecture.png" alt="ONDEMANDENVセットアップアーキテクチャ" class="setup-image">
+                 <p class="setup-caption">図1：ONDEMANDENVの概念的なセットアップアーキテクチャ。中央アカウントがプラットフォームエンジンをホストし、ワークスペースアカウント（例：workspace0）が`contractsLib` enverおよびその後のサービスenverをホストします。</p>
+            </div>
+        </section>
+
+        <section class="doc-section" id="core-workflow">
+            <h2>コアワークフローとハウツー</h2>
+            <p>プラットフォームがセットアップされると、開発者は以下の一般的なワークフローに従ってサービスを定義、デプロイ、管理します。</p>
+
+            <h3 id="define-in-contractslib">1. `contractsLib`での定義</h3>
+            <p>すべてのサービスとその環境（Envers）は、まず`contractsLib`リポジトリで宣言的に定義されます。これにより、一元化された制御と一貫性が保証されます。</p>
+            <h4>a. ビルド定義の定義 (`OdmdBuild`)</h4>
+            <p>各サービスタイプ（例：Node.js Lambda、Spring Boot Fargateサービス、静的サイト）に対して、`OdmdBuild`インスタンスを作成します。これは、サービスのビルド方法とパッケージ化方法を定義します。</p>
+            <pre><code class="language-typescript">//例：my-org-contractslib/lib/builds/my-service-builds.ts
+import { OdmdBuild } from '@ondemandenv/odmd-contracts-base';
+import { MyOrgAppEnver } from '../envers/my-org-app-enver'; // Enverタイプをインポート
+
+export const MyNodeJsLambdaBuild = new OdmdBuild<MyOrgAppEnver>(this, 'MyNodeJsLambdaBuild', {
+    githubRepoAlias: 'my-nodejs-lambda-service-repo', // サービスのコードが存在するリポジトリ
+    buildType: 'lambda_nodejs', // または 'cdk', 'container_image'など
+    sourcePath: 'src', // buildTypeに応じたソースパス
+    // buildTypeに固有の追加パラメータ
+});</code></pre>
+            <p><span class="inline-code">githubRepoAlias</span>は、ONDEMANDENVプラットフォーム設定（例：GitHubアプリのインストール）でマッピングされたリポジトリを指します。</p>
+
+            <h4>b. Enver定義の定義 (`OdmdEnver`の拡張)</h4>
+            <p>各サービスに対して、`OdmdEnverCdk`（CDKベースのデプロイメントの場合）または`OdmdEnverGeneric`を拡張するクラスを作成します。これにより、特定の環境インスタンス（例：開発、ステージング、本番）をモデル化できます。</p>
+            <pre><code class="language-typescript">//例：my-org-contractslib/lib/envers/my-org-app-enver.ts
+import { OdmdEnverCdk, Product, Consumer } from '@ondemandenv/odmd-contracts-base';
+import { Construct } from 'constructs';
+
+// このEnverタイプが公開および消費する製品/消費者を定義するインターフェース
+export interface MyOrgAppEnverProps {
+    // このEnverが公開する製品の例
+    readonly outputsProduct?: Product;
+    // このEnverが消費する製品の例
+    readonly userDatabaseConsumer?: Consumer;
+}
+
+export class MyOrgAppEnver extends OdmdEnverCdk implements MyOrgAppEnverProps {
+    readonly outputsProduct?: Product;
+    readonly userDatabaseConsumer?: Consumer;
+
+    constructor(scope: Construct, id: string, props: OdmdEnverCdkProps & MyOrgAppEnverProps) {
+        super(scope, id, props);
+        this.outputsProduct = props.outputsProduct;
+        this.userDatabaseConsumer = props.userDatabaseConsumer;
+    }
+}</code></pre>
+
+            <h4>c. 特定のEnverインスタンスのインスタンス化</h4>
+            <p>ビルドとEnverタイプを使用して、特定の環境インスタンス（例：`myServiceDev`、`myServiceProd`）をインスタンス化します。製品（このEnverが公開する出力）と消費者（このEnverが必要とする依存関係）を定義します。</p>
+            <pre><code class="language-typescript">//例：my-org-contractslib/lib/envers/service-instances.ts
+import { MyNodeJsLambdaBuild } from '../builds/my-service-builds';
+import { MyOrgAppEnver } from './my-org-app-enver';
+import { Product } from '@ondemandenv/odmd-contracts-base';
+// 他のEnverインスタンスをインポートして依存関係を定義
+// import { sharedDatabaseProd } from './shared-services';
+
+export const myServiceDev = new MyOrgAppEnver(this, 'MyServiceDev', {
+    build: MyNodeJsLambdaBuild, // 関連するビルド定義にリンク
+    targetAccountAlias: 'dev-account', // プラットフォーム設定で定義されたアカウントエイリアス
+    targetRegion: 'us-east-1', // オプション、デフォルトはプラットフォームのプライマリリージョン
+    outputsProduct: new Product(this, 'Outputs'), // このEnverは出力を公開します
+    // userDatabaseConsumer: new Consumer(this, 'UserDb', sharedDatabaseProd.outputsProduct), // 別のEnverからの製品を消費
+    // enverSpecificConfig: { key: 'devValue' } // 環境固有の構成
+});
+
+export const myServiceProd = new MyOrgAppEnver(this, 'MyServiceProd', {
+    build: MyNodeJsLambdaBuild,
+    targetAccountAlias: 'prod-account',
+    immutable: true, // 本番環境は不変としてマークされることがよくあります
+    outputsProduct: new Product(this, 'Outputs'),
+    // userDatabaseConsumer: new Consumer(this, 'UserDb', sharedDatabaseProd.outputsProduct),
+    // enverSpecificConfig: { key: 'prodValue' }
+});</code></pre>
+            <p>`contractsLib`への変更をコミットしてプッシュすると、プラットフォームはこれらの定義を自動的に処理します。</p>
+
+            <h3 id="implement-service">2. サービスの実装</h3>
+            <p>`OdmdBuild`定義で指定されたリポジトリ（例：`my-nodejs-lambda-service-repo`）に、サービスのビジネスロジックを実装します。デプロイメントタイプ（CDK、Lambda、コンテナ）に応じて、関連するファイル（例：`cdk-stack.ts`、`lambda-handler.js`、`Dockerfile`）を作成します。</p>
+
+            <h4>CDKベースのサービスの場合 (`buildType: 'cdk'`)</h4>
+            <p>CDKスタックは`OdmdEnverCdk`（またはそのサブクラス）から`getSharedValue('consumerName')`を介して消費された値と、`getEnverSpecificConfig()`を介して環境固有の構成にアクセスできます。</p>
+            <pre><code class="language-typescript">//例：my-nodejs-lambda-service-repo/lib/my-service-stack.ts
+import * as cdk from 'aws-cdk-lib';
+import { Construct } from 'constructs';
+import { OdmdEnverCdk, OdmdShareOut } from '@ondemandenv/odmd-contracts-base'; // ベースライブラリからインポート
+import * as lambda from 'aws-cdk-lib/aws-lambda';
+// ... 他のCDKインポート
+
+// MyOrgAppEnverで定義されたenverSpecificConfigのインターフェース
+interface MyServiceConfig {
+    key: string;
+    // 他の構成プロパティ
+}
+
+export class MyServiceStack extends OdmdEnverCdk { // OdmdEnverCdkを拡張
+    constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+        super(scope, id, props);
+
+        // 消費された値を取得 (contractsLibで定義)
+        // const userDbDetailsJson = OdmdEnverCdk.getSharedValue('UserDb');
+        // const userDbDetails = JSON.parse(userDbDetailsJson || '{}');
+
+        // 環境固有の構成を取得 (contractsLibで定義)
+        const config = OdmdEnverCdk.getEnverSpecificConfig<MyServiceConfig>();
+
+        const myFunction = new lambda.Function(this, 'MyLambdaFunction', {
+            runtime: lambda.Runtime.NODEJS_18_X,
+            handler: 'index.handler',
+            code: lambda.Code.fromAsset('src'), // MyNodeJsLambdaBuildで定義されたsourcePathに一致
+            environment: {
+                // DB_HOST: userDbDetails.host,
+                CONFIG_KEY: config?.key || 'defaultValue',
+            },
+        });
+
+        // このスタックの出力を公開 (contractsLibのOutputs製品に一致)
+        new OdmdShareOut(this, 'Outputs', {
+            value: cdk.Stack.of(this).toJsonString({
+                lambdaFunctionName: myFunction.functionName,
+                // 他の出力
+            }),
+        });
+    }
+}</code></pre>
+            <p>サービスコードに必要な依存関係（`@ondemandenv/odmd-contracts-base`など）を`package.json`に含めます。</p>
+
+
+            <h3 id="deploy-iterate">3. デプロイとイテレーション</h3>
+            <p>サービスリポジトリ（例：`my-nodejs-lambda-service-repo`）への変更をコミットしてプッシュします。</p>
+            <ul>
+                <li>プラットフォームはプッシュイベントを検出し、`contractsLib`で定義された関連するEnver（例：`myServiceDev`）のビルドとデプロイをトリガーします。</li>
+                <li>ビルドログとデプロイステータスは、ONDEMANDENVプラットフォームのUIまたはAPIを介して監視できます。</li>
+                <li>デプロイされたサービスのエンドポイントまたはリソース詳細は、通常、プラットフォームUIまたは`Product`の消費を介して利用可能になります。</li>
+            </ul>
+            <p>このサイクルを繰り返してサービスを開発および更新します。</p>
+
+            <h3 id="clone-enver">4. Enverのクローン（動的環境）</h3>
+            <p>ONDEMANDENVは、既存のEnverのオンデマンドクローニングをサポートしており、分離されたテスト、機能開発、または一時的なサンドボックスに最適です。</p>
+            <p>クローンを作成するには、サービスリポジトリのターゲットブランチ（例：`feature/new-feature`）にコミットし、コミットメッセージの本文に特別なコマンドを含めます。</p>
+            <pre><code class="plaintext">git commit -m "フィーチャー：新しい認証フローを実装
+
+odmd: create@myServiceDev"</code></pre>
+            <ul>
+                <li><span class="inline-code">odmd: create@BASE_ENVER_ID</span>：`BASE_ENVER_ID`（例：`myServiceDev`）のクローンを作成し、現在のブランチのコードを使用してデプロイします。</li>
+                <li>クローンされたEnverは、ベースEnverの構成（依存関係、ターゲットアカウントなど）を継承しますが、現在のブランチのコードでデプロイされます。</li>
+                <li>リソース名は、競合を避けるためにクローンに対して一意に生成されます。</li>
+                <li>クローンされたEnverの詳細は、プラットフォームUIまたはAPIを介してアクセスできます。</li>
+            </ul>
+            <p>あるいは、`contractsLib`で静的に`ClonedEnver`インスタンスを定義することもできます。</p>
+
+            <h3 id="delete-clone">5. クローンの削除</h3>
+            <p>動的に作成されたクローンEnverが不要になったら、それを削除してリソースを解放できます。</p>
+            <p>クローンEnverに関連付けられたブランチにコミットし、コミットメッセージの本文に特別なコマンドを含めます。</p>
+            <pre><code class="plaintext">git commit --allow-empty -m "フィーチャーブランチクローンの削除
+
+odmd: delete"</code></pre>
+            <ul>
+                <li><span class="inline-code">odmd: delete</span>：現在のブランチに関連付けられたクローンEnverを破棄します。</li>
+                <li>プラットフォームは、クローンされたEnverに関連付けられているすべてのプロビジョニング済みリソースをクリーンアップします。</li>
+            </ul>
+
+
+            <h3 id="use-platform-services">プラットフォームサービスの使用（製品と消費者）</h3>
+            <p>Enverは、`Product`を公開し、他のEnverによって公開された`Product`を`Consumer`として使用することにより、相互作用できます。これにより、契約ベースの依存関係管理が可能になります。</p>
+            <ul>
+                <li><strong>製品の公開：</strong> CDKスタックで`OdmdShareOut`コンストラクトを使用して、Enverの出力をJSON文字列として公開します。`contractsLib`で定義された`Product` IDと一致する必要があります。</li>
+                <li><strong>製品の使用：</strong> `contractsLib`で`Consumer`を定義し、別のEnverの`Product`をターゲットにします。CDKスタックでは、`OdmdEnverCdk.getSharedValue('ConsumerName')`を使用してJSON文字列として製品の値を取得し、解析して使用します。</li>
+            </ul>
+            <p>プラットフォームは、これらのクロスEnverおよびクロスアカウントの依存関係の安全な解決をオーケストレーションします。</p>
+        </section>
+
+        <section class="doc-section" id="deployment-model">
+            <h2>デプロイメントモデル</h2>
+            <p>ONDEMANDENVは、柔軟なデプロイメントモデルをサポートしています。</p>
+            <ul>
+                <li><strong>マルチアカウント：</strong> Enverは、`contractsLib`で定義された`targetAccountAlias`に基づいて、異なるAWSアカウントにデプロイできます。プラットフォームは、クロスアカウントのロールの引き受けとリソース共有を管理します。</li>
+                <li><strong>マルチリージョン：</strong> Enverは、`targetRegion`を指定することにより、異なるAWSリージョンにデプロイできます。</li>
+                <li><strong>ビルドタイプ：</strong>
+                    <ul>
+                        <li><span class="inline-code">cdk</span>：AWS CDKを使用してインフラストラクチャとアプリケーションをデプロイします。</li>
+                        <li><span class="inline-code">lambda_nodejs</span> / <span class="inline-code">lambda_python</span> / <span class="inline-code">lambda_java</span>など：指定されたランタイムのAWS Lambda関数を直接デプロイします（プラットフォームは必要なラッパーまたはCDKコードを生成する場合があります）。</li>
+                        <li><span class="inline-code">container_image</span>：コンテナイメージをビルドしてECSまたはEKSなどのサービスにデプロイします。</li>
+                        <li><span class="inline-code">static_site</span>：静的WebサイトコンテンツをS3/CloudFrontにデプロイします。</li>
+                    </ul>
+                </li>
+                <li><strong>不変性：</strong> Enverは`immutable: true`としてマークでき、意図しない変更を防ぎます。変更には、新しいEnverバージョンまたはクローンの作成が必要です。</li>
+            </ul>
+        </section>
+
+        <section class="doc-section" id="security">
+            <h2>セキュリティに関する考慮事項</h2>
+            <p>ONDEMANDENVは、セキュリティを念頭に置いて設計されています。</p>
+            <ul>
+                <li><strong>最小権限のIAMロール：</strong> プラットフォームコンポーネントとデプロイされたEnverは、最小権限の原則に従って設計されたIAMロールを使用します。</li>
+                <li><strong>契約ベースのセキュリティ：</strong> `contractsLib`での製品と消費者の間の接続は、クロスアカウントアクセス許可を管理するための信頼の基礎を形成します。プラットフォームは、これらの契約に基づいて必要なIAMポリシーとリソース共有（例：AWS RAM）を自動的に構成します。</li>
+                <li><strong>シークレット管理：</strong> GitHubアプリの秘密鍵などの機密データは、AWS Secrets Managerに安全に保存されます。</li>
+                <li><strong>ネットワーク分離：</strong> Enverは、標準のAWSネットワーキングコンストラクト（VPC、セキュリティグループなど）を利用して分離できます。共有ネットワークパターンは、一元管理されたネットワーキングリソースへの安全な接続を可能にします。</li>
+                <li><strong>監査とロギング：</strong> プラットフォームのアクションとEnverのデプロイは、AWS CloudTrailとCloudWatch Logsを介してログに記録され、監査機能を提供します。</li>
+            </ul>
+        </section>
+
+        <section class="doc-section" id="cicd">
+            <h2>CI/CD統合</h2>
+            <p>ONDEMANDENVは、既存のCI/CDプラクティスを補完し、強化します。</p>
+            <ul>
+                <li><strong>GitOps中心：</strong> コアワークフローはGit操作（プッシュ、コミットメッセージ）を中心に展開され、GitOpsの原則と自然に一致します。</li>
+                <li><strong>Webhook統合：</strong> GitHub（または他のVCS）Webhookは、`contractsLib`およびサービスリポジトリへの変更に基づいてプラットフォームアクションをトリガーします。</li>
+                <li><strong>プラットフォームAPI：</strong> ONDEMANDENV APIを使用して、外部CI/CDパイプライン（Jenkins、GitLab CI、GitHub Actionsなど）からビルド、デプロイ、クローン操作をプログラムでトリガーできます。</li>
+                <li><strong>環境プログレッション：</strong> `contractsLib`で異なるEnver（開発、ステージング、本番）を定義し、ソースコミットハッシュを指定する機能と組み合わせることで、CI/CDパイプライン内で制御された環境プログレッションが可能になります。</li>
+            </ul>
+        </section>
+
+
+        <section class="doc-section" id="base-library">
+            <h2>ベースライブラリ (`@ondemandenv/odmd-contracts-base`)</h2>
+            <p><span class="inline-code">@ondemandenv/odmd-contracts-base</span>ライブラリは、ONDEMANDENVプラットフォームと対話するためのコアコンストラクトとユーティリティを提供します。</p>
+            <h4>主なコンストラクト：</h4>
+            <ul>
+                <li><span class="inline-code">OdmdBuild</span>：サービスアーティファクトのビルド方法を定義します。</li>
+                <li><span class="inline-code">OdmdEnverCdk</span>：AWS CDKを使用してデプロイされる環境の基本クラス。環境固有の構成と共有値へのアクセスを提供します。</li>
+                <li><span class="inline-code">OdmdEnverGeneric</span>：CDK以外のデプロイメントシナリオ用の汎用環境基本クラス。</li>
+                <li><span class="inline-code">OdmdBuildContracts</span> / <span class="inline-code">OdmdEnverContracts</span>：`contractsLib`自体を定義およびデプロイするための特別なタイプ。</li>
+                <li><span class="inline-code">Product</span>：Enverによって公開される出力またはリソースを定義します。</li>
+                <li><span class="inline-code">Consumer</span>：別のEnverのProductに対する依存関係を定義します。</li>
+                <li><span class="inline-code">OdmdShareOut</span>：CDKスタック内からProductの値を公開するために使用されます。</li>
+            </ul>
+            <h4>ユーティリティ：</h4>
+            <ul>
+                <li><span class="inline-code">OdmdEnverCdk.getSharedValue(consumerName)</span>：CDKスタック内の消費されたProductの値を取得します。</li>
+                <li><span class="inline-code">OdmdEnverCdk.getEnverSpecificConfig()</span>：CDKスタック内のEnver固有の構成を取得します。</li>
+            </ul>
+            <p>これらのコンストラクトの詳細なAPIドキュメントと使用例については、ライブラリのソースコードと関連する型定義を参照してください。</p>
+        </section>
+
+        <section class="doc-section" id="explore-code">
+            <h2>コードの探索</h2>
+            <p>ONDEMANDENVの機能をより深く理解するには、以下のリポジトリを探索することをお勧めします。</p>
+            <ul>
+                <li>
+                    <strong><a href="https://github.com/ondemandenv/odmd-contracts-base" target="_blank" rel="noopener noreferrer" class="repo-link">`odmd-contracts-base`</a></strong>
+                    <p>コアTypeScriptライブラリ。`OdmdBuild`、`OdmdEnverCdk`、`Product`、`Consumer`などの基本的なコンストラクトが含まれています。これは、独自の`contractsLib`とサービスCDKコードを構築するための基礎です。</p>
+                </li>
+                <li>
+                    <strong><a href="https://github.com/ondemandenv/odmd-contracts-sandbox" target="_blank" rel="noopener noreferrer" class="repo-link">`odmd-contracts-sandbox`</a></strong>
+                    <p>サンプル`contractsLib`リポジトリ。さまざまなビルドタイプ、Enver定義、製品/消費者の使用方法、およびフォルダ構造のベストプラクティスを示しています。独自の`contractsLib`の出発点として最適です。</p>
+                </li>
+                <li>
+                    <strong><a href="https://github.com/ondemandenv/odmd-example-services" target="_blank" rel="noopener noreferrer" class="repo-link">`odmd-example-services`</a></strong> (もしあれば、または個々のサービス例)
+                    <p>ONDEMANDENVを使用してデプロイできるさまざまなタイプのサンプルサービス（例：Node.js Lambda、Python Fargateサービス）。これらの例は、`odmd-contracts-sandbox`で定義された契約とどのように連携するかを示しています。</p>
+                </li>
+                 <li>
+                    <strong>プラットフォームエンジンリポジトリ</strong> (アクセス可能な場合)
+                    <p>ONDEMANDENVプラットフォーム自体のコアロジックを含むプライベートリポジトリ（通常はアクセスできません）。Webhookハンドラー、API、デプロイメントオーケストレーション、および状態管理が含まれます。</p>
+                </li>
+            </ul>
+        </section>
+
+         <section class="doc-section" id="platform-internals">
+            <h2>プラットフォーム内部（高度な概要）</h2>
+            <p>ONDEMANDENVプラットフォームは、いくつかの主要コンポーネントで構成されています。</p>
+            <ul>
+                <li><strong>契約ストア (`contractsLib`):</strong> すべての環境とサービスの定義の信頼できる情報源。これは、専用のAWSアカウント（例：`workspace0`）で実行される特別なEnverとして管理されます。その主な出力は、処理された契約定義を含むS3バケットです。</li>
+                <li><strong>Webhookハンドラー:</strong> GitHub（または他のVCSプロバイダー）からのWebhookイベント（例：プッシュ、コミットメッセージコマンド）をリッスンするAPI GatewayとLambda関数。これらのイベントを解析し、対応するプラットフォームアクションをトリガーします。</li>
+                <li><strong>APIエンドポイント:</strong> プラットフォームと対話するためのRESTful API。ビルドのトリガー、Enverステータスのクエリ、クローンの管理などに使用されます。</li>
+                <li><strong>オーケストレーションエンジン (Step Functions / Lambda):</strong> ビルド、デプロイ、クローン作成、削除などの複雑なワークフローを管理するAWS Step FunctionsステートマシンとLambda関数。これらのワークフローには、コードのチェックアウト、依存関係の解決（Products/Consumers）、CDKの合成とデプロイ、および状態の更新が含まれます。</li>
+                <li><strong>状態データベース (DynamoDB):</strong> Enver、ビルド、デプロイ、およびそれらの関係の状態を追跡するDynamoDBテーブル。</li>
+                <li><strong>ID管理:</strong> APIおよびUIアクセス用のユーザーIDと認証を管理します（例：Amazon Cognito）。</li>
+                <li><strong>CDKツールキットの統合:</strong> プラットフォームは、指定されたターゲットアカウントとリージョンでCDKスタックを合成およびデプロイするために、AWS CDKツールキットと深く統合されています。クロスアカウントデプロイロールを活用します。</li>
+                <li><strong>通知サービス (SNS/SES):</strong> （オプション）デプロイの完了やエラーなどの重要なイベントについてユーザーに通知します。</li>
+            </ul>
+            <p>プラットフォームがコマンド（例：`odmd: create@baseEnver`）を受信すると、次の一般的なシーケンスが発生します。</p>
+            <ol>
+                <li>Webhookハンドラーがコマンドを検証し、オーケストレーションエンジンをトリガーします。</li>
+                <li>オーケストレーションエンジンが契約ストアからベースEnver定義を読み取ります。</li>
+                <li>指定されたブランチからサービスコードをチェックアウトします。</li>
+                <li>ターゲットアカウントとリージョンで、ベースEnverの構成とブランチのコードを使用して新しいEnver（クローン）のCDKスタックを合成します。</li>
+                <li>合成されたテンプレートをデプロイし、リソース名が一意であることを保証します。</li>
+                <li>状態データベースを更新し、プラットフォームUIを介して詳細を利用可能にします。</li>
+            </ol>
+            <p>このアーキテクチャにより、スケーラブルで回復力があり、安全な方法で、オンデマンドで忠実度の高い環境を作成および管理できます。</p>
+        </section>
+
+    </main>
+</div>
+
+<footer>
+    <p>&copy; 2024 ONDEMANDENV.dev. 全著作権所有。</p>
+    <!-- ONDEMANDENV.dev は、動的で忠実度の高いエフェメラル環境の作成と管理を簡素化するプラットフォームのデモンストレーションです。 -->
+</footer>
+
+</body>
+</html> 

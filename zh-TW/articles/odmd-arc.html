@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ONDEMANDENV 架構深度解析 - ONDEMANDENV.dev</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <style>
+        /* Basic article styling */
+        main { max-width: 800px; margin: 2rem auto; padding: 0 1rem; }
+        h1, h2, h3 { color: var(--primary-color); }
+        h2 { margin-top: 2rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; }
+        h3 { margin-top: 1.5rem; color: var(--secondary-color); }
+        p, ul, ol { line-height: 1.7; margin-bottom: 1rem; }
+        ul, ol { margin-left: 1.5rem; }
+        li { margin-bottom: 0.5rem; }
+        pre { background-color: #f0f0f0; padding: 1rem; border-radius: 5px; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word; }
+        code { font-family: monospace; font-size: 0.9em; }
+        pre > code { background-color: transparent; padding: 0; }
+        blockquote { border-left: 4px solid var(--border-color); padding-left: 1rem; margin-left: 0; font-style: italic; color: #555; }
+
+        /* Language switcher styles */
+        .language-switcher {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 5px;
+            display: flex;
+            gap: 5px;
+        }
+        .language-switcher a, .language-switcher span {
+            padding: 5px 10px;
+            text-decoration: none;
+            color: var(--primary-color);
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+        .language-switcher a:hover {
+            background-color: #e9ecef;
+            color: var(--secondary-color);
+        }
+        .language-switcher .active {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <nav>
+        <div class="logo">ONDEMANDENV.dev</div>
+        <ul>
+            <li><a href="../../index.html">首頁</a></li>
+            <li><a href="../../concepts.html">核心概念</a></li>
+            <li><a href="../../patterns.html">模式與使用案例</a></li>
+            <li><a href="../../documentation.html">文件</a></li>
+            <li><a href="../../articles.html">文章</a></li>
+            <li><a href="https://github.com/ondemandenv" target="_blank">GitHub 組織</a></li>
+            <li><a href="mailto:contacts@ondemandenv.dev">請求演示</a></li>
+        </ul>
+        <div class="language-switcher">
+            <a href="../../articles/odmd-arc.html">EN</a>
+            <a href="../../ja/articles/odmd-arc.html">JA</a>
+            <a href="#" class="active">繁體中文</a>
+        </div>
+    </nav>
+</header>
+
+<main>
+    <h1>ONDEMANDENV 架構深度解析</h1>
+
+    <p>ONDEMANDENV 平台旨在解決分散式系統（如微服務）在軟體開發生命週期 (SDLC) 中面臨的挑戰，尤其專注於服務之間的依賴關係以及使用不同儲存庫的團隊之間的協作問題。</p>
+
+    <p>以下是核心架構概念的詳細說明：</p>
+
+    <h2>建置、Enver 與 ContractsLib</h2>
+    <p>每個儲存庫 (`repo`) 可以有多個不同的 `builds` (建置)。每個建置可以有多個與不同 Git 分支或標籤相關聯的 `envers` (環境版本)。一個 `enver` 代表一個服務或元件特定版本的整體性、 logique 環境。</p>
+    <p>一個名為 `contractsLib` 的特殊儲存庫定義了不同 enver 之間的依賴關係。一個 enver 可以取用其他 enver 的 `products` (產出物)。例如，一個網路 enver 可能會產生一個 IPAM 參考 (其產出物)，而一個 EKS 叢集 enver 則取用此參考，從而形成依賴關係。</p>
+    <p>一個建置可以輸出多種類型的產出物：</p>
+    <ol>
+        <li>Docker 映像檔，產生映像檔儲存庫 URI 和映像檔 SHA。</li>
+        <li>CDK (雲端開發工具包) 部署，它實作 enver 的產出物並取用其他 enver 的產出物。</li>
+        <li>具有 URI 的一般資源，透過自訂腳本進行管理。</li>
+    </ol>
+
+    <h2>Enver 類型：分支 vs. 標籤</h2>
+    <p>Enver 對應於來源儲存庫的分支或標籤：</p>
+    <ul>
+        <li><strong>分支 Enver (可變的)：</strong> 與 Git 分支相關聯。當原始碼變更時，enver 會以增量方式部署。</li>
+        <li><strong>標籤 Enver (不可變的)：</strong> 從特定的 Git 標籤建置。這些 enver 只能依賴其他不可變的 (標籤) enver，以確保穩定性和可重複性。</li>
+    </ul>
+    <p>平台會根據 `contractsLib` 中的定義，自動將 enver 部署到其指定的目標帳戶。</p>
+
+    <h2>隨需複製</h2>
+    <p>一個關鍵功能是透過複製來建立隨需環境的能力。透過在 `contractsLib` 中建立新的分支/標籤並參考現有 enver 的分支/標籤，平台會自動建立一個複製品。此複製品會重複使用原始 enver 的依賴關係定義，但會以不同的名稱部署資源，同時維持相同的邏輯/功能。這使得開發人員能夠在隔離的環境中以高度一致性進行測試和實驗。</p>
+    <p>CDK 程式碼設計為將分支/標籤名稱作為參數來載入組態。這確保了定義 enver 的程式碼在分支/標籤之間可以相同，而產生的 CloudFormation/HCL 在資源名稱/URI 上有所不同以避免衝突，但仍維持邏輯上的一致性。</p>
+
+    <h2>組態存放區與依賴管理</h2>
+    <p>當 enver 部署完成後，它會將其產出物的具體值輸出到組態存放區 (例如 AWS SSM Parameter Store)。取用者可以計算 URI 來擷取這些值。組態存放區會對所有值進行版本控制，並在變更時 (例如透過 EventBridge) 分派事件。</p>
+    <p>允許依賴循環，但在初始化期間需要預留位置值。例如，如果網路提供託管區域但需要中央日誌記錄，而中央日誌記錄又需要該託管區域：</p>
+    <ol>
+        <li>初始化網路，提供託管區域，但對中央日誌記錄使用預留位置。</li>
+        <li>使用網路提供的託管區域設定中央日誌記錄。</li>
+        <li>更新網路 enver 以使用實際的中央日誌記錄產出物。</li>
+    </ol>
+    <p>取用者如何回應產出物變更是可設定的。也可以使用初始預留位置值來定義取用者。</p>
+    <p>Enver 可以決定性地定義其堆疊名稱。對於全域唯一的資源，平台依賴 CloudFormation 的實體名稱產生，或允許使用者根據分支/標籤名稱進行定義。</p>
+    <p>複製 enver 預設不會鎖定依賴版本。但是，不可變的 (標籤) enver 會強制其依賴項在建立時也必須是不可變的。</p>
+    <p>每個 enver 的複製品數量有限制 (例如 20 個)，開發人員管理刪除作業，這在很大程度上是自動化的。複製的 enver 是完全隔離的，但共享相同的依賴關係定義。</p>
+
+    <h2>將 ContractsLib 視為「架構即程式碼」</h2>
+    <p>所有定義都存放在程式碼中。`contractsLib` 為建置和 enver 定義提供了內建的介面和類型。它就像一個「議會」，擁有 enver 的團隊透過拉取請求 (Pull Request) 來協商生產者和取用者之間的網路。只有在達成協議後才會進行部署，從而無需對產出物本身進行複雜的存取控制。</p>
+    <p>上游依賴關係的變更可能會破壞下游的 enver；開發人員必須管理此問題。`contractsLib` 本身使用語意版本控制，也被視為一個 enver，並使用自訂腳本建置。其 TypeScript 程式碼包含類型檢查和單元測試，以確保完整性 (例如，強制不可變的 enver 不能依賴可變的 enver)。</p>
+    <p>由於 `contractsLib` 程式碼定義了服務之間的合約，因此它實質上代表了整個系統的架構——「架構即程式碼」。變更應經過深思熟慮且理由充分。</p>
+
+    <h2>平台實作細節</h2>
+    <p>平台利用 IAM/STS 在多個 AWS 帳戶之間擔任角色。一個中央帳戶執行平台的實作/部署。其他帳戶可能用於特定考量，如網路、日誌記錄、安全性，而多個 `workspace` 帳戶則執行實際的應用程式工作負載。</p>
+    <p>目前，組態存放區使用 AWS SSM Parameter Store，EventBridge 作為觸發 Lambda 函數的事件匯流排，而機密則儲存在 AWS Secrets Manager 中。</p>
+
+    <h2>CI/CD 與測試</h2>
+    <p>所有 enver 都有其用於單元測試的 CI/CD 管線。依賴已部署資源的整合測試和端對端 (E2E) 測試，可以是應用程式 enver 本身的一部分，也可以定義為依賴目標 enver 的獨立 enver。</p>
+    <p>平台可以與各種 CI/CD 工具整合，如 CodePipeline、GitHub Actions 或 Step Functions。對於 AWS CDK 部署，CloudFormation 會處理自動回復。</p>
+
+    <h2>Enver 定義與隔離</h2>
+    <p>「Enver」是一個版本化的邏輯部署單元，包含至少一個垂直業務功能切片的所有資源 (從基礎架構到容器)。它代表了程式碼的「假設」版本。</p>
+    <p>來自相同儲存庫/建置的 Enver 通常不應互相感知，但可以共享來自不同儲存庫/建置的 enver 的依賴關係。</p>
+    <p>Enver 組態是安全隔離的，使不同團隊 (即使是離岸/外包團隊) 也能在獨立的分支上協同工作，而不會洩露敏感的組態資料。</p>
+    <p>產出物是版本化的組態值 (URI、JSON、端點等)，可能包含指向傳統建置產出物的 URI。</p>
+    <p>理想情況下，Enver 用於與其他服務簽訂合約的所有輸入/情境都定義在 `contractsLib` 中，以確保一致且可預測的行為。</p>
+
+    <h2>內建建置</h2>
+    <p>平台包含數個可選的預先定義建置：</p>
+    <ul>
+        <li><strong>ContractsLib 建置：</strong> 編譯並部署 `contractsLib` 儲存庫本身 (在 workspace0 中執行)。</li>
+        <li><strong>網路建置：</strong> 在網路帳戶和工作區帳戶之間部署網路資源 (IPAM、VPC、TGW、NAT)。</li>
+        <li><strong>使用者驗證建置：</strong> 部署使用者驗證服務，並可能部署一個用於視覺化合約的 Web 主控台 (在 workspace0 中執行)。</li>
+        <li><strong>EKS 叢集建置：</strong> 部署 EKS 叢集，使用共享網路資源，允許工作負載 enver 將應用程式部署到叢集內隔離的命名空間中 (在 workspace0 中執行，透過中央帳戶 VPC 部署資訊清單)。IAM 對應使用 OIDC 聯合。</li>
+    </ul>
+
+    <h2>平台自動化與視覺化</h2>
+    <p>中央帳戶使用 GitHub App 執行以下操作：</p>
+    <ol>
+        <li>為所有分支上的每個 enver 產生相同的 GitHub Actions 工作流程檔案。</li>
+        <li>監控組態存放區的變更，並根據取用者組態做出反應 (例如，觸發下游 CI/CD、傳送警示)。</li>
+    </ol>
+    <p>一個由 AppSync 從組態存放區同步資料的 Web 圖形化 GUI，提供了 enver 依賴關係的互動式視覺化——一個互動式的架構圖。</p>
+
+    <h2>Contracts Base 與擴充性</h2>
+    <p>一個基礎儲存庫 (<a href="https://github.com/ondemandenv/odmd-contracts-base" target="_blank">`ondemandenv/odmd-contracts-base`</a>) 定義了核心類型和介面 (Build、Enver、Producer、Consumer) 以及與中央帳戶的合約。每個組織都會建立自己特定的 `contractsLib` 來擴充此基礎，定義其具體的服務、建置、enver 目標 (帳戶/區域) 等。ONDEMANDENV 平台團隊維護中央帳戶的部署和基礎程式庫。</p>
+
+    <h2>工作流程摘要</h2>
+    <ul>
+        <li><strong>新增服務：</strong> 在組織的 `contractsLib` 中定義服務 (作為建置/enver)。發佈後，服務會使用此程式庫來擷取依賴關係並發佈其自身的產出物。</li>
+        <li><strong>複製 Enver：</strong> 在來源分支的提交中新增類似 <code>odmd: create@&lt;target_branch&gt;</code> 的註解。平台會偵測到此註解並建立複製品。使用 <code>odmd: delete ...</code> 來移除複製品。</li>
+        <li><strong>更新 ContractsLib：</strong> 將程式碼推送到 `contractsLib` 儲存庫會觸發其 CI/CD，發佈新的套件版本。平台會偵測到此更新，並同步建置/enver 基礎架構 (CI/CD 管線等)。取用該程式庫的下游 enver 也會根據其組態被觸發。</li>
+    </ul>
+    <p>平台強制明確性：如果未在 `contractsLib` 中定義，則不會部署，從而解決模糊性問題。</p>
+
+    <h2>關鍵創新回顧</h2>
+    <ul>
+        <li><strong>Enver：</strong> 具有版本化依賴關係的不可變/可變環境即程式碼單元。</li>
+        <li><strong>ContractsLib：</strong> 用於依賴解析的程式碼化服務合約 (架構即程式碼)。</li>
+        <li><strong>隨需複製：</strong> 具有依賴隔離的分支式環境複製。</li>
+    </ul>
+
+</main>
+
+<footer>
+    <p>&copy; 2024 ONDEMANDENV.dev. 保留所有權利。</p>
+    <!-- 如有需要，請在此處新增頁尾連結 -->
+</footer>
+
+</body>
+</html> 

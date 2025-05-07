@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>擁抱以應用程式為中心的基礎架構 1 - ONDEMANDENV.dev</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <style>
+        /* Basic article styling */
+        main { max-width: 800px; margin: 2rem auto; padding: 0 1rem; }
+        h1, h2, h3 { color: var(--primary-color); }
+        h2 { margin-top: 2rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; }
+        h3 { margin-top: 1.5rem; color: var(--secondary-color); }
+        p, ul, ol { line-height: 1.7; margin-bottom: 1rem; }
+        ul, ol { margin-left: 1.5rem; }
+        li { margin-bottom: 0.5rem; }
+        pre { background-color: #f0f0f0; padding: 1rem; border-radius: 5px; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word; }
+        code { font-family: monospace; font-size: 0.9em; }
+        pre > code { background-color: transparent; padding: 0; }
+        blockquote { border-left: 4px solid var(--border-color); padding-left: 1rem; margin-left: 0; font-style: italic; color: #555; }
+
+        /* Language switcher styles */
+        .language-switcher {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 5px;
+            display: flex;
+            gap: 5px;
+        }
+        .language-switcher a, .language-switcher span {
+            padding: 5px 10px;
+            text-decoration: none;
+            color: var(--primary-color);
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+        .language-switcher a:hover {
+            background-color: #e9ecef;
+            color: var(--secondary-color);
+        }
+        .language-switcher .active {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <nav>
+        <div class="logo">ONDEMANDENV.dev</div>
+        <ul>
+            <li><a href="../../index.html">首頁</a></li>
+            <li><a href="../../concepts.html">核心概念</a></li>
+            <li><a href="../../patterns.html">模式與使用案例</a></li>
+            <li><a href="../../documentation.html">文件</a></li>
+            <li><a href="../../articles.html">文章</a></li>
+            <li><a href="https://github.com/ondemandenv" target="_blank">GitHub 組織</a></li>
+            <li><a href="mailto:contacts@ondemandenv.dev">請求演示</a></li>
+        </ul>
+        <div class="language-switcher">
+            <a href="../../articles/app-centric-infra1.html">EN</a>
+            <a href="../../ja/articles/app-centric-infra1.html">JA</a>
+            <a href="#" class="active">繁體中文</a>
+        </div>
+    </nav>
+</header>
+
+<main>
+    <h1>在雲端擁抱以應用程式為中心的基礎架構 1</h1>
+
+    <p>在雲端運算的世界中，管理基礎架構和應用程式往往是兩種哲學的結合。一方面，我們有像 AWS CloudFormation 這樣的工具，它源於工程思維，專注於確定性和一致性。CloudFormation 擅長將基礎架構定義為程式碼，確保可預測的部署和自動化復原。另一方面，Kubernetes 源於營運領域，強調在動態的容器化應用程式中進行臨機操作和緩解措施。雖然 Kubernetes 在容器編排方面無與倫比，但傳統上缺乏 CloudFormation 那樣廣泛的基礎架構管理能力。</p>
+    <p>這種分歧導致了工具鏈的蔓延、不一致和營運複雜性。然而，隨著「應用程式」的定義演變為包含更廣泛的緊密耦合資源，一種新的範式正在興起：以應用程式為中心的基礎架構。這種方法由 AWS Cloud Development Kit (CDK) 等工具實現，旨在統一基礎架構和執行階段管理，為雲端部署帶來一致性、可管理性和領域驅動的視角。</p>
+
+    <h2>CloudFormation 與 Kubernetes：實踐中的兩種哲學</h2>
+    <p>要理解向以應用程式為中心的基礎架構的轉變，必須先了解 CloudFormation 和 Kubernetes 之間的基本差異：</p>
+
+    <h3>CloudFormation：工程確定性與自動化復原</h3>
+    <ul>
+        <li><strong>重點：</strong> 基礎架構即程式碼 (IaC)，AWS 資源的宣告式佈建。</li>
+        <li><strong>哲學：</strong> 工程確定性、一致性和可預測性。</li>
+        <li><strong>失敗時復原：</strong> 堆疊操作的自動復原。如果任何資源建立或更新失敗，CloudFormation 會回復所有變更，確保狀態一致。這強調「全有或全無」的部署，優先考慮穩定性和可預測性。</li>
+        <li><strong>相依性管理：</strong> 使用 <code>DependsOn</code> 的內建宣告式相依性支援。CloudFormation 理解並強制執行資源建立和刪除順序，簡化複雜的基礎架構部署。</li>
+    </ul>
+
+    <h3>Kubernetes：營運彈性與韌性</h3>
+    <ul>
+        <li><strong>重點：</strong> 容器編排，管理容器化應用程式的生命週期。</li>
+        <li><strong>哲學：</strong> 營運彈性、韌性以及在動態環境中的臨機緩解措施。</li>
+        <li><strong>失敗時復原：</strong> 預設情況下，一般故障不會自動復原（Deployment 更新除外）。Kubernetes 優先考慮營運控制，允許操作員調查並應用有針對性的緩解措施。復原通常是明確的動作。</li>
+        <li><strong>相依性管理：</strong> 隱含式且由控制器驅動。Kubernetes 在其生態系統內管理相依性（例如 Pod 和 Service），但缺乏類似 CloudFormation 的宣告式、基礎架構層級的相依性管理。</li>
+    </ul>
+    <p>這些截然不同的方法反映了它們的起源和主要使用案例：CloudFormation 用於基礎架構，而 Kubernetes 用於應用程式執行階段管理。</p>
+
+    <h2>現代「應用程式」：作為有界上下文的垂直切片</h2>
+    <blockquote>「傳統上，雲端中的『應用程式』可能被視為由 Kubernetes 編排的一組容器。然而，現代應用程式是商業功能的垂直切片，通常包含：
+        <ul>
+            <li>容器：微服務、封裝在容器中的應用程式邏輯。</li>
+            <li>資料庫：像 RDS 這樣的受管理資料庫，或像 DynamoDB 這樣的無伺服器選項。</li>
+            <li>儲存：物件儲存 (S3 儲存貯體)、區塊儲存 (EBS)。</li>
+            <li>網路：VPC、負載平衡器、DNS、CDN。</li>
+            <li>無伺服器函數：用於事件驅動邏輯的 Lambda 函數。</li>
+            <li>API 閘道：用於管理和保護 API。</li>
+            <li>至關重要的是，安全性和最低權限：現代應用程式需要基於最低權限原則建構的強固安全架構。這意味著定義精細的角色和權限，以確保應用程式的每個元件僅能存取執行其功能所需的最少資源。安全性並非事後考量，而是應用程式設計和部署的基本面向。」</li>
+         </ul>
+    </blockquote>
+    <p>將「應用程式」狹隘地定義為僅限容器，會忽略其領域驅動的範圍而變得受限。更準確且有用的定義是將所有緊密耦合的邏輯資源視為一個有界上下文——一個自足的垂直切片，包含提供商業能力所需的所有資源，無論其在何處或屬於何種類型。</p>
+
+    <h2>以應用程式為中心的基礎架構：領域驅動的方法</h2>
+    <p>這種更廣泛的「應用程式」定義催生了以應用程式為中心的基礎架構設計。此範例將焦點從孤立地管理個別資源，轉移到圍繞邏輯應用程式邊界組織基礎架構。關鍵原則包括：</p>
+    <ul>
+        <li><strong>應用程式堆疊 = 垂直切片：</strong> 每個應用程式都定義為一個自足的「堆疊」，其中包含其所有必要的資源——基礎架構和執行階段元件，作為一個垂直的商業能力。此堆疊成為應用程式環境的單一事實來源，反映了領域驅動設計 (DDD) 中的「有界上下文」概念。</li>
+        <li><strong>用於共享模組化或服務的平台堆疊：</strong> 共享的基礎架構元件，例如中央 EKS 叢集，被放置在一個單獨的「平台堆疊」中。透過網路即服務進行共享。然後，應用程式堆疊依賴此平台堆疊，從而建立明確的關注點分離並促進可重複使用性。</li>
+        <li><strong>邏輯凝聚力優於實體性：</strong> 資源是根據其與應用程式的邏輯關係進行分組，而不是其在何處或服務類型。屬於同一應用程式的 S3 儲存貯體、DynamoDB 資料表和 Kubernetes 部署，都在應用程式堆疊內作為一個有凝聚力的單元進行管理。</li>
+    </ul>
+
+    <h3>優點：</h3>
+    <ul>
+        <li>提高一致性：在單一堆疊中管理所有應用程式資源可減少組態漂移並確保環境一致。</li>
+        <li>增強可管理性：應用程式堆疊簡化了部署、更新和復原，使應用程式生命週期管理更加流暢。</li>
+        <li>明確的應用程式所有權：團隊可以擁有和管理其整個應用程式堆疊，從而培養自主性和責任感。</li>
+        <li>簡化成本歸屬：資源成本可透過其專用堆疊輕鬆歸屬於特定應用程式。</li>
+        <li>與雲端原生原則保持一致：促進鬆散耦合、可獨立部署的應用程式單元。</li>
+        <li>增強安全性態勢：應用程式堆疊透過建立明確的安全邊界並在每個應用程式的範圍內啟用精細的權限管理，從而促進最低權限存取控制的實作。</li>
+    </ul>
+    <p>這種以應用程式為中心的方法與領域驅動設計 (DDD) 的哲學產生了深刻的共鳴。正如 DDD 圍繞有界上下文和領域邏輯組織軟體一樣，以應用程式為中心的基礎架構則圍繞邏輯應用程式領域組織雲端資源。這種一致性為基礎架構管理帶來了清晰度、一致性以及對商業價值的更強烈關注。</p>
+
+    <h2>AWS CDK：統一基礎架構與執行階段管理</h2>
+    <p>AWS Cloud Development Kit (CDK) 作為以應用程式為中心的基礎架構的強大推動者而出現。CDK 抽象化了傳統基礎架構即程式碼的複雜性，讓您可以使用熟悉的程式語言，在單一、統一的程式碼庫中定義基礎架構和執行階段編排。</p>
+    <ul>
+        <li><strong>具有抽象化的基礎架構即程式碼：</strong> CDK 提供了用於定義 AWS 資源（VPC、S3、RDS 等）的高階建構，並內建了最佳實務，從而簡化了基礎架構定義並減少了重複的程式碼。</li>
+        <li><strong>透過 cdk8s 進行執行階段編排：</strong> CDK 與 cdk8s 整合，讓您可以直接在 CDK 程式碼中定義 Kubernetes 清單。這使得能夠將 Kubernetes 資源（部署、服務、自訂資源）作為應用程式堆疊的一部分進行無縫管理。</li>
+        <li><strong>統一的工具和工作流程：</strong> CDK 為管理整個應用程式堆疊（從基礎架構到執行階段）提供單一工具鏈和一致的開發人員體驗。</li>
+        <li><strong>簡化的相依性管理：</strong> CDK 簡化了相依性管理，讓您可以在同一個堆疊中定義 AWS 資源和 Kubernetes 資源之間的相依性。</li>
+        <li><strong>基礎架構即安全程式碼：</strong> CDK 不僅僅是基礎架構即程式碼，還是基礎架構即安全程式碼。CDK 提供了用於定義 IAM 角色、策略和安全群組的建構，讓您可以將安全性最佳實務直接嵌入到基礎架構定義中。這對於實作最低權限和確保安全的應用程式部署至關重要。</li>
+        <li><strong>精細的權限管理：</strong> CDK 使授予應用程式堆疊內資源的精細權限變得更加容易。您可以定義與每個應用程式元件的存取需求完全相符的 IAM 角色和策略，從而將過度授權的風險降至最低。</li>
+    </ul>
+    <p>透過使用 CDK，團隊可以擺脫分散的工具和混合方法，為其應用程式採用真正統一的堆疊定義。</p>
+
+    <h2>部署工具的演進</h2>
+    <p>雲端基礎架構管理的格局經歷了重大的演進，其驅動力來自現代應用程式日益增加的複雜性以及對更有效率和一致的部署策略的需求。最初，組織在分散的專業工具生態系統中摸索，導致營運開銷和不一致。下文追溯了雲端部署工具在三個不同階段的演進，最終以 AWS Cloud Development Kit (CDK) 為例的統一堆疊方法的出現為高潮。</p>
+
+    <h3>階段 1：分散的工具 – 專業化和孤島的時代</h3>
+    <p>在雲端採用的早期，組織通常依賴各種不同的專業工具，每種工具都處理雲端環境的特定方面。兩個突出的例子是 AWS CloudFormation 和 Kubernetes，它們各自源於不同的營運哲學：</p>
+    <ul>
+        <li><strong>AWS CloudFormation：孤立的基礎架構佈建：</strong> CloudFormation 源於以工程為中心的世界，專注於基礎架構佈建的確定性和一致性。它擅長透過宣告式範本定義和部署各種 AWS 資源。然而，它對 Kubernetes 資源的方法通常是有限的，將它們視為靜態 YAML 定義，而不是動態管理的實體。</li>
+        <li><strong>Kubernetes：容器編排，基礎架構無關：</strong> Kubernetes 源於營運世界，優先考慮動態環境中的臨機操作和緩解措施。它徹底改變了容器編排，抽象化了底層基礎架構的複雜性，以大規模管理容器化應用程式。然而，Kubernetes 的原生形式缺乏直接佈建和管理其叢集外部雲端資源（例如儲存貯體或資料庫）的能力。</li>
+    </ul>
+    <h4>結果：工具鏈蔓延和營運摩擦</h4>
+    <p>這種分散的方法導致了幾個挑戰：</p>
+    <ul>
+        <li><strong>工具鏈蔓延：</strong> 組織累積了各種不同的工具集，每種工具都需要專業知識。這種複雜性增加了培訓成本並阻礙了整體管理。</li>
+        <li><strong>組態漂移：</strong> 在不同的系統中管理基礎架構和應用程式組態不可避免地導致組態漂移。當一個系統中的變更未自動反映在另一個系統中時，就會出現不一致，從而產生難以重現和排除故障的「雪花」環境。</li>
+        <li><strong>營運開銷：</strong> 操作不同的工具鏈增加了營運複雜性。在不同的系統之間協調部署、更新和監控需要大量的手動工作和自訂指令碼，增加了錯誤和營運開銷的可能性。</li>
+        <li><strong>有限的整體視圖：</strong> 缺乏整合使得難以獲得整個應用程式堆疊的統一、整體視圖。監控和故障排除通常需要在不同的工具介面之間導覽並在孤島之間關聯資料。</li>
+    </ul>
+
+    <h3>階段 2：混合方法 – 以複雜性彌合鴻溝</h3>
+    <p>認識到分散工具的局限性，組織開始採用混合方法來彌合基礎架構和應用程式管理之間的鴻溝。一種常見的模式是結合：</p>
+    <ul>
+        <li><strong>用於基礎架構基礎的 CloudFormation：</strong> CloudFormation 繼續用於佈建底層基礎架構，包括虛擬私有雲 (VPC)、運算資源、受管理服務，甚至基礎的 EKS (Elastic Kubernetes Service) 叢集。</li>
+        <li><strong>用於應用程式部署的 Kubernetes 原生工具：</strong> 在由 CloudFormation 佈建的 Kubernetes 叢集中，組織採用 Kubernetes 原生工具進行應用程式生命週期管理：
+            <ul>
+                <li>Helm：用於在 Kubernetes 中將應用程式封裝、範本化和部署為圖表。</li>
+                <li>GitOps 工具 (Argo CD、Flux)：用於在 Kubernetes 中實作持續交付和宣告式應用程式組態管理，並以 Git 作為事實來源。</li>
+            </ul>
+        </li>
+    </ul>
+    <h4>混合方法的局限性：</h4>
+    <p>雖然混合方法比完全分散的工具提供了改進，但它們也引入了新的複雜性：</p>
+    <ul>
+        <li><strong>範式的不一致 (IaC 與 GitOps)：</strong> 混合模型通常將基礎架構即程式碼 (IaC) 原則與 GitOps 實務並列。CloudFormation 範本體現了宣告式、以基礎架構為中心的方法，而 GitOps 則引入了一個獨立的宣告式模型，專注於 Kubernetes 中的應用程式部署。管理和協調這些不同的宣告式系統增加了一層抽象和潛在的混淆。</li>
+        <li><strong>對多系統專業知識的持續需求：</strong> 儘管進行了整合工作，團隊仍然需要 CloudFormation 和 Kubernetes 生態系統的專業知識。這需要更廣泛的技能組合，並可能導致組織內的知識孤島。</li>
+        <li><strong>複雜的復原和稽核：</strong> 執行全面的復原或進行徹底的稽核變得更加複雜。復原整個應用程式堆疊可能需要在 CloudFormation (用於基礎架構變更) 和 Kubernetes 工具 (用於應用程式部署) 之間進行協調的復原，通常需要自訂指令碼和手動編排。在這些不同的系統之間稽核變更仍然是一個挑戰。</li>
+    </ul>
+
+    <h3>階段 3：使用 CDK 的統一堆疊 – 基礎架構與執行階段的融合</h3>
+    <p>目前的演進趨勢是指向統一堆疊的方法，其中基礎架構和執行階段管理融合到單一、有凝聚力的程式碼庫中。AWS Cloud Development Kit (CDK) 體現了此階段 3，提供了一個強大的框架，用於在單一、開發人員友好的環境中定義和管理整個應用程式堆疊，從基礎架構到執行階段編排。</p>
+    <h4>AWS CDK：統一基礎架構與執行階段管理</h4>
+    <p>AWS CDK 作為 AWS CloudFormation 之上的抽象層，但透過以下方式從根本上改變了開發體驗：</p>
+    <ul>
+        <li><strong>使用程式語言的基礎架構即程式碼：</strong> CDK 使開發人員能夠使用熟悉的程式語言（如 TypeScript、Python、Java 和 Go）定義 AWS 基礎架構。這擺脫了冗長的 JSON/YAML 範本，並釋放了程式設計建構（包括迴圈、條件、函數和物件導向原則）用於基礎架構定義的強大功能。</li>
+        <li><strong>高階抽象 (建構)：</strong> CDK 提供了豐富的建構程式庫，這些建構是預先建置、可重複使用的元件，代表具有內嵌最佳實務的雲端資源。這些建構簡化了複雜資源（如 VPC、S3 儲存貯體、資料庫，甚至 EKS 叢集）的定義，減少了重複的程式碼並促進了一致性。</li>
+        <li><strong>與 cdk8s 整合的執行階段編排：</strong> CDK 與 cdk8s (Cloud Development Kit for Kubernetes) 無縫整合，使開發人員能夠使用相同的程式語言和抽象，直接在其 CDK 程式碼中定義 Kubernetes 清單。這允許在單一堆疊定義中統一管理 AWS 雲端資源和 Kubernetes 資源。</li>
+        <li><strong>統一的工具和工作流程：</strong> CDK 提供了統一的命令列介面 (CDK CLI) 和工作流程，用於開發、部署和管理整個應用程式堆疊。開發人員可以使用單一工具鏈和程式語言來處理基礎架構佈建和應用程式執行階段編排。</li>
+    </ul>
+    <h4>使用 CDK 的統一堆疊的優勢：</h4>
+    <ul>
+        <li>簡化營運：管理單一、統一的程式碼庫可簡化營運。由於基礎架構和應用程式組態一起管理，部署、更新和復原變得更加流暢和原子化。</li>
+        <li>提高一致性並減少漂移：在同一個程式碼庫中定義基礎架構和執行階段組態，本質上可以促進一致性並最大限度地減少組態漂移。對基礎架構和應用程式的變更會進行版本控制並一起部署，確保環境更具凝聚力和可預測性。</li>
+        <li>增強開發人員體驗和生產力：使用熟悉的程式語言、高階建構和統一的工具鏈，顯著改善了開發人員體驗。CDK 使基礎架構定義更易於存取、更令人愉快且更有效率，從而提高了開發人員的生產力並減少了錯誤。</li>
+        <li>強固的相依性管理：CDK 建立在 CloudFormation 之上，繼承了其強固的相依性管理功能。開發人員可以在堆疊中的所有資源（AWS 基礎架構和 Kubernetes 資源）之間定義相依性，確保正確的建立和更新順序。</li>
+        <li>流暢的稽核和復原：統一堆疊簡化了稽核和復原。變更會在 CDK 程式碼的版本控制中進行追蹤，提供清晰的稽核追蹤。可以在堆疊層級執行復原，以協調的方式回復基礎架構和應用程式組態。</li>
+        <li>邁向以應用程式為中心的基礎架構：CDK 促進了以應用程式為中心的基礎架構設計。透過將應用程式定義為一個包含其所有緊密耦合資源（基礎架構和執行階段元件）的整體單元，組織可以實現更好的應用程式所有權、隔離和可管理性。</li>
+    </ul>
+
+    <p>（註：以下似乎是特定的實作說明或連結）</p>
+    <p><a href="https://github.com/ondemandenv/odmd-eks/blob/5f67a7ec01f2effe4302c4a00a33adb0eedca0da/lib/simple-k8s-manifest.ts#L10" target="_blank">https://github.com/ondemandenv/odmd-eks/.../simple-k8s-manifest.ts#L10</a></p>
+    <p>這個單一堆疊將管理 EKS 叢集內外所有資源的生命週期和相依性，使其成為一個包含其所有必要資源（基礎架構和執行階段元件）的自足「堆疊」。此堆疊成為應用程式環境的單一事實來源，反映了領域驅動設計 (DDD) 中的「有界上下文」概念。</p>
+    <p>AWS CloudFormation 將維護堆疊中所有資源之間的相依性，確保它們按順序部署和復原，以實現交易性。</p>
+    <p>這是真實的程式碼，透過如下所示的參數化進行了少量的編碼抽象：</p>
+    <pre><code>//what branch I am on
+const br = execSync('git rev-parse --abbrev-ref HEAD').toString().trim();
+//configuration based on branch
+const imgAndVer = StringParameter.valueForStringParameter(this, '/my-app/' + br );</code></pre>
+    <p>您可以讓不同分支上的相同程式碼產生並部署到多個環境（具有分支指定的組態值的相同邏輯/功能清單），以便進行進一步的實驗、探索、測試或具有高度一致性的生產，透過分支進行程式碼比較以及單元測試，這將 GitOps 徹底淘汰！</p>
+    <p>以上是 <a href="https://ondemandenv.dev" target="_blank">https://ondemandenv.dev</a> 的根本哲學，它支援更深一層的抽象：跨多個帳戶連接 VPC，以便每個帳戶都可以透過私有子網路使用動態值/權杖解析來部署 k8s 清單。</p>
+
+     <!-- 此處可能包含完整檔案中的更多內容 -->
+
+</main>
+
+<footer>
+    <p>&copy; 2024 ONDEMANDENV.dev. 保留所有權利。</p>
+    <!-- 如有需要，請在此處新增頁尾連結 -->
+</footer>
+
+</body>
+</html> 
