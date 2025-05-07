@@ -19,18 +19,20 @@
     <nav>
         <div class="logo">ONDEMANDENV.dev</div>
         <ul>
-            <li><a href="../index.html">Home</a></li>
-            <li><a href="../concepts.html">Core Concepts</a></li>
-            <li><a href="../patterns.html">Patterns & Use Cases</a></li>
-            <li><a href="../documentation.html">Documentation</a></li>
-            <li><a href="../articles.html">Articles</a></li>
+            <li><a href="index.html">ホーム</a></li>
+            <li><a href="concepts.html">コアコンセプト</a></li>
+            <li><a href="patterns.html">パターンとユースケース</a></li>
+            <li><a href="documentation.html">ドキュメント</a></li>
+            <li><a href="articles.html">記事</a></li>
             <li><a href="https://github.com/ondemandenv" target="_blank">GitHub Org</a></li>
-            <li><a href="mailto:contacts@ondemandenv.dev">Request Demo</a></li>
+            <li><a href="mailto:contacts@ondemandenv.dev">デモのリクエスト</a></li>
         </ul>
         <div class="language-switcher">
-            <a href="/index.html">English</a> |
-            <a href="/ja/index.html" class="lang-active">日本語</a> |
-            <a href="/zh-TW/index.html">繁體中文</a>
+            <select onchange="window.location.href=this.value;">
+                <option value="../articles.html">English</option>
+                <option value="articles.html" selected>日本語</option>
+                <option value="../zh-TW/articles.html">繁體中文</option>
+            </select>
         </div>
     </nav>
 </header>

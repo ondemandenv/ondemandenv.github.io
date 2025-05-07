@@ -19,18 +19,20 @@
     <nav>
         <div class="logo">ONDEMANDENV.dev</div>
         <ul>
-            <li><a href="../index.html">Home</a></li>
-            <li><a href="../concepts.html">Core Concepts</a></li>
-            <li><a href="../patterns.html">Patterns & Use Cases</a></li>
-            <li><a href="../documentation.html">Documentation</a></li>
-            <li><a href="../articles.html">Articles</a></li>
-            <li><a href="https://github.com/ondemandenv" target="_blank">GitHub Org</a></li>
-            <li><a href="mailto:contacts@ondemandenv.dev">Request Demo</a></li>
+            <li><a href="index.html">首頁</a></li>
+            <li><a href="concepts.html">核心概念</a></li>
+            <li><a href="patterns.html">模式和使用案例</a></li>
+            <li><a href="documentation.html">文檔</a></li>
+            <li><a href="articles.html">文章</a></li>
+            <li><a href="https://github.com/ondemandenv" target="_blank">GitHub 組織</a></li>
+            <li><a href="mailto:contacts@ondemandenv.dev">申請演示</a></li>
         </ul>
         <div class="language-switcher">
-            <a href="/index.html">English</a> |
-            <a href="/ja/index.html">日本語</a> |
-            <a href="/zh-TW/index.html" class="lang-active">繁體中文</a>
+            <select onchange="window.location.href=this.value;">
+                <option value="../articles.html">English</option>
+                <option value="../ja/articles.html">日本語</option>
+                <option value="articles.html" selected>繁體中文</option>
+            </select>
         </div>
     </nav>
 </header>

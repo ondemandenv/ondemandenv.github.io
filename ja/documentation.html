@@ -136,9 +136,11 @@
             <li><a href="mailto:contacts@ondemandenv.dev">デモをリクエスト</a></li>
         </ul>
         <div class="language-switcher">
-            <a href="../documentation.html">English</a> |
-            <a href="documentation.html" class="lang-active">日本語</a> |
-            <a href="../zh-TW/documentation.html">繁體中文</a>
+            <select onchange="window.location.href=this.value;">
+                <option value="../documentation.html">English</option>
+                <option value="documentation.html" selected>日本語</option>
+                <option value="../zh-TW/documentation.html">繁體中文</option>
+            </select>
         </div>
     </nav>
 </header>
