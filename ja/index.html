@@ -22,9 +22,11 @@
             <li><a href="mailto:contacts@ondemandenv.dev">Request Demo</a></li>
         </ul>
         <div class="language-switcher">
-            <a href="/index.html">English</a> | 
-            <a href="/ja/index.html" class="lang-active">日本語</a> | 
-            <a href="/zh-TW/index.html">繁體中文</a>
+            <select onchange="window.location.href=this.value;">
+                <option value="../index.html">English</option>
+                <option value="index.html" selected>日本語</option>
+                <option value="../zh-TW/index.html">繁體中文</option>
+            </select>
         </div>
     </nav>
 </header>
@@ -106,9 +108,11 @@
 
     <section id="opportunities">
         <h2>参加・連携しませんか</h2>
-        <p>私たちは、環境管理の成長と革新を支援してくださる投資家やパートナーを積極的に募集しています。また、関連ドメインでの契約・フリーランスのソフトウェア開発エンジニア（SDE）としての業務もお受けできます。連携や採用にご興味がございましたら、ぜひご連絡ください！</p>
+        <p>ONDEMANDENV.devは、分散システム管理の成長と革新を支援してくださる投資家や戦略的パートナーを積極的に募集しています。私たちは協調的なイノベーションを信じており、さまざまなパートナーシップモデルについてご相談可能です。</p>
+        <p>同時に、ONDEMANDENV.devのコア専門知識は、コンサルティング、契約、フリーランスのソフトウェア開発エンジニア（SDE）業務としてもご提供可能です。分散システム、クラウドアーキテクチャ（特にAWS）、またはDevOps自動化に関する課題のあるプロジェクトがございましたら、ぜひご連絡ください！</p>
         <div class="cta-buttons">
-            <a href="mailto:contacts@ondemandenv.dev" class="btn btn-primary">お問い合わせ</a>
+            <a href="mailto:contacts@ondemandenv.dev?subject=投資・パートナーシップのお問い合わせ" class="btn btn-primary">投資・パートナーシップのお問い合わせ</a>
+            <a href="mailto:contacts@ondemandenv.dev?subject=SDE契約・フリーランスのお問い合わせ" class="btn btn-secondary">SDE契約・フリーランスのお問い合わせ</a>
         </div>
     </section>
 

@@ -22,9 +22,11 @@
             <li><a href="mailto:contacts@ondemandenv.dev">Request Demo</a></li>
         </ul>
         <div class="language-switcher">
-            <a href="/index.html">English</a> | 
-            <a href="/ja/index.html">日本語</a> | 
-            <a href="/zh-TW/index.html" class="lang-active">繁體中文</a>
+            <select onchange="window.location.href=this.value;">
+                <option value="../index.html">English</option>
+                <option value="../ja/index.html">日本語</option>
+                <option value="index.html" selected>繁體中文</option>
+            </select>
         </div>
     </nav>
 </header>
@@ -106,9 +108,11 @@
 
     <section id="opportunities">
         <h2>加入我們並進行合作</h2>
-        <p>我們積極尋求投資者和合作夥伴，以協助我們成長並革新環境管理。此外，我也承接相關領域的合約/自由軟體開發工程師（SDE）工作機會。如果您有興趣合作或聘用，請與我們聯繫！</p>
+        <p>ONDEMANDENV.dev 積極尋求投資者和策略合作夥伴，協助我們成長並革新分散式系統的管理。我們相信協作式創新，並樂於討論各種合作模式。</p>
+        <p>同時，ONDEMANDENV.dev 的核心專業也可提供顧問、合約與自由軟體開發工程師（SDE）服務。如果您在分散式系統、雲端架構（特別是 AWS）或 DevOps 自動化方面有挑戰性的專案，歡迎與我們聯繫！</p>
         <div class="cta-buttons">
-            <a href="mailto:contacts@ondemandenv.dev" class="btn btn-primary">聯絡我們</a>
+            <a href="mailto:contacts@ondemandenv.dev?subject=投資/合作夥伴諮詢" class="btn btn-primary">投資/合作夥伴諮詢</a>
+            <a href="mailto:contacts@ondemandenv.dev?subject=SDE 合約/自由工作者諮詢" class="btn btn-secondary">SDE 合約/自由工作者諮詢</a>
         </div>
     </section>
 

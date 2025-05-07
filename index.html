@@ -22,9 +22,11 @@
             <li><a href="mailto:contacts@ondemandenv.dev">Request Demo</a></li>
         </ul>
         <div class="language-switcher">
-            <a href="/index.html" class="lang-active">English</a> | 
-            <a href="/ja/index.html">日本語</a> | 
-            <a href="/zh-TW/index.html">繁體中文</a>
+            <select onchange="window.location.href=this.value;">
+                <option value="index.html" selected>English</option>
+                <option value="ja/index.html">日本語</option>
+                <option value="zh-TW/index.html">繁體中文</option>
+            </select>
         </div>
     </nav>
 </header>
@@ -83,16 +85,6 @@
         </div>
     </section>
 
-    <section id="opportunities">
-        <h2>Join Our Journey / Seeking Opportunities</h2>
-        <p>ONDEMANDENV.dev is actively seeking investors and strategic partners to help us grow and revolutionize how distributed systems are managed. We believe in a collaborative approach to innovation and are open to discussing various partnership models.</p>
-        <p>In parallel, the core expertise behind ONDEMANDENV.dev is available for consulting, contract, and freelance Software Development Engineer (SDE) roles. If you have challenging projects in distributed systems, cloud architecture (especially AWS), or DevOps automation, let's connect!</p>
-        <div class="cta-buttons">
-            <a href="mailto:contacts@ondemandenv.dev?subject=Investment/Partnership Inquiry" class="btn btn-primary">Contact for Investment/Partnership</a>
-            <a href="mailto:contacts@ondemandenv.dev?subject=SDE Contract/Freelance Inquiry" class="btn btn-secondary">Contact for SDE Roles</a>
-        </div>
-    </section>
-
     <section id="next-steps">
         <h2>Ready to Dive Deeper?</h2>
         <div class="next-steps-grid">
@@ -111,6 +103,16 @@
                  <p>Follow the setup guide, explore the code examples on GitHub, and start managing your environments.</p>
                  <a href="documentation.html" class="btn btn-primary">View Documentation</a>
             </div>
+        </div>
+    </section>
+
+    <section id="opportunities">
+        <h2>Join Our Journey / Seeking Opportunities</h2>
+        <p>ONDEMANDENV.dev is actively seeking investors and strategic partners to help us grow and revolutionize how distributed systems are managed. We believe in a collaborative approach to innovation and are open to discussing various partnership models.</p>
+        <p>In parallel, the core expertise behind ONDEMANDENV.dev is available for consulting, contract, and freelance Software Development Engineer (SDE) roles. If you have challenging projects in distributed systems, cloud architecture (especially AWS), or DevOps automation, let's connect!</p>
+        <div class="cta-buttons">
+            <a href="mailto:contacts@ondemandenv.dev?subject=Investment/Partnership Inquiry" class="btn btn-primary">Contact for Investment/Partnership</a>
+            <a href="mailto:contacts@ondemandenv.dev?subject=SDE Contract/Freelance Inquiry" class="btn btn-secondary">Contact for SDE Roles</a>
         </div>
     </section>
 

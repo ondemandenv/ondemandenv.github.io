@@ -31,9 +31,11 @@
             <li><a href="mailto:contacts@ondemandenv.dev">Request Demo</a></li>
         </ul>
         <div class="language-switcher">
-            <a href="../concepts.html">English</a> |
-            <a href="../ja/concepts.html">日本語</a> |
-            <a href="concepts.html" class="lang-active">繁體中文</a>
+            <select onchange="window.location.href=this.value;">
+                <option value="../concepts.html">English</option>
+                <option value="../ja/concepts.html">日本語</option>
+                <option value="concepts.html" selected>繁體中文</option>
+            </select>
         </div>
     </nav>
 </header>
