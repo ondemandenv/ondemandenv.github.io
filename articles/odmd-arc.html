@@ -56,7 +56,7 @@
     <h2>Enver Types: Branch vs. Tag</h2>
     <p>Envers correspond to source repository branches or tags:</p>
     <ul>
-        <li><strong>Branch Envers (Mutable):</strong> Associated with a Git branch. When the source code changes, the enver is incrementally deployed.</li>
+        <li><strong>Branch Envers (Incremental):</strong> Associated with a Git branch. When the source code changes, the enver is incrementally deployed.</li>
         <li><strong>Tag Envers (Immutable):</strong> Built from a specific Git tag. These envers can only depend on other immutable (tag) envers, ensuring stability and reproducibility.</li>
     </ul>
     <p>The platform automatically deploys envers to their designated target accounts based on definitions in the `contractsLib`.</p>
