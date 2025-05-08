@@ -39,11 +39,14 @@ nav {
     color: white;
     font-size: 1.5rem;
     font-weight: bold;
+    flex-shrink: 0;
 }
 
 nav ul {
     display: flex;
     list-style: none;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 nav ul li a {
@@ -58,7 +61,7 @@ nav ul li a:hover {
 }
 
 main {
-    margin-top: 4rem;
+    margin-top: 6rem;
     padding: 2rem;
 }
 
@@ -697,27 +700,24 @@ footer a:hover {
 
 /* Language Switcher Styles */
 .language-switcher {
-    margin-left: auto; /* Pushes switcher to the right in the nav bar */
-    padding: 0 15px; /* Adjust padding as needed */
-    display: flex;
-    align-items: center;
+    flex-shrink: 0;
 }
 
 .language-switcher a {
     text-decoration: none;
-    padding: 0 5px; /* Space between language links */
-    color: #ccc; /* Light gray, or choose a color that fits your theme */
-    font-size: 0.9em; /* Slightly smaller than main nav links */
+    padding: 0 5px;
+    color: #ccc;
+    font-size: 0.9em;
 }
 
 .language-switcher a:hover {
-    color: #fff; /* White or a highlight color on hover */
+    color: #fff;
     text-decoration: underline;
 }
 
 .language-switcher a.lang-active {
     font-weight: bold;
-    color: #fff; /* White or a distinct color for the active language */
+    color: #fff;
     cursor: default;
 }
 
@@ -733,7 +733,7 @@ footer a:hover {
     }
     .language-switcher {
         margin-left: 0;
-        margin-top: 10px; /* Add some space above if nav items stack */
-        justify-content: center; /* Center switcher on smaller screens */
+        margin-top: 10px;
+        justify-content: center;
     }
 }
