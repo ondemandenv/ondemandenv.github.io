@@ -5,6 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Documentation - ONDEMANDENV.dev</title>
     <link rel="stylesheet" href="styles.css">
+    
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-HLWV6BZQE1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-HLWV6BZQE1');
+    </script>
     <!-- Basic styling for documentation page -->
     <style>
         /* Main layout */
@@ -136,9 +145,11 @@
             <li><a href="mailto:contacts@ondemandenv.dev">Request Demo</a></li>
         </ul>
         <div class="language-switcher">
-            <a href="documentation.html" class="lang-active">English</a> |
-            <a href="ja/documentation.html">日本語</a> |
-            <a href="zh-TW/documentation.html">繁體中文</a>
+            <select onchange="window.location.href=this.value;">
+                <option value="documentation.html" selected>English</option>
+                <option value="ja/documentation.html">日本語</option>
+                <option value="zh-TW/documentation.html">繁體中文</option>
+            </select>
         </div>
     </nav>
 </header>

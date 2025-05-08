@@ -5,6 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Articles - ONDEMANDENV.dev</title>
     <link rel="stylesheet" href="styles.css">
+    
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-HLWV6BZQE1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-HLWV6BZQE1');
+    </script>
     <style>
         /* Basic styling for articles list */
         .articles-list { list-style: none; padding-left: 0; }
@@ -28,9 +37,11 @@
             <li><a href="mailto:contacts@ondemandenv.dev">Request Demo</a></li>
         </ul>
         <div class="language-switcher">
-            <a href="articles.html" class="lang-active">English</a> | 
-            <a href="ja/articles.html">日本語</a> | 
-            <a href="zh-TW/articles.html">繁體中文</a>
+            <select onchange="window.location.href=this.value;">
+                <option value="articles.html" selected>English</option>
+                <option value="ja/articles.html">日本語</option>
+                <option value="zh-TW/articles.html">繁體中文</option>
+            </select>
         </div>
     </nav>
 </header>
@@ -41,55 +52,17 @@
 
     <ul class="articles-list">
         <li>
-            <h3><a href="https://www.linkedin.com/pulse/fragmentation-trap-how-yaml-centric-gitops-mentality-hindering-yang-ufaje/">The Fragmentation Trap: How YAML/Container-Centric GitOps are Hindering Cloud-Native Evolution and Breed Organizational inefficiencies</a></h3>
+            <h3><a href="https://www.linkedin.com/pulse/fragmentation-trap-how-yaml-centric-gitops-mentality-hindering-yang-ufaje/">The Fragmentation Trap: How YAML/Container-Centric GitOps are Hindering Cloud-Native Evolution and Breed Organizational inefficiencies</a> <a href="articles/fragmentation-trap.html">[Local Copy]</a></h3>
             <p>Analyzes how prevalent YAML-centric GitOps practices lead to fragmentation, complexity, and friction, hindering true cloud-native progress.</p>
         </li>
         <li>
-            <h3><a href="https://www.linkedin.com/pulse/from-fragmented-tools-unified-stacks-embracing-cloud-gary-yang-zfjpe">Embracing Application-Centric Infrastructure in the Cloud 1</a></h3>
+            <h3><a href="https://www.linkedin.com/pulse/from-fragmented-tools-unified-stacks-embracing-cloud-gary-yang-zfjpe">Embracing Application-Centric Infrastructure in the Cloud 1</a> <a href="articles/app-centric-infra1.html">[Local Copy]</a></h3>
             <p>Introduces the concept of Application-Centric Infrastructure, contrasting CloudFormation and Kubernetes philosophies and advocating for managing vertical slices.</p>
         </li>
         <li>
-            <h3><a href="https://www.linkedin.com/pulse/embracing-application-centric-infrastructure-cloud-2-gary-yang-6jzje/">Embracing Application-Centric Infrastructure in the Cloud 2</a></h3>
+            <h3><a href="https://www.linkedin.com/pulse/embracing-application-centric-infrastructure-cloud-2-gary-yang-6jzje/">Embracing Application-Centric Infrastructure in the Cloud 2</a> <a href="articles/app-centric-infra2.html">[Local Copy]</a></h3>
             <p>Discusses the limitations of the AWS CDK EKS module, particularly `Cluster.addManifest`, in practical, shared, multi-account EKS scenarios.</p>
         </li>
         <li>
-            <h3><a href="https://www.linkedin.com/pulse/embracing-application-centric-infrastructure-cloud-3-power-gary-yang-3ziqe/">Implementing Application-Centricity Part 3: The Power of Declarative Contracts and Platform Abstraction</a></h3>
-            <p>Explains how ONDEMANDENV uses `contractsLib` and independent `Envers` to enable true ACI, contrast traditional silos, and provide powerful debugging capabilities via environment comparison.</p>
-        </li>
-         <li>
-            <h3><a href="https://www.linkedin.com/pulse/entanglement-complexity-fragmentation-inconsistency-ambiguity-yang-pqohe">The Entanglement of Complexity: Fragmentation, Inconsistency, and Ambiguity in Modern SDLC/DevOps</a></h3>
-            <p>Explores the interconnected challenges of fragmentation, environment inconsistency ("snowflaking"), and ambiguity in modern software development and operations.</p>
-        </li>
-         <li>
-            <h3><a href="https://www.linkedin.com/pulse/abstracting-offloading-infrastructure-transforming-software-gary-yang-murpe">Abstracting and Offloading Infrastructure: Transforming the Software Development Lifecycle</a></h3>
-            <p>Highlights the benefits of abstracting infrastructure logic via IaC, enabling focus on business value and accelerating delivery.</p>
-        </li>
-        <li>
-            <h3><a href="https://www.linkedin.com/pulse/perils-distributed-monolith-why-monolithic-thinking-fails-gary-yang-ocfvc">The Perils of the Distributed Monolith: Why Monolithic Thinking Fails in Distributed Systems</a></h3>
-            <p>Examines the anti-pattern of applying monolithic thinking (synchronous calls, RDS reliance) to microservices, leading to distributed monoliths.</p>
-        </li>
-         <li>
-            <h3><a href="https://www.linkedin.com/pulse/operator-trap-why-sysadmin-led-sdlcs-stifle-agility-gary-yang-qlwxc">The Perilous Path: Operator-Led SDLC in the Age of Microservices</a></h3>
-            <p>Discusses the limitations of operator-led SDLC for microservices, focusing on source control and YAML configuration complexities.</p>
-        </li>
-         <li>
-            <h3><a href="https://www.linkedin.com/pulse/illusion-smoothness-how-oversimplified-technologies-mask-gary-yang-qohoc">The Illusion of Smoothness: How Oversimplified Technologies Mask Real Conflicts in Modern Software and kill innovation</a></h3>
-            <p>Compares how technologies like RDS transactions and YAML-centric GitOps can oversimplify and mask underlying business logic and configuration conflicts.</p>
-        </li>
-        <!--
-        <li>
-            <h3><a href="articles/odmd-arc.html">ONDEMANDENV Architecture Deep Dive</a></h3>
-            <p>Provides a detailed look into the core concepts and components of the ONDEMANDENV platform architecture.</p>
-        </li>
-        -->
-    </ul>
-
-</main>
-
-<footer>
-    <p>&copy; 2024 ONDEMANDENV.dev. All rights reserved.</p>
-    <!-- Add links to concepts, patterns, docs, articles if desired -->
-</footer>
-
-</body>
-</html> 
+            <h3><a href="https://www.linkedin.com/pulse/embracing-application-centric-infrastructure-cloud-3-power-gary-yang-3ziqe/">Implementing Application-Centricity Part 3: The Power of Declarative Contracts and Platform Abstraction</a> <a href="articles/app-centric-infra3.html">[Local Copy]</a></h3>
+            <p>Explains how ONDEMANDENV uses `contractsLib`

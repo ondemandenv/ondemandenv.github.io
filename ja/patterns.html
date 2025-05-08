@@ -147,16 +147,16 @@ const orderServiceDev = new OrderServiceEnver(this, 'OrderServiceDev', {
     </section>
 
     <section class="pattern-section" id="shared-eks">
-        <h2>Pattern: Deploying Applications to a Shared EKS Cluster</h2>
+        <h2>パターン：共有 EKS クラスターへのアプリケーションのデプロイ</h2>
         <div class="problem-statement">
-            <p><strong>Problem:</strong> A platform team manages shared EKS clusters in a dedicated account (`workspace0` or `eks-account`). Application teams need to deploy workloads securely onto these clusters from their own workspace accounts, requiring cluster details, cross-account IAM permissions (IRSA), and manifest deployment capabilities.</p>
+            <p><strong>問題：</strong> プラットフォームチームが専用アカウント（`workspace0`または`eks-account`）で共有EKSクラスターを管理しています。アプリケーションチームは、自身のワークスペースアカウントからこれらのクラスターにワークロードを安全にデプロイする必要があり、クラスターの詳細、クロスアカウントIAM権限（IRSA）、およびマニフェストデプロイ機能が必要です。</p>
         </div>
          <div class="solution-statement">
-            <p><strong>ONDEMANDENV Solution:</strong> Define the shared EKS cluster as a Platform Enver (`sharedEksProd`) publishing cluster details (OIDC ARN, Kubectl Role ARN) as `Products`. Application Envers (`myAppEksDev`) in workspace accounts consume these `Products`. The application's CDK stack uses the consumed OIDC ARN to define pod-specific IAM Roles (IRSA) in the application's account. The platform uses the consumed Kubectl Role ARN to assume permissions into the EKS cluster account and deploy the cdk8s-generated manifests defined within the application's CDK stack. This keeps infrastructure (IAM) and runtime (k8s) definitions together, managed atomically within the application Enver, while facilitating secure cross-account deployment.</p>
+            <p><strong>ONDEMANDENV の解決策：</strong> 共有EKSクラスターをプラットフォームEnver（`sharedEksProd`）として定義し、クラスターの詳細（OIDC ARN、Kubectl Role ARN）を`Products`として発行します。ワークスペースアカウントのアプリケーションEnver（`myAppEksDev`）はこれらの`Products`を消費します。アプリケーションのCDKスタックは、消費されたOIDC ARNを使用して、アプリケーションのアカウントにPod固有のIAMロール（IRSA）を定義します。プラットフォームは、消費されたKubectl Role ARNを使用してEKSクラスターアカウントへの権限を引き受け、アプリケーションのCDKスタック内で定義されたcdk8s生成のマニフェストをデプロイします。これにより、インフラストラクチャ（IAM）とランタイム（k8s）の定義を一緒に保ち、アプリケーションEnver内で原子的に管理しながら、安全なクロスアカウントデプロイメントを容易にします。</p>
         </div>
 
-        <h3>1. Define EKS Platform Enver (`contractsLib`)</h3>
-         <p>The platform team defines the EKS Enver, publishing necessary details within its single `Outputs` Product.</p>
+        <h3>1. EKS プラットフォーム Enver の定義 (`contractsLib`)</h3>
+         <p>プラットフォームチームはEKS Enverを定義し、単一の`Outputs` Product内で必要な詳細を発行します。</p>
         <pre><code class="language-typescript">// In MyOrgContracts.ts (contractsLib)
 import { OdmdBuild, OdmdEnverCdk, Product } from '@ondemandenv/odmd-contracts-base';
 // Assuming EksPlatformEnver extends OdmdEnverCdk
@@ -171,8 +171,8 @@ const sharedEksProd = new EksPlatformEnver(this, 'SharedEksProd', {
     outputsProduct: new Product(this, 'Outputs'), // Contains ClusterName, OidcArn, KubectlRoleArn etc.
 });</code></pre>
 
-         <h3>2. Define Application Enver Consuming EKS Details (`contractsLib`)</h3>
-         <p>The application team defines their Enver, consuming the `Outputs` Product from the EKS Enver.</p>
+         <h3>2. EKS 詳細を消費するアプリケーション Enver の定義 (`contractsLib`)</h3>
+         <p>アプリケーションチームは、EKS Enverからの`Outputs` Productを消費する自身のEnverを定義します。</p>
          <pre><code class="language-typescript">// In MyOrgContracts.ts (contractsLib)
 import { OdmdBuild, Consumer, Product } from '@ondemandenv/odmd-contracts-base';
 // Assuming MyAppEksEnver extends OdmdEnverCdk
@@ -190,8 +190,8 @@ const myAppEksDev = new MyAppEksEnver(this, 'MyAppEksDev', {
     appImageOutputsConsumer: new Consumer(this, 'AppImageOutputs', myAppImgEnver.outputsProduct),
 });</code></pre>
 
-        <h3>3. Implement Application CDK Stack (IAM + k8s Manifests)</h3>
-        <p>The application's CDK stack consumes the EKS outputs JSON, parses it, defines the app-specific IAM role, and the Kubernetes manifests.</p>
+        <h3>3. アプリケーション CDK スタックの実装 (IAM + k8s マニフェスト)</h3>
+        <p>アプリケーションのCDKスタックはEKS出力JSONを消費し、それを解析し、アプリケーション固有のIAMロールとKubernetesマニフェストを定義します。</p>
         <pre><code class="language-typescript">// Simplified example in my-app-repo/lib/app-eks-stack.ts
 import * as cdk from 'aws-cdk-lib';
 import * as iam from 'aws-cdk-lib/aws-iam';
