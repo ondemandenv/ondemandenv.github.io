@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frameworks in Flux: Rethinking Internal Architecture in the Age of Microservices - ONDEMANDENV.dev</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<header>
+    <nav>
+        <div class="logo">ONDEMANDENV.dev</div>
+        <ul>
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="../concepts.html">Core Concepts</a></li>
+            <li><a href="../patterns.html">Patterns & Use Cases</a></li>
+            <li><a href="../documentation.html">Documentation</a></li>
+            <li><a href="../articles.html">Articles</a></li>
+            <li><a href="https://github.com/ondemandenv" target="_blank">GitHub Org</a></li>
+            <li><a href="mailto:contacts@ondemandenv.dev">Request Demo</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main>
+    <article>
+        <h1>Frameworks in Flux: Rethinking Internal Architecture in the Age of Microservices</h1>
+        
+        <p>For years, robust application frameworks like Spring Boot (Java) and Express.js (Node.js) have been indispensable tools for building complex software systems. In monolithic architectures, they provide essential structure, manage cross-cutting concerns, and tame the inherent complexity of large, single-deployment codebases. However, the rise of microservices has fundamentally shifted architectural paradigms towards distributed systems. Recognizing the inherently asynchronous nature of robust distributed systems, modern microservice architectures increasingly favor event-driven communication and leverage data streaming platforms and infrastructure-level policies.</p>
+
+        <h2>Section 1: The Monolithic World - Frameworks as Essential Scaffolding</h2>
+        <p>Monolithic applications, where all functionality resides within a single codebase and deployment unit, face significant challenges as they grow: increasing complexity, tight coupling between components, and difficulties in scaling or adopting new technologies for specific parts of the application.</p>
+
+        <h2>Section 2: The Microservice Paradigm - Embracing Asynchronicity and Externalization</h2>
+        <p>Microservice architecture tackles complexity by decomposing the application. To build resilient, decoupled systems and avoid the pitfalls of synchronous, tightly-coupled distributed monoliths, the focus shifts significantly:</p>
+
+        <h3>Event-Driven Communication & Data Streaming: The Resilient Backbone</h3>
+        <p>The preferred approach for inter-service communication in robust microservice architectures is asynchronous, using events. This inherently promotes decoupling and resilience:</p>
+        <ul>
+            <li>Core Technologies: Platforms like Apache Kafka, cloud-native streams (AWS Kinesis, AWS DynamoDB Streams, Google Pub/Sub, Azure Event Hubs) become central communication fabrics.</li>
+            <li>Inherent Resilience: These platforms provide durability by persisting events. If a consuming service is temporarily unavailable, events are retained and can be processed later.</li>
+            <li>Decoupling & Scalability: Services publish events without knowing the consumers, and consumers process events independently.</li>
+        </ul>
+
+        <h3>The API Gateway: The Controlled Synchronous Entry Point</h3>
+        <p>While async is preferred internally, systems often need synchronous interfaces for external clients (web/mobile apps). An API Gateway serves this purpose:</p>
+        <ul>
+            <li>External Interface: Manages incoming client requests, routing them to the appropriate internal service or potentially triggering an initial event.</li>
+            <li>Edge Functions: Handles Authentication (JWT validation, etc.), basic Authorization, rate limiting, SSL termination – tasks best kept at the edge.</li>
+        </ul>
+
+        <h3>Centralized Observability with OpenTelemetry</h3>
+        <p>Understanding behavior across distributed services is crucial. Instead of relying on framework-specific logging or metrics within each service, the industry is standardizing on OpenTelemetry (OTel):</p>
+        <ul>
+            <li>Standardization: OTel provides vendor-neutral APIs, SDKs, and tools for generating and collecting telemetry data (traces, metrics, logs) across all services.</li>
+            <li>Externalization: This data is exported to centralized observability backends for analysis across service boundaries.</li>
+        </ul>
+
+        <h2>Conclusion</h2>
+        <p>The evolution from monoliths to microservices is not just about breaking code apart; it's about embracing the principles of distributed systems, primarily favoring asynchronous, event-driven communication for resilience and decoupling. By leveraging robust data streaming platforms for inter-service communication and inherent resilience, handling security through infrastructure policies, utilizing API Gateways for controlled synchronous access, and standardizing observability with OpenTelemetry, we externalize many concerns previously managed internally by large application frameworks.</p>
+    </article>
+</main>
+</body>
+</html> 
