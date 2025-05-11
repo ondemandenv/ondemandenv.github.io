@@ -5,20 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Documentation - ONDEMANDENV.dev</title>
     <link rel="stylesheet" href="styles.css">
-    
+
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-HLWV6BZQE1"></script>
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-HLWV6BZQE1');
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+        gtag('config', 'G-HLWV6BZQE1');
     </script>
     <!-- Basic styling for documentation page -->
     <style>
         /* Main layout */
-        body { display: flex; flex-direction: column; min-height: 100vh; }
-        .docs-container { display: flex; flex-grow: 1; }
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .docs-container {
+            display: flex;
+            flex-grow: 1;
+        }
 
         /* Sidebar (Table of Contents) */
         .docs-sidebar {
@@ -32,25 +44,30 @@
             border-right: 1px solid var(--border-color);
             background-color: #fdfdfd; /* Slightly off-white background */
         }
+
         .docs-sidebar h2 {
             font-size: 1.2rem;
             margin-bottom: 1rem;
             color: var(--primary-color);
             padding-left: 1rem; /* Indent heading */
         }
+
         .docs-sidebar ul {
             list-style: none;
             margin: 0;
             padding: 0;
         }
+
         .docs-sidebar ul ul { /* Nested lists for sub-sections */
-           padding-left: 1.5rem; /* Indent sub-items */
-           margin-top: 0.25rem;
-           margin-bottom: 0.5rem;
+            padding-left: 1.5rem; /* Indent sub-items */
+            margin-top: 0.25rem;
+            margin-bottom: 0.5rem;
         }
+
         .docs-sidebar li {
             margin-bottom: 0.25rem;
         }
+
         .docs-sidebar a {
             display: block;
             text-decoration: none;
@@ -60,10 +77,12 @@
             font-size: 0.9rem;
             transition: background-color 0.2s ease, color 0.2s ease;
         }
+
         .docs-sidebar a:hover {
             background-color: #f0f0f0;
             color: var(--primary-color);
         }
+
         /* Consider adding an 'active' state later with JS if needed */
 
         /* Main Content Area */
@@ -71,46 +90,167 @@
             flex-grow: 1; /* Allow content to take remaining space */
             padding: 2rem 3rem; /* Add padding around content */
             max-width: 900px; /* Optional: Limit content width for readability */
-            margin-left: auto;  /* Center the content area if max-width is set */
+            margin-left: auto; /* Center the content area if max-width is set */
             margin-right: auto; /* Center the content area if max-width is set */
         }
 
         /* Doc Section Styling (minor adjustments might be needed) */
         .doc-section {
-             margin-bottom: 3rem;
-             padding-bottom: 1.5rem;
-             border-bottom: 1px solid var(--border-color);
-             scroll-margin-top: 70px; /* Adjust offset for sticky header */
-         }
-        .doc-section:last-child { border-bottom: none; } /* Remove border from last section */
+            margin-bottom: 3rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            scroll-margin-top: 70px; /* Adjust offset for sticky header */
+        }
 
-        .doc-section h1 { font-size: 2.5rem; margin-bottom: 1.5rem; color: var(--text-color); } /* Specific H1 style for content */
-        .doc-section h2 { font-size: 2rem; margin-bottom: 1rem; color: var(--primary-color); padding-top: 1rem; border-top: 1px dashed var(--border-color); } /* Add top border to separate sections visually */
-        .doc-section h2:first-of-type { border-top: none; padding-top: 0;} /* No top border for the very first H2 */
+        .doc-section:last-child {
+            border-bottom: none;
+        }
 
-        .doc-section h3 { font-size: 1.5rem; margin-top: 1.5rem; margin-bottom: 0.75rem; color: var(--secondary-color); }
-        .doc-section h4 { font-size: 1.1rem; margin-top: 1.25rem; margin-bottom: 0.5rem; font-weight: bold; }
-        .doc-section p { margin-bottom: 1rem; line-height: 1.7; }
-        .doc-section ul { list-style: disc; margin-left: 1.5rem; margin-bottom: 1rem; }
-        .doc-section ol { list-style: decimal; margin-left: 1.5rem; margin-bottom: 1rem; }
-        .doc-section li { margin-bottom: 0.5rem; }
-        .doc-section pre { background-color: #f8f9fa; border: 1px solid var(--border-color); padding: 1rem; border-radius: 5px; overflow-x: auto; margin-bottom: 1rem; font-size: 0.9em;}
-        .doc-section code { font-family: monospace; font-size: 0.9em; }
-        .doc-section pre code { background-color: transparent; padding: 0; }
-        .doc-section strong { font-weight: bold; }
-        .doc-section .inline-code { background-color: #f0f0f0; padding: 0.1em 0.4em; border-radius: 3px; font-family: monospace; font-size: 0.9em; color: #343a40; }
-        .setup-architecture { margin: 2rem auto; text-align: center; max-width: 100%; /* Let it fill content area width */ padding: 1rem; background: #f8f9fa; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-        .setup-image { max-width: 100%; height: auto; border: 1px solid var(--border-color); }
-        .setup-caption { padding-top: 1rem; font-size: 0.9rem; color: #555; }
-        .repo-link { display: inline-block; background-color: var(--primary-color); color: white; padding: 0.5rem 1rem; text-decoration: none; border-radius: 5px; margin-top: 0.5rem; }
-        .repo-link:hover { background-color: var(--secondary-color); }
+        /* Remove border from last section */
+
+        .doc-section h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-color);
+        }
+
+        /* Specific H1 style for content */
+        .doc-section h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+            padding-top: 1rem;
+            border-top: 1px dashed var(--border-color);
+        }
+
+        /* Add top border to separate sections visually */
+        .doc-section h2:first-of-type {
+            border-top: none;
+            padding-top: 0;
+        }
+
+        /* No top border for the very first H2 */
+
+        .doc-section h3 {
+            font-size: 1.5rem;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            color: var(--secondary-color);
+        }
+
+        .doc-section h4 {
+            font-size: 1.1rem;
+            margin-top: 1.25rem;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        .doc-section p {
+            margin-bottom: 1rem;
+            line-height: 1.7;
+        }
+
+        .doc-section ul {
+            list-style: disc;
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .doc-section ol {
+            list-style: decimal;
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .doc-section li {
+            margin-bottom: 0.5rem;
+        }
+
+        .doc-section pre {
+            background-color: #f8f9fa;
+            border: 1px solid var(--border-color);
+            padding: 1rem;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 1rem;
+            font-size: 0.9em;
+        }
+
+        .doc-section code {
+            font-family: monospace;
+            font-size: 0.9em;
+        }
+
+        .doc-section pre code {
+            background-color: transparent;
+            padding: 0;
+        }
+
+        .doc-section strong {
+            font-weight: bold;
+        }
+
+        .doc-section .inline-code {
+            background-color: #f0f0f0;
+            padding: 0.1em 0.4em;
+            border-radius: 3px;
+            font-family: monospace;
+            font-size: 0.9em;
+            color: #343a40;
+        }
+
+        .setup-architecture {
+            margin: 2rem auto;
+            text-align: center;
+            max-width: 100%; /* Let it fill content area width */
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .setup-image {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid var(--border-color);
+        }
+
+        .setup-caption {
+            padding-top: 1rem;
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+        .repo-link {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 0.5rem;
+        }
+
+        .repo-link:hover {
+            background-color: var(--secondary-color);
+        }
 
         /* Footer adjustment */
-        footer { width: 100%; text-align: center; padding: 1rem 0; margin-top: auto; background-color: #f8f9fa; border-top: 1px solid var(--border-color);}
+        footer {
+            width: 100%;
+            text-align: center;
+            padding: 1rem 0;
+            margin-top: auto;
+            background-color: #f8f9fa;
+            border-top: 1px solid var(--border-color);
+        }
 
         /* Responsive: Hide sidebar on smaller screens (example) */
         @media (max-width: 768px) {
-            .docs-container { flex-direction: column; }
+            .docs-container {
+                flex-direction: column;
+            }
+
             .docs-sidebar {
                 width: 100%;
                 height: auto; /* Allow height to adjust */
@@ -120,13 +260,19 @@
                 padding: 1rem;
                 overflow-y: visible;
             }
+
             .docs-content-area {
                 padding: 1.5rem; /* Reduce padding */
-                 margin-left: 0;
-                 margin-right: 0;
-                 max-width: none; /* Allow full width */
+                margin-left: 0;
+                margin-right: 0;
+                max-width: none; /* Allow full width */
             }
-            .doc-section { scroll-margin-top: 60px; } /* Adjust scroll margin if header is still fixed */
+
+            .doc-section {
+                scroll-margin-top: 60px;
+            }
+
+            /* Adjust scroll margin if header is still fixed */
         }
 
     </style>
@@ -189,9 +335,10 @@
 
     <main class="docs-content-area">
         <section class="doc-section" id="top"> <!-- Added id=top for potential skip link -->
-             <h1>Documentation & Getting Started</h1>
-             <p>This documentation guides you through setting up and using ONDEMANDENV, providing the necessary details to get the platform operational and integrate your services.</p>
-         </section>
+            <h1>Documentation & Getting Started</h1>
+            <p>This documentation guides you through setting up and using ONDEMANDENV, providing the necessary details
+                to get the platform operational and integrate your services.</p>
+        </section>
 
         <section class="doc-section" id="setup">
             <h2>Installation & Setup</h2>
@@ -202,23 +349,34 @@
             <h4>AWS Environment:</h4>
             <ul>
                 <li>
-                    <strong>AWS Organization:</strong> Set up an <a href="https://aws.amazon.com/organizations/" target="_blank" rel="noopener noreferrer">AWS Organization</a>.
+                    <strong>AWS Organization:</strong> Set up an <a href="https://aws.amazon.com/organizations/"
+                                                                    target="_blank" rel="noopener noreferrer">AWS
+                    Organization</a>.
                 </li>
                 <li>
                     <strong>Two AWS Accounts:</strong> Within your organization, designate or create:
                     <ul>
-                        <li>A <strong>Central Account</strong>: This is where the core ONDEMANDENV platform engine will run.</li>
-                        <li>A <strong>Workspace Account (<span class="inline-code">workspace0</span>)</strong>: The initial target for deployments, including the mandatory <span class="inline-code">contractsLib</span> enver.</li>
+                        <li>A <strong>Central Account</strong>: This is where the core ONDEMANDENV platform engine will
+                            run.
+                        </li>
+                        <li>A <strong>Workspace Account (<span class="inline-code">workspace0</span>)</strong>: The
+                            initial target for deployments, including the mandatory <span class="inline-code">contractsLib</span>
+                            enver.
+                        </li>
                     </ul>
                 </li>
                 <li>
-                    <strong>Hosted Zone:</strong> Create a public hosted zone in Route 53 within the <strong>Central Account</strong>. Choose a suitable domain name, for example: <span class="inline-code">&lt;your-chosen-name&gt;.root.ondemandenv.link</span>. Note this name, as you will need it later.
+                    <strong>Hosted Zone:</strong> Create a public hosted zone in Route 53 within the <strong>Central
+                    Account</strong>. Choose a suitable domain name, for example: <span class="inline-code">&lt;your-chosen-name&gt;.root.ondemandenv.link</span>.
+                    Note this name, as you will need it later.
                 </li>
                 <li>
-                    <strong>Region:</strong> Decide on the primary AWS region (e.g., <span class="inline-code">us-east-1</span>). All initial setup resources should be in this region.
+                    <strong>Region:</strong> Decide on the primary AWS region (e.g., <span
+                        class="inline-code">us-east-1</span>). All initial setup resources should be in this region.
                 </li>
                 <li>
-                    <strong>AWS CDK Bootstrap:</strong> Bootstrap CDK in <strong>both</strong> the Central Account and the <span class="inline-code">workspace0</span> account for your chosen region. Run:
+                    <strong>AWS CDK Bootstrap:</strong> Bootstrap CDK in <strong>both</strong> the Central Account and
+                    the <span class="inline-code">workspace0</span> account for your chosen region. Run:
                     <pre><code class="language-bash"># In Central Account context
 aws configure set region YOUR_REGION
 cdk bootstrap aws://CENTRAL_ACCOUNT_ID/YOUR_REGION
@@ -228,34 +386,64 @@ aws configure set region YOUR_REGION
 cdk bootstrap aws://WORKSPACE0_ACCOUNT_ID/YOUR_REGION</code></pre>
                 </li>
                 <li>
-                    <strong>Cross-Account Trust:</strong> Configure the <span class="inline-code">workspace0</span> account to trust the Central Account. Create an IAM role in <span class="inline-code">workspace0</span> (e.g., <span class="inline-code">OndemandenvDeployerRole</span>) with AdministratorAccess (or a more restricted policy based on least privilege later) that the Central Account can assume. The trust policy should explicitly allow the role ARN that the ONDEMANDENV platform will use in the Central Account (this will be defined by the platform template).
+                    <strong>Cross-Account Trust:</strong> Configure the <span class="inline-code">workspace0</span>
+                    account to trust the Central Account. Create an IAM role in <span
+                        class="inline-code">workspace0</span> (e.g., <span
+                        class="inline-code">OndemandenvDeployerRole</span>) with AdministratorAccess (or a more
+                    restricted policy based on least privilege later) that the Central Account can assume. The trust
+                    policy should explicitly allow the role ARN that the ONDEMANDENV platform will use in the Central
+                    Account (this will be defined by the platform template).
                 </li>
-                 <li>
-                    <strong>GitHub App Private Key Secret:</strong> Create a secret in AWS Secrets Manager within the <strong>Central Account</strong>. Choose a specific name for this secret (e.g., <span class="inline-code">ondemandenv/github-app-private-key</span>). You will store your GitHub App's private key here in the next step. Note this secret name (<span class="inline-code">ghAppPrivateKeySecretName</span>). The ONDEMANDENV platform template will require this name.
-                 </li>
+                <li>
+                    <strong>GitHub App Private Key Secret:</strong> Create a secret in AWS Secrets Manager within the
+                    <strong>Central Account</strong>. Choose a specific name for this secret (e.g., <span
+                        class="inline-code">ondemandenv/github-app-private-key</span>). You will store your GitHub App's
+                    private key here in the next step. Note this secret name (<span class="inline-code">ghAppPrivateKeySecretName</span>).
+                    The ONDEMANDENV platform template will require this name.
+                </li>
             </ul>
 
             <h4>GitHub Environment:</h4>
             <ul>
-                 <li>
+                <li>
                     <strong>GitHub Organization:</strong> Ensure you have a GitHub Organization set up.
-                 </li>
-                 <li>
+                </li>
+                <li>
                     <strong>Private GitHub App:</strong> Create a new, private GitHub App owned by your organization.
                     <ul>
                         <li>Download the generated private key (.pem file).</li>
-                        <li><strong>Important:</strong> Store the contents of this private key file securely as a new version in the AWS Secrets Manager secret (<span class="inline-code">ghAppPrivateKeySecretName</span>) you created in the Central Account.</li>
-                        <li>Configure necessary permissions for the App (refer to ONDEMANDENV documentation for specifics, typically includes read access to code, metadata, and write access for issues, pull requests, workflows, checks, statuses, deployments).</li>
+                        <li><strong>Important:</strong> Store the contents of this private key file securely as a new
+                            version in the AWS Secrets Manager secret (<span class="inline-code">ghAppPrivateKeySecretName</span>)
+                            you created in the Central Account.
+                        </li>
+                        <li>Configure necessary permissions for the App (refer to ONDEMANDENV documentation for
+                            specifics, typically includes read access to code, metadata, and write access for issues,
+                            pull requests, workflows, checks, statuses, deployments).
+                        </li>
                         <li>Leave the Webhook URL blank for now; you will update this after deploying the platform.</li>
-                        <li>Install this GitHub App on the specific repository you intend to use for your `contractsLib`.</li>
-            </ul>
-                 </li>
-                 <li>
-                    <strong>`contractsLib` Repository:</strong> Create a repository within your GitHub Organization to define your service contracts. This repository will contain your ONDEMANDENV build and enver definitions.
+                        <li>Install this GitHub App on the specific repository you intend to use for your
+                            `contractsLib`.
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>`contractsLib` Repository:</strong> Create a repository within your GitHub Organization to
+                    define your service contracts. This repository will contain your ONDEMANDENV build and enver
+                    definitions.
                     <ul>
-                        <li>You can use <a href="https://github.com/ondemandenv/odmd-contracts-sandbox/blob/main/lib/repos/_contracts/odmd-build-contracts-sbx.ts" target="_blank" rel="noopener noreferrer">`ondemandenv/odmd-contracts-sandbox`</a> as an example structure.</li>
-                        <li>Ensure your repository includes necessary dependencies (like `@ondemandenv/odmd-contracts-base`) and build scripts (e.g., in `package.json`) to compile your TypeScript definitions.</li>
-                        <li>You will need to package your compiled `contractsLib` definition using <span class="inline-code">npm pack</span>. This generates a <span class="inline-code">.tgz</span> file.</li>
+                        <li>You can use <a
+                                href="https://github.com/ondemandenv/odmd-contracts-sandbox/blob/main/lib/repos/_contracts/odmd-build-contracts-sbx.ts"
+                                target="_blank" rel="noopener noreferrer">`ondemandenv/odmd-contracts-sandbox`</a> as an
+                            example structure.
+                        </li>
+                        <li>Ensure your repository includes necessary dependencies (like
+                            `@ondemandenv/odmd-contracts-base`) and build scripts (e.g., in `package.json`) to compile
+                            your TypeScript definitions.
+                        </li>
+                        <li>You will need to package your compiled `contractsLib` definition using <span
+                                class="inline-code">npm pack</span>. This generates a <span
+                                class="inline-code">.tgz</span> file.
+                        </li>
                     </ul>
                 </li>
             </ul>
@@ -264,18 +452,24 @@ cdk bootstrap aws://WORKSPACE0_ACCOUNT_ID/YOUR_REGION</code></pre>
             <ol>
                 <li>
                     <strong>Submit Information to ONDEMANDENV Service:</strong>
-                    You will need to provide the following information to the ONDEMANDENV service team (e.g., via email or a setup portal):
+                    You will need to provide the following information to the ONDEMANDENV service team (e.g., via email
+                    or a setup portal):
                     <ul>
-                        <li>Your packaged <span class="inline-code">contractsLib</span> definition file (<span class="inline-code">.tgz</span>).</li>
-                        <li>The name of the hosted zone you created (e.g., <span class="inline-code">&lt;your-chosen-name&gt;.root.ondemandenv.link</span>).</li>
+                        <li>Your packaged <span class="inline-code">contractsLib</span> definition file (<span
+                                class="inline-code">.tgz</span>).
+                        </li>
+                        <li>The name of the hosted zone you created (e.g., <span class="inline-code">&lt;your-chosen-name&gt;.root.ondemandenv.link</span>).
+                        </li>
                         <li>Your AWS Central Account ID.</li>
-                        <li>The name you chose for the GitHub App private key secret (<span class="inline-code">ghAppPrivateKeySecretName</span>).</li>
+                        <li>The name you chose for the GitHub App private key secret (<span class="inline-code">ghAppPrivateKeySecretName</span>).
+                        </li>
                         <li>The GitHub App ID.</li>
                     </ul>
                 </li>
                 <li>
                     <strong>Receive and Deploy Platform Template:</strong>
-                    The ONDEMANDENV service team will use this information to prepare the core infrastructure template. They will send back a CloudFormation template file (e.g., <span class="inline-code">odmd--central-artifact.template.json</span>).
+                    The ONDEMANDENV service team will use this information to prepare the core infrastructure template.
+                    They will send back a CloudFormation template file (e.g., <span class="inline-code">odmd--central-artifact.template.json</span>).
                     Deploy this template into your <strong>Central Account</strong> using the AWS Console or CLI.
                     <pre><code class="language-bash">aws cloudformation deploy \
     --template-file path/to/odmd--central-artifact.template.json \
@@ -285,37 +479,77 @@ cdk bootstrap aws://WORKSPACE0_ACCOUNT_ID/YOUR_REGION</code></pre>
                     <em>(Note: Parameter overrides might be required depending on the template structure.)</em>
                     <p><em><strong>Important Notes on Resource Sharing:</strong></em></p>
                     <ul>
-                        <li><em><strong>S3 Bucket for Artifacts:</strong> This stack will provision or configure an S3 bucket. This bucket is used by the platform (and potentially your CI/CD workflows) to store deployment artifacts like CloudFormation templates. Ensure its policy allows access as needed by the ONDEMANDENV service backend.</em></li>
-                        <li><em><strong>SQS Queue for Notifications:</strong> The template configures integration with an SQS queue provided by the ONDEMANDENV service. Your deployed stack resources (e.g., Lambda functions) will poll or be triggered by messages from this queue to receive notifications or commands from the platform.</em></li>
+                        <li><em><strong>S3 Bucket for Artifacts:</strong> This stack will provision or configure an S3
+                            bucket. This bucket is used by the platform (and potentially your CI/CD workflows) to store
+                            deployment artifacts like CloudFormation templates. Ensure its policy allows access as
+                            needed by the ONDEMANDENV service backend.</em></li>
+                        <li><em><strong>SQS Queue for Notifications:</strong> The template configures integration with
+                            an SQS queue provided by the ONDEMANDENV service. Your deployed stack resources (e.g.,
+                            Lambda functions) will poll or be triggered by messages from this queue to receive
+                            notifications or commands from the platform.</em></li>
                     </ul>
                 </li>
-                 <li>
+                <li>
                     <strong>Configure GitHub App Webhook:</strong>
                     <ul>
-                        <li>Wait for the CloudFormation stack (<span class="inline-code">odmd-central-platform</span> or similar name based on the template) to complete deployment successfully.</li>
-                        <li>Within the stack outputs, find the output named <span class="inline-code">GithubWebHookUrl</span> (or similar).</li>
+                        <li>Wait for the CloudFormation stack (<span class="inline-code">odmd-central-platform</span> or
+                            similar name based on the template) to complete deployment successfully.
+                        </li>
+                        <li>Within the stack outputs, find the output named <span
+                                class="inline-code">GithubWebHookUrl</span> (or similar).
+                        </li>
                         <li>Go back to your GitHub App settings page on GitHub.</li>
                         <li>Paste this URL into the "Webhook URL" field.</li>
-                        <li>Configure a Webhook secret if required by the platform template and enter it in the GitHub App settings.</li>
+                        <li>Configure a Webhook secret if required by the platform template and enter it in the GitHub
+                            App settings.
+                        </li>
                         <li>Ensure the webhook is set to "Active".</li>
-                     </ul>
+                    </ul>
                 </li>
             </ol>
-            <p>Once these steps are complete, the core ONDEMANDENV platform should be running in your Central Account and connected to your GitHub App. You can then proceed to the <a href="#core-workflow">Core Workflow</a> section to learn how to define and deploy your services.</p>
+            <p>Once these steps are complete, the core ONDEMANDENV platform should be running in your Central Account
+                and connected to your GitHub App. You can then proceed to the <a href="#core-workflow">Core Workflow</a>
+                section to learn how to define and deploy your services.</p>
         </section>
 
         <section class="doc-section" id="core-workflow">
             <h2>Core Workflow & How-To Guide</h2>
-            <p>Once the platform is running, here's the detailed workflow for defining, implementing, and managing a service Enver, incorporating common how-to tasks:</p>
+            <p>Once the platform is running, here's the detailed workflow for defining, implementing, and managing a
+                service Enver, incorporating common how-to tasks:</p>
 
             <h3 id="define-in-contractslib">1. Define a New Service & its Envers in `contractsLib`</h3>
-            <p>Architecture, dependencies, and target environments are defined centrally. Edit your organization's <span class="inline-code">contractsLib</span> repository (e.g., <span class="inline-code">&lt;your-org&gt;/my-contracts-lib-repo</span>).</p>
+            <p>Architecture, dependencies, and target environments are defined centrally. Edit your organization's <span
+                    class="inline-code">contractsLib</span> repository (e.g., <span class="inline-code">&lt;your-org&gt;/my-contracts-lib-repo</span>).
+            </p>
             <h4>Key Actions:</h4>
             <ul>
-                <li><strong>Define Build Configuration (<span class="inline-code">OdmdBuild&lt;T&gt;</span>):</strong> For each type of Enver (CDK, Cmd, Docker) associated with a source repository, create an instance of <span class="inline-code">OdmdBuild&lt;T&gt;</span> (where T is <span class="inline-code">OdmdEnverCdk</span>, <span class="inline-code">OdmdEnverCmd</span>, etc.). Provide the <span class="inline-code">githubRepoAlias</span>, <span class="inline-code">buildType</span>, and any source paths/commands.</li>
-                <li><strong>Define Enver(s) (<span class="inline-code">OdmdEnverCdk</span>, etc.):</strong> For each specific branch/tag you want to manage, create an instance of the appropriate Enver class (e.g., <span class="inline-code">new OdmdEnverCdk(...)</span>). Link it to the corresponding <span class="inline-code">OdmdBuild</span> instance. Specify the target AWS account alias (<span class="inline-code">targetAccountAlias</span>) and region (<span class="inline-code">targetRegion</span>). Use the Enver construct ID (e.g., 'OrderManagerDev') to represent the logical environment (often related to the branch name). Mark production/staging Envers as immutable (<span class="inline-code">immutable: true</span>) if they correspond to Git tags.</li>
-                <li><strong>Declare Single Product (Convention):</strong> Within the Enver definition, declare <strong>one primary <span class="inline-code">Product</span></strong> (conventionally named <span class="inline-code">'Outputs'</span>) that will contain all shared outputs as a structured value (usually JSON). Example: <span class="inline-code">outputsProduct: new Product(this, 'Outputs')</span>.</li>
-                <li><strong>Declare Consumers (How-To: Consume a Product):</strong> Within the Enver definition, declare dependencies on Products from other Envers using <span class="inline-code">new Consumer(this, 'LocalConsumerName', otherEnver.outputsProduct, '{ /* Optional Default JSON */ }')</span>. The 'LocalConsumerName' is how your CDK code will reference this consumed value (typically a JSON string). Ensure Tag Envers only consume from other Tag Envers. Default values (provided as a JSON string) can optionally be provided.</li>
+                <li><strong>Define Build Configuration (<span class="inline-code">OdmdBuild&lt;T&gt;</span>):</strong>
+                    For each type of Enver (CDK, Cmd, Docker) associated with a source repository, create an instance of
+                    <span class="inline-code">OdmdBuild&lt;T&gt;</span> (where T is <span class="inline-code">OdmdEnverCdk</span>,
+                    <span class="inline-code">OdmdEnverCmd</span>, etc.). Provide the <span class="inline-code">githubRepoAlias</span>,
+                    <span class="inline-code">buildType</span>, and any source paths/commands.
+                </li>
+                <li><strong>Define Enver(s) (<span class="inline-code">OdmdEnverCdk</span>, etc.):</strong> For each
+                    specific branch/tag you want to manage, create an instance of the appropriate Enver class (e.g.,
+                    <span class="inline-code">new OdmdEnverCdk(...)</span>). Link it to the corresponding <span
+                            class="inline-code">OdmdBuild</span> instance. Specify the target AWS account alias (<span
+                            class="inline-code">targetAccountAlias</span>) and region (<span class="inline-code">targetRegion</span>).
+                    Use the Enver construct ID (e.g., 'OrderManagerDev') to represent the logical environment (often
+                    related to the branch name). Mark production/staging Envers as immutable (<span class="inline-code">immutable: true</span>)
+                    if they correspond to Git tags.
+                </li>
+                <li><strong>Declare Single Product (Convention):</strong> Within the Enver definition, declare <strong>one
+                    primary <span class="inline-code">Product</span></strong> (conventionally named <span
+                        class="inline-code">'Outputs'</span>) that will contain all shared outputs as a structured value
+                    (usually JSON). Example: <span
+                            class="inline-code">outputsProduct: new Product(this, 'Outputs')</span>.
+                </li>
+                <li><strong>Declare Consumers (How-To: Consume a Product):</strong> Within the Enver definition, declare
+                    dependencies on Products from other Envers using <span class="inline-code">new Consumer(this, 'LocalConsumerName', otherEnver.outputsProduct, '{ /* Optional Default JSON */ }')</span>.
+                    The 'LocalConsumerName' is how your CDK code will reference this consumed value (typically a JSON
+                    string). Ensure Tag Envers only consume from other Tag Envers. Default values (provided as a JSON
+                    string) can optionally be provided.
+                </li>
             </ul>
             <h4>Example (<span class="inline-code">my-org-contracts.ts</span>):</h4>
             <pre><code class="language-typescript">// Example within your contractsLib repository (e.g., my-org-contracts.ts)
@@ -398,15 +632,30 @@ export class MyOrgContracts extends OdmdContracts {
   }
 }
 </code></pre>
-            <p><strong>Commit, PR, Merge:</strong> Follow standard Git workflow for the <span class="inline-code">contractsLib</span> repo.</p>
-            <p><strong>Platform Synchronization:</strong> Merging triggers the <span class="inline-code">contractsLib</span> pipeline, which publishes updates and notifies the platform. The platform then generates/updates the specific CI/CD workflow file (e.g., <span class="inline-code">.github/workflows/ODMD_OrderManagerDev_*.yaml</span>) in the service repository (<span class="inline-code">order-manager-service</span>).</p>
+            <p><strong>Commit, PR, Merge:</strong> Follow standard Git workflow for the <span class="inline-code">contractsLib</span>
+                repo.</p>
+            <p><strong>Platform Synchronization:</strong> Merging triggers the <span
+                    class="inline-code">contractsLib</span> pipeline, which publishes updates and notifies the platform.
+                The platform then generates/updates the specific CI/CD workflow file (e.g., <span class="inline-code">.github/workflows/ODMD_OrderManagerDev_*.yaml</span>)
+                in the service repository (<span class="inline-code">order-manager-service</span>).</p>
 
             <h3 id="implement-service">2. Implement the Service (CDK Stack / Dockerfile / Script)</h3>
-            <p>In the service's repository (e.g., <span class="inline-code">order-manager-service</span>), implement the logic and infrastructure definitions.</p>
+            <p>In the service's repository (e.g., <span class="inline-code">order-manager-service</span>), implement the
+                logic and infrastructure definitions.</p>
             <h4>How-To: Consume a Product in CDK</h4>
-            <p>Within your CDK stack class (extending <span class="inline-code">OdmdEnverCdk</span> from <span class="inline-code">@ondemandenv/odmd-contracts-base</span>), use the static method <span class="inline-code">OdmdEnverCdk.getSharedValue('LocalConsumerName')</span> to retrieve the concrete value (typically a JSON string) during synthesis. The 'LocalConsumerName' must match the ID given in the <span class="inline-code">Consumer</span> definition in `contractsLib`. You will likely need to parse this JSON string to access individual values.</p>
+            <p>Within your CDK stack class (extending <span class="inline-code">OdmdEnverCdk</span> from <span
+                    class="inline-code">@ondemandenv/odmd-contracts-base</span>), use the static method <span
+                    class="inline-code">OdmdEnverCdk.getSharedValue('LocalConsumerName')</span> to retrieve the concrete
+                value (typically a JSON string) during synthesis. The 'LocalConsumerName' must match the ID given in the
+                <span class="inline-code">Consumer</span> definition in `contractsLib`. You will likely need to parse
+                this JSON string to access individual values.</p>
             <h4>How-To: Publish a Product from CDK</h4>
-            <p>Instantiate the <strong>single allowed</strong> <span class="inline-code">OdmdShareOut</span> construct per stack (from <span class="inline-code">@ondemandenv/odmd-contracts-base</span>). To publish multiple values, structure them as an object, serialize it to JSON using <span class="inline-code">cdk.Stack.of(this).toJsonString(...)</span>, and publish the string. The ID used for <span class="inline-code">OdmdShareOut</span> (e.g., <span class="inline-code">'Outputs'</span>) MUST match the corresponding <span class="inline-code">Product</span> ID declared in `contractsLib`.</p>
+            <p>Instantiate the <strong>single allowed</strong> <span class="inline-code">OdmdShareOut</span> construct
+                per stack (from <span class="inline-code">@ondemandenv/odmd-contracts-base</span>). To publish multiple
+                values, structure them as an object, serialize it to JSON using <span class="inline-code">cdk.Stack.of(this).toJsonString(...)</span>,
+                and publish the string. The ID used for <span class="inline-code">OdmdShareOut</span> (e.g., <span
+                        class="inline-code">'Outputs'</span>) MUST match the corresponding <span class="inline-code">Product</span>
+                ID declared in `contractsLib`.</p>
             <pre><code class="language-typescript">// Example: order-manager-service/infra/lib/order-manager-stack.ts
 import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
@@ -499,11 +748,14 @@ export class OrderManagerStack extends OdmdEnverCdk {
   }
 }
 </code></pre>
-            <p>Consumers will retrieve this JSON string and parse it to access the individual values (e.g., <span class="inline-code">apiUrl</span>, <span class="inline-code">queueArn</span>).</p>
-            <p>For Docker/Cmd builds, Products might be published automatically by the platform build process (e.g., Image URI) or via specific platform commands/mechanisms within custom scripts.</p>
+            <p>Consumers will retrieve this JSON string and parse it to access the individual values (e.g., <span
+                    class="inline-code">apiUrl</span>, <span class="inline-code">queueArn</span>).</p>
+            <p>For Docker/Cmd builds, Products might be published automatically by the platform build process (e.g.,
+                Image URI) or via specific platform commands/mechanisms within custom scripts.</p>
 
             <h3 id="deploy-iterate">3. Deploy and Iterate</h3>
-            <p>Push code changes to the relevant Git branch (e.g., <span class="inline-code">dev</span>) in the service repository.</p>
+            <p>Push code changes to the relevant Git branch (e.g., <span class="inline-code">dev</span>) in the service
+                repository.</p>
             <ul>
                 <li>The platform-managed GitHub Actions workflow triggers.</li>
                 <li>It executes the build/deployment steps (CDK, Docker, Cmd).</li>
@@ -516,10 +768,15 @@ export class OrderManagerStack extends OdmdEnverCdk {
             <ol>
                 <li>Create and check out a new feature branch (e.g., <span class="inline-code">feature/xyz</span>).</li>
                 <li>Make code changes.</li>
-                <li>Commit with the <span class="inline-code">odmd: create@&lt;source_branch&gt;</span> command in the commit message body (e.g., <span class="inline-code">odmd: create@dev</span>). The source must be a Branch Enver.</li>
+                <li>Commit with the <span class="inline-code">odmd: create@&lt;source_branch&gt;</span> command in the
+                    commit message body (e.g., <span class="inline-code">odmd: create@dev</span>). The source must be a
+                    Branch Enver.
+                </li>
                 <li>Push the feature branch.</li>
             </ol>
-            <p>The platform detects the command, creates a dynamic Enver linked to the feature branch, resolves dependencies based on the source branch's state, and deploys the clone using the feature branch code.</p>
+            <p>The platform detects the command, creates a dynamic Enver linked to the feature branch, resolves
+                dependencies based on the source branch's state, and deploys the clone using the feature branch
+                code.</p>
 
             <h3 id="delete-clone">5. Delete a Cloned Enver</h3>
             <p>When finished with the clone:</p>
@@ -531,119 +788,300 @@ export class OrderManagerStack extends OdmdEnverCdk {
             <p>The platform detects the command and triggers the destruction of the clone's resources.</p>
 
             <h3 id="use-platform-services">How-To: Use Platform Services</h3>
-            <p>Using centrally managed platform services (like shared networking or EKS) follows the standard Consume pattern:</p>
+            <p>Using centrally managed platform services (like shared networking or EKS) follows the standard Consume
+                pattern:</p>
             <ol>
-                <li>Identify the Platform Enver (e.g., <span class="inline-code">sharedNetworkingProd</span>) and the specific `Product` it publishes (e.g., <span class="inline-code">vpcIdProduct</span>) in `contractsLib`.</li>
-                <li>In your application Enver's definition within `contractsLib`, declare a `Consumer` for that Product (e.g., <span class="inline-code">new Consumer(this, 'VpcId', sharedNetworkingProd.vpcIdProduct)</span>).</li>
-                <li>In your application's CDK stack, retrieve the value using <span class="inline-code">OdmdEnverCdk.getSharedValue('VpcId')</span>.</li>
-                <li>Use the retrieved value to configure your resources appropriately (e.g., place Lambda functions in the shared VPC).</li>
+                <li>Identify the Platform Enver (e.g., <span class="inline-code">sharedNetworkingProd</span>) and the
+                    specific `Product` it publishes (e.g., <span class="inline-code">vpcIdProduct</span>) in
+                    `contractsLib`.
+                </li>
+                <li>In your application Enver's definition within `contractsLib`, declare a `Consumer` for that Product
+                    (e.g., <span
+                            class="inline-code">new Consumer(this, 'VpcId', sharedNetworkingProd.vpcIdProduct)</span>).
+                </li>
+                <li>In your application's CDK stack, retrieve the value using <span class="inline-code">OdmdEnverCdk.getSharedValue('VpcId')</span>.
+                </li>
+                <li>Use the retrieved value to configure your resources appropriately (e.g., place Lambda functions in
+                    the shared VPC).
+                </li>
             </ol>
             <p>The platform handles the cross-account resolution and permissions based on the established contract.</p>
+
+            <div style="background-color: #f8f9fa; border-left: 4px solid #007bff; padding: 1rem; margin: 2rem 0;">
+                <h4 style="margin-top: 0; color: #0056b3;">Coming Soon: Advanced Networking & Kubernetes
+                    Integration</h4>
+                <p>This documentation currently covers the minimum setup required for managing dependencies between
+                    Envers. In upcoming sections, we will add:</p>
+                <ul>
+                    <li><strong>Advanced Networking Envers:</strong> Detailed setup for sharing NAT gateways through
+                        Transit Gateway (TGW) connected VPCs across different workspace accounts, enabling efficient
+                        cross-account networking.
+                    </li>
+                    <li><strong>EKS Cluster Enver:</strong> Implementation of a shared EKS cluster Enver that allows
+                        other Envers across accounts to deploy Kubernetes manifests, providing a centralized Kubernetes
+                        management solution.
+                    </li>
+                </ul>
+                <p>These additions will demonstrate how to build more complex, production-grade infrastructure patterns
+                    using ONDEMANDENV's dependency management capabilities.</p>
+            </div>
 
         </section>
 
         <section class="doc-section" id="deployment-model">
             <h2>Deployment Model</h2>
-            <p>ONDEMANDENV leverages the underlying deployment mechanism specified by the <span class="inline-code">BuildDefinition</span> associated with an Enver in <span class="inline-code">contractsLib</span>, primarily focusing on AWS CDK for holistic environment definition.</p>
+            <p>ONDEMANDENV leverages the underlying deployment mechanism specified by the <span class="inline-code">BuildDefinition</span>
+                associated with an Enver in <span class="inline-code">contractsLib</span>, primarily focusing on AWS CDK
+                for holistic environment definition.</p>
             <ul>
-                <li><strong>AWS CDK (Preferred):</strong> For <span class="inline-code">buildType: 'cdk'</span>, the platform triggers an AWS CDK deployment (<span class="inline-code">cdk deploy</span>). The CDK app synthesizes a CloudFormation template defining all necessary resources (AWS native, Kubernetes via cdk8s, etc.) within the Enver's scope.</li>
-                <li><strong>CloudFormation Execution:</strong> The CDK deployment ultimately translates to a CloudFormation stack being created or updated in the target Workspace Account. ONDEMANDENV manages the stack lifecycle, ensuring atomicity and leveraging CloudFormation's rollback capabilities.</li>
-                <li><strong>Cross-Account Deployments:</strong> The platform's central orchestrator assumes the pre-configured IAM deployment role in the target Workspace Account to execute the CloudFormation deployment. Permissions are defined by this assumed role.</li>
-                <li><strong>Docker Images:</strong> For <span class="inline-code">buildType: 'docker'</span>, the platform typically manages building the Docker image, pushing it to a designated ECR repository (often managed by the platform or CDK bootstrap), and potentially triggering a deployment update (e.g., updating an ECS service or Kubernetes deployment). Product publishing might involve sharing the image URI.</li>
-                <li><strong>Custom Commands:</strong> For <span class="inline-code">buildType: 'cmd'</span>, the platform executes the specified build/deploy commands within a CI/CD environment (e.g., CodeBuild, GitHub Actions runner). This allows integration with other tools or custom deployment scripts.</li>
+                <li><strong>AWS CDK (Preferred):</strong> For <span class="inline-code">buildType: 'cdk'</span>, the
+                    platform triggers an AWS CDK deployment (<span class="inline-code">cdk deploy</span>). The CDK app
+                    synthesizes a CloudFormation template defining all necessary resources (AWS native, Kubernetes via
+                    cdk8s, etc.) within the Enver's scope.
+                </li>
+                <li><strong>CloudFormation Execution:</strong> The CDK deployment ultimately translates to a
+                    CloudFormation stack being created or updated in the target Workspace Account. ONDEMANDENV manages
+                    the stack lifecycle, ensuring atomicity and leveraging CloudFormation's rollback capabilities.
+                </li>
+                <li><strong>Cross-Account Deployments:</strong> The platform's central orchestrator assumes the
+                    pre-configured IAM deployment role in the target Workspace Account to execute the CloudFormation
+                    deployment. Permissions are defined by this assumed role.
+                </li>
+                <li><strong>Docker Images:</strong> For <span class="inline-code">buildType: 'docker'</span>, the
+                    platform typically manages building the Docker image, pushing it to a designated ECR repository
+                    (often managed by the platform or CDK bootstrap), and potentially triggering a deployment update
+                    (e.g., updating an ECS service or Kubernetes deployment). Product publishing might involve sharing
+                    the image URI.
+                </li>
+                <li><strong>Custom Commands:</strong> For <span class="inline-code">buildType: 'cmd'</span>, the
+                    platform executes the specified build/deploy commands within a CI/CD environment (e.g., CodeBuild,
+                    GitHub Actions runner). This allows integration with other tools or custom deployment scripts.
+                </li>
             </ul>
-            <p>The key is that the <span class="inline-code">contractsLib</span> defines <i>what</i> needs to be deployed (the Build and Enver relationship) and <i>where</i> (target account/region), while the platform orchestrates the <i>how</i> based on the build type and configured workflows.</p>
+            <p>The key is that the <span class="inline-code">contractsLib</span> defines <i>what</i> needs to be
+                deployed (the Build and Enver relationship) and <i>where</i> (target account/region), while the platform
+                orchestrates the <i>how</i> based on the build type and configured workflows.</p>
         </section>
 
         <section class="doc-section" id="security">
             <h2>Security Considerations</h2>
-            <p>Security is paramount in a multi-account, automated environment. ONDEMANDENV relies on standard AWS and GitHub security mechanisms, configured according to the principle of least privilege.</p>
+            <p>Security is paramount in a multi-account, automated environment. ONDEMANDENV relies on standard AWS and
+                GitHub security mechanisms, configured according to the principle of least privilege.</p>
             <ul>
-                <li><strong>IAM Roles & Trust Policies:</strong> The foundation is the cross-account IAM role defined in each Workspace Account, which trusts the platform's execution role in the Central Orchestration Account. This role should be granted only the permissions necessary to deploy the resources defined by the Envers targeting that account. Avoid using overly broad permissions like <span class="inline-code">AdministratorAccess</span> in production; scope permissions down based on the actual resource types managed by your Envers. Use IAM condition keys (e.g., restricting actions based on CloudFormation stack tags or resource prefixes) for finer control.</li>
+                <li><strong>IAM Roles & Trust Policies:</strong> The foundation is the cross-account IAM role defined in
+                    each Workspace Account, which trusts the platform's execution role in the Central Orchestration
+                    Account. This role should be granted only the permissions necessary to deploy the resources defined
+                    by the Envers targeting that account. Avoid using overly broad permissions like <span
+                            class="inline-code">AdministratorAccess</span> in production; scope permissions down based
+                    on the actual resource types managed by your Envers. Use IAM condition keys (e.g., restricting
+                    actions based on CloudFormation stack tags or resource prefixes) for finer control.
+                </li>
                 <li><strong>GitHub App Security:</strong>
                     <ul>
-                        <li><strong>Permissions:</strong> Grant the GitHub App the minimum required permissions in its settings. Avoid requesting unnecessary write access.</li>
-                        <li><strong>Installation Scope:</strong> Install the GitHub App only on the specific repositories it needs to interact with (<span class="inline-code">contractsLib</span>, service repos), not organization-wide, if possible.</li>
-                        <li><strong>Private Key Management:</strong> The GitHub App's private key is highly sensitive. Storing it securely in AWS Secrets Manager within the Central Account is crucial. Ensure the secret has a restrictive resource policy allowing access only to the platform's execution role. Implement secret rotation if feasible.</li>
-                        <li><strong>Webhook Security:</strong> Secure the webhook endpoint (exposed by the platform, e.g., via API Gateway) using a webhook secret configured in both GitHub and the platform. Validate the payload signature in the platform's webhook handler.</li>
+                        <li><strong>Permissions:</strong> Grant the GitHub App the minimum required permissions in its
+                            settings. Avoid requesting unnecessary write access.
+                        </li>
+                        <li><strong>Installation Scope:</strong> Install the GitHub App only on the specific
+                            repositories it needs to interact with (<span class="inline-code">contractsLib</span>,
+                            service repos), not organization-wide, if possible.
+                        </li>
+                        <li><strong>Private Key Management:</strong> The GitHub App's private key is highly sensitive.
+                            Storing it securely in AWS Secrets Manager within the Central Account is crucial. Ensure the
+                            secret has a restrictive resource policy allowing access only to the platform's execution
+                            role. Implement secret rotation if feasible.
+                        </li>
+                        <li><strong>Webhook Security:</strong> Secure the webhook endpoint (exposed by the platform,
+                            e.g., via API Gateway) using a webhook secret configured in both GitHub and the platform.
+                            Validate the payload signature in the platform's webhook handler.
+                        </li>
                     </ul>
                 </li>
-                <li><strong>Secrets Management:</strong> Use AWS Secrets Manager or Parameter Store (secure string) for managing all sensitive configuration values (database passwords, API keys, the GitHub App key). Access should be tightly controlled via IAM policies. Consumed secrets can be passed securely to application runtimes (e.g., injected into Lambda environment variables or ECS task definitions via CDK).</li>
-                <li><strong>Config Store Security:</strong> Access to the central configuration store (SSM Parameters) where Product values are stored should be controlled via IAM. The platform needs write access to update Products. Consumers (deployment roles) need read access to specific parameter paths corresponding to the Products they consume.</li>
-                <li><strong>Code Security:</strong> Standard code security practices (dependency scanning, static analysis) should be applied to both the <span class="inline-code">contractsLib</span> and service repositories.</li>
-                <li><strong>CDK Security:</strong> Be mindful of CDK constructs that might create broad permissions (e.g., <span class="inline-code">grantReadWrite()</span>). Review synthesized CloudFormation templates and IAM policies generated by CDK. Use tools like <span class="inline-code">cdk-nag</span> to enforce security best practices.</li>
+                <li><strong>Secrets Management:</strong> Use AWS Secrets Manager or Parameter Store (secure string) for
+                    managing all sensitive configuration values (database passwords, API keys, the GitHub App key).
+                    Access should be tightly controlled via IAM policies. Consumed secrets can be passed securely to
+                    application runtimes (e.g., injected into Lambda environment variables or ECS task definitions via
+                    CDK).
+                </li>
+                <li><strong>Config Store Security:</strong> Access to the central configuration store (SSM Parameters)
+                    where Product values are stored should be controlled via IAM. The platform needs write access to
+                    update Products. Consumers (deployment roles) need read access to specific parameter paths
+                    corresponding to the Products they consume.
+                </li>
+                <li><strong>Code Security:</strong> Standard code security practices (dependency scanning, static
+                    analysis) should be applied to both the <span class="inline-code">contractsLib</span> and service
+                    repositories.
+                </li>
+                <li><strong>CDK Security:</strong> Be mindful of CDK constructs that might create broad permissions
+                    (e.g., <span class="inline-code">grantReadWrite()</span>). Review synthesized CloudFormation
+                    templates and IAM policies generated by CDK. Use tools like <span class="inline-code">cdk-nag</span>
+                    to enforce security best practices.
+                </li>
             </ul>
         </section>
 
         <section class="doc-section" id="cicd">
             <h2>CI/CD Integration</h2>
-            <p>ONDEMANDENV integrates with CI/CD systems, primarily GitHub Actions by default, to automate the build, deployment, and lifecycle management of Envers.</p>
+            <p>ONDEMANDENV integrates with CI/CD systems, primarily GitHub Actions by default, to automate the build,
+                deployment, and lifecycle management of Envers.</p>
             <ul>
-                <li><strong>Workflow Generation:</strong> A key function of the platform is dynamically generating or updating CI/CD workflow files (e.g., <span class="inline-code">.github/workflows/ODMD_*.yaml</span>) within each managed service repository based on the Enver definitions in <span class="inline-code">contractsLib</span>. When <span class="inline-code">contractsLib</span> is updated (e.g., a new Enver is defined, a target account changes), the platform ensures the corresponding service repo's workflow file reflects this.</li>
+                <li><strong>Workflow Generation:</strong> A key function of the platform is dynamically generating or
+                    updating CI/CD workflow files (e.g., <span class="inline-code">.github/workflows/ODMD_*.yaml</span>)
+                    within each managed service repository based on the Enver definitions in <span class="inline-code">contractsLib</span>.
+                    When <span class="inline-code">contractsLib</span> is updated (e.g., a new Enver is defined, a
+                    target account changes), the platform ensures the corresponding service repo's workflow file
+                    reflects this.
+                </li>
                 <li><strong>GitHub Actions Integration:</strong>
                     <ul>
-                        <li><strong>Triggers:</strong> Workflows are typically triggered by pushes to specific branches (for Branch Envers) or tags (for Tag Envers). The platform sets up these triggers in the generated workflow files.</li>
-                        <li><strong>Authentication:</strong> Workflows authenticate to AWS using mechanisms like OpenID Connect (OIDC) configured between GitHub Actions and AWS IAM, or by assuming the cross-account deployment role using credentials stored securely (e.g., AWS secrets accessed via OIDC).</li>
-                        <li><strong>Execution Steps:</strong> The generated workflow contains steps to: Check out code, set up the build environment (Node.js, CDK, Docker), potentially authenticate to AWS, run build commands (<span class="inline-code">npm run build</span>), synthesize CDK (<span class="inline-code">cdk synth</span>), and deploy (<span class="inline-code">cdk deploy</span>). It fetches consumed Product values during synthesis/deployment.</li>
-                        <li><strong>Platform Interaction:</strong> Workflow steps may interact with the platform (e.g., via AWS SDK calls to Lambda functions or Step Functions in the Central Account) to retrieve configuration, report status, or trigger subsequent actions.</li>
+                        <li><strong>Triggers:</strong> Workflows are typically triggered by pushes to specific branches
+                            (for Branch Envers) or tags (for Tag Envers). The platform sets up these triggers in the
+                            generated workflow files.
+                        </li>
+                        <li><strong>Authentication:</strong> Workflows authenticate to AWS using mechanisms like OpenID
+                            Connect (OIDC) configured between GitHub Actions and AWS IAM, or by assuming the
+                            cross-account deployment role using credentials stored securely (e.g., AWS secrets accessed
+                            via OIDC).
+                        </li>
+                        <li><strong>Execution Steps:</strong> The generated workflow contains steps to: Check out code,
+                            set up the build environment (Node.js, CDK, Docker), potentially authenticate to AWS, run
+                            build commands (<span class="inline-code">npm run build</span>), synthesize CDK (<span
+                                    class="inline-code">cdk synth</span>), and deploy (<span class="inline-code">cdk deploy</span>).
+                            It fetches consumed Product values during synthesis/deployment.
+                        </li>
+                        <li><strong>Platform Interaction:</strong> Workflow steps may interact with the platform (e.g.,
+                            via AWS SDK calls to Lambda functions or Step Functions in the Central Account) to retrieve
+                            configuration, report status, or trigger subsequent actions.
+                        </li>
                     </ul>
                 </li>
-                <li><strong>Commit Message Commands (`odmd:`):</strong> Commands like <span class="inline-code">odmd: create@&lt;source&gt;</span> and <span class="inline-code">odmd: delete</span> embedded in commit messages act as triggers for specific platform actions (cloning, deletion) processed via webhooks or polling.</li>
-                <li><strong>Extensibility:</strong> While GitHub Actions is the common case, the platform's core logic (reacting to Git events, managing state, triggering deployments) can potentially be integrated with other CI/CD systems (GitLab CI, Jenkins, CodePipeline/CodeBuild) by adapting the workflow generation/triggering mechanism.</li>
+                <li><strong>Commit Message Commands (`odmd:`):</strong> Commands like <span class="inline-code">odmd: create@&lt;source&gt;</span>
+                    and <span class="inline-code">odmd: delete</span> embedded in commit messages act as triggers for
+                    specific platform actions (cloning, deletion) processed via webhooks or polling.
+                </li>
+                <li><strong>Extensibility:</strong> While GitHub Actions is the common case, the platform's core logic
+                    (reacting to Git events, managing state, triggering deployments) can potentially be integrated with
+                    other CI/CD systems (GitLab CI, Jenkins, CodePipeline/CodeBuild) by adapting the workflow
+                    generation/triggering mechanism.
+                </li>
             </ul>
         </section>
 
-         <section class="doc-section" id="base-library">
+        <section class="doc-section" id="base-library">
             <h2>Base Library (`@ondemandenv/odmd-contracts-base`)</h2>
-            <p>The <span class="inline-code">@ondemandenv/odmd-contracts-base</span> library (version specified in your project, e.g., 0.0.65) provides the core CDK constructs and types necessary for defining your architecture in <span class="inline-code">contractsLib</span> and implementing compatible service stacks.</p>
-            <p><strong>Installation:</strong> Typically added as a dependency to your <span class="inline-code">contractsLib</span> repository and any service repositories using CDK Envers.</p>
+            <p>The <span class="inline-code">@ondemandenv/odmd-contracts-base</span> library (version specified in your
+                project, e.g., 0.0.65) provides the core CDK constructs and types necessary for defining your
+                architecture in <span class="inline-code">contractsLib</span> and implementing compatible service
+                stacks.</p>
+            <p><strong>Installation:</strong> Typically added as a dependency to your <span class="inline-code">contractsLib</span>
+                repository and any service repositories using CDK Envers.</p>
             <pre><code class="language-bash">npm install @ondemandenv/odmd-contracts-base</code></pre>
 
             <h3>Key Constructs & Types:</h3>
             <ul>
-                <li><strong><span class="inline-code">OdmdContracts</span> (in `contractsLib`):</strong> The base class for your main contracts definition file (e.g., <span class="inline-code">my-org-contracts.ts</span>). It serves as the root scope for defining Builds and Envers.</li>
+                <li><strong><span class="inline-code">OdmdContracts</span> (in `contractsLib`):</strong> The base class
+                    for your main contracts definition file (e.g., <span class="inline-code">my-org-contracts.ts</span>).
+                    It serves as the root scope for defining Builds and Envers.
+                </li>
                 <li>
-                    <strong><span class="inline-code">OdmdBuild&lt;T extends OdmdEnver&gt;</span> (in `contractsLib`):</strong> Defines the build configuration for a specific Enver type. Key properties often include:
+                    <strong><span class="inline-code">OdmdBuild&lt;T extends OdmdEnver&gt;</span> (in
+                        `contractsLib`):</strong> Defines the build configuration for a specific Enver type. Key
+                    properties often include:
                     <ul>
-                        <li><span class="inline-code">githubRepoAlias</span>: Alias mapping to the source code repository (configured in the platform).</li>
-                        <li><span class="inline-code">buildType</span>: <span class="inline-code">'cdk' | 'docker' | 'cmd'</span>.</li>
-                        <li>(Optional) <span class="inline-code">sourcePath</span>: Path within the repo containing the buildable unit (e.g., <span class="inline-code">'infra/'</span> for a CDK app).</li>
-                        <li>(Optional) <span class="inline-code">buildCommand</span>: Specific command override for 'cmd' type.</li>
+                        <li><span class="inline-code">githubRepoAlias</span>: Alias mapping to the source code
+                            repository (configured in the platform).
+                        </li>
+                        <li><span class="inline-code">buildType</span>: <span class="inline-code">'cdk' | 'docker' | 'cmd'</span>.
+                        </li>
+                        <li>(Optional) <span class="inline-code">sourcePath</span>: Path within the repo containing the
+                            buildable unit (e.g., <span class="inline-code">'infra/'</span> for a CDK app).
+                        </li>
+                        <li>(Optional) <span class="inline-code">buildCommand</span>: Specific command override for
+                            'cmd' type.
+                        </li>
                     </ul>
                 </li>
-                 <li><strong><span class="inline-code">OdmdEnverCdk | OdmdEnverDocker | OdmdEnverCmd</span> (in `contractsLib`):</strong> Base classes for defining specific environment instances (Envers). Key properties:
+                <li><strong><span class="inline-code">OdmdEnverCdk | OdmdEnverDocker | OdmdEnverCmd</span> (in
+                    `contractsLib`):</strong> Base classes for defining specific environment instances (Envers). Key
+                    properties:
                     <ul>
-                        <li><span class="inline-code">build</span>: Links to an <span class="inline-code">OdmdBuild</span> instance.</li>
-                        <li><span class="inline-code">targetAccountAlias</span>: Alias mapping to the target AWS Workspace Account (configured in the platform).</li>
+                        <li><span class="inline-code">build</span>: Links to an <span
+                                class="inline-code">OdmdBuild</span> instance.
+                        </li>
+                        <li><span class="inline-code">targetAccountAlias</span>: Alias mapping to the target AWS
+                            Workspace Account (configured in the platform).
+                        </li>
                         <li><span class="inline-code">targetRegion</span>: The AWS region for deployment.</li>
-                        <li><span class="inline-code">immutable</span>: Boolean (default: false). True for Tag Envers, False for Branch Envers.</li>
-                        <li><span class="inline-code">enverId</span>: Automatically derived from the construct ID (e.g., 'OrderManagerDev'). Represents the logical environment name.</li>
-                        <li><span class="inline-code">outputsProduct</span>: (Convention) The single <span class="inline-code">Product</span> instance for publishing outputs.</li>
-                    </ul>
-                 </li>
-                <li><strong><span class="inline-code">Product</span> (in `contractsLib`):</strong> Declared within an Enver definition using <span class="inline-code">new Product(this, 'Outputs')</span>. Represents the single structured output value the Enver provides.</li>
-                <li><strong><span class="inline-code">Consumer</span> (in `contractsLib`):</strong> Declared within an Enver definition using <span class="inline-code">new Consumer(this, 'LocalConsumerName', otherEnver.outputsProduct, '{...defaultJson...}')</span>. Represents a dependency on another Enver's <span class="inline-code">Outputs</span> Product. The <span class="inline-code">'LocalConsumerName'</span> is used in the consuming service's code. Optional default JSON string can be provided.</li>
-                <li><strong><span class="inline-code">OdmdEnverCdk</span> (in service repo CDK code):</strong> The base class your service's CDK stack should extend.
-                    <ul>
-                        <li><strong><span class="inline-code">static getSharedValue(localConsumerName: string): string</span>:</strong> Static method used during CDK synthesis to retrieve the JSON string value of a consumed Product, identified by the <span class="inline-code">'LocalConsumerName'</span>.</li>
-                        <li><strong><span class="inline-code">static getEnverIdSuffix(): string</span>:</strong> Static method to get a unique suffix based on the Enver ID, useful for naming resources uniquely per Enver instance.</li>
+                        <li><span class="inline-code">immutable</span>: Boolean (default: false). True for Tag Envers,
+                            False for Branch Envers.
+                        </li>
+                        <li><span class="inline-code">enverId</span>: Automatically derived from the construct ID (e.g.,
+                            'OrderManagerDev'). Represents the logical environment name.
+                        </li>
+                        <li><span class="inline-code">outputsProduct</span>: (Convention) The single <span
+                                class="inline-code">Product</span> instance for publishing outputs.
+                        </li>
                     </ul>
                 </li>
-                <li><strong><span class="inline-code">OdmdShareOut</span> (in service repo CDK code):</strong> CDK construct used within an <span class="inline-code">OdmdEnverCdk</span> stack to publish the Enver's outputs. Instantiated once as <span class="inline-code">new OdmdShareOut(this, 'Outputs', { value: jsonStringifiedOutputs })</span>. The ID MUST match the <span class="inline-code">Product</span> ID ('Outputs') declared in `contractsLib`.</li>
-                 <li><strong><span class="inline-code">OdmdUtils</span> (Utility):</strong> May provide helper functions for common tasks within the ONDEMANDENV context (specific utilities depend on the library version).</li>
+                <li><strong><span class="inline-code">Product</span> (in `contractsLib`):</strong> Declared within an
+                    Enver definition using <span class="inline-code">new Product(this, 'Outputs')</span>. Represents the
+                    single structured output value the Enver provides.
+                </li>
+                <li><strong><span class="inline-code">Consumer</span> (in `contractsLib`):</strong> Declared within an
+                    Enver definition using <span class="inline-code">new Consumer(this, 'LocalConsumerName', otherEnver.outputsProduct, '{...defaultJson...}')</span>.
+                    Represents a dependency on another Enver's <span class="inline-code">Outputs</span> Product. The
+                    <span class="inline-code">'LocalConsumerName'</span> is used in the consuming service's code.
+                    Optional default JSON string can be provided.
+                </li>
+                <li><strong><span class="inline-code">OdmdEnverCdk</span> (in service repo CDK code):</strong> The base
+                    class your service's CDK stack should extend.
+                    <ul>
+                        <li><strong><span
+                                class="inline-code">static getSharedValue(localConsumerName: string): string</span>:</strong>
+                            Static method used during CDK synthesis to retrieve the JSON string value of a consumed
+                            Product, identified by the <span class="inline-code">'LocalConsumerName'</span>.
+                        </li>
+                        <li><strong><span class="inline-code">static getEnverIdSuffix(): string</span>:</strong> Static
+                            method to get a unique suffix based on the Enver ID, useful for naming resources uniquely
+                            per Enver instance.
+                        </li>
+                    </ul>
+                </li>
+                <li><strong><span class="inline-code">OdmdShareOut</span> (in service repo CDK code):</strong> CDK
+                    construct used within an <span class="inline-code">OdmdEnverCdk</span> stack to publish the Enver's
+                    outputs. Instantiated once as <span class="inline-code">new OdmdShareOut(this, 'Outputs', { value: jsonStringifiedOutputs })</span>.
+                    The ID MUST match the <span class="inline-code">Product</span> ID ('Outputs') declared in
+                    `contractsLib`.
+                </li>
+                <li><strong><span class="inline-code">OdmdUtils</span> (Utility):</strong> May provide helper functions
+                    for common tasks within the ONDEMANDENV context (specific utilities depend on the library version).
+                </li>
             </ul>
-            <p>By using these constructs, you define the architecture (<span class="inline-code">contractsLib</span>) and implement services (<span class="inline-code">service-repo</span>) in a way that is understood and managed by the ONDEMANDENV platform.</p>
+            <p>By using these constructs, you define the architecture (<span class="inline-code">contractsLib</span>)
+                and implement services (<span class="inline-code">service-repo</span>) in a way that is understood and
+                managed by the ONDEMANDENV platform.</p>
         </section>
 
 
         <section class="doc-section" id="explore-code">
             <h2>Explore the Code (github.com/ondemandenv)</h2>
-            <p>The ONDEMANDENV code is hosted on GitHub under the <a href="https://github.com/ondemandenv" target="_blank" class="repo-link">github.com/ondemandenv</a> organization. Key repositories to explore include the <span class="inline-code">contractsLib</span> for architectural definitions, the core platform implementation (likely named <span class="inline-code">ondemandenv-platform</span> or similar), and various example service repositories demonstrating different patterns and integrations. We recommend starting with the <span class="inline-code">contractsLib</span> structure and an example application relevant to your use case.</p>
+            <p>The ONDEMANDENV code is hosted on GitHub under the <a href="https://github.com/ondemandenv"
+                                                                     target="_blank" class="repo-link">github.com/ondemandenv</a>
+                organization. Key repositories to explore include the <span class="inline-code">contractsLib</span> for
+                architectural definitions, the core platform implementation (likely named <span class="inline-code">ondemandenv-platform</span>
+                or similar), and various example service repositories demonstrating different patterns and integrations.
+                We recommend starting with the <span class="inline-code">contractsLib</span> structure and an example
+                application relevant to your use case.</p>
         </section>
 
         <section class="doc-section" id="platform-internals">
             <h2>Platform Internals (High Level)</h2>
-            <p>At its core, ONDEMANDENV relies on a central orchestration engine, typically implemented using AWS Step Functions and Lambda functions within the Central Orchestration Account. This engine responds to events (e.g., Git pushes via webhooks processed by the GitHub App integration, manual triggers) and consults the desired state defined in <span class="inline-code">contractsLib</span>. It interacts with a central configuration store (like AWS SSM Parameter Store or DynamoDB) to manage state, track dependencies (Product/Consumer values), and coordinate deployments. AWS EventBridge is often used for decoupling components and signaling between the platform and deployment workflows.</p>
+            <p>At its core, ONDEMANDENV relies on a central orchestration engine, typically implemented using AWS Step
+                Functions and Lambda functions within the Central Orchestration Account. This engine responds to events
+                (e.g., Git pushes via webhooks processed by the GitHub App integration, manual triggers) and consults
+                the desired state defined in <span class="inline-code">contractsLib</span>. It interacts with a central
+                configuration store (like AWS SSM Parameter Store or DynamoDB) to manage state, track dependencies
+                (Product/Consumer values), and coordinate deployments. AWS EventBridge is often used for decoupling
+                components and signaling between the platform and deployment workflows.</p>
         </section>
 
     </main>
