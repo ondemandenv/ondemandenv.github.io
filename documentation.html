@@ -451,7 +451,7 @@ cdk bootstrap aws://WORKSPACE0_ACCOUNT_ID/YOUR_REGION</code></pre>
                         </li>
                         <li>Ensure your repository includes necessary dependencies (like
                             `@ondemandenv/odmd-contracts-base`) and build scripts (e.g., in `package.json`) to compile
-                            your TypeScript definitions.
+                            your TypeScript definitions. The `@ondemandenv/odmd-contracts-base` package provides the core interfaces and base classes that your specific `contractsLib` will implement and extend to define your system's architecture and integrate with the ONDEMANDENV platform.
                         </li>
                         <li>You will need to package your compiled <span class="inline-code">contractsLib</span>
                             definition using <span
@@ -1007,8 +1007,9 @@ export class OrderManagerStack extends OdmdEnverCdk {
 
          <section class="doc-section" id="base-library">
             <h2>Base Library</h2>
-            <p>The ONDEMANDENV platform provides a base library that simplifies the process of defining and deploying
-                services.</p>
+            <p>The ONDEMANDENV platform provides a crucial base library, published as <a href="https://github.com/ondemandenv/odmd-contracts-base" target="_blank" rel="noopener noreferrer"><code class="inline-code">@ondemandenv/odmd-contracts-base</code></a>. This library is fundamental to the platform's operation, serving as the definitive contract between all user-defined builds/envers and the central ONDEMANDENV system. It supplies the essential TypeScript base classes and interfaces that your organization's <code>contractsLib</code> repository will use.</p>
+            <p>When you create your own <code>contractsLib</code> (like the example <a href="https://github.com/ondemandenv/odmd-contracts-sandbox" target="_blank" rel="noopener noreferrer"><code class="inline-code">odmd-contracts-sandbox</code></a>), you will extend these base classes. This extension mechanism is key to how the platform understands your architecture and, critically, how your specific services (including custom console implementations) bridge to the central platform's capabilities, such as AWS AppSync for real-time data synchronization.</p>
+            <p>For instance, a common pattern is for a user-defined contract for console authentication, like <a href="https://github.com/ondemandenv/odmd-contracts-sandbox/blob/main/lib/repos/_user-auth/OdmdBuildUserAuthSbx.ts" target="_blank" rel="noopener noreferrer"><code class="inline-code">OdmdBuildUserAuthSbx.ts</code></a> from the sandbox, to extend a corresponding base class from <a href="https://github.com/ondemandenv/odmd-contracts-base/blob/main/lib/repos/__user-auth/odmd-build-user-auth.ts" target="_blank" rel="noopener noreferrer"><code class="inline-code">odmd-build-user-auth.ts</code></a> in <code>@ondemandenv/odmd-contracts-base</code>. This ensures that your implementation correctly interacts with the platform's expectations for authentication and data exchange with services like AppSync.</p>
 
             <h3>Key Features:</h3>
             <ul>
@@ -1164,6 +1165,7 @@ export class MyServiceContracts extends OdmdContracts {
                     authentication service that the console would rely on, see the <a
                             href="https://github.com/ondemandenv/odmd-contracts-sandbox/blob/main/lib/repos/_user-auth/OdmdBuildUserAuthSbx.ts"
                             target="_blank"><code>OdmdBuildUserAuthSbx.ts</code> example</a> in the sandbox contracts.
+                    This example file typically extends a base authentication contract class (e.g., <a href="https://github.com/ondemandenv/odmd-contracts-base/blob/main/lib/repos/__user-auth/odmd-build-user-auth.ts" target="_blank" rel="noopener noreferrer"><code>odmd-build-user-auth.ts</code></a>) from the <code>@ondemandenv/odmd-contracts-base</code> library, demonstrating how your specific console authentication setup connects with the central platform logic, often involving services like AWS AppSync.
                 </li>
                     </ul>
             <p>Proper configuration of these OAuth credentials and their integration into your <code>contractsLib</code>
