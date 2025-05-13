@@ -59,9 +59,9 @@
         }
 
         .docs-sidebar ul ul { /* Nested lists for sub-sections */
-            padding-left: 1.5rem; /* Indent sub-items */
-            margin-top: 0.25rem;
-            margin-bottom: 0.5rem;
+           padding-left: 1.5rem; /* Indent sub-items */
+           margin-top: 0.25rem;
+           margin-bottom: 0.5rem;
         }
 
         .docs-sidebar li {
@@ -96,11 +96,11 @@
 
         /* Doc Section Styling (minor adjustments might be needed) */
         .doc-section {
-            margin-bottom: 3rem;
-            padding-bottom: 1.5rem;
-            border-bottom: 1px solid var(--border-color);
-            scroll-margin-top: 70px; /* Adjust offset for sticky header */
-        }
+             margin-bottom: 3rem;
+             padding-bottom: 1.5rem;
+             border-bottom: 1px solid var(--border-color);
+             scroll-margin-top: 70px; /* Adjust offset for sticky header */
+         }
 
         .doc-section:last-child {
             border-bottom: none;
@@ -263,9 +263,9 @@
 
             .docs-content-area {
                 padding: 1.5rem; /* Reduce padding */
-                margin-left: 0;
-                margin-right: 0;
-                max-width: none; /* Allow full width */
+                 margin-left: 0;
+                 margin-right: 0;
+                 max-width: none; /* Allow full width */
             }
 
             .doc-section {
@@ -348,10 +348,10 @@
 
     <main class="docs-content-area">
         <section class="doc-section" id="top"> <!-- Added id=top for potential skip link -->
-            <h1>Documentation & Getting Started</h1>
+             <h1>Documentation & Getting Started</h1>
             <p>This documentation guides you through setting up and using ONDEMANDENV, providing the necessary details
                 to get the platform operational and integrate your services.</p>
-        </section>
+         </section>
 
         <section class="doc-section" id="setup">
             <h2>Installation & Setup</h2>
@@ -437,7 +437,7 @@ cdk bootstrap aws://WORKSPACE0_ACCOUNT_ID/YOUR_REGION</code></pre>
                         <li>Install this GitHub App on the specific repository you intend to use for your
                             `contractsLib`.
                         </li>
-                    </ul>
+            </ul>
                 </li>
                 <li>
                     <strong>`contractsLib` Repository:</strong> Create a repository within your GitHub Organization to
@@ -501,8 +501,8 @@ cdk bootstrap aws://WORKSPACE0_ACCOUNT_ID/YOUR_REGION</code></pre>
                             an SQS queue provided by the ONDEMANDENV service. Your deployed stack resources (e.g.,
                             Lambda functions) will poll or be triggered by messages from this queue to receive
                             notifications or commands from the platform.</em></li>
-                    </ul>
-                </li>
+                             </ul>
+                        </li>
                 <li>
                     <strong>Configure GitHub App Webhook:</strong>
                     <ul>
@@ -518,7 +518,7 @@ cdk bootstrap aws://WORKSPACE0_ACCOUNT_ID/YOUR_REGION</code></pre>
                             App settings.
                         </li>
                         <li>Ensure the webhook is set to "Active".</li>
-                    </ul>
+                     </ul>
                 </li>
             </ol>
             <p>Once these steps are complete, the core ONDEMANDENV platform should be running in your Central Account
@@ -602,7 +602,7 @@ export class MyOrgContracts extends OdmdContracts {
     // --- Build Configuration for Order Manager Service (CDK type) ---
     const orderManagerBuild = new OdmdBuild<OdmdEnverCdk>(this, 'OrderManagerBuild', {
         githubRepoAlias: 'order-manager-service', // Alias for the service repo
-        buildType: 'cdk',
+      buildType: 'cdk',
         sourcePath: 'infra/' // Path to CDK app within the repo
     });
 
@@ -610,7 +610,7 @@ export class MyOrgContracts extends OdmdContracts {
     const orderManagerDev = new OdmdEnverCdk(this, 'OrderManagerDev', {
         build: orderManagerBuild, // Link to the build config
         targetAccountAlias: 'workspace0', // Deploying to workspace0 in example
-        targetRegion: 'us-east-1',
+      targetRegion: 'us-east-1',
         immutable: false, // Branch Enver
 
         // Product published by this Enver (convention: single 'Outputs' product)
@@ -931,7 +931,7 @@ export class OrderManagerStack extends OdmdEnverCdk {
                 <li><strong>Data Isolation:</strong> Envers are isolated from each other, ensuring that data from one
                     environment doesn't leak into another.
                 </li>
-            </ul>
+                    </ul>
 
             <h3>Infrastructure Security:</h3>
             <ul>
@@ -1005,7 +1005,7 @@ export class OrderManagerStack extends OdmdEnverCdk {
             </ol>
         </section>
 
-        <section class="doc-section" id="base-library">
+         <section class="doc-section" id="base-library">
             <h2>Base Library</h2>
             <p>The ONDEMANDENV platform provides a base library that simplifies the process of defining and deploying
                 services.</p>
@@ -1024,7 +1024,7 @@ export class OrderManagerStack extends OdmdEnverCdk {
                 <li><strong>Documentation:</strong> The library is well-documented, with detailed API documentation and
                     examples.
                 </li>
-            </ul>
+                    </ul>
 
             <h3>Example Usage:</h3>
             <pre><code class="language-typescript">// Example usage of the base library
@@ -1101,14 +1101,14 @@ export class MyServiceContracts extends OdmdContracts {
                 </li>
                 <li><strong>Console Service:</strong> Provides the ONDEMANDENV Console web interface.
                 </li>
-            </ul>
+                    </ul>
 
             <h3>Data Flow:</h3>
             <p>The data flow within the platform is as follows:</p>
             <ol>
                 <li><strong>Contracts:</strong> The contractsLib repository defines the contracts for the platform,
                     including the build configurations and Enver definitions.
-                </li>
+                 </li>
                 <li><strong>CI/CD Workflows:</strong> The Contracts Service generates the CI/CD workflows based on the
                     contracts.
                 </li>
@@ -1165,7 +1165,7 @@ export class MyServiceContracts extends OdmdContracts {
                             href="https://github.com/ondemandenv/odmd-contracts-sandbox/blob/main/lib/repos/_user-auth/OdmdBuildUserAuthSbx.ts"
                             target="_blank"><code>OdmdBuildUserAuthSbx.ts</code> example</a> in the sandbox contracts.
                 </li>
-            </ul>
+                    </ul>
             <p>Proper configuration of these OAuth credentials and their integration into your <code>contractsLib</code>
                 is essential for the console's login functionality and secure access to real-time data.</p>
 
@@ -1222,9 +1222,9 @@ export class MyServiceContracts extends OdmdContracts {
             </ul>
         </section>
 
-        <footer>
+<footer>
             <p>&copy; 2023 ONDEMANDENV.dev</p>
-        </footer>
+</footer>
     </main>
 </div>
 </body>
