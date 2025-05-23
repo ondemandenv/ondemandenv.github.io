@@ -1,0 +1,54 @@
+# Site settings
+title: ONDEMANDENV.dev
+description: On-Demand Environments and Service Contract Management in Distributed Systems
+url: "https://ondemandenv.github.io"
+baseurl: ""
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+
+# GitHub Pages compatible settings
+safe: true
+source: .
+destination: ./_site
+incremental: false
+gist:
+  noscript: false
+
+# Kramdown settings
+kramdown:
+  input: GFM
+  hard_wrap: false
+  syntax_highlighter: rouge
+
+# Collections
+collections:
+  articles:
+    output: true
+    permalink: /articles/:name/
+
+# Default front matter
+defaults:
+  - scope:
+      path: "articles"
+      type: "articles"
+    values:
+      layout: "article"
+  - scope:
+      path: ""
+      type: "pages"
+    values:
+      layout: "default"
+
+# Exclude files from processing
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+  - vendor
+  - .git
+  - .gitignore 

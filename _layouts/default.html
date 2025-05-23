@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if page.title %}{{ page.title }} - {% endif %}{{ site.title }}</title>
+    <link rel="stylesheet" href="{{ '/styles.css' | relative_url }}">
+    
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-HLWV6BZQE1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-HLWV6BZQE1');
+    </script>
+    
+    {% if page.layout == 'article' %}
+    <style>
+        /* Basic article styling */
+        main { max-width: 800px; margin: 2rem auto; padding: 0 1rem; padding-top: 80px; }
+        h1, h2, h3 { color: var(--primary-color); }
+        h2 { margin-top: 2rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; }
+        h3 { margin-top: 1.5rem; color: var(--secondary-color); }
+        p, ul, ol { line-height: 1.7; margin-bottom: 1rem; }
+        ul, ol { margin-left: 1.5rem; }
+        li { margin-bottom: 0.5rem; }
+        pre { background-color: #f0f0f0; padding: 1rem; border-radius: 5px; overflow-x: auto; }
+        code { font-family: monospace; font-size: 0.9em; }
+        pre > code { background-color: transparent; padding: 0; }
+    </style>
+    {% endif %}
+</head>
+<body>
+<header>
+    <nav>
+        <div class="logo">{{ site.title }}</div>
+        <ul>
+            <li><a href="{{ '/' | relative_url }}">Home</a></li>
+            <li><a href="{{ '/concepts.html' | relative_url }}">Core Concepts</a></li>
+            <li><a href="{{ '/patterns.html' | relative_url }}">Patterns & Use Cases</a></li>
+            <li><a href="{{ '/documentation.html' | relative_url }}">Documentation</a></li>
+            <li><a href="{{ '/articles.html' | relative_url }}">Articles</a></li>
+            <li><a href="https://github.com/ondemandenv" target="_blank">GitHub Org</a></li>
+            <li><a href="mailto:contacts@ondemandenv.dev">Request Demo</a></li>
+        </ul>
+        <div class="language-switcher">
+            <select onchange="window.location.href=this.value;">
+                <option value="{{ '/articles.html' | relative_url }}" selected>English</option>
+                <option value="{{ '/ja/articles.html' | relative_url }}">日本語</option>
+                <option value="{{ '/zh-TW/articles.html' | relative_url }}">繁體中文</option>
+            </select>
+        </div>
+    </nav>
+</header>
+
+<main>
+    {{ content }}
+</main>
+
+<footer>
+    <p>&copy; 2024 {{ site.title }}. All rights reserved.</p>
+</footer>
+
+</body>
+</html> 
