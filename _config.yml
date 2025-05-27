@@ -25,17 +25,11 @@ kramdown:
   hard_wrap: false
   syntax_highlighter: rouge
 
-# Collections
-collections:
-  articles:
-    output: true
-    permalink: /articles/:name/
-
 # Default front matter
 defaults:
   - scope:
       path: "articles"
-      type: "articles"
+      type: "pages"
     values:
       layout: "article"
   - scope:

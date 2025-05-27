@@ -1,6 +1,7 @@
 ---
 title: "The Siren Song of AI Vibe Coding and the Shore of Accidental Complexity"
 layout: article
+permalink: /articles/github_workflow_vibe/
 ---
 
 ## The Siren Song of AI Vibe Coding and the Shore of Accidental Complexity

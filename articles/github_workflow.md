@@ -1,6 +1,7 @@
 ---
 title: "Taming the Complexity: Moving Beyond YAML for Robust GitHub Actions Workflows"
 layout: article
+permalink: /articles/github_workflow/
 ---
 
 ## Taming the Complexity: Moving Beyond YAML for Robust GitHub Actions Workflows
