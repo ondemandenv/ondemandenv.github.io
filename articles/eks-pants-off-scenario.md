@@ -4,9 +4,6 @@ title: "The EKS "Pants Off to Fart" Scenario: Accidental Complexity vs. ECS/CDK 
 permalink: /articles/eks-pants-off-scenario/
 ---
 
-
-# The EKS "Pants Off to Fart" Scenario: Accidental Complexity vs. ECS/CDK Simplicity in the SDLC
-
 Deploying a standard web application – a Spring Boot or Express container, secured with a certificate and DNS, fronted by an Application Load Balancer (ALB), and backed by an RDS database – is a common pattern. However, the journey through the Software Development Life Cycle (SDLC) diverges dramatically depending on whether you choose Amazon EKS (Elastic Kubernetes Service) or a more integrated AWS-native approach like ECS (Elastic Container Service) with the AWS CDK (Cloud Development Kit) and CloudFormation.
 
 This article details why, for many enterprise applications, the EKS route often becomes an exercise in "taking off pants to fart" (脱了裤子放屁): an introduction of profound, unnecessary, and counterproductive accidental complexity, especially when contrasted with the cohesive efficiency of CDK/CloudFormation.

@@ -4,8 +4,6 @@ layout: article
 permalink: /articles/github_workflow_vibe/
 ---
 
-## The Siren Song of AI Vibe Coding and the Shore of Accidental Complexity
-
 The rapid advancements in AI, particularly Large Language Models (LLMs), offer a tantalizing promise: accelerated development, instant code generation, and on-demand problem-solving. Developers, when faced with a specific coding challenge or a need to extend functionality, might turn to an AI assistant. The AI, in turn, provides a solution tailored to the immediate query. This iterative process, where AI assists in adding feature upon feature or fix upon fix, can feel highly productive—an "AI vibe coding" experience where progress seems swift.
 
 However, this path can be a deceptive one, leading directly to what architects call "accidental complexity." This isn't the inherent complexity of the problem domain itself, but rather complexity introduced by the solutions chosen—often a series of locally optimal decisions that globally degrade the system's integrity.

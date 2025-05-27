@@ -4,8 +4,6 @@ layout: article
 permalink: /articles/github_workflow/
 ---
 
-## Taming the Complexity: Moving Beyond YAML for Robust GitHub Actions Workflows
-
 GitHub Actions has revolutionized CI/CD with its powerful automation capabilities, allowing developers to build, test, and deploy code directly from their repositories. Workflows, defined in YAML files, are the backbone of this system. However, as workflows grow in complexity, especially when managing intricate branch-specific logic or striving for a "branch as environment" model, the declarative nature of YAML can become a significant bottleneck. Developers often encounter verbose files, perplexing execution behaviors, and debugging nightmares. This article explores these challenges and proposes a robust solution: offloading the core build and deployment logic to scripts or code residing within the repository itself, thereby treating this logic as an integral part of the application.
 
 ### The Pitfalls of YAML-Centric GitHub Actions

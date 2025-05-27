@@ -4,9 +4,6 @@ title: "Frameworks in Flux: Rethinking Internal Architecture in the Age of Micro
 permalink: /articles/frameworks-flux/
 ---
 
-
-# Frameworks in Flux: Rethinking Internal Architecture in the Age of Microservices
-
 For years, robust application frameworks like Spring Boot (Java) and Express.js (Node.js) have been indispensable tools for building complex software systems. In monolithic architectures, they provide essential structure, manage cross-cutting concerns, and tame the inherent complexity of large, single-deployment codebases. However, the rise of microservices has fundamentally shifted architectural paradigms towards distributed systems. Recognizing the inherently asynchronous nature of robust distributed systems, modern microservice architectures increasingly favor event-driven communication and leverage data streaming platforms and infrastructure-level policies. This article explores the evolving role of traditional application frameworks, arguing that while crucial in monoliths, their necessity within individual microservices often diminishes as responsibilities shift towards asynchronous patterns and externalized infrastructure concerns, helping avoid the trap of building fragile "distributed monoliths."
 
 ## Section 1: The Monolithic World - Frameworks as Essential Scaffolding

@@ -4,9 +4,6 @@ title: "Spring Framework: The Monolith Enabler in a Microservices World"
 permalink: /articles/spring-monolith-enabler/
 ---
 
-
-# Spring Framework: The Monolith Enabler in a Microservices World
-
 ## Introduction
 
 Spring Framework revolutionized Java enterprise development by simplifying complex enterprise patterns, but its fundamental architecture emerged in an era when monolithic applications were standard practice. While Spring has evolved with additions like Spring Cloud to support distributed systems, its core design patterns and conveniences still subtly encourage monolithic tendencies. This article examines how Spring's design influences architecture decisions, why decomposing Spring-based monoliths is challenging, and how contract-first infrastructure automation offers a potential solution.

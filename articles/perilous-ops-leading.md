@@ -4,9 +4,6 @@ title: "The Perilous Path: Operator-Led SDLC in the Age of Microservices"
 permalink: /articles/perilous-ops-leading/
 ---
 
-
-# The Perilous Path: Operator-Led SDLC in the Age of Microservices
-
 The promise of Service-Oriented Architectures (SOA) and microservices is compelling: increased agility, scalability, and resilience through independently deployable and manageable services. As organizations adopt these architectures, a natural tendency emerges – to entrust the Software Development Lifecycle (SDLC) to operations teams. After all, operations teams are traditionally responsible for deployment, infrastructure, and keeping systems running. However, while seemingly practical on the surface, operator-led SDLC in the complex world of microservices can lead down a perilous path, fraught with challenges, particularly in managing source control complexity and configuration.
 
 This article will explore the inherent limitations of an operator-centric approach to microservices SDLC, highlighting how it can inadvertently recreate monolithic patterns, stifle innovation, and ultimately undermine the very benefits microservices are intended to deliver. We will focus specifically on the bottlenecks created by source control complexity and the limitations of YAML-based configurations when placed solely in the hands of teams lacking a deep software engineering mindset.

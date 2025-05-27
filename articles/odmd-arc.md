@@ -4,9 +4,6 @@ title: "ONDEMANDENV Architecture Deep Dive"
 permalink: /articles/odmd-arc/
 ---
 
-
-# ONDEMANDENV Architecture Deep Dive
-
 The ONDEMANDENV platform aims to solve challenges in the Software Development Lifecycle (SDLC) for distributed systems like microservices, particularly focusing on dependencies between services and collaboration across teams using different repositories.
 
 Here's a breakdown of the core architectural concepts:

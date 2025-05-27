@@ -4,9 +4,6 @@ title: "Abstracting and Offloading Infrastructure: Transforming the Software Dev
 permalink: /articles/offload-to-platform/
 ---
 
-
-# Abstracting and Offloading Infrastructure: Transforming the Software Development Lifecycle
-
 ## The Power of Abstraction: How Offloading Infrastructure Logic Transforms the Entire SDLC
 
 In today's cloud-native world, the separation of infrastructure management from application development is not just a convenience—it's a necessity for agility, scalability, and innovation. This transformation is driven by Infrastructure as Code (IaC), which allows organizations to model, provision, and manage complex IT environments through code. However, while the benefits are immense, the journey to effective infrastructure abstraction is challenging and requires a unique blend of deep infrastructure knowledge and advanced software engineering skills, particularly in Object-Oriented Programming (OOP) and Domain-Driven Design (DDD).

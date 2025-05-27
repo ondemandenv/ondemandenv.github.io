@@ -4,9 +4,6 @@ title: "The Illusion of Smoothness: How Oversimplified Technologies Mask Real Co
 permalink: /articles/ilusion-smooth-yml/
 ---
 
-
-# The Illusion of Smoothness: How Oversimplified Technologies Mask Real Conflicts in Modern Software and kill innovation
-
 We live in an era that prizes seamlessness and automation. Technologies like GitOps and relational database transactions promise streamlined workflows and data consistency, often presented as elegant solutions to complex problems. But beneath the surface of this apparent smoothness, a critical question emerges: are we truly solving the root issues, or are we merely masking fundamental complexities, potentially to our detriment?
 
 This question is particularly pertinent when we examine the dominant paradigms in modern software development and operations. Let's take a closer look at two seemingly disparate but surprisingly analogous areas: relational database transaction management and GitOps practices centered around YAML configuration. In both, we find powerful mechanisms designed for specific historical contexts, which, while still valuable, can inadvertently oversimplify and obscure the inherent complexities of business logic and conflict resolution in today's distributed, rapidly evolving systems.
