@@ -321,6 +321,7 @@
                     <li><a href="#deploy-iterate">3. Deploy & Iterate</a></li>
                     <li><a href="#clone-enver">4. Clone Enver</a></li>
                     <li><a href="#delete-clone">5. Delete Clone</a></li>
+                    <li><a href="#dynamic-cloning">Dynamic/Ephemeral Cloning</a></li>
                     <li><a href="#use-platform-services">Use Platform Services</a></li>
                 </ul>
             </li>
@@ -832,6 +833,124 @@ export class OrderManagerStack extends OdmdEnverCdk {
                     CloudFormation stack has been deleted in the target account.
                 </li>
             </ul>
+
+            <h3 id="dynamic-cloning">Dynamic/Ephemeral Cloning</h3>
+            <p>In addition to static clones defined in <span class="inline-code">contractsLib</span>, ONDEMANDENV supports dynamic, ephemeral cloning for rapid development and testing. These clones are temporary environments that can be created and destroyed on-demand.</p>
+            
+            <h4>Method 1: Manual Clone Commands</h4>
+            <p>Create dynamic clones using special commands in Git commit messages:</p>
+            
+            <h5>Creating a Dynamic Clone:</h5>
+            <ol>
+                <li><strong>Create Feature Branch:</strong> Create a new feature branch from your base branch:
+                    <pre><code>git checkout -b feature/new-feature
+# Make your code changes
+git add .
+git commit -m "Implement new feature
+
+odmd: create@myServiceDev"</code></pre>
+                </li>
+                <li><strong>Push to Trigger Clone:</strong> Push your branch to trigger the platform:
+                    <pre><code>git push origin feature/new-feature</code></pre>
+                </li>
+                <li><strong>Platform Creates Clone:</strong> ONDEMANDENV automatically:
+                    <ul>
+                        <li>Creates a dynamic Enver for your feature branch</li>
+                        <li>Inherits dependency versions from the source Enver</li>
+                        <li>Deploys isolated infrastructure with unique resource names</li>
+                        <li>Provides endpoints for your isolated environment</li>
+                    </ul>
+                </li>
+            </ol>
+
+            <h5>Deleting a Dynamic Clone:</h5>
+            <pre><code>git commit --allow-empty -m "Cleanup feature environment
+
+odmd: delete"
+git push origin feature/new-feature</code></pre>
+
+            <h4>Method 2: Automated PR-Based Cloning</h4>
+            <p>ONDEMANDENV provides fully automated cloning that integrates seamlessly with Pull Request workflows:</p>
+            
+            <h5>Automated Workflow:</h5>
+            <ol>
+                <li><strong>Create Feature Branch & Push:</strong> Create and push your feature branch as usual:
+                    <pre><code>git checkout -b feature/user-dashboard
+# Make your changes
+git commit -m "Redesign user dashboard"
+git push origin feature/user-dashboard</code></pre>
+                </li>
+                <li><strong>Create Pull Request:</strong> Create a PR targeting a branch with a static Enver:
+                    <pre><code>gh pr create --base dev --head feature/user-dashboard \
+  --title "User Dashboard Redesign" \
+  --body "Implements new responsive design"</code></pre>
+                </li>
+                <li><strong>Automatic Clone Creation:</strong> When the PR targets a branch with a static Enver in <span class="inline-code">contractsLib</span>, the platform automatically:
+                    <ul>
+                        <li>Detects the PR creation</li>
+                        <li>Creates a dynamic Enver for the PR branch</li>
+                        <li>Deploys the isolated environment</li>
+                        <li>Updates the PR with environment details</li>
+                    </ul>
+                </li>
+                <li><strong>Automatic Updates:</strong> Additional commits to the PR branch automatically update the dynamic environment</li>
+                <li><strong>Automatic Cleanup:</strong> When the PR is closed or merged, the platform automatically destroys the dynamic Enver and cleans up all resources</li>
+            </ol>
+
+            <h4>Benefits of Dynamic Cloning:</h4>
+            <ul>
+                <li><strong>Isolated Testing:</strong> Each feature gets its own complete environment</li>
+                <li><strong>Dependency Consistency:</strong> Clones inherit exact dependency versions from source Envers</li>
+                <li><strong>Resource Isolation:</strong> Unique resource naming prevents conflicts</li>
+                <li><strong>Automatic Cleanup:</strong> No forgotten environments consuming resources (especially with PR-based method)</li>
+                <li><strong>Rapid Iteration:</strong> Quick environment provisioning for fast feedback cycles</li>
+                <li><strong>Full Stack Testing:</strong> Complete infrastructure and application testing in isolation</li>
+            </ul>
+
+            <h4>Requirements for PR-Based Automation:</h4>
+            <ul>
+                <li><strong>Static Enver Mapping:</strong> Target branch must have a corresponding static Enver in <span class="inline-code">contractsLib</span></li>
+                <li><strong>GitHub App Permissions:</strong> Platform needs appropriate permissions to monitor PR events</li>
+                <li><strong>Branch Name Matching:</strong> PR target branch names must match Git branch references in static Enver definitions</li>
+            </ul>
+
+            <h4>Comparison of Dynamic Cloning Methods:</h4>
+            <table style="width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.9em;">
+                <thead>
+                    <tr style="background-color: #f8f9fa;">
+                        <th style="border: 1px solid #ddd; padding: 0.5rem; text-align: left;">Aspect</th>
+                        <th style="border: 1px solid #ddd; padding: 0.5rem; text-align: left;">Manual Commands</th>
+                        <th style="border: 1px solid #ddd; padding: 0.5rem; text-align: left;">PR-Based Automation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="border: 1px solid #ddd; padding: 0.5rem;"><strong>Trigger</strong></td>
+                        <td style="border: 1px solid #ddd; padding: 0.5rem;"><span class="inline-code">odmd: create@</span> in commit</td>
+                        <td style="border: 1px solid #ddd; padding: 0.5rem;">PR creation against static Enver branch</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid #ddd; padding: 0.5rem;"><strong>Cleanup</strong></td>
+                        <td style="border: 1px solid #ddd; padding: 0.5rem;"><span class="inline-code">odmd: delete</span> in commit</td>
+                        <td style="border: 1px solid #ddd; padding: 0.5rem;">PR closure (merge/close)</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid #ddd; padding: 0.5rem;"><strong>Use Case</strong></td>
+                        <td style="border: 1px solid #ddd; padding: 0.5rem;">Ad-hoc testing, experimentation</td>
+                        <td style="border: 1px solid #ddd; padding: 0.5rem;">Standard development workflow</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid #ddd; padding: 0.5rem;"><strong>Automation Level</strong></td>
+                        <td style="border: 1px solid #ddd; padding: 0.5rem;">Manual control</td>
+                        <td style="border: 1px solid #ddd; padding: 0.5rem;">Fully automated</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid #ddd; padding: 0.5rem;"><strong>Integration</strong></td>
+                        <td style="border: 1px solid #ddd; padding: 0.5rem;">Git commits</td>
+                        <td style="border: 1px solid #ddd; padding: 0.5rem;">GitHub/GitLab workflow</td>
+                    </tr>
+                </tbody>
+            </table>
 
             <h3 id="use-platform-services">Use Platform Services</h3>
             <p>The ONDEMANDENV platform provides additional services to enhance your development and deployment

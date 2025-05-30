@@ -50,7 +50,7 @@
 
 <main>
     <h1>Core Concepts of ONDEMANDENV</h1>
-    <p>ONDEMANDENV introduces several core concepts designed to bring order, consistency, and agility to the management of complex distributed systems. Understanding these concepts is key to leveraging the platform's power. For a deeper technical overview, see the <a href="articles/odmd-arc.md">ONDEMANDENV Architecture Deep Dive</a> article.</p>
+    <p>ONDEMANDENV introduces several core concepts designed to bring order, consistency, and agility to the management of complex distributed systems. Understanding these concepts is key to leveraging the platform's power. For a deeper technical overview, see the <a href="/articles/odmd-arc/">ONDEMANDENV Architecture Deep Dive</a> article.</p>
 
     <p style="margin-top: 1.5rem; margin-bottom: 2rem; font-style: italic; background-color: #eef; padding: 1rem; border-left: 4px solid #aac;">
         <strong>Note on Implementation:</strong> While the current examples and reference implementation heavily utilize <strong>AWS CDK</strong> and CloudFormation for defining and deploying resources, the core ONDEMANDENV principles – Application-Centricity, Envers, contractsLib, Cloning, and Platform Abstraction – are tool-agnostic. The same conceptual framework could be implemented using other Infrastructure-as-Code tools like <strong>Terraform CDK</strong>, <strong>Pulumi</strong>, or potentially even primarily with <strong>cdk8s</strong> for environments heavily focused on Kubernetes orchestration. The key is the pattern of codified contracts, versioned environments, and platform automation.
