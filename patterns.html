@@ -271,6 +271,111 @@ export class MyAppEksStack extends OdmdEnverCdk {
          </p>
     </section>
 
+    <section class="pattern-section" id="ai-assisted-development">
+        <h2>Pattern: AI-Assisted Development within Bounded Contexts</h2>
+        <div class="problem-statement">
+            <p><strong>Problem:</strong> AI code generation tools, while powerful, often produce code that violates architectural boundaries, introduces tight coupling, or creates accidental complexity. Without proper constraints and context, AI can generate technically correct but architecturally problematic solutions that compromise long-term maintainability and system coherence. Traditional development approaches lack the structured contracts and boundaries needed to guide AI toward producing well-architected, Domain-Driven Design-compliant code.</p>
+        </div>
+        <div class="solution-statement">
+            <p><strong>ONDEMANDENV Solution:</strong> ONDEMANDENV provides the perfect framework for AI-assisted development by establishing clear bounded contexts, explicit contracts, and isolated testing environments. The platform's `contractsLib` serves as a specification that AI can reference to generate code that respects domain boundaries, uses correct interfaces, and integrates properly with the existing system. This approach transforms AI from a potential source of accidental complexity into a powerful tool for generating maintainable, DDD-compliant code.</p>
+        </div>
+
+        <h3>AI-Guided Development Workflow:</h3>
+        <ol>
+            <li><strong>Define Bounded Context in contractsLib:</strong> Establish clear boundaries, responsibilities, and contracts for your domain before involving AI in code generation.</li>
+            <li><strong>Provide AI with Architectural Context:</strong> Share the relevant `BuildDefinition`, `Enver` definitions, and `Product`/`Consumer` contracts with your AI assistant to establish architectural constraints.</li>
+            <li><strong>Generate Code within Boundaries:</strong> Request AI to generate code that operates within the defined bounded context, referencing specific contracts and dependency interfaces.</li>
+            <li><strong>Validate in Isolated Environment:</strong> Use ONDEMANDENV's cloning capability to create an ephemeral environment for testing AI-generated code without affecting shared infrastructure.</li>
+            <li><strong>Iterate with Contract Evolution:</strong> If AI suggests interface changes, evolve contracts through the proper governance process in `contractsLib` before implementing.</li>
+        </ol>
+
+        <h3>Example: AI-Assisted Microservice Development</h3>
+        <p>Consider developing a new authentication service using AI assistance within ONDEMANDENV:</p>
+        
+        <h4>1. Define the Bounded Context (`contractsLib`)</h4>
+        <pre><code class="language-typescript">// In MyOrgContracts.ts
+const authServiceBuild = new OdmdBuild<AuthServiceEnver>(this, 'AuthServiceBuild', {
+    githubRepoAlias: 'auth-service-repo',
+    buildType: 'cdk',
+});
+
+const authServiceDev = new AuthServiceEnver(this, 'AuthServiceDev', {
+    build: authServiceBuild,
+    targetAccountAlias: 'dev-workspace-account',
+    // Define what this service will provide
+    outputsProduct: new Product(this, 'Outputs'), // JWT endpoints, user validation APIs
+    // Define dependencies it needs
+    userDbConsumer: new Consumer(this, 'UserDbOutputs', userDbEnver.outputsProduct),
+    auditLogConsumer: new Consumer(this, 'AuditLogOutputs', auditLogEnver.outputsProduct),
+});</code></pre>
+
+        <h4>2. AI Code Generation with Architectural Context</h4>
+        <p>Provide your AI assistant with the contract definition and request code generation:</p>
+        <pre><code class="language-typescript">// AI Prompt: "Generate a CDK stack for the AuthServiceEnver that:
+// 1. Consumes UserDb outputs for user data access
+// 2. Consumes AuditLog outputs for security logging  
+// 3. Publishes JWT endpoint and validation API as outputs
+// 4. Follows Application-Centric Infrastructure principles
+// 5. Uses the consumed database connection for user authentication"
+
+export class AuthServiceStack extends cdk.Stack {
+    constructor(scope: Construct, id: string, props: cdk.StackProps) {
+        super(scope, id, props);
+        
+        // AI-generated code respects contract boundaries
+        const userDbConfig = JSON.parse(OdmdEnverCdk.getSharedValue('UserDbOutputs') || '{}');
+        const auditConfig = JSON.parse(OdmdEnverCdk.getSharedValue('AuditLogOutputs') || '{}');
+        
+        // AI generates infrastructure within bounded context
+        const authLambda = new lambda.Function(this, 'AuthFunction', {
+            // ... AI-generated Lambda configuration
+            environment: {
+                USER_DB_ENDPOINT: userDbConfig.endpoint,
+                AUDIT_LOG_TOPIC: auditConfig.topicArn,
+            }
+        });
+        
+        // AI publishes outputs according to contract
+        new OdmdShareOut(this, 'Outputs', {
+            value: cdk.Stack.of(this).toJsonString({
+                jwtEndpoint: authApi.url,
+                validationEndpoint: `${authApi.url}/validate`,
+            })
+        });
+    }
+}</code></pre>
+
+        <h4>3. Isolated Testing with Cloning</h4>
+        <p>Test the AI-generated code in isolation:</p>
+        <pre><code class="plaintext">git commit -m "feat: AI-generated auth service implementation
+
+odmd: create@AuthServiceDev"</code></pre>
+        <p>This creates a temporary environment where the AI-generated authentication service can be tested without affecting other services or shared infrastructure.</p>
+
+        <h4>4. Contract Evolution and Governance</h4>
+        <p>If AI suggests adding new outputs or changing interfaces, update `contractsLib` through proper governance:</p>
+        <pre><code class="language-typescript">// AI suggests adding password reset capability
+// Update contract in contractsLib through PR process
+const authServiceDev = new AuthServiceEnver(this, 'AuthServiceDev', {
+    // ... existing configuration
+    outputsProduct: new Product(this, 'Outputs'), // Now includes password reset endpoints
+    // AI identifies need for email service
+    emailServiceConsumer: new Consumer(this, 'EmailServiceOutputs', emailServiceEnver.outputsProduct),
+});</code></pre>
+
+        <h3>Benefits of AI + ONDEMANDENV + DDD</h3>
+        <ul>
+            <li><strong>Architectural Compliance:</strong> AI generates code that automatically respects bounded contexts and domain boundaries</li>
+            <li><strong>Contract Adherence:</strong> Explicit interfaces prevent AI from creating inappropriate dependencies or tight coupling</li>
+            <li><strong>Safe Experimentation:</strong> Cloned environments allow rapid iteration with AI-generated code without risk</li>
+            <li><strong>Governance Integration:</strong> Changes to system architecture follow established processes, even when AI-suggested</li>
+            <li><strong>Maintainable Output:</strong> AI-generated code follows consistent patterns and integrates properly with the platform</li>
+            <li><strong>Accelerated Development:</strong> Developers can leverage AI while maintaining architectural integrity and system coherence</li>
+        </ul>
+
+        <p>This pattern demonstrates how ONDEMANDENV transforms AI from a potential source of technical debt into a powerful ally for building maintainable, well-architected systems that follow Domain-Driven Design principles.</p>
+    </section>
+
 </main>
 
 <footer>
