@@ -195,6 +195,3 @@ Citations:
 [40] https://www.youtube.com/watch?v=IZoUdVS2Rw0
 [41] http://www.iariajournals.org/software/soft_v17_n12_2024_paged.pdf
 [42] https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.1500-4r1.pdf
-
----
-Answer from Perplexity: pplx.ai/share

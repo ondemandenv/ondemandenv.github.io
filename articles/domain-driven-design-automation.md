@@ -105,6 +105,3 @@ As distributed systems become increasingly complex, the combination of strong do
 ## Citations
 
   1. [1] <https://ondemandenv.dev/concepts.html>
-  2. [2] <https://ondemandenv.dev/concepts.html> (Note: Citation [2] in the original text points to the same URL as [1])
-
-Answer from Perplexity: pplx.ai/share
