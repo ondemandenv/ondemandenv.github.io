@@ -1,3 +1,9 @@
+---
+layout: article
+title: "The Partitioning Principle: A Unified Theory for Stateful Deployments"
+permalink: /articles/partitioning-principle/
+---
+
 ## **The Partitioning Principle: A Unified Theory for Stateful Deployments**
 
 ## **Abstract**
