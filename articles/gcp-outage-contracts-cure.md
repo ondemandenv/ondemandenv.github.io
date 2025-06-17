@@ -1,3 +1,10 @@
+---
+title: "The GCP Outage We Should Have Seen Coming: How Shared Environments Breed Chaos and Why Contracts are the Cure"
+layout: article
+permalink: /articles/gcp-outage-contracts-cure/
+---
+
+
 ## **The GCP Outage We Should Have Seen Coming: How Shared Environments Breed Chaos and Why Contracts are the Cure**
 
 On June 12, 2025, a significant portion of the internet felt a tremor. A massive Google Cloud outage took down or degraded over 70 of its own services, creating a ripple effect that impacted major platforms like OpenAI, Shopify, and Cloudflare[1](https://www.moneycontrol.com/technology/google-says-it-is-sorry-for-the-cloud-outage-flawed-updates-led-to-disruption-of-worldwide-services-article-13128296.html). Downdetector registered over 1.4 million user reports globally, a stark reminder of the interconnectedness and fragility of our digital infrastructure[2](https://www.ookla.com/articles/google-cloud-outage-june-2025).
