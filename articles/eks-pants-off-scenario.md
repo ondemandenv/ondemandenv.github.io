@@ -1,6 +1,6 @@
 ---
 layout: article
-title: "The EKS "Pants Off to Fart" Scenario: Accidental Complexity vs. ECS/CDK Simplicity in the SDLC"
+title: 'The EKS `Pants Off to Fart" Scenario: Accidental Complexity vs. ECS/CDK Simplicity in the SDLC'
 permalink: /articles/eks-pants-off-scenario/
 ---
 
