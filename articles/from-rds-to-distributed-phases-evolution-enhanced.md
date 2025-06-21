@@ -54,7 +54,7 @@ To illustrate how these phases differ, let's examine how each one handles the **
 
 The traditional approach where all business logic executes within database transactions, providing strong consistency at the cost of scalability and resilience.
 
-```mermaid
+<div class="mermaid">
 flowchart TD
     subgraph "Phase 1: RDS-Centric Monolithic Architecture"
         P1_User["👤 User Request<br/>Buy 2 iPhones, $2000"]
@@ -80,7 +80,7 @@ flowchart TD
             P1_Insight["💡 Simple but Limited:<br/>• Single point of failure (app + DB)<br/>• Strong consistency via ACID<br/>• Vertical scaling only<br/>• Fast development for small teams<br/>• All components share resources<br/>• Technology lock-in (single stack)"]
         end
     end
-```
+</div>
 
 #### When Phase 1 Excels:
 - **Small to Medium Scale**: Under 10,000 concurrent users
@@ -115,7 +115,7 @@ public class OrderService {
 
 Evolution that introduces message queues to decouple client requests from processing, improving responsiveness while maintaining transactional processing.
 
-```mermaid
+<div class="mermaid">
 flowchart TD
     subgraph "Phase 2: Queue-Based Asynchronous Processing"
         P2_User["👤 User Request<br/>Buy 2 iPhones, $2000"]
@@ -146,7 +146,7 @@ flowchart TD
             P2_Insight["💡 Async Benefits via Platform:<br/>• Client responsiveness improved<br/>• Queue platform handles reliability<br/>• Worker can retry failed operations<br/>• Better resource utilization<br/>• Still single codebase/deployment<br/>• Worker becomes new bottleneck"]
         end
     end
-```
+</div>
 
 #### The Platform Breakthrough:
 Phase 2 represents the first adoption of **managed platform services** for messaging (AWS SQS, RabbitMQ, Redis), abstracting away the complexity of reliable message delivery.
@@ -191,7 +191,7 @@ public class OrderWorker {
 
 Further evolution that introduces queues between each processing step, enabling step-level retries and fault isolation while maintaining deployment coupling.
 
-```mermaid
+<div class="mermaid">
 flowchart TD
     subgraph "Phase 3: Step-Level Queue Architecture"
         P3_User["👤 User Request<br/>Buy 2 iPhones, $2000"]
@@ -229,7 +229,7 @@ flowchart TD
             P3_Insight["💡 The Hidden Monolith Problem:<br/>• Step-level efficiency achieved<br/>• Each step can retry independently<br/>• Workers specialized but still coupled<br/>• Same deployment unit = shared fate<br/>• Same technology stack limitations<br/>❓ Why keep them together if queues decouple them?"]
         end
     end
-```
+</div>
 
 #### The Critical Realization:
 Phase 3 often reveals the **"Hidden Monolith Problem"** - despite logical separation, components remain deployment-coupled, leading to the key question: *"If these steps are already communicating asynchronously via queues, why are we still packaging them together?"*
@@ -275,7 +275,7 @@ public class PaymentWorker {
 
 The architectural breakthrough where managed event streaming platforms enable true service independence, with each service owning its data, technology choices, and deployment lifecycle.
 
-```mermaid
+<div class="mermaid">
 flowchart TD
     subgraph "Phase 4: Platform-as-a-Service Event-Driven Architecture"
         P4_User["👤 User Request<br/>Buy 2 iPhones, $2000"]
@@ -312,7 +312,7 @@ flowchart TD
             P4_Insight["💡 Platform abstracts complexity:<br/>• No direct service-to-service calls<br/>• Each service owns its data & technology<br/>• Teams deploy independently<br/>• Event streaming handles coordination<br/>• Managed service handles infrastructure"]
         end
     end
-```
+</div>
 
 #### The "Aha!" Moment:
 Phase 4 represents the realization that **managed platform services** (Kafka, Kinesis, EventBridge) can handle all distributed systems complexity, allowing teams to focus on business logic while achieving true service independence.

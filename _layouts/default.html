@@ -42,17 +42,62 @@
     <!-- Mermaid.js for diagram rendering -->
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
     <script>
-        mermaid.initialize({ 
-            startOnLoad: true,
-            theme: 'default',
-            themeVariables: {
-                primaryColor: '#ff6b6b',
-                primaryTextColor: '#333',
-                primaryBorderColor: '#ff6b6b',
-                lineColor: '#333',
-                secondaryColor: '#4ecdc4',
-                tertiaryColor: '#45b7d1'
+        document.addEventListener('DOMContentLoaded', function() {
+            mermaid.initialize({ 
+                startOnLoad: false,
+                theme: 'default',
+                themeVariables: {
+                    primaryColor: '#ff6b6b',
+                    primaryTextColor: '#333',
+                    primaryBorderColor: '#ff6b6b',
+                    lineColor: '#333',
+                    secondaryColor: '#4ecdc4',
+                    tertiaryColor: '#45b7d1'
+                }
+            });
+            
+            // Multiple selectors to catch different ways Kramdown might render mermaid
+            const selectors = [
+                'pre code.language-mermaid',
+                'code.language-mermaid',
+                'pre.highlight code[data-lang="mermaid"]',
+                '.language-mermaid',
+                '.highlight-mermaid'
+            ];
+            
+            let foundMermaid = false;
+            
+            selectors.forEach(selector => {
+                const blocks = document.querySelectorAll(selector);
+                blocks.forEach((block, index) => {
+                    const mermaidDiv = document.createElement('div');
+                    mermaidDiv.className = 'mermaid';
+                    mermaidDiv.id = 'mermaid-' + Date.now() + '-' + index;
+                    mermaidDiv.textContent = block.textContent;
+                    
+                    // Replace the parent pre element if it exists, otherwise replace the code element
+                    const parentPre = block.closest('pre');
+                    if (parentPre) {
+                        parentPre.replaceWith(mermaidDiv);
+                    } else {
+                        block.replaceWith(mermaidDiv);
+                    }
+                    foundMermaid = true;
+                });
+            });
+            
+            // Also handle direct mermaid class elements
+            const directMermaidBlocks = document.querySelectorAll('.mermaid');
+            if (directMermaidBlocks.length > 0) {
+                foundMermaid = true;
             }
+            
+            if (foundMermaid) {
+                mermaid.run();
+            }
+            
+            // Debug: log what we found
+            console.log('Mermaid blocks found:', document.querySelectorAll('.mermaid').length);
         });
     </script>
     {% endif %}
