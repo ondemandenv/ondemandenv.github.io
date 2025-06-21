@@ -1,3 +1,12 @@
+---
+layout: article
+title: "From RDS-Centric to Distributed Systems: An Evolution Through Architectural Phases"
+description: "A comprehensive guide to understanding the evolutionary phases of modern application architecture - from traditional RDS-centric designs to eventually consistent distributed systems"
+author: "Gary Y."
+date: 2025-02-01
+linkedin_url: "https://www.linkedin.com/pulse/from-rds-centric-distributed-systems-evolution-towards-gary-yang-zhyse/"
+---
+
 # From RDS-Centric to Distributed Systems: An Evolution Through Architectural Phases
 
 *A comprehensive guide to understanding the evolutionary phases of modern application architecture - from traditional RDS-centric designs to eventually consistent distributed systems*
