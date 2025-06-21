@@ -165,24 +165,27 @@ sequenceDiagram
     Note over Ticket: Ticket sits in queue for days
     
     Ticket->>+Ops: Ops reviews request
-    Note over Ops: Ops doesn't understand business context
+    Note over Ops: Ops does not understand business context
     
-    Ops->>+Dev: Request clarification
-    Dev->>-Ops: Provide business context
+    Ops->>Dev: Request clarification
+    Dev->>Ops: Provide business context
     
-    Ops->>+Istio: Make configuration change
+    Ops->>Istio: Make configuration change
     Note over Istio: Change breaks something else
     
-    Istio->>+Service: Route traffic
-    Service-->>-Istio: Error response
+    Istio->>Service: Route traffic
+    Service->>Istio: Error response
     
-    Istio->>+Ops: Alert: Service failing
-    Ops->>+Ticket: Create rollback ticket
+    Istio->>Ops: Alert Service failing
+    Ops->>Ticket: Create rollback ticket
     
-    Note over Dev,Service: Days later, still not working
+    Note over Dev,Service: Days later still not working
     
-    Ops->>-Dev: Working as designed
-    Dev-->>-Ticket: Escalate to management
+    Ops->>Dev: Working as designed
+    Dev->>Ticket: Escalate to management
+    
+    Ticket-->>-Ops: Close ticket
+    Ops-->>-Ticket: Ticket closed
 </div>
 
 ### The YAML Configuration Hell
