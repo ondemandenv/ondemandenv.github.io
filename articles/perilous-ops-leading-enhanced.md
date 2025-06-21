@@ -181,7 +181,7 @@ sequenceDiagram
     
     Note over Dev,Service: Days later, still not working
     
-    Ops->>-Dev: "Working as designed"
+    Ops->>-Dev: Working as designed
     Dev-->>-Ticket: Escalate to management
 </div>
 
