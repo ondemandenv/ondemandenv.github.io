@@ -638,11 +638,10 @@ The perilous path of operator-led microservices decomposition represents one of 
 
 The key insights for avoiding this trap:
 
-1. **Respect the Evolution**: Don't skip phases in architectural evolution
-2. **Business Capabilities First**: Organize services around business domains, not technical layers
-3. **Developer Self-Service**: Infrastructure should enable developers, not constrain them
-4. **Async by Default**: Embrace eventual consistency and event-driven patterns
-5. **Measure Business Outcomes**: Focus on end-to-end business transaction metrics
+1. **Business Capabilities First**: Organize services around business domains, not technical layers
+2. **Developer Self-Service**: Infrastructure should enable developers, not constrain them
+3. **Async by Default**: Embrace eventual consistency and event-driven patterns
+4. **Measure Business Outcomes**: Focus on end-to-end business transaction metrics
 
 The promise of microservices - increased agility, scalability, and resilience - is real, but only when implemented with proper architectural principles and organizational alignment. The perilous path of operator-led decomposition delivers none of these benefits while amplifying complexity, reducing performance, and creating organizational dysfunction.
 
