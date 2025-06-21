@@ -652,4 +652,4 @@ The choice is clear: evolve thoughtfully through proper architectural phases, or
 
 ---
 
-*This article is part of the Architecture Evolution Series. For the proper evolution path from monoliths to distributed systems, see "[From RDS-Centric to Distributed: The Four Phases of Architectural Evolution](/articles/from-rds-to-distributed-phases-evolution-enhanced/)".* 
+*This article is part of the Architecture Evolution Series. For the proper evolution path from monoliths to distributed systems, see "[From RDS-Centric to Distributed: The Four Phases of Architectural Evolution](/articles/from-rds-to-distributed-phases-evolution-enhanced)".* 
