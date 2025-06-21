@@ -28,7 +28,33 @@
         pre { background-color: #f0f0f0; padding: 1rem; border-radius: 5px; overflow-x: auto; }
         code { font-family: monospace; font-size: 0.9em; }
         pre > code { background-color: transparent; padding: 0; }
+        /* Mermaid diagram styling */
+        .mermaid { 
+            text-align: center; 
+            margin: 2rem 0; 
+            background-color: white; 
+            border: 1px solid #e1e4e8; 
+            border-radius: 6px; 
+            padding: 1rem; 
+        }
     </style>
+    
+    <!-- Mermaid.js for diagram rendering -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'default',
+            themeVariables: {
+                primaryColor: '#ff6b6b',
+                primaryTextColor: '#333',
+                primaryBorderColor: '#ff6b6b',
+                lineColor: '#333',
+                secondaryColor: '#4ecdc4',
+                tertiaryColor: '#45b7d1'
+            }
+        });
+    </script>
     {% endif %}
 </head>
 <body>
