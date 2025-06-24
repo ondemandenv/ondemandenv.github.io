@@ -7,13 +7,21 @@ permalink: /articles/app-centric-infra2/
 
 # AWS CDK for EKS: Falling Short in Real-World, Multi-Account Kubernetes Deployments
 
-AWS Cloud Development Kit (CDK) aims to simplify cloud infrastructure provisioning using familiar programming languages. While its EKS module promises to streamline Kubernetes cluster creation and management, a closer look reveals significant shortcomings, especially when considering practical, multi-account EKS deployments. This article will delve into these limitations, arguing that AWS CDK's current EKS implementation, particularly the `Cluster.addManifest` function, is not truly useful for organizations adopting a shared, multi-account EKS strategy.
+*Part 2 of "Embracing Application-Centric Infrastructure in the Cloud"*
 
-## The Illusion of Simplicity: Cluster.addManifest and its Account Boundaries
+AWS Cloud Development Kit (CDK) aims to simplify cloud infrastructure provisioning using familiar programming languages. While its EKS module promises to streamline Kubernetes cluster creation and management, a closer look reveals significant shortcomings when implementing **application-centric infrastructure** patterns in multi-account environments.
 
-The `Cluster.addManifest(id: string, ...manifest: Record<string, any>[]): KubernetesManifest` function in CDK appears to offer a straightforward way to deploy Kubernetes manifests to an EKS cluster. However, this simplicity is deceptive when considering real-world scenarios where EKS clusters are designed to be shared across multiple AWS accounts.
+This article explores how CDK's EKS implementation, particularly the `Cluster.addManifest` function, fundamentally conflicts with application-centric principles where applications own their complete vertical slice of resources across environments. The core issue isn't just technical limitations—it's that CDK's design philosophy assumes infrastructure-centric rather than application-centric patterns.
 
-In practice, a central EKS cluster is often shared by various teams or applications residing in separate AWS accounts. This multi-account approach is crucial for security, isolation, and cost management. However, `Cluster.addManifest` operates under the implicit assumption of a single account and region deployment.
+## The Application-Centric Challenge: Why CDK's Assumptions Break Down
+
+In **application-centric infrastructure**, each application enver (environment version) owns its complete vertical slice: application code, infrastructure definitions, database schemas, IAM roles, and Kubernetes manifests. This ownership pattern requires applications to deploy resources across multiple platforms and accounts while maintaining atomic deployment/rollback capabilities.
+
+The `Cluster.addManifest(id: string, ...manifest: Record<string, any>[]): KubernetesManifest` function in CDK appears to support this pattern but fundamentally conflicts with application-centric principles:
+
+1. **Breaks Enver Ownership**: CDK assumes the infrastructure team owns both cluster AND manifest deployment, violating the principle that applications should own their complete vertical slice
+2. **Single-Account Limitation**: Application envers need to deploy manifests to shared platform services (EKS) from their own AWS accounts, but `addManifest` assumes same-account deployment
+3. **Violates Bounded Context**: Forces applications to understand EKS cluster internals rather than treating Kubernetes as a platform service
 
 ### Evidence of this Limitation:
   * **Implicit Same-Account Assumption in CDK Design:** AWS CDK's core constructs and IAM role management are inherently designed for deployments within a single AWS account. While the CDK documentation for `KubernetesManifest` does not explicitly forbid cross-account deployments, its examples and underlying mechanisms are geared towards single-account use cases.
@@ -39,15 +47,22 @@ CDK tokens are designed to be resolved within the scope of a single CDK applicat
 
 This limitation forces users to abandon CDK's elegant token-based approach and resort to manually passing concrete values – such as VPC IDs, subnet IDs, and security group IDs – as context parameters or environment variables to their CDK applications. This manual value passing is not only less elegant but also introduces more opportunities for errors and reduces the overall benefits of using CDK in the first place.
 
-## Solution begin with networking:
+## Application-Centric Solution: Platform Services Enable Enver Ownership
 
-Prerequisite: Embracing Application-Centric Infrastructure in the Cloud 1
-  * **Environment:** All tightly coupled logical resources as a bounded context—a self-contained vertical slice with all resources needed to deliver a business capability, regardless of their physical location or type.
-  * **Enver:** Environment Version, Different envers are logical/function consistent with different config values. An enver will deploy and rollback as a unit.
-  * **Networking as service:** network team owns all VPC related resources (marked red in original text/diagram) by managing thru code and lib. The networking account running multiple networking envers, each networking enver contains and shares IPAM, VPC with transit gateway and NAT to workspace accounts, that will get a range of CIDR from shared IPAM and share NAT and internal naming system when deploying vpcs in workload envers. Each VPC can only connect to one Transit Gateway, so VPCs and their resources inside are connected thru TGW, but different TGW's connected VPCs are physically disconnected.
-  * **RDS as service:** DB team owns DB cluster hosting DB for other envers that define/own/control DB/Schema/Role/User.
-  * **EKS as service:** k8s team own Eks cluster host container orchestration for other envers that define/own/control k8s manifests and service account to IAM role mappings.
-  * Same for EC2, MSK, Opensearch, ECS, ElasticCache, Redshift, private link ...
+The solution to CDK's limitations lies in embracing **true application-centric infrastructure** through platform services that support enver ownership patterns:
+
+### Core Application-Centric Principles
+* **🎯 Enver (Environment Version)**: A complete vertical slice containing all resources needed to deliver a business capability—application code, infrastructure, database schemas, IAM roles, and Kubernetes manifests. Each enver deploys and rolls back as an atomic unit.
+* **📦 Bounded Context**: Each application enver owns its complete stack while consuming platform services through well-defined interfaces, eliminating infrastructure coupling.
+* **🔄 Cross-Environment Consistency**: The same enver definition works across development, staging, and production by consuming different instances of the same platform services.
+
+### Platform Services That Enable Application Ownership
+Rather than forcing applications to understand infrastructure details, platform teams provide services that applications can consume:
+
+* **🌐 Networking-as-a-Service**: Network team manages the connectivity fabric (Transit Gateway, VPC sharing, IPAM) that enables secure communication between application envers and platform services
+* **⚙️ EKS-as-a-Service**: Kubernetes team manages EKS clusters while allowing application envers to own and deploy their manifests, ServiceAccounts, and IRSA mappings  
+* **🗄️ RDS-as-a-Service**: Database team manages RDS clusters while application envers own their schemas, roles, users, and access patterns
+* **🔧 Same Pattern**: EC2, MSK, OpenSearch, ECS, ElastiCache, Redshift, PrivateLink all follow the same platform service pattern
 
 ### Multi-Account Network Architecture
 
@@ -373,20 +388,27 @@ Obviously the whole design and implementation will depend on platform:
 
 This platform transforms AWS multi-account complexity into safe, self-service enver deployments while maintaining enterprise-grade security - exactly what raw AWS CDK/EKS lacks.
 
-## Why the Network Foundation Matters
+## Why Application-Centric Infrastructure Requires Network Foundation
 
-The networking architecture described above directly addresses the core limitations of AWS CDK's EKS implementation:
+The networking architecture described above isn't just about connectivity—it's the foundation that enables **true application-centric infrastructure** patterns:
 
-### 1. Multi-Account Reality vs. CDK Assumptions
-While `Cluster.addManifest` assumes single-account deployments, the transit gateway architecture **embraces multi-account patterns** as a first-class design principle. Each service (EKS, RDS, applications) operates in its own account while maintaining secure connectivity.
+### 1. Preserves Application Ownership
+While CDK's `Cluster.addManifest` forces infrastructure teams to own manifest deployment, the platform service pattern allows **applications to maintain ownership** of their complete vertical slice. Application envers can deploy their Kubernetes manifests to shared EKS clusters without losing bounded context principles.
 
-### 2. Cross-Account Token Resolution
-CDK's token resolution breaks down across account boundaries, but the **Lambda-based deployment pattern** in the Central VPC provides runtime resolution of cross-account resource references. This enables dynamic configuration injection that CDK simply cannot achieve.
+### 2. Enables Cross-Platform Integration
+The Transit Gateway fabric allows application envers to seamlessly integrate with multiple platform services (EKS, RDS, MSK) while maintaining **atomic deployment boundaries**. Applications declare their requirements; platform services fulfill them through secure network channels.
 
-### 3. Network-First Design
-Instead of treating networking as an afterthought, this architecture positions the **transit gateway and IPAM as foundational services**. Applications inherit network connectivity rather than having to configure it, dramatically simplifying deployment complexity.
+### 3. Supports Environment Promotion
+The same application enver can deploy to different environment networks (development, production) without code changes. **Network abstraction enables application portability** while maintaining security boundaries through physical network isolation.
 
-### 4. Platform Service Abstraction
-The **"X-as-a-Service"** pattern (Networking-as-a-Service, EKS-as-a-Service, RDS-as-a-Service) provides clear ownership boundaries while enabling self-service consumption. This is the organizational pattern that makes multi-account Kubernetes feasible at scale.
+### 4. Simplifies Application Development
+Applications inherit secure connectivity and don't need to understand VPC peering, security groups, or cross-account IAM complexity. **Platform services abstract infrastructure complexity** while preserving application control over business logic and data.
 
-The contrast is stark: CDK's EKS module optimizes for demo-friendly simplicity while ignoring production-grade networking requirements. The enver-centric approach optimizes for operational excellence while providing developer-friendly abstractions.
+### The Application-Centric Advantage
+
+The contrast reveals a fundamental philosophical difference:
+
+- **CDK's Infrastructure-Centric Approach**: Applications must understand and configure infrastructure details, creating tight coupling and operational complexity
+- **Enver-Centric Application Ownership**: Applications own their complete vertical slice while consuming infrastructure through platform service APIs, enabling true business agility
+
+This transformation allows development teams to focus on delivering business value while platform teams optimize for operational excellence—the essence of application-centric infrastructure.

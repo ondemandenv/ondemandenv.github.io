@@ -85,73 +85,155 @@
     <section class="pattern-section" id="shared-networking">
         <h2>Pattern: Managing Shared Networking Resources (VPC/TGW)</h2>
         <div class="problem-statement">
-            <p><strong>Problem:</strong> A dedicated networking team manages core infrastructure (VPCs, TGW, IPAM) in a central account. Application teams in separate workspace accounts need to consume these resources consistently and securely without managing the networking infrastructure themselves.</p>
+            <p><strong>Problem:</strong> A dedicated networking team manages core infrastructure (VPCs, Transit Gateway, IPAM) in a central account. Application teams in separate workspace accounts need to consume these resources consistently and securely without managing the networking infrastructure themselves. Traditional tools like AWS CDK's `Cluster.addManifest` fail in this multi-account scenario because they assume single-account deployments and cannot resolve cross-account resource references.</p>
         </div>
         <div class="solution-statement">
-            <p><strong>ONDEMANDENV Solution:</strong> Define networking infrastructure as a dedicated "Platform Enver" (e.g., `networkingProd`) in the networking account. This Enver publishes network details (VPC IDs, Subnet IDs, TGW ID) as `Products` in `contractsLib`. Application Envers in workspace accounts declare `Consumers` for these Products. The platform securely resolves these cross-account dependencies using the contracts and handles necessary resource sharing (e.g., RAM) and IAM permissions, providing the application Enver's CDK code with the required values.</p>
+            <p><strong>ONDEMANDENV Solution:</strong> Create unified networks spanning multiple AWS accounts through Transit Gateway architecture. Define networking infrastructure as dedicated "Platform Envers" that establish network authority and publish connectivity details. This enables true multi-account networking where applications inherit secure connectivity rather than managing it.</p>
         </div>
 
-        <h3>1. Define Networking Platform Enver (`contractsLib`)</h3>
-        <p>The networking team defines their Enver and explicitly declares the <span class="inline-code">Outputs</span> Product.</p>
+        <h3>Network Architecture Overview</h3>
+        <p>ONDEMANDENV solves multi-account networking through <strong>Transit Gateway as the network hub</strong>:</p>
+        <ul>
+            <li><strong>🌐 Networking Account Authority:</strong> Each environment (Prod, Dev) has a dedicated AWS account containing Transit Gateway, NAT Gateway, and IPAM that manages connectivity across all other accounts</li>
+            <li><strong>📦 Cross-Account VPC Connectivity:</strong> VPCs in different AWS accounts (EKS Platform, RDS Platform, Application Workloads) connect through the centralized Transit Gateway to form a unified network</li>
+            <li><strong>🔒 Environment Isolation:</strong> Production Network (10.0.0.0/8) and Development Network (172.16.0.0/12) are completely isolated with separate Transit Gateways</li>
+            <li><strong>📊 Centralized IP Management:</strong> IPAM in the networking account allocates CIDR ranges to prevent conflicts across all connected VPCs</li>
+        </ul>
+
+        <h3>Why This Matters: CDK Limitations</h3>
+        <p>AWS CDK's EKS implementation assumes <strong>single-account deployments</strong>, making it unsuitable for production multi-account architectures:</p>
+        <ul>
+            <li><strong>Token Resolution Failures:</strong> CDK tokens break across account boundaries, forcing manual value passing</li>
+            <li><strong>No Cross-Account IAM Handling:</strong> CDK cannot automatically manage the complex cross-account role assumptions needed for shared EKS clusters</li>
+            <li><strong>Network Foundation Ignored:</strong> CDK treats networking as an afterthought rather than the foundational service it must be</li>
+        </ul>
+        <p>ONDEMANDENV's networking pattern addresses these limitations by providing <strong>runtime resolution</strong> of cross-account dependencies and establishing networking as a foundational platform service.</p>
+
+        <h3>Implementation: Three Steps to Multi-Account Networking</h3>
+        
+        <h4>1. Define Networking Platform Enver (`contractsLib`)</h4>
+        <p>The networking team defines dedicated Envers for each isolated network (Production, Development):</p>
         <pre><code class="language-typescript">// In MyOrgContracts.ts (contractsLib)
 import { OdmdBuild, OdmdEnverCdk, Product } from '@ondemandenv/odmd-contracts-base';
-// Assuming NetworkingPlatformEnver extends OdmdEnverCdk
 
-// Define the build configuration for the Networking Enver type
 const networkingBuild = new OdmdBuild<NetworkingPlatformEnver>(this, 'NetworkingBuild', {
     githubRepoAlias: 'networking-infra-repo',
     buildType: 'cdk',
-    /* ... potentially sourcePath ... */
 });
 
-// Define the specific "prod" instance (Enver)
+// Production Network: 10.0.0.0/8 CIDR space
 const networkingProd = new NetworkingPlatformEnver(this, 'NetworkingProd', {
-    build: networkingBuild, // Link to build config
-    targetAccountAlias: 'networking-account',
-    immutable: true, // Assuming prod is immutable
-    // Declare the single 'Outputs' product this Enver will publish
-    outputsProduct: new Product(this, 'Outputs'),
+    build: networkingBuild,
+    targetAccountAlias: 'networking-prod-account',
+    immutable: true,
+    outputsProduct: new Product(this, 'Outputs'), // VPC IDs, TGW ID, NAT Gateway info
+});
+
+// Development Network: 172.16.0.0/12 CIDR space  
+const networkingDev = new NetworkingPlatformEnver(this, 'NetworkingDev', {
+    build: networkingBuild,
+    targetAccountAlias: 'networking-dev-account',
+    outputsProduct: new Product(this, 'Outputs'), // Separate network infrastructure
 });</code></pre>
 
-        <h3>2. Implement Networking CDK Stack (in `networking-infra-repo`)</h3>
-        <p>The networking team's CDK code provisions resources and uses the single `OdmdShareOut` construct to publish a JSON string containing all outputs.</p>
-        <pre><code class="language-typescript">// Simplified example in networking-infra-repo/lib/networking-stack.ts
+        <h4>2. Implement Transit Gateway Network Infrastructure</h4>
+        <p>The networking team's CDK stack creates the network foundation that spans multiple accounts:</p>
+        <pre><code class="language-typescript">// networking-infra-repo/lib/networking-stack.ts
 import * as cdk from 'aws-cdk-lib';
+import * as ec2 from 'aws-cdk-lib/aws-ec2';
+import * as ipam from 'aws-cdk-lib/aws-ec2';
 import { OdmdEnverCdk, OdmdShareOut } from '@ondemandenv/odmd-contracts-base';
-// ... provision VPC, TGW, Subnets ...
 
-// Structure outputs
-const outputs = {
-    sharedVpcId: vpc.vpcId,
-    privateSubnetIds: vpc.privateSubnets.map(s => s.subnetId),
-    // ... other outputs ...
-};
+export class NetworkingStack extends OdmdEnverCdk {
+    constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+        super(scope, id, props);
 
-// Share outputs via the single 'Outputs' Product ID
-new OdmdShareOut(this, 'Outputs', { value: cdk.Stack.of(this).toJsonString(outputs) });
+        // 🔗 Transit Gateway - The Network Hub
+        const transitGateway = new ec2.CfnTransitGateway(this, 'TransitGateway', {
+            amazonSideAsn: 64512,
+            description: 'Hub for cross-account connectivity',
+        });
 
-// Platform might also configure AWS RAM sharing here based on consumers in contractsLib
-</code></pre>
+        // 🌍 Shared NAT Gateway for Internet Access
+        const natGateway = new ec2.NatGateway(this, 'SharedNatGateway', {
+            // ... configuration ...
+        });
 
-        <h3>3. Consume Networking Products in Application Enver (`contractsLib`)</h3>
-        <p>An application team declares a `Consumer` for the networking Enver's `Outputs` Product.</p>
+        // 📊 IPAM for Centralized IP Management
+        const ipamPool = new ec2.CfnIPAMPool(this, 'IpamPool', {
+            ipamScopeId: 'ipam-scope-xxx',
+            addressFamily: 'ipv4',
+            provisionedCidrs: [{ cidr: '10.0.0.0/8' }], // Or 172.16.0.0/12 for dev
+        });
+
+        // 📦 Central VPC for Network Operations
+        const centralVpc = new ec2.Vpc(this, 'CentralVpc', {
+            cidr: '10.1.0.0/16', // Reserved for networking operations
+            natGateways: 0, // Use shared NAT Gateway
+        });
+
+        // Attach Central VPC to Transit Gateway
+        new ec2.CfnTransitGatewayVpcAttachment(this, 'CentralVpcAttachment', {
+            transitGatewayId: transitGateway.ref,
+            vpcId: centralVpc.vpcId,
+            subnetIds: centralVpc.privateSubnets.map(s => s.subnetId),
+        });
+
+        // 🔄 Publish Network Infrastructure Details
+        const networkOutputs = {
+            transitGatewayId: transitGateway.ref,
+            transitGatewayArn: `arn:aws:ec2:${this.region}:${this.account}:transit-gateway/${transitGateway.ref}`,
+            ipamPoolId: ipamPool.ref,
+            natGatewayId: natGateway.natGatewayId,
+            centralVpcId: centralVpc.vpcId,
+            // IP ranges for different platform accounts
+            eksVpcCidr: '10.2.0.0/16',
+            rdsVpcCidr: '10.3.0.0/16',
+            appBaseCidr: '10.4.0.0/14', // 10.4-10.7 for app accounts
+        };
+
+        new OdmdShareOut(this, 'Outputs', { 
+            value: cdk.Stack.of(this).toJsonString(networkOutputs) 
+        });
+    }
+}</code></pre>
+
+        <h4>3. Platform Services Consume Network Infrastructure</h4>
+        <p>Platform services (EKS, RDS) and application Envers connect to the shared network:</p>
         <pre><code class="language-typescript">// In MyOrgContracts.ts (contractsLib)
 import { OdmdBuild, Consumer, Product } from '@ondemandenv/odmd-contracts-base';
-// Assuming OrderServiceEnver extends OdmdEnverCdk
 
-// Define the build for the Order Service
-const orderServiceBuild = new OdmdBuild<OrderServiceEnver>(this, 'OrderServiceBuild', { /* ... */ });
-
-// Define the dev instance of the Order Service
-const orderServiceDev = new OrderServiceEnver(this, 'OrderServiceDev', {
-    build: orderServiceBuild,
-    targetAccountAlias: 'dev-workspace-account',
-    outputsProduct: new Product(this, 'Outputs'), // Its own outputs
-    // Consume the single 'Outputs' product published by the networkingProd Enver
-    // Consumers retrieve the JSON string and parse it in their CDK code
+// EKS Platform Service connects to Production Network
+const eksPlatformProd = new EksPlatformEnver(this, 'EksPlatformProd', {
+    build: eksPlatformBuild,
+    targetAccountAlias: 'eks-platform-account',
+    outputsProduct: new Product(this, 'Outputs'), // EKS cluster details
+    // Consume networking details to connect VPC to Transit Gateway
     networkingOutputsConsumer: new Consumer(this, 'NetworkingOutputs', networkingProd.outputsProduct),
+});
+
+// Application Enver connects to same network
+const orderServiceProd = new OrderServiceEnver(this, 'OrderServiceProd', {
+    build: orderServiceBuild,
+    targetAccountAlias: 'order-service-account',
+    outputsProduct: new Product(this, 'Outputs'), // Service endpoints
+    // Consume networking for VPC connectivity
+    networkingOutputsConsumer: new Consumer(this, 'NetworkingOutputs', networkingProd.outputsProduct),
+    // Consume EKS platform details for deployment
+    eksOutputsConsumer: new Consumer(this, 'EksOutputs', eksPlatformProd.outputsProduct),
 });</code></pre>
-        <p>The platform ensures the `OrderServiceDev` CDK stack receives the correct JSON string containing VPC/Subnet IDs from the networking account, allowing it to parse and deploy resources correctly.</p>
+
+        <h3>Key Benefits vs. Traditional Approaches</h3>
+        <p>This pattern provides several critical advantages:</p>
+        <ul>
+            <li><strong>🚀 CDK Cross-Account Resolution:</strong> Unlike raw CDK which fails across accounts, ONDEMANDENV resolves network references at runtime</li>
+            <li><strong>🔒 Automatic Security:</strong> Transit Gateway attachments, route tables, and security groups are configured automatically based on contracts</li>
+            <li><strong>📊 IP Conflict Prevention:</strong> IPAM ensures no CIDR overlaps across the entire multi-account network</li>
+            <li><strong>🏗️ Foundation-First Architecture:</strong> Networking is established as a platform service that other services consume, not an afterthought</li>
+            <li><strong>♻️ Environment Replication:</strong> The same pattern creates identical network topologies for Prod/Dev with complete isolation</li>
+        </ul>
+        
+        <p>The result: <strong>Applications inherit secure, managed connectivity</strong> without needing to understand the underlying multi-account network complexity—exactly what production-grade infrastructure requires.</p>
     </section>
 
     <section class="pattern-section" id="shared-eks">
