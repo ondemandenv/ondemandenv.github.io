@@ -50,6 +50,37 @@ This isn't a CloudFormation bug. It's a fundamental limitation of declarative sy
 
 ---
 
+### The CDK Safety Check: An Admission of Impossibility
+
+The DocumentDB Paradox illustrates the problem of *manual drift*, where human intervention creates a state the tool cannot understand. But an even more common scenario reveals the same limitation: **initial deployment failure**.
+
+Consider this sequence of events, a rite of passage for every cloud engineer:
+
+1. You run `cdk deploy` to create a new stack.
+2. For any number of reasons—a transient network error, an IAM permission you forgot, an invalid parameter—the deployment fails halfway through.
+3. AWS CloudFormation, unable to proceed, puts the stack into a `CREATE_FAILED` state. This is not a clean slate; it's a corrupted state with a messy collection of partially-created resources.
+4. You fix the underlying issue in your code and confidently run `cdk deploy` again.
+
+Instead of success, you are met with a hard stop:
+
+```
+❌ MyStack failed: _ToolkitError: Stack is in a paused fail state (CREATE_FAILED) 
+and change includes a replacement which cannot be deployed...
+terminal (TTY) is not attached so we are unable to get a confirmation from the user
+```
+
+This error isn't a bug; it's the AWS CDK **explicitly admitting its own limitations**. The tool is telling you:
+
+> "I see that my 'declaration' of reality is `CREATE_FAILED`. The actual state of the world is broken and inconsistent. Your new code requires me to perform a destructive replacement, but I cannot trust the ground I'm standing on. Proceeding automatically is too dangerous."
+
+Why is it dangerous? Because **the CDK could blindly attempt the replacement, potentially failing again and leaving the stack in an even more corrupted state, making cleanup much more difficult.** It's a programmatic recognition that performing a major operation on a broken foundation is a recipe for disaster.
+
+This safety check is a built-in "escape hatch" that proves the article's thesis. The declarative model has failed. The tool itself recognizes that the manifest-reality gap has become a chasm it cannot cross. It is forced to halt and require a manual, out-of-band human intervention—logging into the AWS Console to delete the failed stack—to reset reality to a state simple enough for the declarative model to once again be useful.
+
+The tool itself is telling you: **my declarative power is impossible to apply in the face of accumulated, failed history.**
+
+---
+
 ## The Information Theory Problem
 
 The core issue is **information asymmetry** between declarations and reality—a problem that runs deeper than any single IaC tool:
