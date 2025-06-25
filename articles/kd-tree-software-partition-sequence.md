@@ -8,7 +8,7 @@ permalink: /articles/kd-tree-software-partition-sequence/
 
 Across the rapidly evolving landscape of software architecture—from Spring Integration to Apache Kafka, from distributed databases like DynamoDB and Cassandra to the threading models deep within Java—there is a unifying philosophy that transcends technology stacks and use cases: **partition first, process in parallel, and let the system handle coordination**. Whether the context is messaging, event streaming, or distributed storage, this methodology is the backbone of scalable, resilient, and maintainable systems.
 
-This article examines the **tactical implementation** of partitioning across data processing and storage technologies. For the complementary **strategic perspective** on how these same principles apply to architecture and deployment patterns, see [The Partitioning Principle: A Unified Theory for Stateful Deployments](/articles/partitioning-principle/).
+This article examines the **tactical implementation** of partitioning across data processing and storage technologies. For the complementary **strategic perspective** on how these same principles apply to architecture and deployment patterns, see [Breaking the Stateful Deployment Ceiling: Dimensional Partitioning for DevOps](/articles/stateful-deployment-dimensional-partitioning/).
 
 ## The K-D Tree Foundation: Why Partitioning Sequence Matters
 
@@ -48,7 +48,7 @@ The elimination of manual synchronization is not a coincidence—it's a direct r
 
 ## Same Philosophy, Different Contexts
 
-Despite their differences in domain and implementation, these systems share the same core methodology that mirrors the principles discussed in [stateful deployment patterns](/articles/partitioning-principle/):
+Despite their differences in domain and implementation, these systems share the same core methodology that mirrors the principles discussed in [stateful deployment patterns](/articles/stateful-deployment-dimensional-partitioning/):
 
 1. **Partition** data by business-driven boundaries (not technical convenience)
 2. **Process** partitions in parallel (leveraging natural independence)
@@ -56,7 +56,7 @@ Despite their differences in domain and implementation, these systems share the 
 
 The business-driven partitioning ensures that the system's scalability and parallelism are aligned with real-world data relationships and access patterns—not arbitrary technical details like hash codes or sequence numbers.
 
-Consider this parallel: just as [stateful deployments become manageable when you partition data by domain boundaries](/articles/partitioning-principle/), data processing becomes efficient when you partition streams and storage by the same boundaries. The same DDD Bounded Contexts that enable independent deployments also enable independent data processing.
+Consider this parallel: just as [stateful deployments become manageable when you partition data by domain boundaries](/articles/stateful-deployment-dimensional-partitioning/), data processing becomes efficient when you partition streams and storage by the same boundaries. The same DDD Bounded Contexts that enable independent deployments also enable independent data processing.
 
 ## Threading: The Invisible Engine
 
@@ -74,7 +74,7 @@ The meta-pattern connects data processing with system architecture: **partition 
 * **Scalability**: Add more nodes or threads, and the system scales naturally because partitions are independent
 * **Resilience**: Failures are isolated to partitions, not the entire system
 * **Maintainability**: Business logic is decoupled from infrastructure concerns
-* **Deployability**: As explored in [the partitioning principle](/articles/partitioning-principle/), the same partitions that enable efficient data processing also enable independent deployments
+* **Deployability**: As explored in [the partitioning principle](/articles/stateful-deployment-dimensional-partitioning/), the same partitions that enable efficient data processing also enable independent deployments
 
 The connection is profound: **the same DDD-informed partitioning decisions that make data processing efficient also make system deployment manageable**. Whether you're designing Kafka topics, DynamoDB tables, or deployment boundaries, the partitioning strategy should emerge from the same domain analysis.
 
@@ -85,7 +85,7 @@ Returning to our K-D tree metaphor: in data systems, the first partitioning deci
 - **Technical concerns first** (database normalization, service boundaries based on team structure, hash-based sharding) → Coordination complexity grows exponentially with scale
 - **Business domains first** (customer segments, geographical regions, functional bounded contexts) → Coordination remains minimal as the system grows
 
-This is why greenfield projects are actually **harder** than brownfield when it comes to partitioning, as discussed in [the partitioning principle](/articles/partitioning-principle/). Without operational evidence of where the true business boundaries lie, it's easy to make the wrong first partitioning decision and create a "distributed monolith" that requires constant coordination.
+This is why greenfield projects are actually **harder** than brownfield when it comes to partitioning, as discussed in [the partitioning principle](/articles/stateful-deployment-dimensional-partitioning/). Without operational evidence of where the true business boundaries lie, it's easy to make the wrong first partitioning decision and create a "distributed monolith" that requires constant coordination.
 
 ## Summary: One Philosophy, Many Implementations
 
@@ -96,7 +96,7 @@ Whether you're implementing:
 - Document storage with Elasticsearch  
 - Wide-column storage with Cassandra
 - Key-value storage with DynamoDB
-- Or [stateful deployment patterns](/articles/partitioning-principle/) with blue/green strategies
+- Or [stateful deployment patterns](/articles/stateful-deployment-dimensional-partitioning/) with blue/green strategies
 
 ...the same DDD-informed partitioning strategy that identifies meaningful business boundaries will guide you to an architecture that is both technically efficient and business-aligned.
 
@@ -108,4 +108,4 @@ The beauty of this approach is its universality: learn to partition correctly on
 
 ## Related Articles
 
-- [The Partitioning Principle: A Unified Theory for Stateful Deployments](/articles/partitioning-principle/) - Explores how the same partitioning philosophy applies to architecture and deployment patterns 
+- [Breaking the Stateful Deployment Ceiling: Dimensional Partitioning for DevOps](/articles/stateful-deployment-dimensional-partitioning/) - Explores how the same partitioning philosophy applies to architecture and deployment patterns 
