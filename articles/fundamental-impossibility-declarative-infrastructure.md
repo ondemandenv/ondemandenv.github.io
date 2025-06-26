@@ -79,6 +79,40 @@ This safety check is a built-in "escape hatch" that proves the article's thesis.
 
 The tool itself is telling you: **my declarative power is impossible to apply in the face of accumulated, failed history.**
 
+### The Custom-Named Resource Trap: When Identity Becomes Immutable
+
+Another common scenario reveals a different facet of the same impossibility—the **custom-named resource trap**:
+
+```
+UPDATE_FAILED | AWS::CloudFront::KeyValueStore | basicAuthus-west-2/solo-dev-auth
+CloudFormation cannot update a stack when a custom-named resource requires replacing. 
+Rename soloinfragarybasicAuthuswest2solodevauth93819E8D and update the stack again.
+```
+
+This error exposes a fundamental contradiction in declarative systems: **identity vs. mutability**. Here's what happened:
+
+1. You created a CloudFront KeyValueStore with a custom name (not auto-generated)
+2. Later, you made a change that requires CloudFormation to replace the resource
+3. CloudFormation discovers it cannot replace a custom-named resource because:
+   - It would need to delete the old resource first
+   - But it can't create the new resource with the same name until the old one is gone
+   - This creates a brief moment where the name doesn't exist
+   - Other resources depending on that exact name would break during the transition
+
+CloudFormation is essentially saying:
+
+> "You asked me to manage this resource declaratively, but you also gave it a fixed identity that makes replacement impossible. I cannot reconcile your desire for both **stable identity** and **declarative mutability**. These are mathematically incompatible requirements."
+
+The "solution" CloudFormation suggests—manually renaming the resource—proves the article's point: **you must step outside the declarative model and perform manual, imperative actions** to resolve contradictions the declarative system cannot handle.
+
+This isn't a CloudFormation limitation; it's a **logical impossibility**. You cannot simultaneously guarantee:
+- Stable, predictable resource names (for dependencies)
+- Seamless resource replacement (for updates)  
+- Zero-downtime transitions (for availability)
+- Declarative management (for reproducibility)
+
+Something must give, and when it does, the declarative model breaks down and requires human intervention to resolve the contradiction.
+
 ---
 
 ## The Information Theory Problem
