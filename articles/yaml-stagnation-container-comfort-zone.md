@@ -1,9 +1,11 @@
 ---
+layout: article
 title: "So You Haven't Touched Your Shared YAML for Months: The Container Comfort Zone Trap"
 description: "Why developers retreat inside containers while deployment configurations stagnate, and how isolated SDLC environments break the cycle"
-date: 2024-01-15
+date: 2025-07-3
 author: "ONDEMANDENV Platform Team"
 tags: ["DevOps", "Containers", "YAML", "Deployment", "Platform Engineering"]
+permalink: /yaml-stagnation-container-comfort-zone/
 ---
 
 # So You Haven't Touched Your Shared YAML for Months: The Container Comfort Zone Trap
