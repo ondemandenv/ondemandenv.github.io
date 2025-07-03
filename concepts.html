@@ -49,133 +49,68 @@
 </header>
 
 <main>
-    <h1>Core Concepts of ONDEMANDENV</h1>
-    <p>ONDEMANDENV introduces several core concepts designed to bring order, consistency, and agility to the management of complex distributed systems. Understanding these concepts is key to leveraging the platform's power. For a deeper technical overview, see the <a href="/articles/odmd-arc/">ONDEMANDENV Architecture Deep Dive</a> article.</p>
+    <h1>Core Concepts: From Ambiguity to Certainty</h1>
+    <p>The ONDEMANDENV platform is built on a single, guiding principle: <strong>to master the complexity of distributed systems by eliminating architectural ambiguity.</strong> Instead of allowing architecture to be an implicit, fragile understanding spread across teams and documents, the platform provides the tools to codify it into a central, executable source of truth. Understanding how this is achieved is key to leveraging the platform's power.</p>
 
     <p style="margin-top: 1.5rem; margin-bottom: 2rem; font-style: italic; background-color: #eef; padding: 1rem; border-left: 4px solid #aac;">
-        <strong>Note on Implementation:</strong> While the current examples and reference implementation heavily utilize <strong>AWS CDK</strong> and CloudFormation for defining and deploying resources, the core ONDEMANDENV principles – Application-Centricity, Envers, contractsLib, Cloning, and Platform Abstraction – are tool-agnostic. The same conceptual framework could be implemented using other Infrastructure-as-Code tools like <strong>Terraform CDK</strong>, <strong>Pulumi</strong>, or potentially even primarily with <strong>cdk8s</strong> for environments heavily focused on Kubernetes orchestration. The key is the pattern of codified contracts, versioned environments, and platform automation.
+        <strong>Note on Implementation:</strong> While the current examples heavily utilize <strong>AWS CDK</strong>, the core principles—a central Contracts Library, versioned environments (Envers), and on-demand cloning—are tool-agnostic. The same framework of codified certainty could be implemented with <strong>Terraform CDK</strong>, <strong>Pulumi</strong>, or others. The key is the pattern of formalizing architecture first.
     </p>
 
-    <section class="concept-section" id="application-centric">
-        <h2>Application-Centric Infrastructure</h2>
-        <p>Instead of viewing infrastructure and applications as separate entities managed by different tools (like CloudFormation for infra, Kubernetes/Helm for runtime), ONDEMANDENV adopts an <span class="concept-term">Application-Centric</span> approach.</p>
-        <ul>
-            <li><strong>Vertical Slice as Unit:</strong> A modern "application" is treated as a complete vertical slice of business functionality. This includes not just containers, but also databases (RDS, DynamoDB), storage (S3), networking (VPCs, Load Balancers), serverless functions (Lambda), API Gateways, and crucially, the associated security posture (IAM Roles, Policies).</li>
-            <li><strong>Bounded Context:</strong> This entire vertical slice is managed as a single, cohesive unit, mirroring the concept of a "Bounded Context" from Domain-Driven Design (DDD). Resources are grouped logically by their relationship to the business capability, not just their physical type.</li>
-            <li><strong>Unified Management:</strong> Leveraging tools like AWS CDK allows defining both infrastructure and runtime components (including Kubernetes manifests via cdk8s) within a single codebase and toolchain. This reduces fragmentation and toolchain sprawl.</li>
-            <li><strong>Benefits:</strong> This approach leads to improved consistency, enhanced manageability (atomic deployments/rollbacks), clear ownership, better cost attribution, and a stronger security posture through embedded least-privilege principles.</li>
-        </ul>
-        <p>Crucially, the scope defined by an Application-Centric approach (and therefore the scope of a <a href="#contractslib"><code>BuildDefinition</code></a> and its <a href="#enver"><code>Envers</code></a>) is subjective and <strong>user-determined, guided by Domain-Driven Design principles</strong>. It can range from a single deployable artifact like a container image or shared library package, to a specific frontend deployment, a full-stack vertical slice, or even complex platform infrastructure like a dedicated EKS cluster Enver.</p>
-        
-        <p><strong>AI-Assisted Development Benefits:</strong> This Application-Centric model provides the architectural structure that AI tools need to generate maintainable code. By establishing clear bounded contexts and explicit contracts, AI can generate code that respects domain boundaries, uses proper interfaces, and integrates correctly with existing systems. Rather than producing monolithic or tightly-coupled solutions, AI working within ONDEMANDENV's constraints naturally produces code aligned with Domain-Driven Design principles, preventing the "accidental complexity" often introduced by unconstrained AI code generation.</p>
-    </section>
-
-    <section class="concept-section" id="enver">
-        <h2>Enver (Environment Version)</h2>
-        <p>An <span class="concept-term">Enver</span> represents a specific, deployable <strong>composite version</strong> of an application's Bounded Context, as defined by a <a href="#contractslib"><code>BuildDefinition</code></a> in `contractsLib`. It acts as a holistic, logical environment managed as an atomic unit. Its version encompasses <strong>both its source code commit and the exact versions of all dependency Products it consumes</strong>.</p>
-        <ul>
-             <li><strong>Instance of a Build:</strong> Each Enver definition in `contractsLib` is an instance of a specific <a href="#contractslib"><code>BuildDefinition</code></a>, representing one particular version (tied to a Git branch or tag) deployed to a specific target environment (AWS Account/Region).</li>
-            <li><strong>Composite Versioning via Git & Dependencies:</strong> Envers link environment state directly to versioned dependencies:
-                <ul>
-                    <li><strong>Branch Envers (Incremental Composite Versions):</strong> Associated with a Git branch. These represent evolving versions that can change due to:
-                        <ol>
-                            <li>New code commits pushed to the Enver's source branch (defined in the `BuildDefinition`).</li>
-                            <li>Updates to the `Products` consumed from dependency Envers (which may themselves be Branch Envers).</li>
-                        </ol>
-                        Ideal for development, feature work, and iterative testing where both code and dependencies might evolve. The platform tracks the specific dependency versions consumed at each deployment.
-                    </li>
-                    <li><strong>Tag Envers (Immutable Composite Versions):</strong> Associated with a Git tag. These represent fixed, point-in-time versions where <strong>both the source code and all consumed dependency versions are locked</strong>. This is enforced by the rule that Tag Envers can <i>only</i> declare dependencies on (`Consume`) `Products` published by other Tag Envers. This creates a fully immutable dependency chain, guaranteeing absolute reproducibility. Ideal for staging, production releases, or critical point-in-time validation.</li>
-                </ul>
-            </li>
-            <li><strong>Holistic Definition:</strong> An Enver encapsulates everything needed for its specific composite version – the infrastructure (defined via CDK based on its source code version), configuration values (including resolved consumed Product versions), references to code artifacts (like Docker image URIs), dependency declarations (`Consumers`), and the target AWS account/region for deployment.</li>
-            <li><strong>Atomic Deployment Unit:</strong> Each Enver (representing a specific composite version of a BuildDefinition) is deployed and rolled back as a single transaction (leveraging CloudFormation). This ensures the infrastructure, runtime configuration, and application components are always consistent with that specific composite version.</li>
-            <li><strong>Versioned Config Store:</strong> The underlying config store (e.g., AWS SSM Parameter Store) naturally versions the `Product` values published by Envers, enabling the platform to resolve and track the specific dependency versions consumed by each Enver deployment.</li>
-            <li><strong>Isolation:</strong> Different Enver versions (whether branch or tag based) of the same BuildDefinition are logically isolated.</li>
-            <li><strong>Parameterization for Consistency:</strong> CDK code uses the Enver's identifier (branch/tag) to parameterize resources, maintaining functional consistency across different versions.</li>
-        </ul>
-    </section>
-
     <section class="concept-section" id="contractslib">
-        <h2>Contracts Library (`contractsLib`)</h2>
-        <p>The <span class="concept-term">contractsLib</span> is a dedicated, version-controlled repository (typically TypeScript) that serves as the central <strong>declaration hub</strong> and single source of truth for your entire distributed system\'s architecture and dependencies. It focuses solely on the <strong>contracts and boundaries</strong> between different services (Bounded Contexts) and teams, <strong>not their internal implementation details</strong>. This repository is the source that gets packaged (e.g., via <span class=\"code\">npm pack</span>) and provided to the platform during the initial <a href=\"documentation.html#platform-deployment\">setup process</a>.</p>
+        <h2>1. The Contracts Library (`contractsLib`): The Source of Truth</h2>
+        <p>The <span class="concept-term">contractsLib</span> is the heart of the platform. It is a dedicated, version-controlled repository (typically TypeScript) that serves as the central <strong>declaration hub</strong> and single source of truth for your entire distributed system's architecture. It is where you move from implicit assumptions to explicit, validated contracts, killing ambiguity before it can cause downstream failures.</p>
         <ul>
-            <li><strong>Architecture as Code (Declarations):</strong> Defines service boundaries (mapping to Bounded Contexts via <a href="#contractslib"><code>BuildDefinition</code></a>s), environment instances (<a href="#enver"><code>Enver</code></a> definitions), inter-service dependencies (<a href="#contractslib"><code>Products</code> and <code>Consumers</code></a>), and organizational mappings (target AWS accounts, source GitHub repos). It declares <em>what</em> services exist, <em>where</em> their code lives, <em>what</em> they produce/consume, and <em>where</em> their different versions (Envers) should be deployed.</li>
-            <li><strong>Dependency Management:</strong> Explicitly defines which `Products` (outputs like ARNs, URIs, configuration values) an Enver publishes and which Products other Envers `Consume` (inputs). The platform uses this graph to orchestrate deployments and manage dependencies effectively.</li>
-            <li><strong>Eliminating Ambiguity:</strong> If a dependency or configuration isn't defined in `contractsLib`, it effectively doesn't exist for the platform. This forces clarity and explicit agreement on service interactions.</li>
-            <li><strong>Governance ("Congress"):</strong> Changes to `contractsLib` (declarations, contracts, dependencies) are managed via standard code review processes (Pull Requests). This acts as a governance mechanism where teams negotiate and agree upon architectural changes and inter-service contracts before they are implemented.</li>
-            <li><strong>AI Code Generation Guidance:</strong> The explicit contracts and bounded contexts defined in `contractsLib` serve as precise specifications that AI tools can reference when generating code. This ensures AI-generated solutions respect architectural boundaries, use correct interfaces, and maintain system coherence. The contracts provide the context AI needs to produce maintainable, well-architected code rather than ad-hoc solutions.</li>
-            <li><strong>Platform Integration:</strong> The ONDEMANDENV platform monitors `contractsLib`. Changes trigger updates to the central configuration store and downstream deployment pipelines (defined in the implementation repos) for affected Envers.</li>
-            <li><strong>Typing and Validation:</strong> Uses TypeScript for strong typing. The core platform provides base interfaces and classes in a foundational package like <a href="https://github.com/ondemandenv/odmd-contracts-base" target="_blank" rel="noopener noreferrer"><code>ondemandenv/odmd-contracts-base</code></a>. User-defined <code>contractsLib</code> repositories, such as the example <a href="https://github.com/ondemandenv/odmd-contracts-sandbox" target="_blank" rel="noopener noreferrer"><code>ondemandenv/odmd-contracts-sandbox</code></a>, extend these base contracts. This layered approach is crucial:
-                <ul>
-                    <li><code>odmd-contracts-base</code> defines standard contract structures, for instance, for how a console application should interface with the platform's central services (e.g., for authentication or data queries via AWS AppSync). An example is <a href="https://github.com/ondemandenv/odmd-contracts-base/blob/main/lib/repos/__user-auth/odmd-build-user-auth.ts" target="_blank" rel="noopener noreferrer"><code>odmd-build-user-auth.ts</code></a>.</li>
-                    <li>An implementation like <code>odmd-contracts-sandbox</code> (e.g., in <a href="https://github.com/ondemandenv/odmd-contracts-sandbox/blob/main/lib/repos/_user-auth/OdmdBuildUserAuthSbx.ts" target="_blank" rel="noopener noreferrer"><code>OdmdBuildUserAuthSbx.ts</code></a>) then extends these base contracts to bridge a specific user console implementation with the platform.</li>
-                    <li>This allows a project like <a href="https://github.com/ondemandenv/user-pool" target="_blank" rel="noopener noreferrer"><code>ondemandenv/user-pool</code></a> to use its chosen authentication mechanism (e.g., Amazon Cognito) to manage console user access. The contracts ensure that the console can correctly authenticate users and authorize them to assume the necessary IAM roles for accessing configuration or parameter store data, as governed by the ONDEMANDENV platform.</li>
-                </ul>
-                Unit tests within the <code>contractsLib</code> can further guarantee its integrity (e.g., preventing immutable Envers from depending on incremental ones).
-            </li>
+            <li><strong>Architecture as Executable Code:</strong> It defines service boundaries (mapping to Bounded Contexts), how services are built (`BuildDefinition`), what they produce (`Products`), what they consume (`Consumers`), and where their different versions (`Envers`) are deployed. It is a living, testable model of your system.</li>
+            <li><strong>Proactive Governance ("Shift Left"):</strong> Changes to `contractsLib` are managed via Pull Requests. This forces teams to negotiate and agree upon architectural changes and inter-service contracts *before* implementation. It's a powerful "shift left" mechanism that prevents architectural drift and design flaws at the cheapest possible stage.</li>
+            <li><strong>Eliminating Integration "Surprises":</strong> If a dependency isn't explicitly defined in `contractsLib`, it effectively doesn't exist for the platform. This forces clarity and removes the risk of integration failures discovered late in the development cycle.</li>
+            <li><strong>AI Code Generation Guidance:</strong> The explicit contracts serve as a perfect blueprint for AI tools, ensuring that generated code adheres to the established architecture and uses the correct interfaces.</li>
         </ul>
-        <p>Within `contractsLib`, these concepts define the Bounded Contexts and how they interact.</p>
+    </section>
+
+    <section class="concept-section" id="application-centric">
+        <h2>2. Application-Centric Infrastructure: Defining the Boundaries</h2>
+        <p>The `contractsLib` needs a way to group resources logically. Instead of thinking in terms of infrastructure types (e.g., "the database repo," "the Kubernetes repo"), ONDEMANDENV uses an <span class="concept-term">Application-Centric</span> approach to define the boundaries of what is being declared.</p>
         <ul>
-            <li>
-                <strong><code>OdmdBuild&lt;T extends OdmdEnver&gt;</code>:</strong> Represents the build configuration for a specific type of Enver (e.g., `OdmdBuild<OdmdEnverCdk>`). Defined in `contractsLib`, it associates the Enver type with its source code and build process:
-                <ul>
-                    <li>Typically configured with the source code repository alias (<span class="code-term">githubRepoAlias</span>), the build type (<span class="code-term">buildType</span>: 'cdk', 'docker', 'cmd'), and optionally source paths or commands.</li>
-                    <li>This construct defines <em>how</em> to build a specific *type* of Enver from a given source.</li>
-                </ul>
-            </li>
-            <li>
-                <strong><code>OdmdEnverCdk | OdmdEnverCmd | OdmdEnverDocker</code> (or custom subclasses):</strong> Represents a specific, deployable instance or version of a service/component, tied to a Git branch/tag and a target environment. Defined in `contractsLib` using its specific class:
-                <ul>
-                    <li>Linked to its corresponding <code>OdmdBuild</code> instance.</li>
-                    <li>Specifies deployment target (<code>targetAccountAlias</code>, <code>targetRegion</code>).</li>
-                    <li>Holds the declarations for <code>Product</code>(s) it publishes and <code>Consumer</code>(s) for dependencies it requires.</li>
-                    <li>Marked as <code>immutable: true</code> for Tag Envers.</li>
-                </ul>
-            </li>
-            <li><strong>Product:</strong> (Conventionally named <span class="code">'Outputs'</span>) A single, named output value (typically a JSON string containing multiple outputs) that an Enver makes available. Declared in `contractsLib` as part of an Enver definition (e.g., <code>outputsProduct: new Product(this, 'Outputs')</code>). Represents the public interface of that specific Enver instance.</li>
-            <li><strong>Consumer:</strong> A declaration within an Enver definition in `contractsLib` stating its requirement for the <code>Outputs</code> Product from another Enver (e.g., <code>new Consumer(this, 'LocalConsumerName', otherEnver.outputsProduct, '{...defaultJson...}')</code>). The platform resolves this dependency, providing the consuming Enver's implementation code with the concrete JSON string value of the dependency's published Outputs. Default values can be provided.</li>
+            <li><strong>Vertical Slice as the Unit:</strong> A modern "application" is a complete vertical slice of business functionality—its containers, databases, message queues, serverless functions, and the security posture that binds them. This slice is a "Bounded Context" in Domain-Driven Design terms.</li>
+            <li><strong>Cohesive Management:</strong> This entire vertical slice is managed as a single unit within the `contractsLib` and its corresponding implementation repository. This aligns ownership with business capabilities, not technology layers.</li>
+            <li><strong>Clarity of Scope:</strong> The scope of a `BuildDefinition` in the `contractsLib` maps directly to one of these Application-Centric bounded contexts.</li>
         </ul>
-        <p>This explicit structure defines the architecture and dependencies, linking specific Enver instances (like `OrderManagerDev`) to their build sources (`OdmdBuild<OdmdEnverCdk>`) and target environments, while managing interactions through Products and Consumers.</p>
+    </section>
+    
+    <section class="concept-section" id="enver">
+        <h2>3. Enver (Environment Version): Bringing the Architecture to Life</h2>
+        <p>Once the architecture is codified in the `contractsLib`, an <span class="concept-term">Enver</span> makes it real. An Enver represents a specific, deployable <strong>composite version</strong> of a Bounded Context. Its version is a snapshot of both its own source code and the exact versions of all dependency `Products` it consumes, as defined by the contracts.</p>
+        <ul>
+            <li><strong>An Instance of a Contract:</strong> Each Enver definition in `contractsLib` is an instance of a specific `BuildDefinition`, representing one version (e.g., `dev` branch, `v1.2.0` tag) deployed to a target environment.</li>
+            <li><strong>Composite Versioning for Reproducibility:</strong>
+                <ul>
+                    <li><strong>Branch Envers (For Development):</strong> Evolving versions that track a Git branch. They automatically consume the latest compatible versions of their dependencies.</li>
+                    <li><strong>Tag Envers (For Releases):</strong> Immutable versions locked to a Git tag. They can *only* consume `Products` from other Tag Envers, creating a fully immutable dependency chain that guarantees absolute reproducibility for staging and production.</li>
+                </ul>
+            </li>
+            <li><strong>Atomic Deployment Unit:</strong> Each Enver is deployed and rolled back as a single transaction, ensuring that infrastructure and application code are always consistent with the specific version of the contract they represent.</li>
+        </ul>
     </section>
 
     <section class="concept-section" id="cloning">
-        <h2>On-Demand Cloning (Dynamic/Ephemeral Envers)</h2>
-        <p>A key feature enabling developer agility is the ability to create dynamic, ephemeral clones of the <strong>static Envers declared in <code>contractsLib</code></strong>.</p>
+        <h2>4. On-Demand Cloning: Safe, High-Fidelity Experimentation</h2>
+        <p>With a stable, predictable architecture defined in `contractsLib` and instantiated as `Envers`, developers can now experiment safely. Cloning allows them to create dynamic, ephemeral copies of **static Envers**.</p>
         <ul>
-            <li><strong>Cloning Static Branch Envers:</strong> Developers typically clone a static <em>Branch Enver</em> (e.g., the one associated with the `dev` or `main` branch) defined in `contractsLib`. This creates a new, temporary, dynamic Enver linked to the developer's feature branch.</li>
-            <li><strong>Dynamic Lifecycle (Ephemeral):</strong> These cloned Envers are intended to be short-lived (ephemeral). They are created and destroyed dynamically via simple Git commit comments, typically:
-                <ul>
-                    <li><code>odmd: create@&lt;source_branch_enver_id&gt;</code> (e.g., <code>odmd: create@MyServiceDev</code>): Creates the clone, linked to the commit's feature branch.</li>
-                    <li><code>odmd: delete</code>: Destroys the clone associated with the commit's feature branch.</li>
-                </ul>
-            </li>
-            <li><strong>Dependency Reuse:</strong> A cloned (dynamic) Enver reuses the <em>exact same</em> resolved dependency Product versions as its source static Enver had <em>at the time the clone command was processed</em>. This ensures the clone operates within a consistent and predictable dependency context based on its origin.</li>
-            <li><strong>Resource Isolation:</strong> While dependency versions are inherited, the platform ensures that the actual infrastructure resources <em>deployed by the clone itself</em> (using its feature branch code) are uniquely named and isolated from the source static Enver and other clones, preventing conflicts.</li>
-            <li><strong>Static Envers Remain Unchanged:</strong> Cloning operations *do not affect* the original static Envers declared in `contractsLib`. Those Envers remain consistent with their definition and continue their own lifecycle based on commits to their associated branch/tag.</li>
-            <li><strong>Use Cases:</strong> Perfect for feature development, bug fixing, safe experimentation, CI validation of PRs, performance testing, or running temporary E2E tests without impacting shared static environments or risking dependency conflicts.</li>
-            <li><strong>AI Development Support:</strong> Cloning provides an ideal environment for testing AI-generated code. Developers can rapidly experiment with AI-suggested implementations in isolated environments, validate architectural compliance, and iterate on solutions without affecting other team members or stable environments.</li>
+            <li><strong>Clone from a Trusted Baseline:</strong> Developers clone a stable static Enver (e.g., `dev` or `main`). The clone inherits the exact, resolved dependency versions from its source at the moment of creation, providing a high-fidelity, production-like environment.</li>
+            <li><strong>Isolate a Feature's Blast Radius:</strong> The clone is tied to the developer's feature branch. All infrastructure it creates is uniquely named and isolated, so experimentation cannot affect shared environments.</li>
+            <li><strong>Dynamic Lifecycle:</strong> Clones are created and destroyed with simple Git commands (e.g., <code>odmd: create@...</code> and <code>odmd: delete</code>), making them perfect for CI validation, bug fixing, and safe experimentation.</li>
         </ul>
-        <p>Cloning provides developers with nearly instant access to isolated, full-stack, high-fidelity environments based on a known good static baseline, greatly accelerating testing and iteration cycles.</p>
     </section>
 
     <section class="concept-section" id="platform-abstraction">
-        <h2>Platform Abstraction: Enabling Unified Control</h2>
-        <p>A core goal of ONDEMANDENV is to abstract away underlying infrastructure and system interaction complexity, allowing developers to define and control their entire Application-Centric Bounded Context via their Enver, regardless of where resources physically reside.</p>
+        <h2>5. Platform Abstraction: Focusing on Business Logic</h2>
+        <p>The final piece is abstracting away the underlying operational complexity. The platform handles the "how" so developers can focus on the "what."</p>
         <ul>
-            <li><strong>Unified Resource Ownership Across Boundaries:</strong> The platform provides the mechanisms to make the Application-Centric approach practical, even across AWS accounts, GitHub, or potentially other clouds. It handles the complex authentication, authorization, and interaction logic required for an Enver's deployment process (e.g., its CDK code or associated scripts) to manage all resources logically belonging to its Bounded Context. This includes:
-                <ul>
-                    <li>Assuming the correct cross-account IAM roles for deploying AWS resources (defined via `contractsLib` targets).</li>
-                    <li>Authenticating as the organization's GitHub App (using the centrally stored private key) to manage workflows, checks, or repository settings defined within an Enver.</li>
-                    <li>Executing `kubectl` commands against shared EKS clusters in other accounts (using appropriate consumed roles/endpoints).</li>
-                    <li>Potentially orchestrating deployments to other cloud platforms (e.g., GCP GKE via custom CDK resources) using centrally managed credentials and platform logic.</li>
-                </ul>
-                This allows developers to define *all* resources logically belonging to their Bounded Context within their Enver's implementation (e.g., CDK stack), trusting the platform to handle the cross-boundary execution complexity securely.</li>
-            <li><strong>Platform Services via Standard Contracts:</strong> Common infrastructure components (Networking, EKS, CI/CD runners, Monitoring Agents, etc.) can be provided as standardized "Platform Envers". Application teams consume these foundational services via the normal Product/Consumer mechanism in `contractsLib`, simplifying access to complex shared resources without needing deep operational expertise for those specific domains.</li>
-            <li><strong>Automated Workflows & Dependency Management:</strong> Beyond resource deployment, the platform automates critical background tasks such as dependency resolution (fetching the correct versioned Product values from the config store based on `contractsLib` definitions), event handling based on Product changes (triggering downstream Enver pipelines), and managing access to secrets, further reducing the operational burden on application teams.</li>
+            <li><strong>Unified Control Across Boundaries:</strong> The platform handles the complex cross-account role assumption, GitHub App authentication, and other interactions needed to manage all resources within a Bounded Context, regardless of where they physically reside.</li>
+            <li><strong>Platform Services as Products:</strong> Foundational services like networking, EKS clusters, or observability stacks are provided as standard Platform Envers, consumable via the same `Product`/`Consumer` mechanism in `contractsLib`, simplifying access to complex, shared infrastructure.</li>
         </ul>
-        <p>By abstracting the complexities of cross-boundary interactions and infrastructure management, ONDEMANDENV empowers developers to focus on their core domain logic while maintaining true, unified ownership over their entire application slice, wherever its components may run.</p>
+        <p>By abstracting this complexity, ONDEMANDENV empowers developers to focus on their core domain logic while maintaining true, unified ownership over their entire application slice.</p>
     </section>
-
 
 </main>
 
