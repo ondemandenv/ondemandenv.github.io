@@ -196,15 +196,19 @@ The resistance to constraint evolution isn't just psychological - it's **structu
 
 ### The Complexity Valley
 Modern organizations often get stuck in a **complexity valley** between two peaks:
-- **Peak 1**: Simple systems optimized for old constraints (monoliths optimized for physical limits)
+- **Peak 1**: Simple systems optimized for old constraints (monoliths for physical limits)
 - **Valley**: Fragmented systems optimized for nothing (YAML sprawl, microservice chaos)
 - **Peak 2**: Elegant systems optimized for new constraints (app-centric architectures)
 
-This trap occurs because:
-1. **Shallow tasks become currency**: YAML manipulation and container orchestration feel like progress
-2. **Tribal knowledge becomes power**: System complexity creates artificial scarcity of expertise
-3. **Hero culture emerges**: Firefighting becomes more valued than prevention
-4. **Innovation stops**: Fear of breaking fragile systems prevents meaningful change
+This trap occurs because the industry has widely misapplied brilliant solutions from the wrong era—most notably, the principles from the **Google SRE book**. Published in 2016, the book codified practices for managing Google's custom "metal rack" infrastructure. It was a masterpiece of metal-era constraint optimization.
+
+When organizations applied these metal-era principles (like the Dev/SRE split, error budgets for scarce hardware, and toil automation for physical servers) to the public cloud, they inadvertently created the very fragmentation they sought to avoid. They created artificial organizational boundaries and automated the symptoms of complexity rather than solving the root cause with application-centric design.
+
+The resistance to evolving is therefore structural:
+1. **Shallow tasks become currency**: YAML manipulation and container orchestration feel like progress.
+2. **Tribal knowledge becomes power**: System complexity creates artificial scarcity of expertise.
+3. **Hero culture emerges**: Firefighting becomes more valued than prevention.
+4. **Innovation stops**: Fear of breaking fragile systems prevents meaningful change.
 
 Organizations resist moving to Peak 2 because they're exhausted from climbing out of Peak 1, unaware that the valley they're in is actually harder to navigate than either destination.
 
