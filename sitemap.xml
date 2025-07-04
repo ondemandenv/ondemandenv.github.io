@@ -132,4 +132,12 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://ondemandenv.dev/patterns.html" />
   </url>
 
+  <!-- new article -->
+  <url>
+    <loc>https://ondemandenv.github.io/articles/microservices-testing-complexity-gcp-outage/</loc>
+    <lastmod>2025-01-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
 </urlset> 
