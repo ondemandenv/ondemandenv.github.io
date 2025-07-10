@@ -984,7 +984,26 @@ footer a:hover {
     background-color: #1e2124;
 }
 
+/* Basic styling for articles list */
+.articles-list { list-style: none; padding-left: 0; }
+.articles-list li { margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-color); }
+.articles-list h3 { margin-bottom: 0.5rem; }
+.articles-list a { text-decoration: none; color: var(--primary-color); }
+.articles-list a:hover { text-decoration: underline; }
+
 .cta-buttons {
     margin-top: 2rem;
     text-align: center;
+}
+
+.cta-buttons .btn-enhanced {
+    margin: 0.5rem;
+}
+
+@media (max-width: 768px) {
+    .cta-buttons {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
 }

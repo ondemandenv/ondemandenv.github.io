@@ -54,7 +54,7 @@
 
 <main>
     <h1>Common Patterns & Use Cases</h1>
-    <p>Explore how ONDEMANDENV's core concepts are applied to solve common challenges in managing distributed systems. Note that these patterns inherently involve secure cross-account interactions, orchestrated by the platform based on contracts defined in `contractsLib`.</p>
+    <p>Explore how ONDEMANDENV's core concepts are applied to solve common challenges and implement <strong>anti-stagnation patterns</strong> in managing distributed systems. Note that these patterns inherently involve secure cross-account interactions, orchestrated by the platform based on contracts defined in `contractsLib`.</p>
 
     <section class="pattern-section" id="isolated-testing">
         <h2>Pattern: Isolated Full SDLC Environments per Service Branch</h2>
@@ -88,7 +88,7 @@
             <p><strong>Problem:</strong> A dedicated networking team manages core infrastructure (VPCs, Transit Gateway, IPAM) in a central account. Application teams in separate workspace accounts need to consume these resources consistently and securely without managing the networking infrastructure themselves. Traditional tools like AWS CDK's `Cluster.addManifest` fail in this multi-account scenario because they assume single-account deployments and cannot resolve cross-account resource references.</p>
         </div>
         <div class="solution-statement">
-            <p><strong>ONDEMANDENV Solution:</strong> Create unified networks spanning multiple AWS accounts through Transit Gateway architecture. Define networking infrastructure as dedicated "Platform Envers" that establish network authority and publish connectivity details. This enables true multi-account networking where applications inherit secure connectivity rather than managing it.</p>
+            <p><strong>ONDEMANDENV Solution:</strong> At first glance, using a shared resource seems to contradict the philosophy of complete isolation. However, ONDEMANDENV enables a pattern of <strong>governed sharing</strong>. The chaos of traditional shared environments comes from ungoverned, implicit dependencies. By defining the networking infrastructure as a platform Enver that publishes its capabilities as a formal `Product` within `contractsLib`, we eliminate the chaos. Application Envers consume this `Product` via an explicit, version-aware `Consumer` contract. This transforms the shared resource from a source of unpredictable risk into a stable, reliable platform service. It's no longer "sharing an environment and wishing for good luck"; it's sharing a contract-governed platform utility.</p>
         </div>
 
         <h3>Network Architecture Overview</h3>
@@ -242,7 +242,7 @@ const orderServiceProd = new OrderServiceEnver(this, 'OrderServiceProd', {
             <p><strong>Problem:</strong> A platform team manages shared EKS clusters in a dedicated account (`workspace0` or `eks-account`). Application teams need to deploy workloads securely onto these clusters from their own workspace accounts, requiring cluster details, cross-account IAM permissions (IRSA), and manifest deployment capabilities.</p>
         </div>
          <div class="solution-statement">
-            <p><strong>ONDEMANDENV Solution:</strong> Define the shared EKS cluster as a Platform Enver (`sharedEksProd`) publishing cluster details (OIDC ARN, Kubectl Role ARN) as `Products`. Application Envers (`myAppEksDev`) in workspace accounts consume these `Products`. The application's CDK stack uses the consumed OIDC ARN to define pod-specific IAM Roles (IRSA) in the application's account. The platform uses the consumed Kubectl Role ARN to assume permissions into the EKS cluster account and deploy the cdk8s-generated manifests defined within the application's CDK stack. This keeps infrastructure (IAM) and runtime (k8s) definitions together, managed atomically within the application Enver, while facilitating secure cross-account deployment.</p>
+            <p><strong>ONDEMANDENV Solution:</strong> While some of our articles caution against choosing EKS for use cases where simpler alternatives exist, we recognize many organizations are already invested in Kubernetes. This pattern addresses that reality. It demonstrates how to integrate with a shared EKS cluster using a <strong>governed sharing</strong> model, mitigating the very complexity we warn about. Instead of ungoverned access, the EKS cluster becomes a platform Enver, publishing its capabilities as a formal `Product` in `contractsLib`. Application Envers consume this `Product` via an explicit, version-aware `Consumer` contract. This crucial step ensures the application's deployment is always bound to a specific, known version of the EKS platform, transforming a potentially chaotic shared resource into a stable, predictable utility.</p>
         </div>
 
         <h3>1. Define EKS Platform Enver (`contractsLib`)</h3>
@@ -461,7 +461,7 @@ const authServiceDev = new AuthServiceEnver(this, 'AuthServiceDev', {
 </main>
 
 <footer>
-    <p>&copy; 2024 ONDEMANDENV.dev. All rights reserved.</p>
+    <p>&copy; 2025 ONDEMANDENV.dev. All rights reserved.</p>
     <!-- Add footer links if needed -->
 </footer>
 
