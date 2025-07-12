@@ -230,6 +230,9 @@ class MermaidEnhanced {
     }
 }
 
+let enhancedRetryCount = 0;
+const maxEnhancedRetries = 50; // 5 seconds max
+
 // Initialize when libraries are loaded
 function initMermaidEnhanced() {
     if (typeof svgPanZoom !== 'undefined' && typeof screenfull !== 'undefined') {
@@ -241,7 +244,20 @@ function initMermaidEnhanced() {
         
         console.log('MermaidEnhanced initialized and available globally');
     } else {
-        console.warn('svg-pan-zoom or screenfull not loaded, retrying...');
+        enhancedRetryCount++;
+        if (enhancedRetryCount >= maxEnhancedRetries) {
+            console.warn('Enhancement libraries not available after 5 seconds. Diagrams will work without zoom/pan/fullscreen features.');
+            // Create a dummy MermaidEnhanced that does nothing
+            window.MermaidEnhanced = {
+                enhanceAllDiagrams: () => console.log('Enhancement not available - diagrams will display without interactive features'),
+                loadExternalDiagram: () => {}
+            };
+            return;
+        }
+        
+        if (enhancedRetryCount === 1) {
+            console.log('Waiting for enhancement libraries to load...');
+        }
         setTimeout(initMermaidEnhanced, 100);
     }
 }

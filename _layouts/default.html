@@ -35,15 +35,35 @@
     
     <!-- Required Libraries - Load in specific order -->
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.2/dist/svg-pan-zoom.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/screenfull@6.0.2/dist/screenfull.min.js"></script>
     
     <script>
+        let initRetryCount = 0;
+        const maxRetries = 50; // 5 seconds max wait time
+        
         // Wait for all libraries to load before initializing
         function initializeMermaidSystem() {
             // Check if all required libraries are loaded
             if (typeof mermaid === 'undefined' || typeof svgPanZoom === 'undefined' || typeof screenfull === 'undefined') {
-                console.log('Waiting for libraries to load...');
+                initRetryCount++;
+                if (initRetryCount >= maxRetries) {
+                    console.error('Failed to load required libraries after 5 seconds. Falling back to basic mermaid.');
+                    console.error('Missing libraries:', {
+                        mermaid: typeof mermaid !== 'undefined',
+                        svgPanZoom: typeof svgPanZoom !== 'undefined', 
+                        screenfull: typeof screenfull !== 'undefined'
+                    });
+                    // Fall back to basic mermaid without enhancement
+                    if (typeof mermaid !== 'undefined') {
+                        initBasicMermaid();
+                    }
+                    return;
+                }
+                
+                if (initRetryCount === 1) {
+                    console.log('Waiting for libraries to load...');
+                }
                 setTimeout(initializeMermaidSystem, 100);
                 return;
             }
@@ -76,22 +96,24 @@
             handleInlineDiagrams();
         }
         
-        async function loadExternalDiagrams(diagrams) {
+        async function loadExternalDiagrams(diagrams, enableEnhancement = true) {
             for (const diagram of diagrams) {
                 const diagramPath = diagram.getAttribute('data-external-diagram');
                 await loadExternalDiagram(diagram, diagramPath);
             }
             
-            // After all external diagrams are loaded, enhance them
-            if (window.MermaidEnhanced) {
-                window.MermaidEnhanced.enhanceAllDiagrams();
-            } else {
-                // Initialize enhanced functionality
-                setTimeout(() => {
-                    if (window.MermaidEnhanced) {
-                        window.MermaidEnhanced.enhanceAllDiagrams();
-                    }
-                }, 500);
+            // After all external diagrams are loaded, enhance them if requested
+            if (enableEnhancement) {
+                if (window.MermaidEnhanced) {
+                    window.MermaidEnhanced.enhanceAllDiagrams();
+                } else {
+                    // Initialize enhanced functionality
+                    setTimeout(() => {
+                        if (window.MermaidEnhanced) {
+                            window.MermaidEnhanced.enhanceAllDiagrams();
+                        }
+                    }, 500);
+                }
             }
         }
         
@@ -176,6 +198,34 @@
             
             // Debug: log what we found
             console.log('Mermaid blocks found:', document.querySelectorAll('.mermaid').length);
+        }
+        
+        // Fallback function for basic mermaid without enhancement
+        function initBasicMermaid() {
+            console.log('Initializing basic mermaid without enhancement features');
+            
+            mermaid.initialize({ 
+                startOnLoad: false,
+                theme: 'default',
+                themeVariables: {
+                    primaryColor: '#ff6b6b',
+                    primaryTextColor: '#333',
+                    primaryBorderColor: '#ff6b6b',
+                    lineColor: '#333',
+                    secondaryColor: '#4ecdc4',
+                    tertiaryColor: '#45b7d1'
+                }
+            });
+            
+            // Handle external diagrams with basic functionality
+            const externalDiagrams = document.querySelectorAll('[data-external-diagram]');
+            if (externalDiagrams.length > 0) {
+                loadExternalDiagrams(externalDiagrams, false); // No enhancement
+                return;
+            }
+            
+            // Handle inline diagrams
+            handleInlineDiagrams();
         }
         
         // Start initialization when DOM is ready
