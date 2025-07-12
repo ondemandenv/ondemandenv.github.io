@@ -62,84 +62,110 @@ ONDEMANDENV's **Three-Tier Security Pattern** breaks the stagnation cycle by imp
 <div class="mermaid-diagram mermaid" id="architecture-diagram">
 flowchart TB
     subgraph PublicZone["🌍 TIER 1: INNOVATION LAB NETWORK (Public PKI)"]
+        subgraph InnPlatform["Platform Infrastructure (Shared)"]
+            InnDB["🗄️ Database Platform Enver<br/>• MongoDB Cluster<br/>• PostgreSQL Cluster<br/>• MySQL Cluster"]
+            InnEKS["☸️ EKS Platform Enver<br/>• Kubernetes Cluster<br/>• Container Registry"]
+            InnNet["🌐 Networking Platform Enver<br/>• VPC + Transit Gateway<br/>• 192.168.0.0/16"]
+        end
+        
         subgraph InnAcct1["AWS Account: offshore-team-1<br/>192.168.10.0/24"]
-            InnEnv1["🚀 App-A Innovation Enver<br/>• React Frontend<br/>• Node.js Backend<br/>• MongoDB"]
-            InnEnv2["🚀 App-B Innovation Enver<br/>• Python ML Service<br/>• PostgreSQL"]
+            InnEnv1["🚀 App-A Innovation Enver<br/>• React Frontend + Node.js<br/>• Consumes: DB + EKS Platform"]
+            InnEnv2["🚀 App-B Innovation Enver<br/>• Python ML Service<br/>• Consumes: DB + EKS Platform"]
         end
         
         subgraph InnAcct2["AWS Account: offshore-team-2<br/>192.168.20.0/24"]
-            InnEnv3["🚀 App-C Innovation Enver<br/>• Java Spring Boot<br/>• Redis Cache"]
+            InnEnv3["🚀 App-C Innovation Enver<br/>• Java Spring Boot<br/>• Consumes: DB + EKS Platform"]
         end
         
         subgraph InnAcct3["GCP Project: innovation-lab<br/>192.168.30.0/24"]
-            InnEnv4["🚀 App-D Innovation Enver<br/>• Go Microservices<br/>• Cloud SQL"]
+            InnEnv4["🚀 App-D Innovation Enver<br/>• Go Microservices<br/>• Consumes: DB + EKS Platform"]
         end
         
-        InnTGW["🔗 Innovation Network TGW<br/>192.168.0.0/16<br/>• Public Internet Access<br/>• Public PKI Trust"]
-        InnTGW === InnAcct1
-        InnTGW === InnAcct2
-        InnTGW === InnAcct3
+        InnEnv1 -.->|"Platform Service Consumer"| InnPlatform
+        InnEnv2 -.->|"Platform Service Consumer"| InnPlatform
+        InnEnv3 -.->|"Platform Service Consumer"| InnPlatform
+        InnEnv4 -.->|"Platform Service Consumer"| InnPlatform
+        
+        InnNet -.->|"🌐 Internet Access"| Internet["Public Internet<br/>Package Repositories<br/>External APIs"]
     end
     
     subgraph QuarantineZone["🔍 TIER 2: QUARANTINE NETWORK (Hybrid PKI)"]
+        subgraph QuarPlatform["Platform Infrastructure (Shared)"]
+            QuarDB["🗄️ Database Platform Enver<br/>• Isolated DB Clusters<br/>• Security Scanning Tools"]
+            QuarEKS["☸️ EKS Platform Enver<br/>• Security Scan Cluster<br/>• Internal Registry"]
+            QuarNet["🌐 Networking Platform Enver<br/>• VPC + Transit Gateway<br/>• 172.16.0.0/12"]
+        end
+        
         subgraph QuarAcct1["AWS Account: security-scan-1<br/>172.16.10.0/24"]
-            QuarEnv1["🛡️ App-A Quarantine Enver<br/>• Security Scanning<br/>• License Compliance<br/>• Vulnerability Assessment"]
-            QuarEnv2["🛡️ App-B Quarantine Enver<br/>• Malware Detection<br/>• SAST/DAST Scans"]
+            QuarEnv1["🛡️ App-A Quarantine Enver<br/>• Security Scanning<br/>• Consumes: Security Platform"]
+            QuarEnv2["🛡️ App-B Quarantine Enver<br/>• License Compliance<br/>• Consumes: Security Platform"]
         end
         
         subgraph QuarAcct2["AWS Account: security-scan-2<br/>172.16.20.0/24"]
-            QuarEnv3["🛡️ App-C Quarantine Enver<br/>• Container Scanning<br/>• Dependency Analysis"]
+            QuarEnv3["🛡️ App-C Quarantine Enver<br/>• Container Scanning<br/>• Consumes: Security Platform"]
         end
         
         subgraph QuarAcct3["GCP Project: security-quarantine<br/>172.16.30.0/24"]
-            QuarEnv4["🛡️ App-D Quarantine Enver<br/>• Binary Analysis<br/>• Supply Chain Verification"]
+            QuarEnv4["🛡️ App-D Quarantine Enver<br/>• Binary Analysis<br/>• Consumes: Security Platform"]
         end
         
-        QuarTGW["🔗 Quarantine Network TGW<br/>172.16.0.0/12<br/>• Air-Gapped from Internet<br/>• Hybrid PKI (Public + Private)"]
-        QuarTGW === QuarAcct1
-        QuarTGW === QuarAcct2
-        QuarTGW === QuarAcct3
+        QuarEnv1 -.->|"Platform Service Consumer"| QuarPlatform
+        QuarEnv2 -.->|"Platform Service Consumer"| QuarPlatform
+        QuarEnv3 -.->|"Platform Service Consumer"| QuarPlatform
+        QuarEnv4 -.->|"Platform Service Consumer"| QuarPlatform
+        
+        QuarNet -.->|"❌ No Internet"| NoInternet1["❌ Blocked"]
     end
     
     subgraph InternalZone["🔒 TIER 3: INTERNAL POC NETWORK (Private PKI)"]
+        subgraph IntPlatform["Platform Infrastructure (Shared)"]
+            IntDB["🗄️ Database Platform Enver<br/>• Private PKI DB Clusters<br/>• VPC Endpoints Only"]
+            IntEKS["☸️ EKS Platform Enver<br/>• Internal POC Cluster<br/>• Private Registry"]
+            IntNet["🌐 Networking Platform Enver<br/>• VPC + Transit Gateway<br/>• 10.0.0.0/8"]
+        end
+        
         subgraph IntAcct1["AWS Account: internal-poc-1<br/>10.1.0.0/24"]
-            IntEnv1["⚙️ App-A Internal Enver<br/>• Private PKI Only<br/>• Internal Repos<br/>• Compliance Controls"]
-            IntEnv2["⚙️ App-B Internal Enver<br/>• Zero Internet Access<br/>• Private Certificates"]
+            IntEnv1["⚙️ App-A Internal Enver<br/>• Private PKI Application<br/>• Consumes: Internal Platform"]
+            IntEnv2["⚙️ App-B Internal Enver<br/>• Zero Internet Access<br/>• Consumes: Internal Platform"]
         end
         
         subgraph IntAcct2["AWS Account: internal-poc-2<br/>10.2.0.0/24"]
-            IntEnv3["⚙️ App-C Internal Enver<br/>• AWS Private CA<br/>• VPC Endpoints Only"]
+            IntEnv3["⚙️ App-C Internal Enver<br/>• Internal POC App<br/>• Consumes: Internal Platform"]
         end
         
         subgraph IntAcct3["GCP Project: internal-secure<br/>10.3.0.0/24"]
-            IntEnv4["⚙️ App-D Internal Enver<br/>• Private Service Connect<br/>• Internal DNS Only"]
+            IntEnv4["⚙️ App-D Internal Enver<br/>• Secure Internal App<br/>• Consumes: Internal Platform"]
         end
         
-        IntTGW["🔗 Internal Network TGW<br/>10.0.0.0/8<br/>• Zero Internet Access<br/>• Private PKI Only<br/>• AWS Private CA"]
-        IntTGW === IntAcct1
-        IntTGW === IntAcct2
-        IntTGW === IntAcct3
+        IntEnv1 -.->|"Platform Service Consumer"| IntPlatform
+        IntEnv2 -.->|"Platform Service Consumer"| IntPlatform
+        IntEnv3 -.->|"Platform Service Consumer"| IntPlatform
+        IntEnv4 -.->|"Platform Service Consumer"| IntPlatform
+        
+        IntNet -.->|"❌ No Internet"| NoInternet2["❌ Blocked"]
     end
     
-    %% Manual Git-based promotion flows
-    InnEnv1 -.->|"Manual Git Fork<br/>Repository Promotion"| QuarEnv1
-    InnEnv2 -.->|"Security Team<br/>Code Review"| QuarEnv2
-    InnEnv3 -.->|"Cherry-pick<br/>Approved Changes"| QuarEnv3
-    InnEnv4 -.->|"Air-gapped<br/>Code Transfer"| QuarEnv4
+    %% Manual Git-based promotion flows - Application Code
+    InnEnv1 -.->|"Manual Git Fork<br/>App Code Promotion"| QuarEnv1
+    InnEnv2 -.->|"Security Team<br/>App Code Review"| QuarEnv2
+    InnEnv3 -.->|"Cherry-pick<br/>App Code Changes"| QuarEnv3
+    InnEnv4 -.->|"Air-gapped<br/>App Code Transfer"| QuarEnv4
     
-    QuarEnv1 -.->|"Manual Approval<br/>After Scanning"| IntEnv1
-    QuarEnv2 -.->|"Compliance<br/>Verification"| IntEnv2
-    QuarEnv3 -.->|"Security<br/>Sign-off"| IntEnv3
-    QuarEnv4 -.->|"Internal<br/>Deployment"| IntEnv4
+    QuarEnv1 -.->|"Manual Approval<br/>After App Scanning"| IntEnv1
+    QuarEnv2 -.->|"Compliance<br/>App Verification"| IntEnv2
+    QuarEnv3 -.->|"Security<br/>App Sign-off"| IntEnv3
+    QuarEnv4 -.->|"Internal<br/>App Deployment"| IntEnv4
     
-    %% Network isolation
-    InnTGW -.->|"🌐 Internet Access"| Internet["Public Internet<br/>Package Repositories<br/>External APIs"]
-    QuarTGW -.->|"❌ No Internet"| NoInternet1["❌ Blocked"]
-    IntTGW -.->|"❌ No Internet"| NoInternet2["❌ Blocked"]
+    %% Platform Infrastructure promotion flows
+    InnPlatform -.->|"Platform Infra<br/>Security Hardening"| QuarPlatform
+    QuarPlatform -.->|"Platform Infra<br/>Final Approval"| IntPlatform
     
     style PublicZone fill:#e1f5fe
     style QuarantineZone fill:#fff3e0
     style InternalZone fill:#f3e5f5
+    style InnPlatform fill:#bbdefb
+    style QuarPlatform fill:#ffe0b2
+    style IntPlatform fill:#e1bee7
     style InnAcct1 fill:#e8f4fd
     style InnAcct2 fill:#e8f4fd
     style InnAcct3 fill:#e8f4fd
@@ -606,76 +632,88 @@ This pattern demonstrates how ONDEMANDENV systematically eliminates stagnation t
 - **⏳ Sequential Development**: Teams wait in line for deployment windows
 - **🎭 Configuration Chaos**: Shared configs become lowest common denominator
 
-### ✅ ONDEMANDENV Enver Pattern: Complete SDLC Ownership
+### ✅ ONDEMANDENV Enver Pattern: Application-Centric SDLC Isolation
 
-**Each Enver = Complete Isolated SDLC:**
+**Each Tier = Shared Platform Infrastructure + Application-Centric Boundaries:**
 ```
-🚀 ONDEMANDENV Approach: Per-Application Full SDLC Isolation
+🚀 ONDEMANDENV Approach: Application-Centric SDLC Isolation Within Shared Platform
 
-App-A Enver (Complete SDLC):                    App-B Enver (Complete SDLC):
-├── 🏗️ Own AWS Account/GCP Project             ├── 🏗️ Own AWS Account/GCP Project  
-├── 🌐 Own VPC/Network (192.168.10.0/24)       ├── 🌐 Own VPC/Network (192.168.20.0/24)
-├── ☸️ Own Kubernetes Namespace/Cluster        ├── ☸️ Own Kubernetes Namespace/Cluster
-├── 🗄️ Own Database Instance/Schema            ├── 🗄️ Own Database Instance/Schema
-├── 📋 Own CI/CD Pipeline                      ├── 📋 Own CI/CD Pipeline
-├── 🔧 Own Configuration/Secrets               ├── 🔧 Own Configuration/Secrets
-├── 📊 Own Monitoring/Logging                  ├── 📊 Own Monitoring/Logging
-├── 🧪 Own Testing Environment                 ├── 🧪 Own Testing Environment
-└── 🚀 Independent Deploy/Rollback             └── 🚀 Independent Deploy/Rollback
-
-Result: 🎯 Complete autonomy, zero conflicts, fearless innovation
+Tier 1 Infrastructure (Shared):               App Envers (Application-Centric):
+├── 🗄️ Database Platform Enver                App-A Enver:
+├── ☸️ EKS Cluster Platform Enver            ├── 🏗️ Own AWS Account/GCP Project
+├── 🌐 Networking Platform Enver             ├── 🔗 Consumes DB Platform Service
+└── 📋 Platform Services (S3, etc.)          ├── 🔗 Consumes EKS Platform Service
+                                             ├── 🔗 Consumes Network Platform Service
+App-B Enver:                                 ├── 📋 Own CI/CD Pipeline
+├── 🏗️ Own AWS Account/GCP Project           ├── 🔧 Own Application Configuration
+├── 🔗 Consumes DB Platform Service          ├── 📊 Own Application Monitoring
+├── 🔗 Consumes EKS Platform Service         ├── 🧪 Own Application Testing
+├── 🔗 Consumes Network Platform Service     └── 🚀 Independent App Deploy/Rollback
+├── 📋 Own CI/CD Pipeline                   
+├── 🔧 Own Application Configuration         Result: 🎯 Application autonomy through platform-enforced
+├── 📊 Own Application Monitoring                   boundaries, zero conflicts, fearless innovation
+├── 🧪 Own Application Testing              
+└── 🚀 Independent App Deploy/Rollback      
 ```
 
 ### 🎯 Real-World Enver Examples
 
-**Innovation Lab Tier - Multiple Complete SDLCs:**
+**Innovation Lab Tier - Application-Centric SDLC with Shared Platform Services:**
 
 ```bash
+# Tier 1 Shared Platform Infrastructure:
+📍 Platform Services (Shared across all app envers):
+├── 🗄️ Database Platform Enver: MongoDB/PostgreSQL/MySQL clusters  
+├── ☸️ EKS Cluster Platform Enver: Kubernetes cluster (192.168.2.0/16)
+├── 🌐 Networking Platform Enver: VPC + Transit Gateway (192.168.0.0/16)
+├── 📦 Container Registry: ECR with approved base images
+└── 🔧 Platform Services: S3, CloudWatch, Secrets Manager
+
 # App-A Team (React Frontend + Node.js Backend)
 📍 AWS Account: offshore-team-1 (192.168.10.0/24)
-├── 🚀 Complete Frontend SDLC: React app + CDN + API Gateway
-├── 🗄️ Complete Backend SDLC: Node.js + MongoDB + Redis
-├── 🧪 Complete Testing: Jest + Cypress + Load testing
-├── 📋 Complete CI/CD: GitHub Actions → ECR → EKS deploy
-├── 📊 Complete Monitoring: CloudWatch + Datadog dashboards
-└── 🔄 Complete Lifecycle: Git → Build → Test → Deploy → Monitor
+├── 🚀 Application SDLC: React app + CDN + API Gateway  
+├── 🔗 Consumes: DB Platform (MongoDB schema) + EKS Platform (namespace)
+├── 🧪 Application Testing: Jest + Cypress + Load testing
+├── 📋 Application CI/CD: GitHub Actions → ECR → EKS deploy
+├── 📊 Application Monitoring: CloudWatch + Datadog dashboards  
+└── 🔄 Application Lifecycle: Git → Build → Test → Deploy → Monitor
 
 # App-B Team (Python ML Service)  
 📍 AWS Account: offshore-team-1 (192.168.10.0/24) 
-├── 🤖 Complete ML Pipeline: Training + Inference + Model serving
-├── 🗄️ Complete Data SDLC: PostgreSQL + S3 + EMR
-├── 🧪 Complete ML Testing: Unit + Integration + Model validation
-├── 📋 Complete MLOps: Model versioning + A/B testing + Rollback
-├── 📊 Complete ML Monitoring: Model drift + Performance + Alerts
-└── 🔄 Complete ML Lifecycle: Data → Train → Validate → Deploy → Monitor
+├── 🤖 Application ML Pipeline: Training + Inference + Model serving
+├── 🔗 Consumes: DB Platform (PostgreSQL schema) + EKS Platform (namespace) + S3 buckets
+├── 🧪 Application ML Testing: Unit + Integration + Model validation
+├── 📋 Application MLOps: Model versioning + A/B testing + Rollback
+├── 📊 Application ML Monitoring: Model drift + Performance + Alerts  
+└── 🔄 Application ML Lifecycle: Data → Train → Validate → Deploy → Monitor
 
 # App-C Team (Java Spring Boot)
 📍 AWS Account: offshore-team-2 (192.168.20.0/24)
-├── ☕ Complete Java SDLC: Spring Boot + Gradle + JUnit
-├── 🗄️ Complete Persistence: MySQL + Redis + JPA
-├── 🧪 Complete Testing: Unit + Integration + Contract testing  
-├── 📋 Complete Pipeline: Jenkins + SonarQube + Nexus + Deploy
-├── 📊 Complete APM: New Relic + Log aggregation + Alerts
-└── 🔄 Complete Enterprise Lifecycle: Code → Quality Gates → Deploy → Operate
+├── ☕ Application Java SDLC: Spring Boot + Gradle + JUnit
+├── 🔗 Consumes: DB Platform (MySQL schema) + EKS Platform (namespace)
+├── 🧪 Application Testing: Unit + Integration + Contract testing  
+├── 📋 Application Pipeline: Jenkins + SonarQube + Nexus + Deploy
+├── 📊 Application APM: New Relic + Log aggregation + Alerts
+└── 🔄 Application Enterprise Lifecycle: Code → Quality Gates → Deploy → Operate
 ```
 
-**Key Insight**: Each team gets their **own complete technology stack** and **full SDLC ownership** - no sharing, no conflicts, no waiting.
+**Key Insight**: Each team gets **application-centric SDLC ownership** consuming **shared, governed platform services** - no infrastructure conflicts, no platform setup overhead, complete application autonomy.
 
 ## Tier 1: Innovation Lab Enver (Public PKI)
 
 ### Purpose: Complete SDLC for Rapid Experimentation and Offshore Development
 
-Each Innovation Lab Enver provides a **complete, isolated SDLC environment** designed for experimentation, prototyping, and offshore development teams. Unlike shared development environments, **each application team owns their entire technology stack** from code to deployment to monitoring. This tier prioritizes **speed and exploration** while maintaining strict data isolation.
+Each Innovation Lab Enver provides a **complete, isolated application SDLC environment** designed for experimentation, prototyping, and offshore development teams. Unlike shared development environments, **each application team owns their complete application lifecycle** while consuming shared, governed platform services. This tier prioritizes **speed and exploration** while maintaining strict data isolation and application-centric boundaries.
 
-**🎯 Complete SDLC Ownership Per Application:**
-- **🏗️ Own AWS Account/GCP Project**: Full resource isolation and cost tracking
-- **🌐 Own Network**: Dedicated VPC/subnets with no cross-team interference  
-- **☸️ Own Kubernetes/Container Platform**: No shared cluster conflicts
-- **🗄️ Own Database/Storage**: No schema conflicts or performance contention
-- **📋 Own CI/CD**: Team-specific pipelines and deployment strategies
-- **🔧 Own Configuration**: Environment-specific settings without compromise
-- **📊 Own Monitoring**: Application-specific dashboards and alerting
-- **🧪 Own Testing**: Complete test suites without shared resource limits
+**🎯 Application-Centric SDLC Ownership:**
+- **🏗️ Own AWS Account/GCP Project**: Full application resource isolation and cost tracking
+- **🔗 Consumes Platform Network**: Dedicated VPC/subnets from networking platform enver
+- **🔗 Consumes Platform Kubernetes**: Dedicated namespace from shared EKS platform enver  
+- **🔗 Consumes Platform Database**: Dedicated schema from shared database platform enver
+- **📋 Own Application CI/CD**: Team-specific pipelines and deployment strategies
+- **🔧 Own Application Configuration**: Application settings without platform compromise
+- **📊 Own Application Monitoring**: Application-specific dashboards and alerting
+- **🧪 Own Application Testing**: Complete application test suites with dedicated resources
 
 ### Anti-Stagnation Implementation
 
@@ -693,6 +731,30 @@ const innovationLab = new InnovationLabEnver(this, 'InnovationLab', {
 - **Energy Redirection**: Developers focus on innovation, not security bureaucracy
 - **Collective Learning**: All innovation patterns shared across offshore teams
 - **Resource Consolidation**: Shared platform eliminates per-team security setup
+
+### Application-Centric Boundaries Through Platform Enforcement
+
+**🎯 The S3/DynamoDB Model Applied to All Platform Services:**
+
+Just as thousands of applications safely share AWS S3 and DynamoDB through IAM policies and service boundaries, ONDEMANDENV applies the same **platform-enforced isolation** to all infrastructure:
+
+```typescript
+// contractsLib ensures strict application boundaries within shared platform
+const orderServiceEnver = new OrderServiceEnver(this, 'OrderService', {
+    // Application gets its own bounded context within shared platform
+    dbConsumer: new Consumer(this, 'DbAccess', dbPlatformEnver.outputsProduct),
+    eksConsumer: new Consumer(this, 'EksAccess', eksPlatformEnver.outputsProduct),
+    // Platform automatically enforces: only this app can access these specific resources
+});
+```
+
+**Platform Enforcement Mechanisms:**
+- **Database Isolation**: Each app gets dedicated schema/database within shared RDS cluster
+- **Kubernetes Isolation**: Each app gets dedicated namespace + RBAC within shared EKS cluster  
+- **Network Isolation**: Each app gets dedicated VPC/subnets within shared networking infrastructure
+- **IAM Isolation**: Each app gets dedicated roles/policies automatically generated by platform
+
+**The Efficiency Win**: Instead of 10 apps × 3 tiers = 30 separate infrastructure deployments, we get 3 tiers × shared platform services = efficient resource utilization with **contractsLib-guaranteed** application boundaries.
 
 ### Key Features
 
@@ -1076,7 +1138,7 @@ The Three-Tier Security Pattern demonstrates how ONDEMANDENV enables **secure in
 
 **Specific Achievements:**
 
-1. **🚀 True Innovation Velocity**: Each offshore team owns complete technology stack with zero shared environment conflicts
+1. **🚀 True Innovation Velocity**: Each offshore team owns complete application SDLC with zero shared environment conflicts through platform-enforced boundaries
 2. **🛡️ Automated Security**: Comprehensive scanning without manual bottlenecks across isolated environments
 3. **🔒 Internal Security**: High-grade protection for internal development and POC work with complete audit isolation
 4. **📋 Foundation for Compliance**: Complete audit trails per application that support eventual production compliance
