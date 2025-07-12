@@ -7,7 +7,7 @@ permalink: /articles/isolated-offshore-development-pattern/
 <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
 <script>
     mermaid.initialize({
-        startOnLoad: true,
+        startOnLoad: false,  // Disable auto-initialization to prevent conflicts
         theme: 'default',
         flowchart: {
             useMaxWidth: true,
@@ -395,7 +395,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 zoomOut(mouseX, mouseY);
             }
         }
-    });
+    }, { passive: false });
     
     // Pan functionality - only in fullscreen mode
     document.addEventListener('mousedown', function(e) {
@@ -464,245 +464,45 @@ document.addEventListener('DOMContentLoaded', function() {
         touchStartY = touchY;
         
         e.preventDefault();
-    });
+    }, { passive: false });
 });
 </script>
 
 <script>
-// Load external Mermaid diagram with embedded fallback
+// Load external Mermaid diagram
 document.addEventListener('DOMContentLoaded', async function() {
     const diagramElement = document.getElementById('architecture-diagram');
     if (!diagramElement) return;
     
-    let diagramContent = '';
-    
-    // Try to load external diagram first
+    // Try to load external diagram
     try {
         const response = await fetch('/diagrams/three-tier-security-architecture.mmd');
-        if (response.ok) {
-            diagramContent = await response.text();
-        } else {
-            throw new Error('External diagram not found');
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
         }
+        
+        const diagramContent = await response.text();
+        console.log('External diagram loaded successfully');
+        
+        // Generate a unique ID for the diagram
+        const diagramId = 'mermaid-diagram-' + Date.now();
+        
+        // Use mermaid.render to convert the diagram content to SVG
+        const { svg } = await mermaid.render(diagramId, diagramContent);
+        
+        // Insert the rendered SVG into the container
+        diagramElement.innerHTML = svg;
+        
     } catch (error) {
-        console.warn('External diagram fetch failed, using embedded diagram:', error);
-        // Fallback to embedded diagram content
-        diagramContent = `flowchart TB
-    %% ========================================
-    %% TIER 1: INNOVATION LAB
-    %% ========================================
-    subgraph Tier1["🌍 TIER 1: INNOVATION LAB (Public PKI) - 192.168.0.0/16"]
-        direction TB
-        
-        subgraph T1Network["🌐 NETWORK PLATFORM ENVER (tier1-branch) - CIDR Authority"]
-            direction LR
-            T1TGW["🔗 Transit Gateway<br/>192.168.0.1<br/>Central Connectivity Hub"]
-            T1IPAM["📊 IPAM Pool<br/>192.168.0.0/16<br/>CIDR Allocation Authority"]
-        end
-        
-        subgraph T1Platform["🏗️ PLATFORM SERVICE VPCs"]
-            direction LR
-            T1DBVPC["🗄️ DB Platform VPC<br/>192.168.1.0/24<br/>MongoDB/PostgreSQL/MySQL"]
-            T1EKSVPC["☸️ EKS Platform VPC<br/>192.168.2.0/24<br/>K8s Cluster + Registry"]
-        end
-        
-        subgraph T1Apps["📱 APPLICATION ENVER VPCs + DYNAMIC BRANCHES"]
-            direction TB
-            subgraph T1AppsRow1["Main Application VPCs"]
-                direction LR
-                T1App1VPC["🚀 App-A Main VPC<br/>192.168.10.0/24<br/>React + Node.js<br/>(AWS Account 1)"]
-                T1App2VPC["🚀 App-B Main VPC<br/>192.168.11.0/24<br/>Python ML<br/>(AWS Account 1)"]
-            end
-            subgraph T1AppsRow2["Additional Application VPCs"]
-                direction LR
-                T1App3VPC["🚀 App-C Main VPC<br/>192.168.20.0/24<br/>Java Spring Boot<br/>(AWS Account 2)"]
-                T1App4VPC["🚀 App-D Main VPC<br/>192.168.30.0/24<br/>Go Microservices<br/>(GCP Project)"]
-            end
-            subgraph T1Dynamic["Dynamic Branch VPCs"]
-                T1App1Branch["🌿 App-A feature/auth VPC<br/>192.168.10.128/25<br/>Auto-created on Git branch<br/>(Same AWS Account)"]
-            end
-        end
-    end
-    
-    %% ========================================
-    %% TIER 2: QUARANTINE
-    %% ========================================
-    subgraph Tier2["🔍 TIER 2: QUARANTINE (Hybrid PKI) - 172.16.0.0/12"]
-        direction TB
-        
-        subgraph T2Network["🌐 NETWORK PLATFORM ENVER (tier2-branch) - CIDR Authority"]
-            direction LR
-            T2TGW["🔗 Transit Gateway<br/>172.16.0.1<br/>Air-Gapped Hub"]
-            T2IPAM["📊 IPAM Pool<br/>172.16.0.0/12<br/>CIDR Allocation Authority"]
-        end
-        
-        subgraph T2Platform["🏗️ PLATFORM SERVICE VPCs"]
-            direction LR
-            T2DBVPC["🗄️ DB Platform VPC<br/>172.16.1.0/24<br/>Isolated DB + Security Tools"]
-            T2EKSVPC["☸️ EKS Platform VPC<br/>172.16.2.0/24<br/>Security Scan Cluster"]
-        end
-        
-        subgraph T2Apps["📱 APPLICATION ENVER VPCs"]
-            direction TB
-            subgraph T2AppsRow1["Security Application VPCs Row 1"]
-                direction LR
-                T2App1VPC["🛡️ App-A VPC<br/>172.16.10.0/24<br/>Security Scanning<br/>(AWS Security 1)"]
-                T2App2VPC["🛡️ App-B VPC<br/>172.16.11.0/24<br/>License Compliance<br/>(AWS Security 1)"]
-            end
-            subgraph T2AppsRow2["Security Application VPCs Row 2"]
-                direction LR
-                T2App3VPC["🛡️ App-C VPC<br/>172.16.20.0/24<br/>Container Scanning<br/>(AWS Security 2)"]
-                T2App4VPC["🛡️ App-D VPC<br/>172.16.30.0/24<br/>Binary Analysis<br/>(GCP Security)"]
-            end
-        end
-    end
-    
-    %% ========================================
-    %% TIER 3: INTERNAL POC
-    %% ========================================
-    subgraph Tier3["🔒 TIER 3: INTERNAL POC (Private PKI) - 10.0.0.0/8"]
-        direction TB
-        
-        subgraph T3Network["🌐 NETWORK PLATFORM ENVER (tier3-branch) - CIDR Authority"]
-            direction TB
-            subgraph T3NetworkRow1["Network Infrastructure"]
-                direction LR
-                T3TGW["🔗 Transit Gateway<br/>10.0.0.1<br/>Private PKI Hub"]
-                T3IPAM["📊 IPAM Pool<br/>10.0.0.0/8<br/>CIDR Allocation Authority"]
-            end
-            T3VPCEndpoints["🔌 VPC Endpoints<br/>Private AWS Services<br/>S3, ECR, SSM, etc."]
-        end
-        
-        subgraph T3Platform["🏗️ PLATFORM SERVICE VPCs"]
-            direction LR
-            T3DBVPC["🗄️ DB Platform VPC<br/>10.1.0.0/16<br/>Private PKI DB Clusters"]
-            T3EKSVPC["☸️ EKS Platform VPC<br/>10.2.0.0/16<br/>Internal POC Cluster"]
-        end
-        
-        subgraph T3Apps["📱 APPLICATION ENVER VPCs"]
-            direction TB
-            subgraph T3AppsRow1["Internal Application VPCs Row 1"]
-                direction LR
-                T3App1VPC["⚙️ App-A VPC<br/>10.4.0.0/24<br/>Private PKI App<br/>(AWS Internal 1)"]
-                T3App2VPC["⚙️ App-B VPC<br/>10.4.1.0/24<br/>Zero Internet App<br/>(AWS Internal 1)"]
-            end
-            subgraph T3AppsRow2["Internal Application VPCs Row 2"]
-                direction LR
-                T3App3VPC["⚙️ App-C VPC<br/>10.5.0.0/24<br/>Internal POC App<br/>(AWS Internal 2)"]
-                T3App4VPC["⚙️ App-D VPC<br/>10.6.0.0/24<br/>Secure Internal App<br/>(GCP Internal)"]
-            end
-        end
-    end
-    
-    %% ========================================
-    %% DYNAMIC ENVER CREATION CAPABILITY
-    %% ========================================
-    
-    subgraph DynamicCapability["🌿 DYNAMIC ENVER CREATION ON ANY GIT BRANCH"]
-        direction TB
-        BranchFlow["Git Branch Created<br/>↓<br/>odmd: create@source-enver<br/>↓<br/>Platform Auto-Creates:<br/>• New VPC (auto-allocated CIDR)<br/>• New Infrastructure<br/>• Complete Isolated SDLC<br/>↓<br/>Full Application Environment<br/>Ready for Development"]
-        
-        AppliesTo["🎯 APPLIES TO ALL ENVERS:<br/>• Application Envers<br/>• Database Platform Envers<br/>• EKS Platform Envers<br/>• Network Platform Envers<br/>• Any Enver in Any Tier"]
-    end
-    
-    %% ========================================
-    %% CONNECTIONS AND FLOWS
-    %% ========================================
-    
-    %% TGW Connections within each tier
-    T1TGW === T1DBVPC
-    T1TGW === T1EKSVPC
-    T1TGW === T1App1VPC
-    T1TGW === T1App1Branch
-    T1TGW === T1App2VPC
-    T1TGW === T1App3VPC
-    T1TGW === T1App4VPC
-    
-    T2TGW === T2DBVPC
-    T2TGW === T2EKSVPC
-    T2TGW === T2App1VPC
-    T2TGW === T2App2VPC
-    T2TGW === T2App3VPC
-    T2TGW === T2App4VPC
-    
-    T3TGW === T3DBVPC
-    T3TGW === T3EKSVPC
-    T3TGW === T3App1VPC
-    T3TGW === T3App2VPC
-    T3TGW === T3App3VPC
-    T3TGW === T3App4VPC
-    T3TGW === T3VPCEndpoints
-    
-    %% Platform serves Applications
-    T1Platform ==> T1Apps
-    T2Platform ==> T2Apps
-    T3Platform ==> T3Apps
-    
-    %% Dynamic Enver Creation Example
-    T1App1VPC -.->|"odmd: create@main<br/>Git Branch → Auto VPC"| T1App1Branch
-    
-    %% Internet/Repository Access
-    T1TGW -.->|"🌐 Internet via NAT"| Internet["Public Internet<br/>Repos & APIs"]
-    T2TGW -.->|"📦 Internal Repos Only"| T2InternalRepo["Internal Artifactory<br/>Pre-approved Packages<br/>Container Registry"]
-    T3TGW -.->|"📦 Internal Repos Only"| T3InternalRepo["Internal Artifactory<br/>Approved Packages Only<br/>Private Container Registry"]
-    
-    %% Application Code Promotion Between Tiers
-    T1App1VPC -.->|"Git Fork App Code"| T2App1VPC
-    T1App2VPC -.->|"Git Fork App Code"| T2App2VPC
-    T1App3VPC -.->|"Git Fork App Code"| T2App3VPC
-    T1App4VPC -.->|"Git Fork App Code"| T2App4VPC
-    
-    T2App1VPC -.->|"Security Approval"| T3App1VPC
-    T2App2VPC -.->|"Security Approval"| T3App2VPC
-    T2App3VPC -.->|"Security Approval"| T3App3VPC
-    T2App4VPC -.->|"Security Approval"| T3App4VPC
-    
-    %% Platform Infrastructure Promotion Between Tiers
-    T1Network -.->|"Network Platform Git Fork"| T2Network
-    T2Network -.->|"Network Platform Git Fork"| T3Network
-    T1Platform -.->|"Platform Git Fork"| T2Platform
-    T2Platform -.->|"Platform Git Fork"| T3Platform
-    
-    %% Tier styling
-    style Tier1 fill:#e1f5fe,stroke:#0277bd,stroke-width:3px
-    style Tier2 fill:#fff3e0,stroke:#ff8f00,stroke-width:3px
-    style Tier3 fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
-    
-    %% Network Platform styling
-    style T1Network fill:#81c784,stroke:#388e3c,stroke-width:2px
-    style T2Network fill:#ffb74d,stroke:#f57c00,stroke-width:2px
-    style T3Network fill:#ba68c8,stroke:#7b1fa2,stroke-width:2px
-    
-    %% Platform services styling  
-    style T1Platform fill:#bbdefb,stroke:#0288d1,stroke-width:2px
-    style T2Platform fill:#ffe0b2,stroke:#fb8c00,stroke-width:2px
-    style T3Platform fill:#e1bee7,stroke:#8e24aa,stroke-width:2px
-    
-    %% Application VPC styling
-    style T1Apps fill:#e8f4fd,stroke:#039be5,stroke-width:1px
-    style T2Apps fill:#fef7e0,stroke:#ffa000,stroke-width:1px
-    style T3Apps fill:#f8f4f8,stroke:#9c27b0,stroke-width:1px
-    
-    %% Dynamic capability styling
-    style DynamicCapability fill:#e8f5e8,stroke:#4caf50,stroke-width:3px
-    style T1App1Branch fill:#c8e6c9,stroke:#66bb6a,stroke-width:2px`;
-    }
-    
-    // Render the diagram using mermaid.render
-    if (typeof mermaid !== 'undefined' && diagramContent) {
-        try {
-            // Generate a unique ID for the diagram
-            const diagramId = 'mermaid-diagram-' + Date.now();
-            
-            // Use mermaid.render to convert the diagram content to SVG
-            const { svg } = await mermaid.render(diagramId, diagramContent);
-            
-            // Insert the rendered SVG into the container
-            diagramElement.innerHTML = svg;
-        } catch (renderError) {
-            console.error('Mermaid render error:', renderError);
-            diagramElement.innerHTML = '<p style="color: red; text-align: center; padding: 2rem;">Diagram rendering failed. Please refresh the page.</p>';
-        }
+        console.error('Failed to load external diagram:', error);
+        diagramElement.innerHTML = `
+            <div style="padding: 2rem; text-align: center; border: 1px solid #ddd; border-radius: 8px; background: #f9f9f9;">
+                <h4 style="color: #e74c3c; margin-bottom: 1rem;">Diagram Loading Failed</h4>
+                <p style="color: #666; margin-bottom: 1rem;">Unable to load the Three-Tier Security Architecture diagram.</p>
+                <p style="color: #666; font-size: 0.9em;">Error: ${error.message}</p>
+                <p style="color: #666; font-size: 0.9em;">Please check the console for more details or refresh the page.</p>
+            </div>
+        `;
     }
 });
 </script>
