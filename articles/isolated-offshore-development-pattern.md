@@ -66,21 +66,36 @@ flowchart TD
     %% ========================================
     subgraph Tier1["🌍 TIER 1: INNOVATION LAB (Public PKI) - 192.168.0.0/16"]
         
-        subgraph T1Platform["🏗️ PLATFORM SERVICES (tier1-branch)"]
-            T1DB["🗄️ Database Platform Enver<br/>MongoDB/PostgreSQL/MySQL"]
-            T1EKS["☸️ EKS Platform Enver<br/>K8s Cluster + Registry"]
-            T1Net["🌐 Network Platform Enver<br/>VPC + TGW + Internet"]
+        subgraph T1Network["🌐 NETWORK PLATFORM ENVER (tier1-branch) - CIDR Authority"]
+            T1TGW["🔗 Transit Gateway<br/>192.168.0.1<br/>Central Connectivity Hub"]
+            T1IPAM["📊 IPAM Pool<br/>192.168.0.0/16<br/>CIDR Allocation Authority"]
         end
         
-        subgraph T1Apps["📱 APPLICATION ENVERS"]
-            T1App1["🚀 App-A Enver<br/>React + Node.js<br/>(AWS Account 1)"]
-            T1App2["🚀 App-B Enver<br/>Python ML<br/>(AWS Account 1)"]
-            T1App3["🚀 App-C Enver<br/>Java Spring Boot<br/>(AWS Account 2)"]
-            T1App4["🚀 App-D Enver<br/>Go Microservices<br/>(GCP Project)"]
+        subgraph T1Platform["🏗️ PLATFORM SERVICE VPCs"]
+            T1DBVPC["🗄️ DB Platform VPC<br/>192.168.1.0/24<br/>MongoDB/PostgreSQL/MySQL"]
+            T1EKSVPC["☸️ EKS Platform VPC<br/>192.168.2.0/24<br/>K8s Cluster + Registry"]
         end
         
+        subgraph T1Apps["📱 APPLICATION ENVER VPCs"]
+            T1App1VPC["🚀 App-A VPC<br/>192.168.10.0/24<br/>React + Node.js<br/>(AWS Account 1)"]
+            T1App2VPC["🚀 App-B VPC<br/>192.168.11.0/24<br/>Python ML<br/>(AWS Account 1)"]
+            T1App3VPC["🚀 App-C VPC<br/>192.168.20.0/24<br/>Java Spring Boot<br/>(AWS Account 2)"]
+            T1App4VPC["🚀 App-D VPC<br/>192.168.30.0/24<br/>Go Microservices<br/>(GCP Project)"]
+        end
+        
+        %% TGW Connections
+        T1TGW === T1DBVPC
+        T1TGW === T1EKSVPC
+        T1TGW === T1App1VPC
+        T1TGW === T1App2VPC
+        T1TGW === T1App3VPC
+        T1TGW === T1App4VPC
+        
+        %% Platform serves Apps
         T1Platform ==> T1Apps
-        T1Net -.->|"🌐 Internet"| Internet["Public Internet<br/>Repos & APIs"]
+        
+        %% Internet Access
+        T1TGW -.->|"🌐 Internet via NAT"| Internet["Public Internet<br/>Repos & APIs"]
     end
     
     %% ========================================
@@ -88,21 +103,36 @@ flowchart TD
     %% ========================================
     subgraph Tier2["🔍 TIER 2: QUARANTINE (Hybrid PKI) - 172.16.0.0/12"]
         
-        subgraph T2Platform["🏗️ PLATFORM SERVICES (tier2-branch)"]
-            T2DB["🗄️ Database Platform Enver<br/>Isolated DB + Security Tools"]
-            T2EKS["☸️ EKS Platform Enver<br/>Security Scan Cluster"]
-            T2Net["🌐 Network Platform Enver<br/>VPC + TGW + Air-Gapped"]
+        subgraph T2Network["🌐 NETWORK PLATFORM ENVER (tier2-branch) - CIDR Authority"]
+            T2TGW["🔗 Transit Gateway<br/>172.16.0.1<br/>Air-Gapped Hub"]
+            T2IPAM["📊 IPAM Pool<br/>172.16.0.0/12<br/>CIDR Allocation Authority"]
         end
         
-        subgraph T2Apps["📱 APPLICATION ENVERS"]
-            T2App1["🛡️ App-A Enver<br/>Security Scanning<br/>(AWS Security 1)"]
-            T2App2["🛡️ App-B Enver<br/>License Compliance<br/>(AWS Security 1)"]
-            T2App3["🛡️ App-C Enver<br/>Container Scanning<br/>(AWS Security 2)"]
-            T2App4["🛡️ App-D Enver<br/>Binary Analysis<br/>(GCP Security)"]
+        subgraph T2Platform["🏗️ PLATFORM SERVICE VPCs"]
+            T2DBVPC["🗄️ DB Platform VPC<br/>172.16.1.0/24<br/>Isolated DB + Security Tools"]
+            T2EKSVPC["☸️ EKS Platform VPC<br/>172.16.2.0/24<br/>Security Scan Cluster"]
         end
         
+        subgraph T2Apps["📱 APPLICATION ENVER VPCs"]
+            T2App1VPC["🛡️ App-A VPC<br/>172.16.10.0/24<br/>Security Scanning<br/>(AWS Security 1)"]
+            T2App2VPC["🛡️ App-B VPC<br/>172.16.11.0/24<br/>License Compliance<br/>(AWS Security 1)"]
+            T2App3VPC["🛡️ App-C VPC<br/>172.16.20.0/24<br/>Container Scanning<br/>(AWS Security 2)"]
+            T2App4VPC["🛡️ App-D VPC<br/>172.16.30.0/24<br/>Binary Analysis<br/>(GCP Security)"]
+        end
+        
+        %% TGW Connections
+        T2TGW === T2DBVPC
+        T2TGW === T2EKSVPC
+        T2TGW === T2App1VPC
+        T2TGW === T2App2VPC
+        T2TGW === T2App3VPC
+        T2TGW === T2App4VPC
+        
+        %% Platform serves Apps
         T2Platform ==> T2Apps
-        T2Net -.->|"❌ No Internet"| Blocked1["❌ Blocked"]
+        
+        %% No Internet Access
+        T2TGW -.->|"❌ Air-Gapped"| Blocked1["❌ No Internet"]
     end
     
     %% ========================================
@@ -110,21 +140,40 @@ flowchart TD
     %% ========================================
     subgraph Tier3["🔒 TIER 3: INTERNAL POC (Private PKI) - 10.0.0.0/8"]
         
-        subgraph T3Platform["🏗️ PLATFORM SERVICES (tier3-branch)"]
-            T3DB["🗄️ Database Platform Enver<br/>Private PKI + VPC Endpoints"]
-            T3EKS["☸️ EKS Platform Enver<br/>Internal POC Cluster"]
-            T3Net["🌐 Network Platform Enver<br/>VPC + TGW + Zero Internet"]
+        subgraph T3Network["🌐 NETWORK PLATFORM ENVER (tier3-branch) - CIDR Authority"]
+            T3TGW["🔗 Transit Gateway<br/>10.0.0.1<br/>Private PKI Hub"]
+            T3IPAM["📊 IPAM Pool<br/>10.0.0.0/8<br/>CIDR Allocation Authority"]
+            T3VPCEndpoints["🔌 VPC Endpoints<br/>Private AWS Services<br/>S3, ECR, SSM, etc."]
         end
         
-        subgraph T3Apps["📱 APPLICATION ENVERS"]
-            T3App1["⚙️ App-A Enver<br/>Private PKI App<br/>(AWS Internal 1)"]
-            T3App2["⚙️ App-B Enver<br/>Zero Internet App<br/>(AWS Internal 1)"]
-            T3App3["⚙️ App-C Enver<br/>Internal POC App<br/>(AWS Internal 2)"]
-            T3App4["⚙️ App-D Enver<br/>Secure Internal App<br/>(GCP Internal)"]
+        subgraph T3Platform["🏗️ PLATFORM SERVICE VPCs"]
+            T3DBVPC["🗄️ DB Platform VPC<br/>10.1.0.0/16<br/>Private PKI DB Clusters"]
+            T3EKSVPC["☸️ EKS Platform VPC<br/>10.2.0.0/16<br/>Internal POC Cluster"]
         end
         
+        subgraph T3Apps["📱 APPLICATION ENVER VPCs"]
+            T3App1VPC["⚙️ App-A VPC<br/>10.4.0.0/24<br/>Private PKI App<br/>(AWS Internal 1)"]
+            T3App2VPC["⚙️ App-B VPC<br/>10.4.1.0/24<br/>Zero Internet App<br/>(AWS Internal 1)"]
+            T3App3VPC["⚙️ App-C VPC<br/>10.5.0.0/24<br/>Internal POC App<br/>(AWS Internal 2)"]
+            T3App4VPC["⚙️ App-D VPC<br/>10.6.0.0/24<br/>Secure Internal App<br/>(GCP Internal)"]
+        end
+        
+        %% TGW Connections
+        T3TGW === T3DBVPC
+        T3TGW === T3EKSVPC
+        T3TGW === T3App1VPC
+        T3TGW === T3App2VPC
+        T3TGW === T3App3VPC
+        T3TGW === T3App4VPC
+        
+        %% VPC Endpoints connected to TGW
+        T3TGW === T3VPCEndpoints
+        
+        %% Platform serves Apps
         T3Platform ==> T3Apps
-        T3Net -.->|"❌ No Internet"| Blocked2["❌ Blocked"]
+        
+        %% Zero Internet Access
+        T3TGW -.->|"❌ Zero Internet"| Blocked2["❌ Complete Isolation"]
     end
     
     %% ========================================
@@ -132,31 +181,39 @@ flowchart TD
     %% ========================================
     
     %% Application Code Promotion
-    T1App1 -.->|"Git Fork<br/>App Code"| T2App1
-    T1App2 -.->|"Git Fork<br/>App Code"| T2App2
-    T1App3 -.->|"Git Fork<br/>App Code"| T2App3
-    T1App4 -.->|"Git Fork<br/>App Code"| T2App4
+    T1App1VPC -.->|"Git Fork<br/>App Code"| T2App1VPC
+    T1App2VPC -.->|"Git Fork<br/>App Code"| T2App2VPC
+    T1App3VPC -.->|"Git Fork<br/>App Code"| T2App3VPC
+    T1App4VPC -.->|"Git Fork<br/>App Code"| T2App4VPC
     
-    T2App1 -.->|"Security<br/>Approval"| T3App1
-    T2App2 -.->|"Security<br/>Approval"| T3App2
-    T2App3 -.->|"Security<br/>Approval"| T3App3
-    T2App4 -.->|"Security<br/>Approval"| T3App4
+    T2App1VPC -.->|"Security<br/>Approval"| T3App1VPC
+    T2App2VPC -.->|"Security<br/>Approval"| T3App2VPC
+    T2App3VPC -.->|"Security<br/>Approval"| T3App3VPC
+    T2App4VPC -.->|"Security<br/>Approval"| T3App4VPC
     
     %% Platform Infrastructure Promotion
-    T1Platform -.->|"Platform Git Fork<br/>Security Hardening"| T2Platform
-    T2Platform -.->|"Platform Git Fork<br/>Private PKI Config"| T3Platform
+    T1Network -.->|"Network Platform Git Fork<br/>Security Hardening + Air-Gap"| T2Network
+    T2Network -.->|"Network Platform Git Fork<br/>Private PKI + VPC Endpoints"| T3Network
+    
+    T1Platform -.->|"Platform Git Fork<br/>Security Tools Integration"| T2Platform
+    T2Platform -.->|"Platform Git Fork<br/>Internal POC Configuration"| T3Platform
     
     %% Tier styling
     style Tier1 fill:#e1f5fe,stroke:#0277bd,stroke-width:3px
     style Tier2 fill:#fff3e0,stroke:#ff8f00,stroke-width:3px
     style Tier3 fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
     
+    %% Network Platform styling
+    style T1Network fill:#81c784,stroke:#388e3c,stroke-width:2px
+    style T2Network fill:#ffb74d,stroke:#f57c00,stroke-width:2px
+    style T3Network fill:#ba68c8,stroke:#7b1fa2,stroke-width:2px
+    
     %% Platform services styling  
     style T1Platform fill:#bbdefb,stroke:#0288d1,stroke-width:2px
     style T2Platform fill:#ffe0b2,stroke:#fb8c00,stroke-width:2px
     style T3Platform fill:#e1bee7,stroke:#8e24aa,stroke-width:2px
     
-    %% Application styling
+    %% Application VPC styling
     style T1Apps fill:#e8f4fd,stroke:#039be5,stroke-width:1px
     style T2Apps fill:#fef7e0,stroke:#ffa000,stroke-width:1px
     style T3Apps fill:#f8f4f8,stroke:#9c27b0,stroke-width:1px
