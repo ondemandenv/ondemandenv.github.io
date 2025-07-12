@@ -4,6 +4,19 @@ title: "The Three-Tier Security Pattern: Isolated SDLC for High-Security Environ
 permalink: /articles/isolated-offshore-development-pattern/
 ---
 
+<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+<script>
+    mermaid.initialize({
+        startOnLoad: true,
+        theme: 'default',
+        flowchart: {
+            useMaxWidth: true,
+            htmlLabels: true,
+            curve: 'basis'
+        }
+    });
+</script>
+
 # The Three-Tier Security Pattern: Isolated SDLC for High-Security Environments
 
 *A comprehensive approach to secure software development using ONDEMANDENV's isolated enver architecture*
@@ -40,13 +53,13 @@ ONDEMANDENV's **Three-Tier Security Pattern** breaks the stagnation cycle by imp
 <div class="diagram-container">
 <div class="diagram-controls">
 <button class="fullscreen-btn" onclick="toggleFullscreen(document.getElementById('architecture-diagram'))">🔍 View Fullscreen</button>
+<div class="zoom-controls" style="display: none;">
 <button class="zoom-btn" onclick="zoomIn()">🔍 +</button>
 <button class="zoom-btn" onclick="zoomOut()">🔍 -</button>
 <button class="zoom-btn" onclick="resetZoom()">↻ Reset</button>
 </div>
-<div class="mermaid-diagram" id="architecture-diagram">
-
-```mermaid
+</div>
+<div class="mermaid-diagram mermaid" id="architecture-diagram">
 flowchart TB
     subgraph PublicZone["🌍 TIER 1: INNOVATION LAB NETWORK (Public PKI)"]
         subgraph InnAcct1["AWS Account: offshore-team-1<br/>192.168.10.0/24"]
@@ -136,7 +149,6 @@ flowchart TB
     style IntAcct1 fill:#f8f4f8
     style IntAcct2 fill:#f8f4f8
     style IntAcct3 fill:#f8f4f8
-```
 
 </div>
 </div>
@@ -187,12 +199,15 @@ flowchart TB
 .mermaid-diagram {
     transition: all 0.3s ease;
     overflow: auto;
-    cursor: grab;
     position: relative;
     max-height: 600px;
 }
 
-.mermaid-diagram:active {
+.mermaid-diagram.fullscreen {
+    cursor: grab;
+}
+
+.mermaid-diagram.fullscreen:active {
     cursor: grabbing;
 }
 
@@ -245,6 +260,15 @@ flowchart TB
     font-size: 16px;
 }
 
+.fullscreen-zoom-controls {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1001;
+    display: flex;
+    gap: 5px;
+}
+
 @media (max-width: 768px) {
     .mermaid-diagram.fullscreen {
         padding: 1rem;
@@ -270,9 +294,14 @@ function toggleFullscreen(element) {
         element.classList.remove('fullscreen');
         const overlay = document.querySelector('.fullscreen-overlay');
         const closeBtn = document.querySelector('.fullscreen-close');
+        const zoomControls = document.querySelector('.fullscreen-zoom-controls');
         if (overlay) overlay.remove();
         if (closeBtn) closeBtn.remove();
+        if (zoomControls) zoomControls.remove();
         document.body.style.overflow = 'auto';
+        
+        // Reset zoom when exiting fullscreen
+        resetZoom();
     } else {
         // Enter fullscreen
         element.classList.add('fullscreen');
@@ -288,6 +317,16 @@ function toggleFullscreen(element) {
         closeBtn.innerHTML = '✕ Close';
         closeBtn.onclick = () => toggleFullscreen(element);
         document.body.appendChild(closeBtn);
+        
+        // Create fullscreen zoom controls
+        const zoomControls = document.createElement('div');
+        zoomControls.className = 'fullscreen-zoom-controls';
+        zoomControls.innerHTML = `
+            <button class="zoom-btn" onclick="zoomIn()">🔍 +</button>
+            <button class="zoom-btn" onclick="zoomOut()">🔍 -</button>
+            <button class="zoom-btn" onclick="resetZoom()">↻ Reset</button>
+        `;
+        document.body.appendChild(zoomControls);
         
         document.body.style.overflow = 'hidden';
         
@@ -331,38 +370,46 @@ function applyZoom() {
 document.addEventListener('DOMContentLoaded', function() {
     const diagram = document.getElementById('architecture-diagram');
     
-    // Mouse wheel zoom
+    // Mouse wheel zoom - only in fullscreen mode
     diagram.addEventListener('wheel', function(e) {
-        e.preventDefault();
-        if (e.deltaY < 0) {
-            zoomIn();
-        } else {
-            zoomOut();
+        if (diagram.classList.contains('fullscreen')) {
+            e.preventDefault();
+            if (e.deltaY < 0) {
+                zoomIn();
+            } else {
+                zoomOut();
+            }
         }
     });
     
-    // Pan functionality
+    // Pan functionality - only in fullscreen mode
     diagram.addEventListener('mousedown', function(e) {
-        isDragging = true;
-        startX = e.pageX - diagram.offsetLeft;
-        startY = e.pageY - diagram.offsetTop;
-        scrollLeft = diagram.scrollLeft;
-        scrollTop = diagram.scrollTop;
-        diagram.style.cursor = 'grabbing';
+        if (diagram.classList.contains('fullscreen')) {
+            isDragging = true;
+            startX = e.pageX - diagram.offsetLeft;
+            startY = e.pageY - diagram.offsetTop;
+            scrollLeft = diagram.scrollLeft;
+            scrollTop = diagram.scrollTop;
+            diagram.style.cursor = 'grabbing';
+        }
     });
     
     diagram.addEventListener('mouseleave', function() {
         isDragging = false;
-        diagram.style.cursor = 'grab';
+        if (diagram.classList.contains('fullscreen')) {
+            diagram.style.cursor = 'grab';
+        }
     });
     
     diagram.addEventListener('mouseup', function() {
         isDragging = false;
-        diagram.style.cursor = 'grab';
+        if (diagram.classList.contains('fullscreen')) {
+            diagram.style.cursor = 'grab';
+        }
     });
     
     diagram.addEventListener('mousemove', function(e) {
-        if (!isDragging) return;
+        if (!isDragging || !diagram.classList.contains('fullscreen')) return;
         e.preventDefault();
         const x = e.pageX - diagram.offsetLeft;
         const y = e.pageY - diagram.offsetTop;
@@ -372,16 +419,18 @@ document.addEventListener('DOMContentLoaded', function() {
         diagram.scrollTop = scrollTop - walkY;
     });
     
-    // Touch support for mobile
+    // Touch support for mobile - only in fullscreen mode
     let touchStartX, touchStartY;
     
     diagram.addEventListener('touchstart', function(e) {
-        touchStartX = e.touches[0].clientX;
-        touchStartY = e.touches[0].clientY;
+        if (diagram.classList.contains('fullscreen')) {
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+        }
     });
     
     diagram.addEventListener('touchmove', function(e) {
-        if (!touchStartX || !touchStartY) return;
+        if (!touchStartX || !touchStartY || !diagram.classList.contains('fullscreen')) return;
         
         const touchX = e.touches[0].clientX;
         const touchY = e.touches[0].clientY;
