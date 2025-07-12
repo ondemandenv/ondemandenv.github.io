@@ -224,7 +224,7 @@ flowchart TB
     height: 100vh;
     background: white;
     z-index: 1000;
-    padding: 2rem;
+    padding: 60px 20px 20px 20px;
     box-sizing: border-box;
     overflow: auto;
 }
@@ -232,8 +232,10 @@ flowchart TB
 .mermaid-diagram.fullscreen svg {
     max-width: none !important;
     max-height: none !important;
-    width: 100% !important;
+    width: auto !important;
     height: auto !important;
+    display: block !important;
+    margin: 0 auto;
 }
 
 .fullscreen-overlay {
@@ -362,7 +364,14 @@ function applyZoom() {
     const svg = diagram.querySelector('svg');
     if (svg) {
         svg.style.transform = `scale(${currentZoom})`;
-        svg.style.transformOrigin = 'center center';
+        svg.style.transformOrigin = 'top left';
+        
+        // Ensure container can scroll to see all zoomed content
+        if (diagram.classList.contains('fullscreen')) {
+            const rect = svg.getBoundingClientRect();
+            diagram.style.width = `${rect.width * currentZoom}px`;
+            diagram.style.height = `${rect.height * currentZoom}px`;
+        }
     }
 }
 
@@ -386,35 +395,36 @@ document.addEventListener('DOMContentLoaded', function() {
     diagram.addEventListener('mousedown', function(e) {
         if (diagram.classList.contains('fullscreen')) {
             isDragging = true;
-            startX = e.pageX - diagram.offsetLeft;
-            startY = e.pageY - diagram.offsetTop;
+            startX = e.clientX;
+            startY = e.clientY;
             scrollLeft = diagram.scrollLeft;
             scrollTop = diagram.scrollTop;
             diagram.style.cursor = 'grabbing';
+            e.preventDefault();
         }
     });
     
-    diagram.addEventListener('mouseleave', function() {
+    document.addEventListener('mouseleave', function() {
         isDragging = false;
         if (diagram.classList.contains('fullscreen')) {
             diagram.style.cursor = 'grab';
         }
     });
     
-    diagram.addEventListener('mouseup', function() {
+    document.addEventListener('mouseup', function() {
         isDragging = false;
         if (diagram.classList.contains('fullscreen')) {
             diagram.style.cursor = 'grab';
         }
     });
     
-    diagram.addEventListener('mousemove', function(e) {
+    document.addEventListener('mousemove', function(e) {
         if (!isDragging || !diagram.classList.contains('fullscreen')) return;
         e.preventDefault();
-        const x = e.pageX - diagram.offsetLeft;
-        const y = e.pageY - diagram.offsetTop;
-        const walkX = (x - startX) * 1;
-        const walkY = (y - startY) * 1;
+        const x = e.clientX;
+        const y = e.clientY;
+        const walkX = (x - startX) * 2; // Increased sensitivity
+        const walkY = (y - startY) * 2; // Increased sensitivity
         diagram.scrollLeft = scrollLeft - walkX;
         diagram.scrollTop = scrollTop - walkY;
     });
