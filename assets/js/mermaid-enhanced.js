@@ -132,23 +132,132 @@ class MermaidEnhanced {
     }
 
     toggleFullscreen(diagramId) {
-        if (!window.screenfull || !window.screenfull.isEnabled) {
-            console.warn('Fullscreen not supported');
-            return;
-        }
-
         const container = document.querySelector(`[data-diagram-id="${diagramId}"]`);
         
-        if (window.screenfull.isFullscreen) {
-            window.screenfull.exit();
+        if (container.classList.contains('modal-fullscreen')) {
+            this.exitModalFullscreen(diagramId);
         } else {
-            container.classList.add('fullscreen-mode');
-            this.currentFullscreenDiagram = diagramId;
+            this.enterModalFullscreen(diagramId);
+        }
+    }
+
+    enterModalFullscreen(diagramId) {
+        const container = document.querySelector(`[data-diagram-id="${diagramId}"]`);
+        const svg = container.querySelector('svg');
+        
+        if (!svg) return;
+        
+        // Create modal overlay
+        const overlay = document.createElement('div');
+        overlay.className = 'diagram-modal-overlay';
+        overlay.setAttribute('data-diagram-id', diagramId);
+        
+        // Create modal container
+        const modal = document.createElement('div');
+        modal.className = 'diagram-modal';
+        
+        // Create close button
+        const closeBtn = document.createElement('button');
+        closeBtn.className = 'diagram-modal-close';
+        closeBtn.innerHTML = '✕';
+        closeBtn.onclick = () => this.exitModalFullscreen(diagramId);
+        
+        // Create zoom controls
+        const zoomControls = document.createElement('div');
+        zoomControls.className = 'diagram-modal-controls';
+        zoomControls.innerHTML = `
+            <button class="diagram-btn zoom-btn" onclick="window.MermaidEnhanced.zoomIn('${diagramId}')">🔍 +</button>
+            <button class="diagram-btn zoom-btn" onclick="window.MermaidEnhanced.zoomOut('${diagramId}')">🔍 -</button>
+            <button class="diagram-btn zoom-btn" onclick="window.MermaidEnhanced.resetView('${diagramId}')">↻ Reset</button>
+        `;
+        
+        // Create diagram container for modal
+        const modalDiagramContainer = document.createElement('div');
+        modalDiagramContainer.className = 'diagram-modal-content';
+        modalDiagramContainer.setAttribute('data-diagram-id', diagramId);
+        
+        // Clone and scale the SVG
+        const clonedSvg = svg.cloneNode(true);
+        modalDiagramContainer.appendChild(clonedSvg);
+        
+        // Assemble modal
+        modal.appendChild(closeBtn);
+        modal.appendChild(zoomControls);
+        modal.appendChild(modalDiagramContainer);
+        overlay.appendChild(modal);
+        
+        // Add to page
+        document.body.appendChild(overlay);
+        document.body.style.overflow = 'hidden';
+        
+        // Mark original container as in modal mode
+        container.classList.add('modal-fullscreen');
+        this.currentFullscreenDiagram = diagramId;
+        
+        // Initialize pan/zoom for the modal SVG
+        setTimeout(() => {
+            this.initializePanZoom(diagramId, modalDiagramContainer);
+            this.fitDiagramToModal(clonedSvg, modalDiagramContainer);
+        }, 100);
+        
+        // Close on overlay click
+        overlay.onclick = (e) => {
+            if (e.target === overlay) {
+                this.exitModalFullscreen(diagramId);
+            }
+        };
+        
+        // Close on escape key
+        document.addEventListener('keydown', this.handleEscapeKey = (e) => {
+            if (e.key === 'Escape') {
+                this.exitModalFullscreen(diagramId);
+            }
+        });
+        
+        this.updateFullscreenControls(diagramId, true);
+    }
+
+    exitModalFullscreen(diagramId) {
+        const overlay = document.querySelector(`.diagram-modal-overlay[data-diagram-id="${diagramId}"]`);
+        const container = document.querySelector(`[data-diagram-id="${diagramId}"]`);
+        
+        if (overlay) {
+            overlay.remove();
+        }
+        
+        if (container) {
+            container.classList.remove('modal-fullscreen');
+        }
+        
+        document.body.style.overflow = 'auto';
+        
+        if (this.handleEscapeKey) {
+            document.removeEventListener('keydown', this.handleEscapeKey);
+            this.handleEscapeKey = null;
+        }
+        
+        this.currentFullscreenDiagram = null;
+        this.updateFullscreenControls(diagramId, false);
+    }
+
+    fitDiagramToModal(svg, container) {
+        try {
+            const containerRect = container.getBoundingClientRect();
+            const svgBBox = svg.getBBox();
             
-            window.screenfull.request(container).then(() => {
-                // Update controls for fullscreen mode
-                this.updateFullscreenControls(diagramId, true);
-            });
+            // Calculate scale to fit the modal (with some padding)
+            const padding = 40;
+            const scaleX = (containerRect.width - padding) / svgBBox.width;
+            const scaleY = (containerRect.height - padding) / svgBBox.height;
+            const scale = Math.min(scaleX, scaleY, 1); // Don't scale up beyond 100%
+            
+            // Apply initial scale and center the diagram
+            svg.style.transform = `scale(${scale})`;
+            svg.style.transformOrigin = 'center center';
+            
+            console.log('Fitted diagram to modal with scale:', scale);
+        } catch (error) {
+            console.log('Could not auto-fit diagram, using default size');
         }
     }
 
