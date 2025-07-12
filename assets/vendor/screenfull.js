@@ -157,4 +157,5 @@ if (!nativeAPI) {
 	screenfull = {isEnabled: false};
 }
 
-export default screenfull;
+// Make screenfull available globally for browser use
+window.screenfull = screenfull;
