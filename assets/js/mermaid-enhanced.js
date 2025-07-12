@@ -133,7 +133,8 @@ class MermaidEnhanced {
 
     toggleFullscreen(diagramId) {
         const container = document.querySelector(`[data-diagram-id="${diagramId}"]`);
-        
+        if (!container) return;
+
         if (container.classList.contains('modal-fullscreen')) {
             this.exitModalFullscreen(diagramId);
         } else {
@@ -143,122 +144,96 @@ class MermaidEnhanced {
 
     enterModalFullscreen(diagramId) {
         const container = document.querySelector(`[data-diagram-id="${diagramId}"]`);
-        const svg = container.querySelector('svg');
-        
-        if (!svg) return;
-        
+        const mermaidDiagram = container.querySelector('.mermaid');
+        if (!mermaidDiagram) return;
+
         // Create modal overlay
         const overlay = document.createElement('div');
         overlay.className = 'diagram-modal-overlay';
         overlay.setAttribute('data-diagram-id', diagramId);
-        
+
         // Create modal container
         const modal = document.createElement('div');
         modal.className = 'diagram-modal';
-        
+
         // Create close button
         const closeBtn = document.createElement('button');
         closeBtn.className = 'diagram-modal-close';
         closeBtn.innerHTML = '✕';
         closeBtn.onclick = () => this.exitModalFullscreen(diagramId);
-        
-        // Create zoom controls
-        const zoomControls = document.createElement('div');
-        zoomControls.className = 'diagram-modal-controls';
-        zoomControls.innerHTML = `
-            <button class="diagram-btn zoom-btn" onclick="window.MermaidEnhanced.zoomIn('${diagramId}')">🔍 +</button>
-            <button class="diagram-btn zoom-btn" onclick="window.MermaidEnhanced.zoomOut('${diagramId}')">🔍 -</button>
-            <button class="diagram-btn zoom-btn" onclick="window.MermaidEnhanced.resetView('${diagramId}')">↻ Reset</button>
-        `;
-        
+
         // Create diagram container for modal
         const modalDiagramContainer = document.createElement('div');
         modalDiagramContainer.className = 'diagram-modal-content';
-        modalDiagramContainer.setAttribute('data-diagram-id', diagramId);
-        
-        // Clone and scale the SVG
-        const clonedSvg = svg.cloneNode(true);
-        modalDiagramContainer.appendChild(clonedSvg);
+
+        // Move diagram to modal
+        this.originalParent = mermaidDiagram.parentNode;
+        modalDiagramContainer.appendChild(mermaidDiagram);
         
         // Assemble modal
         modal.appendChild(closeBtn);
-        modal.appendChild(zoomControls);
         modal.appendChild(modalDiagramContainer);
         overlay.appendChild(modal);
-        
-        // Add to page
+
         document.body.appendChild(overlay);
         document.body.style.overflow = 'hidden';
-        
-        // Mark original container as in modal mode
         container.classList.add('modal-fullscreen');
         this.currentFullscreenDiagram = diagramId;
-        
-        // Initialize pan/zoom for the modal SVG
-        setTimeout(() => {
-            this.initializePanZoom(diagramId, modalDiagramContainer);
-            this.fitDiagramToModal(clonedSvg, modalDiagramContainer);
-        }, 100);
-        
-        // Close on overlay click
+
+        // Refresh pan-zoom instance
+        const panZoomInstance = this.panZoomInstances.get(diagramId);
+        if (panZoomInstance) {
+            panZoomInstance.resize();
+            panZoomInstance.fit();
+            panZoomInstance.center();
+        }
+
+        // Event listeners for closing
         overlay.onclick = (e) => {
-            if (e.target === overlay) {
-                this.exitModalFullscreen(diagramId);
-            }
+            if (e.target === overlay) this.exitModalFullscreen(diagramId);
         };
-        
-        // Close on escape key
-        document.addEventListener('keydown', this.handleEscapeKey = (e) => {
-            if (e.key === 'Escape') {
-                this.exitModalFullscreen(diagramId);
-            }
-        });
-        
+        this.escapeKeyListener = (e) => {
+            if (e.key === 'Escape') this.exitModalFullscreen(diagramId);
+        };
+        document.addEventListener('keydown', this.escapeKeyListener);
+
         this.updateFullscreenControls(diagramId, true);
     }
 
     exitModalFullscreen(diagramId) {
         const overlay = document.querySelector(`.diagram-modal-overlay[data-diagram-id="${diagramId}"]`);
-        const container = document.querySelector(`[data-diagram-id="${diagramId}"]`);
-        
-        if (overlay) {
-            overlay.remove();
+        const container = document.querySelector(`[data-diagram-id="${diagramId}"].modal-fullscreen`);
+        if (!overlay || !container) return;
+
+        const modalContent = overlay.querySelector('.diagram-modal-content');
+        const mermaidDiagram = modalContent.querySelector('.mermaid');
+
+        // Move diagram back to its original container
+        if (mermaidDiagram && this.originalParent) {
+            this.originalParent.appendChild(mermaidDiagram);
         }
-        
-        if (container) {
-            container.classList.remove('modal-fullscreen');
-        }
-        
+
+        overlay.remove();
         document.body.style.overflow = 'auto';
-        
-        if (this.handleEscapeKey) {
-            document.removeEventListener('keydown', this.handleEscapeKey);
-            this.handleEscapeKey = null;
+        container.classList.remove('modal-fullscreen');
+
+        if (this.escapeKeyListener) {
+            document.removeEventListener('keydown', this.escapeKeyListener);
+            this.escapeKeyListener = null;
         }
         
         this.currentFullscreenDiagram = null;
-        this.updateFullscreenControls(diagramId, false);
-    }
+        this.originalParent = null;
 
-    fitDiagramToModal(svg, container) {
-        try {
-            const containerRect = container.getBoundingClientRect();
-            const svgBBox = svg.getBBox();
-            
-            // Calculate scale to fit the modal (with some padding)
-            const padding = 40;
-            const scaleX = (containerRect.width - padding) / svgBBox.width;
-            const scaleY = (containerRect.height - padding) / svgBBox.height;
-            const scale = Math.min(scaleX, scaleY, 1); // Don't scale up beyond 100%
-            
-            // Apply initial scale and center the diagram
-            svg.style.transform = `scale(${scale})`;
-            svg.style.transformOrigin = 'center center';
-            
-            console.log('Fitted diagram to modal with scale:', scale);
-        } catch (error) {
-            console.log('Could not auto-fit diagram, using default size');
+        // Refresh pan-zoom instance
+        const panZoomInstance = this.panZoomInstances.get(diagramId);
+        if (panZoomInstance) {
+            panZoomInstance.resize();
+            panZoomInstance.fit();
+            panZoomInstance.center();
         }
+        
+        this.updateFullscreenControls(diagramId, false);
     }
 
     updateFullscreenControls(diagramId, isFullscreen) {
