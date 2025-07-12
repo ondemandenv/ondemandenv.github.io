@@ -12,15 +12,8 @@ class MermaidEnhanced {
 
     async init() {
         if (this.initialized) return;
-        
-        // Wait for DOM content to be loaded
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', () => this.enhanceAllDiagrams());
-        } else {
-            this.enhanceAllDiagrams();
-        }
-        
         this.initialized = true;
+        console.log('MermaidEnhanced initialized');
     }
 
     enhanceAllDiagrams() {
@@ -243,10 +236,13 @@ function initMermaidEnhanced() {
         const enhancer = new MermaidEnhanced();
         enhancer.init();
         
-        // Make it globally available for external diagram loading
+        // Make it globally available immediately
         window.MermaidEnhanced = enhancer;
+        
+        console.log('MermaidEnhanced initialized and available globally');
     } else {
-        console.warn('svg-pan-zoom or screenfull not loaded');
+        console.warn('svg-pan-zoom or screenfull not loaded, retrying...');
+        setTimeout(initMermaidEnhanced, 100);
     }
 }
 

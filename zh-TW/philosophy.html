@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ONDEMANDENV的理念 - 主動式架構預防</title>
+    <meta name="description" content="學習ONDEMANDENV背後的核心理念：從被動式治理轉向主動式架構預防，以建立具有韌性和敏捷性的分散式系統。">
+    <link rel="stylesheet" href="../styles.css">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-HLWV6BZQE1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-HLWV6BZQE1');
+    </script>
+    <style>
+        .page-header {
+            background: var(--header-bg-color);
+            padding: 3rem 2rem;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 3rem;
+        }
+        .page-header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+        .page-header p {
+            font-size: 1.25rem;
+            color: var(--text-color-secondary);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .content-section {
+            margin-bottom: 4rem;
+        }
+        .content-section h2 {
+            font-size: 2.2rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 0.5rem;
+            display: inline-block;
+        }
+        .content-section p, .content-section ul {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .content-section li {
+            margin-bottom: 0.75rem;
+        }
+        .callout-box {
+            background: #f0f4f8;
+            border-left: 5px solid #4a90e2;
+            padding: 1.5rem 2rem;
+            margin: 2rem 0;
+            border-radius: 5px;
+        }
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        .comparison-card {
+            border: 1px solid var(--border-color);
+            padding: 2rem;
+            border-radius: 8px;
+        }
+        .comparison-card h3 {
+            font-size: 1.5rem;
+            margin-top: 0;
+            color: var(--primary-color);
+        }
+        .comparison-card--bad {
+            border-color: #e53935;
+            background: #fff1f0;
+        }
+        .comparison-card--bad h3 { color: #c62828; }
+        .comparison-card--good {
+            border-color: #43a047;
+            background: #f1f8e9;
+        }
+        .comparison-card--good h3 { color: #2e7d32; }
+    </style>
+</head>
+<body>
+<header>
+    <nav>
+        <div class="logo">ONDEMANDENV.dev</div>
+        <ul>
+            <li><a href="index.html">首頁</a></li>
+            <li><a href="philosophy.html">我們的理念</a></li>
+            <li><a href="concepts.html">核心概念</a></li>
+            <li><a href="patterns.html">模式與使用案例</a></li>
+            <li><a href="documentation.html">文件</a></li>
+            <li><a href="articles.html">文章</a></li>
+            <li><a href="https://github.com/ondemandenv" target="_blank">GitHub 組織</a></li>
+            <li><a href="mailto:contacts@ondemandenv.dev">請求演示</a></li>
+        </ul>
+        <div class="language-switcher">
+            <select onchange="window.location.href=this.value;">
+                <option value="../philosophy.html">English</option>
+                <option value="../ja/philosophy.html">日本語</option>
+                <option value="philosophy.html" selected>繁體中文</option>
+            </select>
+        </div>
+    </nav>
+</header>
+
+<main>
+    <section class="page-header">
+        <h1>我們的理念</h1>
+        <p>ONDEMANDENV 不僅僅是功能和工具，它是一種思維模式的轉變。我們相信，大多數分散式系統失敗的根本原因不是糟糕的程式碼，而是缺乏架構紀律。我們治療的是疾病本身，而不僅僅是症狀。</p>
+    </section>
+
+    <section class="content-section" id="trap">
+        <h2>疾病：碎片化陷阱的必然性</h2>
+        <p>現代微服務開發鼓勵團隊獨立工作。雖然這種自主性很強大，但它也有其陰暗面。如果沒有一個強制性的、全系統的協調機制，您就會陷入<a href="articles/fragmentation-trap.html">「碎片化陷阱」</a>。</p>
+        <p>這就是各自獨立設計良好的服務，在無意中創建出一個「分散式單體」——一個如此糾纏不清、脆弱不堪的系統，以至於任何變更都變得既有風險又緩慢。曾經在白板上清晰的架構，隨著每一次的提交而衰敗。</p>
+    </section>
+
+    <section class="content-section" id="reactive-governance">
+        <h2>被動式治理的幻覺</h2>
+        <p>大多數組織試圖用被動的措施來對抗這種衰敗：</p>
+        <div class="comparison-grid">
+            <div class="comparison-card comparison-card--bad">
+                <h3>舊方法</h3>
+                <ul>
+                    <li><strong>文件驅動的架構：</strong>依賴於一發布就過時的維基和設計文件。</li>
+                    <li><strong>委員會治理：</strong>架構審查委員會充當守門員，拖慢開發速度，卻沒有提供自動化的強制執行。</li>
+                    <li><strong>以測試作為安全網：</strong>在 CI 或預備環境的後期階段才發現根本性的整合和安全漏洞，而此時修復成本最高。</li>
+                </ul>
+            </div>
+            <div class="comparison-card comparison-card--good">
+                <h3>ONDEMANDENV 的方法</h3>
+                <ul>
+                    <li><strong>程式碼即架構：</strong><code>contractsLib</code> 是您系統架構的單一、可執行的事實來源。它不會過時。</li>
+                    <li><strong>編譯器治理：</strong>架構規則以程式化的方式強制執行。不合規的變更在設計階段就是一個「編譯錯誤」。</li>
+                    <li><strong>以預防為治愈：</strong>在服務實施開始前就捕捉到瑕疵。測試是為了驗證業務邏輯，而不是基本相容性。</li>
+                </ul>
+            </div>
+        </div>
+        <p style="margin-top: 2rem;">被動式治理是一項崇高的努力，但它從根本上是失敗的，因為它不具備可擴展性，缺乏執行力，而且總是在過時的資訊上運作。</p>
+    </section>
+
+    <section class="content-section" id="proactive-prevention">
+        <h2>思維轉變：主動式架構預防</h2>
+        <p>ONDEMANDENV 的方法是將架構視為系統中一個第一級的、可測試的、可強制執行的組件。這是透過 <strong><code>contractsLib</code></strong> 實現的，它扮演著一個可執行的規範——一份為您服務制定的憲法。</p>
+        <div class="callout-box">
+            <p><strong><code>contractsLib</code> 是一個強制函數。</strong>它讓表達糟糕的架構決策變得不可能。您無法建立循環依賴、使用一個不存在的服務，或違反安全策略，因為合約庫的「語言」不允許這樣做。</p>
+        </div>
+        <p>這不僅僅是您架構的語法檢查器；它是一個從第一天起就確保系統完整性的基礎框架。它保證了設計即所建。</p>
+    </section>
+
+    <section class="content-section" id="freedom">
+        <h2>以紀律為自由的基石</h2>
+        <p>這聽起來可能很嚴格，但事實恰恰相反。正是這種嚴謹的、前期的紀律，才使得下游的自由和敏捷性成為可能。</p>
+        <ul>
+            <li><strong>開發者的信心：</strong>團隊可以在其服務的邊界內快速創新，並確信他們不會破壞更廣泛的系統。合約是他們的安全網。</li>
+            <li><strong>有意義的自主性：</strong>因為架構的護欄是自動化和強制執行的，團隊被授予了真正的自主權，而沒有製造混亂的風險。</li>
+            <li><strong>無風險的隨需應變環境：</strong>只需一個命令就能啟動一個臨時環境的能力，只有當該環境是生產環境的高擬真度、合規的複製品時才強大。我們的治理模型保證了這一點。</li>
+        </ul>
+        <p>透過將治理左移並使其主動化，我們不僅預防了失敗。我們還為建立真正敏捷和創新的團隊，奠定了穩定、可預測的基礎。</p>
+    </section>
+
+</main>
+
+<footer>
+    <p>&copy; 2024 ONDEMANDENV.dev. All rights reserved.</p>
+</footer>
+
+</body>
+</html> 

@@ -33,17 +33,24 @@
     <!-- Enhanced Mermaid Styles -->
     <link rel="stylesheet" href="{{ '/assets/css/mermaid-enhanced.css' | relative_url }}">
     
-    <!-- Required Libraries -->
+    <!-- Required Libraries - Load in specific order -->
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/screenfull@6.0.2/dist/screenfull.min.js"></script>
     
-    <!-- Enhanced Mermaid Functionality -->
-    <script src="{{ '/assets/js/mermaid-enhanced.js' | relative_url }}"></script>
-    <script src="{{ '/assets/js/external-diagram-loader.js' | relative_url }}"></script>
-    
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        // Wait for all libraries to load before initializing
+        function initializeMermaidSystem() {
+            // Check if all required libraries are loaded
+            if (typeof mermaid === 'undefined' || typeof svgPanZoom === 'undefined' || typeof screenfull === 'undefined') {
+                console.log('Waiting for libraries to load...');
+                setTimeout(initializeMermaidSystem, 100);
+                return;
+            }
+            
+            console.log('All libraries loaded, initializing mermaid system');
+            
+            // Initialize mermaid
             mermaid.initialize({ 
                 startOnLoad: false,
                 theme: 'default',
@@ -57,6 +64,70 @@
                 }
             });
             
+            // Handle external diagrams first
+            const externalDiagrams = document.querySelectorAll('[data-external-diagram]');
+            if (externalDiagrams.length > 0) {
+                console.log('Found', externalDiagrams.length, 'external diagrams to load');
+                loadExternalDiagrams(externalDiagrams);
+                return; // Exit early - external diagrams will handle enhancement
+            }
+            
+            // Handle inline mermaid diagrams
+            handleInlineDiagrams();
+        }
+        
+        async function loadExternalDiagrams(diagrams) {
+            for (const diagram of diagrams) {
+                const diagramPath = diagram.getAttribute('data-external-diagram');
+                await loadExternalDiagram(diagram, diagramPath);
+            }
+            
+            // After all external diagrams are loaded, enhance them
+            if (window.MermaidEnhanced) {
+                window.MermaidEnhanced.enhanceAllDiagrams();
+            } else {
+                // Initialize enhanced functionality
+                setTimeout(() => {
+                    if (window.MermaidEnhanced) {
+                        window.MermaidEnhanced.enhanceAllDiagrams();
+                    }
+                }, 500);
+            }
+        }
+        
+        async function loadExternalDiagram(container, diagramPath) {
+            try {
+                console.log('Loading external diagram:', diagramPath);
+                container.innerHTML = '<div class="diagram-loading">Loading diagram...</div>';
+                
+                const response = await fetch(diagramPath);
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const diagramContent = await response.text();
+                const diagramId = 'mermaid-diagram-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+                
+                // Use mermaid.render to convert the diagram content to SVG
+                const { svg } = await mermaid.render(diagramId, diagramContent);
+                
+                // Insert the rendered SVG into the container
+                container.innerHTML = svg;
+                console.log('External diagram loaded successfully:', diagramPath);
+                
+            } catch (error) {
+                console.error('Failed to load external diagram:', diagramPath, error);
+                container.innerHTML = `
+                    <div class="diagram-error">
+                        <h4>Diagram Loading Failed</h4>
+                        <p>Unable to load diagram from ${diagramPath}</p>
+                        <p class="error-detail">Error: ${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+        
+        function handleInlineDiagrams() {
             // Multiple selectors to catch different ways Kramdown might render mermaid
             const selectors = [
                 'pre code.language-mermaid',
@@ -87,13 +158,14 @@
                 });
             });
             
-            // Also handle direct mermaid class elements
-            const directMermaidBlocks = document.querySelectorAll('.mermaid');
+            // Also handle direct mermaid class elements without external-diagram attribute
+            const directMermaidBlocks = document.querySelectorAll('.mermaid:not([data-external-diagram])');
             if (directMermaidBlocks.length > 0) {
                 foundMermaid = true;
             }
             
             if (foundMermaid) {
+                console.log('Processing', directMermaidBlocks.length, 'inline mermaid diagrams');
                 mermaid.run().then(() => {
                     // Initialize enhanced functionality after mermaid renders
                     if (window.MermaidEnhanced) {
@@ -104,8 +176,14 @@
             
             // Debug: log what we found
             console.log('Mermaid blocks found:', document.querySelectorAll('.mermaid').length);
-        });
+        }
+        
+        // Start initialization when DOM is ready
+        document.addEventListener('DOMContentLoaded', initializeMermaidSystem);
     </script>
+    
+    <!-- Enhanced Mermaid Functionality - Load after main script -->
+    <script src="{{ '/assets/js/mermaid-enhanced.js' | relative_url }}"></script>
     {% endif %}
 </head>
 <body>
