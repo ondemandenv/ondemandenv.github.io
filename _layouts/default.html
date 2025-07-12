@@ -33,14 +33,14 @@
     <!-- Enhanced Mermaid Styles -->
     <link rel="stylesheet" href="{{ '/assets/css/mermaid-enhanced.css' | relative_url }}">
     
-    <!-- Required Libraries - Load in specific order -->
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.2/dist/svg-pan-zoom.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/screenfull.js/6.0.2/screenfull.min.js"></script>
+    <!-- Required Libraries - Self-hosted for reliability -->
+    <script src="{{ '/assets/vendor/mermaid.min.js' | relative_url }}"></script>
+    <script src="{{ '/assets/vendor/svg-pan-zoom.min.js' | relative_url }}"></script>
+    <script src="{{ '/assets/vendor/screenfull.js' | relative_url }}"></script>
     
     <script>
         let initRetryCount = 0;
-        const maxRetries = 30; // 3 seconds max wait time
+        const maxRetries = 10; // 1 second max wait time for local files
         let systemInitialized = false;
         
         // Wait for all libraries to load before initializing
@@ -51,7 +51,7 @@
             if (typeof mermaid === 'undefined' || typeof svgPanZoom === 'undefined' || typeof screenfull === 'undefined') {
                 initRetryCount++;
                 if (initRetryCount >= maxRetries) {
-                    console.warn('Some libraries failed to load after 3 seconds. Initializing with available features.');
+                    console.warn('Some self-hosted libraries failed to load after 1 second. Checking status...');
                     console.log('Library status:', {
                         mermaid: typeof mermaid !== 'undefined',
                         svgPanZoom: typeof svgPanZoom !== 'undefined', 
@@ -61,22 +61,23 @@
                     // Initialize with whatever is available
                     if (typeof mermaid !== 'undefined') {
                         systemInitialized = true;
+                        console.log('Proceeding with available libraries');
                         initWithAvailableLibraries();
                     } else {
-                        console.error('Mermaid library failed to load - cannot render diagrams');
+                        console.error('Critical: Mermaid library failed to load - cannot render diagrams');
                     }
                     return;
                 }
                 
                 if (initRetryCount === 1) {
-                    console.log('Waiting for libraries to load...');
+                    console.log('Loading self-hosted libraries...');
                 }
                 setTimeout(initializeMermaidSystem, 100);
                 return;
             }
             
             systemInitialized = true;
-            console.log('All libraries loaded successfully');
+            console.log('All self-hosted libraries loaded successfully!');
             initWithAvailableLibraries();
         }
         
