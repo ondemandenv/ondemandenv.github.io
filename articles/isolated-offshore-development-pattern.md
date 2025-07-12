@@ -358,63 +358,75 @@ Team C: 2 weeks setting up VPC endpoints + security policies
 All Teams: inherit(platform.securityInfrastructure) // Instant, consistent, secure
 ```
 
-## Manual Promotion Workflow Between Repository Branches
+## Manual Promotion Workflow Between Repository Forks
 
 ### Git-Based Anti-Stagnation Architecture
 
-**🔄 Collective Learning Through Manual Branch Promotion:**
+**🔄 Collective Learning Through Manual Repository Promotion:**
 
-The three-tier promotion uses manual Git workflows between different repository branches, demonstrating anti-stagnation principles through controlled, developer-driven progression:
+The three-tier promotion uses manual Git workflows between different forked repositories, demonstrating anti-stagnation principles through controlled, air-gapped progression:
 
 ```bash
 # Manual promotion workflow - developers control the flow
-# Each tier uses different repository branches for air-gapped promotion
+# Each tier uses different forked repositories for complete isolation
 
-# 🚀 Innovation Energy: Developers work freely in innovation branches
-git checkout innovation-lab/feature-branch
+# 🚀 Innovation Energy: Developers work freely in innovation lab fork
+git clone git@github.com:offshore-team/app-innovation-lab.git
+cd app-innovation-lab
 # ... develop and test with public packages and synthetic data
 
-# Manual promotion to quarantine branch for security scanning
-git checkout quarantine/feature-branch
-git cherry-pick innovation-lab/feature-branch
-# 🔄 Collective Learning: Security team reviews and scans manually
+# Manual promotion to quarantine repository for security scanning
+git clone git@github.com:security-team/app-quarantine.git
+cd app-quarantine
+git remote add innovation git@github.com:offshore-team/app-innovation-lab.git
+git fetch innovation
+git cherry-pick innovation/feature-branch
+# 🔄 Collective Learning: Security team reviews and scans in isolated fork
 
-# Manual promotion to internal POC after security approval  
-git checkout internal-poc/feature-branch
+# Manual promotion to internal POC repository after security approval  
+git clone git@github.com:internal-team/app-internal-poc.git
+cd app-internal-poc
+git remote add quarantine git@github.com:security-team/app-quarantine.git
+git fetch quarantine
 git cherry-pick quarantine/feature-branch
 # 🎯 Resource Consolidation: Shared internal infrastructure and PKI
 ```
 
 ### Anti-Stagnation Manual Workflow Example
 
-**How manual Git-based promotion eliminates financial services stagnation:**
+**How manual repository-based promotion eliminates financial services stagnation:**
 
 ```bash
 # Traditional approach: Innovation paralysis
 # 3 months security review → manual approval → risk-averse deployment
 
-# ONDEMANDENV approach: Controlled manual progression with anti-stagnation benefits
+# ONDEMANDENV approach: Controlled manual progression across forked repositories
 
-# Tier 1: Innovation Lab Branch
-git checkout innovation-lab/new-payment-integration
+# Tier 1: Innovation Lab Repository (offshore-team/app-innovation-lab)
+cd app-innovation-lab
 npm install stripe@latest  # 🚀 Innovation Energy: Direct access to innovation
 git commit -m "Implement Stripe integration"
+git push origin feature/new-payment-integration
 # Deploy to innovation lab environment with public PKI
 
-# Manual promotion to Tier 2: Quarantine Branch  
-git checkout quarantine/new-payment-integration
-git cherry-pick innovation-lab/new-payment-integration
-# 🔄 Collective Learning: Security team manually reviews and scans
+# Manual promotion to Tier 2: Quarantine Repository (security-team/app-quarantine)  
+cd ../app-quarantine
+git fetch innovation
+git cherry-pick innovation/feature/new-payment-integration
+git push origin feature/new-payment-integration
+# 🔄 Collective Learning: Security team manually reviews and scans in isolated fork
 # Manual security scanning and approval process
 
-# Manual promotion to Tier 3: Internal POC Branch
-git checkout internal-poc/new-payment-integration  
-git cherry-pick quarantine/new-payment-integration
+# Manual promotion to Tier 3: Internal POC Repository (internal-team/app-internal-poc)
+cd ../app-internal-poc  
+git fetch quarantine
+git cherry-pick quarantine/feature/new-payment-integration
+git push origin feature/new-payment-integration
 # 🎯 Resource Consolidation: Deploy to shared internal infrastructure
 # 🔒 Private PKI and internal repositories
 
-# Result: Developer-controlled progression across security tiers
-# Anti-stagnation through manual but systematic progression
+# Result: Complete repository isolation with controlled code promotion
+# Anti-stagnation through air-gapped but systematic progression
 ```
 
 ## Anti-Stagnation Security Outcomes
