@@ -474,25 +474,20 @@ document.addEventListener('DOMContentLoaded', async function() {
     const diagramElement = document.getElementById('architecture-diagram');
     if (!diagramElement) return;
     
+    let diagramContent = '';
+    
     // Try to load external diagram first
     try {
         const response = await fetch('/diagrams/three-tier-security-architecture.mmd');
         if (response.ok) {
-            const diagramContent = await response.text();
-            diagramElement.textContent = diagramContent;
-            
-            // Re-initialize Mermaid for the loaded content
-            if (typeof mermaid !== 'undefined') {
-                mermaid.init(undefined, diagramElement);
-            }
-            return;
+            diagramContent = await response.text();
+        } else {
+            throw new Error('External diagram not found');
         }
     } catch (error) {
         console.warn('External diagram fetch failed, using embedded diagram:', error);
-    }
-    
-    // Fallback to embedded diagram content
-    const embeddedDiagram = `flowchart TB
+        // Fallback to embedded diagram content
+        diagramContent = `flowchart TB
     %% ========================================
     %% TIER 1: INNOVATION LAB
     %% ========================================
@@ -691,12 +686,23 @@ document.addEventListener('DOMContentLoaded', async function() {
     %% Dynamic capability styling
     style DynamicCapability fill:#e8f5e8,stroke:#4caf50,stroke-width:3px
     style T1App1Branch fill:#c8e6c9,stroke:#66bb6a,stroke-width:2px`;
+    }
     
-    diagramElement.textContent = embeddedDiagram;
-    
-    // Re-initialize Mermaid for the embedded content
-    if (typeof mermaid !== 'undefined') {
-        mermaid.init(undefined, diagramElement);
+    // Render the diagram using mermaid.render
+    if (typeof mermaid !== 'undefined' && diagramContent) {
+        try {
+            // Generate a unique ID for the diagram
+            const diagramId = 'mermaid-diagram-' + Date.now();
+            
+            // Use mermaid.render to convert the diagram content to SVG
+            const { svg } = await mermaid.render(diagramId, diagramContent);
+            
+            // Insert the rendered SVG into the container
+            diagramElement.innerHTML = svg;
+        } catch (renderError) {
+            console.error('Mermaid render error:', renderError);
+            diagramElement.innerHTML = '<p style="color: red; text-align: center; padding: 2rem;">Diagram rendering failed. Please refresh the page.</p>';
+        }
     }
 });
 </script>
