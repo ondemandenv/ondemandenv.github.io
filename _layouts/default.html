@@ -36,27 +36,34 @@
     <!-- Required Libraries - Load in specific order -->
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.2/dist/svg-pan-zoom.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/screenfull@6.0.2/dist/screenfull.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/screenfull.js/6.0.2/screenfull.min.js"></script>
     
     <script>
         let initRetryCount = 0;
-        const maxRetries = 50; // 5 seconds max wait time
+        const maxRetries = 30; // 3 seconds max wait time
+        let systemInitialized = false;
         
         // Wait for all libraries to load before initializing
         function initializeMermaidSystem() {
+            if (systemInitialized) return; // Prevent double initialization
+            
             // Check if all required libraries are loaded
             if (typeof mermaid === 'undefined' || typeof svgPanZoom === 'undefined' || typeof screenfull === 'undefined') {
                 initRetryCount++;
                 if (initRetryCount >= maxRetries) {
-                    console.error('Failed to load required libraries after 5 seconds. Falling back to basic mermaid.');
-                    console.error('Missing libraries:', {
+                    console.warn('Some libraries failed to load after 3 seconds. Initializing with available features.');
+                    console.log('Library status:', {
                         mermaid: typeof mermaid !== 'undefined',
                         svgPanZoom: typeof svgPanZoom !== 'undefined', 
                         screenfull: typeof screenfull !== 'undefined'
                     });
-                    // Fall back to basic mermaid without enhancement
+                    
+                    // Initialize with whatever is available
                     if (typeof mermaid !== 'undefined') {
-                        initBasicMermaid();
+                        systemInitialized = true;
+                        initWithAvailableLibraries();
+                    } else {
+                        console.error('Mermaid library failed to load - cannot render diagrams');
                     }
                     return;
                 }
@@ -68,8 +75,12 @@
                 return;
             }
             
-            console.log('All libraries loaded, initializing mermaid system');
-            
+            systemInitialized = true;
+            console.log('All libraries loaded successfully');
+            initWithAvailableLibraries();
+        }
+        
+        function initWithAvailableLibraries() {
             // Initialize mermaid
             mermaid.initialize({ 
                 startOnLoad: false,
@@ -96,24 +107,29 @@
             handleInlineDiagrams();
         }
         
-        async function loadExternalDiagrams(diagrams, enableEnhancement = true) {
+        async function loadExternalDiagrams(diagrams) {
             for (const diagram of diagrams) {
                 const diagramPath = diagram.getAttribute('data-external-diagram');
                 await loadExternalDiagram(diagram, diagramPath);
             }
             
-            // After all external diagrams are loaded, enhance them if requested
-            if (enableEnhancement) {
+            // After all external diagrams are loaded, try to enhance them
+            // But only if we have the enhancement libraries
+            if (typeof svgPanZoom !== 'undefined' && typeof screenfull !== 'undefined') {
                 if (window.MermaidEnhanced) {
+                    console.log('Enhancing diagrams with zoom/pan/fullscreen functionality');
                     window.MermaidEnhanced.enhanceAllDiagrams();
                 } else {
-                    // Initialize enhanced functionality
+                    // Wait a bit for MermaidEnhanced to initialize
                     setTimeout(() => {
                         if (window.MermaidEnhanced) {
+                            console.log('Enhancing diagrams with zoom/pan/fullscreen functionality');
                             window.MermaidEnhanced.enhanceAllDiagrams();
                         }
                     }, 500);
                 }
+            } else {
+                console.log('Enhancement libraries not available - diagrams will display without interactive features');
             }
         }
         
@@ -200,33 +216,6 @@
             console.log('Mermaid blocks found:', document.querySelectorAll('.mermaid').length);
         }
         
-        // Fallback function for basic mermaid without enhancement
-        function initBasicMermaid() {
-            console.log('Initializing basic mermaid without enhancement features');
-            
-            mermaid.initialize({ 
-                startOnLoad: false,
-                theme: 'default',
-                themeVariables: {
-                    primaryColor: '#ff6b6b',
-                    primaryTextColor: '#333',
-                    primaryBorderColor: '#ff6b6b',
-                    lineColor: '#333',
-                    secondaryColor: '#4ecdc4',
-                    tertiaryColor: '#45b7d1'
-                }
-            });
-            
-            // Handle external diagrams with basic functionality
-            const externalDiagrams = document.querySelectorAll('[data-external-diagram]');
-            if (externalDiagrams.length > 0) {
-                loadExternalDiagrams(externalDiagrams, false); // No enhancement
-                return;
-            }
-            
-            // Handle inline diagrams
-            handleInlineDiagrams();
-        }
         
         // Start initialization when DOM is ready
         document.addEventListener('DOMContentLoaded', initializeMermaidSystem);

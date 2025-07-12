@@ -230,10 +230,7 @@ class MermaidEnhanced {
     }
 }
 
-let enhancedRetryCount = 0;
-const maxEnhancedRetries = 50; // 5 seconds max
-
-// Initialize when libraries are loaded
+// Initialize when libraries are loaded (simplified)
 function initMermaidEnhanced() {
     if (typeof svgPanZoom !== 'undefined' && typeof screenfull !== 'undefined') {
         const enhancer = new MermaidEnhanced();
@@ -242,29 +239,15 @@ function initMermaidEnhanced() {
         // Make it globally available immediately
         window.MermaidEnhanced = enhancer;
         
-        console.log('MermaidEnhanced initialized and available globally');
+        console.log('MermaidEnhanced ready for diagram enhancement');
     } else {
-        enhancedRetryCount++;
-        if (enhancedRetryCount >= maxEnhancedRetries) {
-            console.warn('Enhancement libraries not available after 5 seconds. Diagrams will work without zoom/pan/fullscreen features.');
-            // Create a dummy MermaidEnhanced that does nothing
-            window.MermaidEnhanced = {
-                enhanceAllDiagrams: () => console.log('Enhancement not available - diagrams will display without interactive features'),
-                loadExternalDiagram: () => {}
-            };
-            return;
-        }
-        
-        if (enhancedRetryCount === 1) {
-            console.log('Waiting for enhancement libraries to load...');
-        }
-        setTimeout(initMermaidEnhanced, 100);
+        // Create a dummy MermaidEnhanced that does nothing gracefully
+        window.MermaidEnhanced = {
+            enhanceAllDiagrams: () => {}, // Do nothing silently
+            loadExternalDiagram: () => {}
+        };
     }
 }
 
-// Auto-initialize
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initMermaidEnhanced);
-} else {
-    initMermaidEnhanced();
-}
+// Initialize immediately - the main script will handle retries
+initMermaidEnhanced();
