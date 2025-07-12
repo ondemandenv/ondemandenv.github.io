@@ -359,8 +359,8 @@ function toggleFullscreen(element) {
         const zoomControls = document.createElement('div');
         zoomControls.className = 'fullscreen-zoom-controls';
         zoomControls.innerHTML = `
-            <button class="zoom-btn" onclick="zoomIn()">🔍 +</button>
-            <button class="zoom-btn" onclick="zoomOut()">🔍 -</button>
+            <button class="zoom-btn" onclick="zoomInCenter()">🔍 +</button>
+            <button class="zoom-btn" onclick="zoomOutCenter()">🔍 -</button>
             <button class="zoom-btn" onclick="resetZoom()">↻ Reset</button>
         `;
         document.body.appendChild(zoomControls);
@@ -379,36 +379,88 @@ function toggleFullscreen(element) {
     }
 }
 
-function zoomIn() {
-    currentZoom = Math.min(currentZoom * 1.2, 3); // Max zoom 3x
-    applyZoom();
+let lastMouseX = 0;
+let lastMouseY = 0;
+
+function zoomIn(mouseX, mouseY) {
+    const newZoom = Math.min(currentZoom * 1.2, 3); // Max zoom 3x
+    applyZoom(newZoom, mouseX, mouseY);
 }
 
-function zoomOut() {
-    currentZoom = Math.max(currentZoom / 1.2, 0.5); // Min zoom 0.5x
-    applyZoom();
+function zoomOut(mouseX, mouseY) {
+    const newZoom = Math.max(currentZoom / 1.2, 0.5); // Min zoom 0.5x
+    applyZoom(newZoom, mouseX, mouseY);
+}
+
+function zoomInCenter() {
+    if (!fullscreenContent) return;
+    const containerRect = fullscreenContent.getBoundingClientRect();
+    const centerX = containerRect.width / 2;
+    const centerY = containerRect.height / 2;
+    zoomIn(centerX, centerY);
+}
+
+function zoomOutCenter() {
+    if (!fullscreenContent) return;
+    const containerRect = fullscreenContent.getBoundingClientRect();
+    const centerX = containerRect.width / 2;
+    const centerY = containerRect.height / 2;
+    zoomOut(centerX, centerY);
 }
 
 function resetZoom() {
-    currentZoom = 1;
-    applyZoom();
+    if (!fullscreenContent) return;
+    const containerRect = fullscreenContent.getBoundingClientRect();
+    const centerX = containerRect.width / 2;
+    const centerY = containerRect.height / 2;
+    applyZoom(1, centerX, centerY);
 }
 
-function applyZoom() {
+function applyZoom(newZoom, mouseX, mouseY) {
     const svg = fullscreenContent ? fullscreenContent.querySelector('svg') : null;
-    if (svg && fullscreenContent) {
-        svg.style.transform = `scale(${currentZoom})`;
-        svg.style.transformOrigin = '0 0';
-        
-        // Get the natural SVG dimensions
-        const svgRect = svg.getBBox();
-        const scaledWidth = svgRect.width * currentZoom;
-        const scaledHeight = svgRect.height * currentZoom;
-        
-        // Set the content size to accommodate the scaled SVG
-        svg.style.width = `${scaledWidth}px`;
-        svg.style.height = `${scaledHeight}px`;
+    if (!svg || !fullscreenContent) return;
+    
+    // If no mouse position provided, use last known position or center
+    if (mouseX === undefined || mouseY === undefined) {
+        const containerRect = fullscreenContent.getBoundingClientRect();
+        mouseX = lastMouseX || containerRect.width / 2;
+        mouseY = lastMouseY || containerRect.height / 2;
     }
+    
+    // Get current scroll position and container dimensions
+    const scrollLeft = fullscreenContent.scrollLeft;
+    const scrollTop = fullscreenContent.scrollTop;
+    const containerRect = fullscreenContent.getBoundingClientRect();
+    
+    // Calculate mouse position relative to the content (accounting for current scroll)
+    const mouseXInContent = mouseX + scrollLeft;
+    const mouseYInContent = mouseY + scrollTop;
+    
+    // Calculate the zoom ratio
+    const zoomRatio = newZoom / currentZoom;
+    
+    // Calculate new scroll position to center zoom on mouse
+    const newScrollLeft = mouseXInContent * zoomRatio - mouseX;
+    const newScrollTop = mouseYInContent * zoomRatio - mouseY;
+    
+    // Update zoom level
+    currentZoom = newZoom;
+    
+    // Apply the transform
+    svg.style.transform = `scale(${currentZoom})`;
+    svg.style.transformOrigin = '0 0';
+    
+    // Get the natural SVG dimensions and set scaled size
+    const svgRect = svg.getBBox();
+    const scaledWidth = svgRect.width * currentZoom;
+    const scaledHeight = svgRect.height * currentZoom;
+    
+    svg.style.width = `${scaledWidth}px`;
+    svg.style.height = `${scaledHeight}px`;
+    
+    // Update scroll position to center on mouse
+    fullscreenContent.scrollLeft = Math.max(0, newScrollLeft);
+    fullscreenContent.scrollTop = Math.max(0, newScrollTop);
 }
 
 // Initialize zoom and pan functionality when page loads
@@ -417,10 +469,20 @@ document.addEventListener('DOMContentLoaded', function() {
     document.addEventListener('wheel', function(e) {
         if (fullscreenContent && e.target.closest('.fullscreen-content')) {
             e.preventDefault();
+            
+            // Get mouse position relative to the fullscreen content
+            const containerRect = fullscreenContent.getBoundingClientRect();
+            const mouseX = e.clientX - containerRect.left;
+            const mouseY = e.clientY - containerRect.top;
+            
+            // Update last known mouse position
+            lastMouseX = mouseX;
+            lastMouseY = mouseY;
+            
             if (e.deltaY < 0) {
-                zoomIn();
+                zoomIn(mouseX, mouseY);
             } else {
-                zoomOut();
+                zoomOut(mouseX, mouseY);
             }
         }
     });
@@ -456,6 +518,15 @@ document.addEventListener('DOMContentLoaded', function() {
         
         fullscreenContent.scrollLeft = scrollLeft + walkX;
         fullscreenContent.scrollTop = scrollTop + walkY;
+    });
+    
+    // Track mouse position for better zoom centering
+    document.addEventListener('mousemove', function(e) {
+        if (fullscreenContent && e.target.closest('.fullscreen-content')) {
+            const containerRect = fullscreenContent.getBoundingClientRect();
+            lastMouseX = e.clientX - containerRect.left;
+            lastMouseY = e.clientY - containerRect.top;
+        }
     });
     
     // Touch support for mobile - only in fullscreen mode
