@@ -224,9 +224,23 @@ flowchart TB
     height: 100vh;
     background: white;
     z-index: 1000;
-    padding: 60px 20px 20px 20px;
-    box-sizing: border-box;
+    overflow: hidden;
+    padding: 0;
+    margin: 0;
+}
+
+.fullscreen-content {
+    position: absolute;
+    top: 60px;
+    left: 0;
+    right: 0;
+    bottom: 0;
     overflow: auto;
+    cursor: grab;
+}
+
+.fullscreen-content:active {
+    cursor: grabbing;
 }
 
 .mermaid-diagram.fullscreen svg {
@@ -235,7 +249,7 @@ flowchart TB
     width: auto !important;
     height: auto !important;
     display: block !important;
-    margin: 0 auto;
+    transform-origin: 0 0 !important;
 }
 
 .fullscreen-overlay {
@@ -289,6 +303,7 @@ flowchart TB
 let currentZoom = 1;
 let isDragging = false;
 let startX, startY, scrollLeft, scrollTop;
+let fullscreenContent = null;
 
 function toggleFullscreen(element) {
     if (element.classList.contains('fullscreen')) {
@@ -300,13 +315,33 @@ function toggleFullscreen(element) {
         if (overlay) overlay.remove();
         if (closeBtn) closeBtn.remove();
         if (zoomControls) zoomControls.remove();
-        document.body.style.overflow = 'auto';
         
-        // Reset zoom when exiting fullscreen
+        // Remove wrapper and restore original structure
+        if (fullscreenContent && fullscreenContent.parentNode) {
+            const svg = fullscreenContent.querySelector('svg');
+            if (svg) {
+                element.appendChild(svg);
+            }
+            fullscreenContent.remove();
+            fullscreenContent = null;
+        }
+        
+        document.body.style.overflow = 'auto';
         resetZoom();
     } else {
         // Enter fullscreen
         element.classList.add('fullscreen');
+        
+        // Create content wrapper
+        fullscreenContent = document.createElement('div');
+        fullscreenContent.className = 'fullscreen-content';
+        
+        // Move SVG into wrapper
+        const svg = element.querySelector('svg');
+        if (svg) {
+            fullscreenContent.appendChild(svg);
+        }
+        element.appendChild(fullscreenContent);
         
         // Create overlay
         const overlay = document.createElement('div');
@@ -360,28 +395,27 @@ function resetZoom() {
 }
 
 function applyZoom() {
-    const diagram = document.getElementById('architecture-diagram');
-    const svg = diagram.querySelector('svg');
-    if (svg) {
+    const svg = fullscreenContent ? fullscreenContent.querySelector('svg') : null;
+    if (svg && fullscreenContent) {
         svg.style.transform = `scale(${currentZoom})`;
-        svg.style.transformOrigin = 'top left';
+        svg.style.transformOrigin = '0 0';
         
-        // Ensure container can scroll to see all zoomed content
-        if (diagram.classList.contains('fullscreen')) {
-            const rect = svg.getBoundingClientRect();
-            diagram.style.width = `${rect.width * currentZoom}px`;
-            diagram.style.height = `${rect.height * currentZoom}px`;
-        }
+        // Get the natural SVG dimensions
+        const svgRect = svg.getBBox();
+        const scaledWidth = svgRect.width * currentZoom;
+        const scaledHeight = svgRect.height * currentZoom;
+        
+        // Set the content size to accommodate the scaled SVG
+        svg.style.width = `${scaledWidth}px`;
+        svg.style.height = `${scaledHeight}px`;
     }
 }
 
 // Initialize zoom and pan functionality when page loads
 document.addEventListener('DOMContentLoaded', function() {
-    const diagram = document.getElementById('architecture-diagram');
-    
     // Mouse wheel zoom - only in fullscreen mode
-    diagram.addEventListener('wheel', function(e) {
-        if (diagram.classList.contains('fullscreen')) {
+    document.addEventListener('wheel', function(e) {
+        if (fullscreenContent && e.target.closest('.fullscreen-content')) {
             e.preventDefault();
             if (e.deltaY < 0) {
                 zoomIn();
@@ -392,63 +426,58 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     // Pan functionality - only in fullscreen mode
-    diagram.addEventListener('mousedown', function(e) {
-        if (diagram.classList.contains('fullscreen')) {
+    document.addEventListener('mousedown', function(e) {
+        if (fullscreenContent && e.target.closest('.fullscreen-content')) {
             isDragging = true;
             startX = e.clientX;
             startY = e.clientY;
-            scrollLeft = diagram.scrollLeft;
-            scrollTop = diagram.scrollTop;
-            diagram.style.cursor = 'grabbing';
+            scrollLeft = fullscreenContent.scrollLeft;
+            scrollTop = fullscreenContent.scrollTop;
+            fullscreenContent.style.cursor = 'grabbing';
             e.preventDefault();
         }
     });
     
-    document.addEventListener('mouseleave', function() {
-        isDragging = false;
-        if (diagram.classList.contains('fullscreen')) {
-            diagram.style.cursor = 'grab';
-        }
-    });
-    
     document.addEventListener('mouseup', function() {
-        isDragging = false;
-        if (diagram.classList.contains('fullscreen')) {
-            diagram.style.cursor = 'grab';
+        if (isDragging && fullscreenContent) {
+            isDragging = false;
+            fullscreenContent.style.cursor = 'grab';
         }
     });
     
     document.addEventListener('mousemove', function(e) {
-        if (!isDragging || !diagram.classList.contains('fullscreen')) return;
+        if (!isDragging || !fullscreenContent) return;
         e.preventDefault();
+        
         const x = e.clientX;
         const y = e.clientY;
-        const walkX = (x - startX) * 2; // Increased sensitivity
-        const walkY = (y - startY) * 2; // Increased sensitivity
-        diagram.scrollLeft = scrollLeft - walkX;
-        diagram.scrollTop = scrollTop - walkY;
+        const walkX = startX - x;
+        const walkY = startY - y;
+        
+        fullscreenContent.scrollLeft = scrollLeft + walkX;
+        fullscreenContent.scrollTop = scrollTop + walkY;
     });
     
     // Touch support for mobile - only in fullscreen mode
     let touchStartX, touchStartY;
     
-    diagram.addEventListener('touchstart', function(e) {
-        if (diagram.classList.contains('fullscreen')) {
+    document.addEventListener('touchstart', function(e) {
+        if (fullscreenContent && e.target.closest('.fullscreen-content')) {
             touchStartX = e.touches[0].clientX;
             touchStartY = e.touches[0].clientY;
         }
     });
     
-    diagram.addEventListener('touchmove', function(e) {
-        if (!touchStartX || !touchStartY || !diagram.classList.contains('fullscreen')) return;
+    document.addEventListener('touchmove', function(e) {
+        if (!touchStartX || !touchStartY || !fullscreenContent) return;
         
         const touchX = e.touches[0].clientX;
         const touchY = e.touches[0].clientY;
         const diffX = touchStartX - touchX;
         const diffY = touchStartY - touchY;
         
-        diagram.scrollLeft += diffX;
-        diagram.scrollTop += diffY;
+        fullscreenContent.scrollLeft += diffX;
+        fullscreenContent.scrollTop += diffY;
         
         touchStartX = touchX;
         touchStartY = touchY;
