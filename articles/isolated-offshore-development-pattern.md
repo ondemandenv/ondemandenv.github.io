@@ -60,106 +60,106 @@ ONDEMANDENV's **Three-Tier Security Pattern** breaks the stagnation cycle by imp
 </div>
 </div>
 <div class="mermaid-diagram mermaid" id="architecture-diagram">
-flowchart TB
-    subgraph PublicZone["🌍 TIER 1: INNOVATION LAB NETWORK (Public PKI)"]
-        subgraph InnPlatform["Platform Infrastructure (Shared) - 192.168.0.0/16"]
-            InnDB["🗄️ Database Platform Enver<br/>• MongoDB Cluster<br/>• PostgreSQL Cluster<br/>• MySQL Cluster"]
-            InnEKS["☸️ EKS Platform Enver<br/>• Kubernetes Cluster<br/>• Container Registry"]
-            InnNet["🌐 Networking Platform Enver<br/>• VPC + Transit Gateway<br/>• Public Internet Access"]
-            
-            subgraph InnAcct1["AWS Account: offshore-team-1<br/>192.168.10.0/24"]
-                InnEnv1["🚀 App-A Innovation Enver<br/>• React Frontend + Node.js<br/>• Consumes: DB + EKS Platform"]
-                InnEnv2["🚀 App-B Innovation Enver<br/>• Python ML Service<br/>• Consumes: DB + EKS Platform"]
-            end
-            
-            subgraph InnAcct2["AWS Account: offshore-team-2<br/>192.168.20.0/24"]
-                InnEnv3["🚀 App-C Innovation Enver<br/>• Java Spring Boot<br/>• Consumes: DB + EKS Platform"]
-            end
-            
-            subgraph InnAcct3["GCP Project: innovation-lab<br/>192.168.30.0/24"]
-                InnEnv4["🚀 App-D Innovation Enver<br/>• Go Microservices<br/>• Consumes: DB + EKS Platform"]
-            end
+flowchart TD
+    %% ========================================
+    %% TIER 1: INNOVATION LAB
+    %% ========================================
+    subgraph Tier1["🌍 TIER 1: INNOVATION LAB (Public PKI) - 192.168.0.0/16"]
+        
+        subgraph T1Platform["🏗️ PLATFORM SERVICES (tier1-branch)"]
+            T1DB["🗄️ Database Platform Enver<br/>MongoDB/PostgreSQL/MySQL"]
+            T1EKS["☸️ EKS Platform Enver<br/>K8s Cluster + Registry"]
+            T1Net["🌐 Network Platform Enver<br/>VPC + TGW + Internet"]
         end
         
-        InnNet -.->|"🌐 Internet Access"| Internet["Public Internet<br/>Package Repositories<br/>External APIs"]
-    end
-    
-    subgraph QuarantineZone["🔍 TIER 2: QUARANTINE NETWORK (Hybrid PKI)"]
-        subgraph QuarPlatform["Platform Infrastructure (Shared) - 172.16.0.0/12"]
-            QuarDB["🗄️ Database Platform Enver<br/>• Isolated DB Clusters<br/>• Security Scanning Tools"]
-            QuarEKS["☸️ EKS Platform Enver<br/>• Security Scan Cluster<br/>• Internal Registry"]
-            QuarNet["🌐 Networking Platform Enver<br/>• VPC + Transit Gateway<br/>• Air-Gapped from Internet"]
-            
-            subgraph QuarAcct1["AWS Account: security-scan-1<br/>172.16.10.0/24"]
-                QuarEnv1["🛡️ App-A Quarantine Enver<br/>• Security Scanning<br/>• Consumes: Security Platform"]
-                QuarEnv2["🛡️ App-B Quarantine Enver<br/>• License Compliance<br/>• Consumes: Security Platform"]
-            end
-            
-            subgraph QuarAcct2["AWS Account: security-scan-2<br/>172.16.20.0/24"]
-                QuarEnv3["🛡️ App-C Quarantine Enver<br/>• Container Scanning<br/>• Consumes: Security Platform"]
-            end
-            
-            subgraph QuarAcct3["GCP Project: security-quarantine<br/>172.16.30.0/24"]
-                QuarEnv4["🛡️ App-D Quarantine Enver<br/>• Binary Analysis<br/>• Consumes: Security Platform"]
-            end
+        subgraph T1Apps["📱 APPLICATION ENVERS"]
+            T1App1["🚀 App-A Enver<br/>React + Node.js<br/>(AWS Account 1)"]
+            T1App2["🚀 App-B Enver<br/>Python ML<br/>(AWS Account 1)"]
+            T1App3["🚀 App-C Enver<br/>Java Spring Boot<br/>(AWS Account 2)"]
+            T1App4["🚀 App-D Enver<br/>Go Microservices<br/>(GCP Project)"]
         end
         
-        QuarNet -.->|"❌ No Internet"| NoInternet1["❌ Blocked"]
+        T1Platform ==> T1Apps
+        T1Net -.->|"🌐 Internet"| Internet["Public Internet<br/>Repos & APIs"]
     end
     
-    subgraph InternalZone["🔒 TIER 3: INTERNAL POC NETWORK (Private PKI)"]
-        subgraph IntPlatform["Platform Infrastructure (Shared) - 10.0.0.0/8"]
-            IntDB["🗄️ Database Platform Enver<br/>• Private PKI DB Clusters<br/>• VPC Endpoints Only"]
-            IntEKS["☸️ EKS Platform Enver<br/>• Internal POC Cluster<br/>• Private Registry"]
-            IntNet["🌐 Networking Platform Enver<br/>• VPC + Transit Gateway<br/>• Zero Internet Access"]
-            
-            subgraph IntAcct1["AWS Account: internal-poc-1<br/>10.1.0.0/24"]
-                IntEnv1["⚙️ App-A Internal Enver<br/>• Private PKI Application<br/>• Consumes: Internal Platform"]
-                IntEnv2["⚙️ App-B Internal Enver<br/>• Zero Internet Access<br/>• Consumes: Internal Platform"]
-            end
-            
-            subgraph IntAcct2["AWS Account: internal-poc-2<br/>10.2.0.0/24"]
-                IntEnv3["⚙️ App-C Internal Enver<br/>• Internal POC App<br/>• Consumes: Internal Platform"]
-            end
-            
-            subgraph IntAcct3["GCP Project: internal-secure<br/>10.3.0.0/24"]
-                IntEnv4["⚙️ App-D Internal Enver<br/>• Secure Internal App<br/>• Consumes: Internal Platform"]
-            end
+    %% ========================================
+    %% TIER 2: QUARANTINE
+    %% ========================================
+    subgraph Tier2["🔍 TIER 2: QUARANTINE (Hybrid PKI) - 172.16.0.0/12"]
+        
+        subgraph T2Platform["🏗️ PLATFORM SERVICES (tier2-branch)"]
+            T2DB["🗄️ Database Platform Enver<br/>Isolated DB + Security Tools"]
+            T2EKS["☸️ EKS Platform Enver<br/>Security Scan Cluster"]
+            T2Net["🌐 Network Platform Enver<br/>VPC + TGW + Air-Gapped"]
         end
         
-        IntNet -.->|"❌ No Internet"| NoInternet2["❌ Blocked"]
+        subgraph T2Apps["📱 APPLICATION ENVERS"]
+            T2App1["🛡️ App-A Enver<br/>Security Scanning<br/>(AWS Security 1)"]
+            T2App2["🛡️ App-B Enver<br/>License Compliance<br/>(AWS Security 1)"]
+            T2App3["🛡️ App-C Enver<br/>Container Scanning<br/>(AWS Security 2)"]
+            T2App4["🛡️ App-D Enver<br/>Binary Analysis<br/>(GCP Security)"]
+        end
+        
+        T2Platform ==> T2Apps
+        T2Net -.->|"❌ No Internet"| Blocked1["❌ Blocked"]
     end
     
-    %% Manual Git-based promotion flows - Application Code
-    InnEnv1 -.->|"Manual Git Fork<br/>App Code Promotion"| QuarEnv1
-    InnEnv2 -.->|"Security Team<br/>App Code Review"| QuarEnv2
-    InnEnv3 -.->|"Cherry-pick<br/>App Code Changes"| QuarEnv3
-    InnEnv4 -.->|"Air-gapped<br/>App Code Transfer"| QuarEnv4
+    %% ========================================
+    %% TIER 3: INTERNAL POC
+    %% ========================================
+    subgraph Tier3["🔒 TIER 3: INTERNAL POC (Private PKI) - 10.0.0.0/8"]
+        
+        subgraph T3Platform["🏗️ PLATFORM SERVICES (tier3-branch)"]
+            T3DB["🗄️ Database Platform Enver<br/>Private PKI + VPC Endpoints"]
+            T3EKS["☸️ EKS Platform Enver<br/>Internal POC Cluster"]
+            T3Net["🌐 Network Platform Enver<br/>VPC + TGW + Zero Internet"]
+        end
+        
+        subgraph T3Apps["📱 APPLICATION ENVERS"]
+            T3App1["⚙️ App-A Enver<br/>Private PKI App<br/>(AWS Internal 1)"]
+            T3App2["⚙️ App-B Enver<br/>Zero Internet App<br/>(AWS Internal 1)"]
+            T3App3["⚙️ App-C Enver<br/>Internal POC App<br/>(AWS Internal 2)"]
+            T3App4["⚙️ App-D Enver<br/>Secure Internal App<br/>(GCP Internal)"]
+        end
+        
+        T3Platform ==> T3Apps
+        T3Net -.->|"❌ No Internet"| Blocked2["❌ Blocked"]
+    end
     
-    QuarEnv1 -.->|"Manual Approval<br/>After App Scanning"| IntEnv1
-    QuarEnv2 -.->|"Compliance<br/>App Verification"| IntEnv2
-    QuarEnv3 -.->|"Security<br/>App Sign-off"| IntEnv3
-    QuarEnv4 -.->|"Internal<br/>App Deployment"| IntEnv4
+    %% ========================================
+    %% PROMOTION FLOWS
+    %% ========================================
     
-    %% Platform Infrastructure promotion flows
-    InnPlatform -.->|"Platform Infra<br/>Security Hardening"| QuarPlatform
-    QuarPlatform -.->|"Platform Infra<br/>Final Approval"| IntPlatform
+    %% Application Code Promotion
+    T1App1 -.->|"Git Fork<br/>App Code"| T2App1
+    T1App2 -.->|"Git Fork<br/>App Code"| T2App2
+    T1App3 -.->|"Git Fork<br/>App Code"| T2App3
+    T1App4 -.->|"Git Fork<br/>App Code"| T2App4
     
-    style PublicZone fill:#e1f5fe
-    style QuarantineZone fill:#fff3e0
-    style InternalZone fill:#f3e5f5
-    style InnPlatform fill:#bbdefb
-    style QuarPlatform fill:#ffe0b2
-    style IntPlatform fill:#e1bee7
-    style InnAcct1 fill:#e8f4fd
-    style InnAcct2 fill:#e8f4fd
-    style InnAcct3 fill:#e8f4fd
-    style QuarAcct1 fill:#fef7e0
-    style QuarAcct2 fill:#fef7e0
-    style QuarAcct3 fill:#fef7e0
-    style IntAcct1 fill:#f8f4f8
-    style IntAcct2 fill:#f8f4f8
-    style IntAcct3 fill:#f8f4f8
+    T2App1 -.->|"Security<br/>Approval"| T3App1
+    T2App2 -.->|"Security<br/>Approval"| T3App2
+    T2App3 -.->|"Security<br/>Approval"| T3App3
+    T2App4 -.->|"Security<br/>Approval"| T3App4
+    
+    %% Platform Infrastructure Promotion
+    T1Platform -.->|"Platform Git Fork<br/>Security Hardening"| T2Platform
+    T2Platform -.->|"Platform Git Fork<br/>Private PKI Config"| T3Platform
+    
+    %% Tier styling
+    style Tier1 fill:#e1f5fe,stroke:#0277bd,stroke-width:3px
+    style Tier2 fill:#fff3e0,stroke:#ff8f00,stroke-width:3px
+    style Tier3 fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+    
+    %% Platform services styling  
+    style T1Platform fill:#bbdefb,stroke:#0288d1,stroke-width:2px
+    style T2Platform fill:#ffe0b2,stroke:#fb8c00,stroke-width:2px
+    style T3Platform fill:#e1bee7,stroke:#8e24aa,stroke-width:2px
+    
+    %% Application styling
+    style T1Apps fill:#e8f4fd,stroke:#039be5,stroke-width:1px
+    style T2Apps fill:#fef7e0,stroke:#ffa000,stroke-width:1px
+    style T3Apps fill:#f8f4f8,stroke:#9c27b0,stroke-width:1px
 
 </div>
 </div>
