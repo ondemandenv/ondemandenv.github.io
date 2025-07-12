@@ -39,41 +39,94 @@ ONDEMANDENV's **Three-Tier Security Pattern** breaks the stagnation cycle by imp
 
 ```mermaid
 flowchart TB
-    subgraph PublicZone["🌍 TIER 1: INNOVATION LAB (Public PKI)"]
-        InnovationLab["🚀 Innovation Lab Enver<br/>• Offshore development teams<br/>• Direct internet access<br/>• Public package repositories<br/>• Synthetic data only<br/>• Public PKI trust stores"]
-    end
-    
-    subgraph QuarantineZone["🔍 TIER 2: SECURITY QUARANTINE (Hybrid PKI)"]
-        QuarantineEnver["🛡️ Quarantine Enver<br/>• Automated security scanning<br/>• Vulnerability assessment<br/>• License compliance checks<br/>• Private repository ingestion<br/>• Air-gapped from production"]
-    end
-    
-    subgraph InternalZone["🔒 TIER 3: INTERNAL POC (Private PKI)"]
-        InternalEnver["⚙️ Internal POC Enver<br/>• Private CA trust stores<br/>• Internal repositories only<br/>• Secured POC environment<br/>• Full compliance controls<br/>• Zero internet access"]
-    end
-    
-    subgraph NetworkFoundation["🌐 NETWORK FOUNDATION"]
-        subgraph ProductionNetwork["🔒 Production Network (10.0.0.0/8)"]
-            ProdTGW["Transit Gateway"]
-            ProdEKS["EKS Platform"]
-            ProdRDS["RDS Platform"]
+    subgraph PublicZone["🌍 TIER 1: INNOVATION LAB NETWORK (Public PKI)"]
+        subgraph InnAcct1["AWS Account: offshore-team-1<br/>192.168.10.0/24"]
+            InnEnv1["🚀 App-A Innovation Enver<br/>• React Frontend<br/>• Node.js Backend<br/>• MongoDB"]
+            InnEnv2["🚀 App-B Innovation Enver<br/>• Python ML Service<br/>• PostgreSQL"]
         end
         
-        subgraph DevNetwork["🛠️ Development Network (172.16.0.0/12)"]
-            DevTGW["Transit Gateway"]
-            DevEKS["EKS Platform"]
-            DevRDS["RDS Platform"]
+        subgraph InnAcct2["AWS Account: offshore-team-2<br/>192.168.20.0/24"]
+            InnEnv3["🚀 App-C Innovation Enver<br/>• Java Spring Boot<br/>• Redis Cache"]
         end
+        
+        subgraph InnAcct3["GCP Project: innovation-lab<br/>192.168.30.0/24"]
+            InnEnv4["🚀 App-D Innovation Enver<br/>• Go Microservices<br/>• Cloud SQL"]
+        end
+        
+        InnTGW["🔗 Innovation Network TGW<br/>192.168.0.0/16<br/>• Public Internet Access<br/>• Public PKI Trust"]
+        InnTGW === InnAcct1
+        InnTGW === InnAcct2
+        InnTGW === InnAcct3
     end
     
-    InnovationLab ==>|"Automated<br/>Promotion"| QuarantineEnver
-    QuarantineEnver ==>|"Security<br/>Approval"| InternalEnver
+    subgraph QuarantineZone["🔍 TIER 2: QUARANTINE NETWORK (Hybrid PKI)"]
+        subgraph QuarAcct1["AWS Account: security-scan-1<br/>172.16.10.0/24"]
+            QuarEnv1["🛡️ App-A Quarantine Enver<br/>• Security Scanning<br/>• License Compliance<br/>• Vulnerability Assessment"]
+            QuarEnv2["🛡️ App-B Quarantine Enver<br/>• Malware Detection<br/>• SAST/DAST Scans"]
+        end
+        
+        subgraph QuarAcct2["AWS Account: security-scan-2<br/>172.16.20.0/24"]
+            QuarEnv3["🛡️ App-C Quarantine Enver<br/>• Container Scanning<br/>• Dependency Analysis"]
+        end
+        
+        subgraph QuarAcct3["GCP Project: security-quarantine<br/>172.16.30.0/24"]
+            QuarEnv4["🛡️ App-D Quarantine Enver<br/>• Binary Analysis<br/>• Supply Chain Verification"]
+        end
+        
+        QuarTGW["🔗 Quarantine Network TGW<br/>172.16.0.0/12<br/>• Air-Gapped from Internet<br/>• Hybrid PKI (Public + Private)"]
+        QuarTGW === QuarAcct1
+        QuarTGW === QuarAcct2
+        QuarTGW === QuarAcct3
+    end
     
-    InnovationLab -.-> DevNetwork
-    InternalEnver -.-> ProductionNetwork
+    subgraph InternalZone["🔒 TIER 3: INTERNAL POC NETWORK (Private PKI)"]
+        subgraph IntAcct1["AWS Account: internal-poc-1<br/>10.1.0.0/24"]
+            IntEnv1["⚙️ App-A Internal Enver<br/>• Private PKI Only<br/>• Internal Repos<br/>• Compliance Controls"]
+            IntEnv2["⚙️ App-B Internal Enver<br/>• Zero Internet Access<br/>• Private Certificates"]
+        end
+        
+        subgraph IntAcct2["AWS Account: internal-poc-2<br/>10.2.0.0/24"]
+            IntEnv3["⚙️ App-C Internal Enver<br/>• AWS Private CA<br/>• VPC Endpoints Only"]
+        end
+        
+        subgraph IntAcct3["GCP Project: internal-secure<br/>10.3.0.0/24"]
+            IntEnv4["⚙️ App-D Internal Enver<br/>• Private Service Connect<br/>• Internal DNS Only"]
+        end
+        
+        IntTGW["🔗 Internal Network TGW<br/>10.0.0.0/8<br/>• Zero Internet Access<br/>• Private PKI Only<br/>• AWS Private CA"]
+        IntTGW === IntAcct1
+        IntTGW === IntAcct2
+        IntTGW === IntAcct3
+    end
+    
+    %% Manual Git-based promotion flows
+    InnEnv1 -.->|"Manual Git Fork<br/>Repository Promotion"| QuarEnv1
+    InnEnv2 -.->|"Security Team<br/>Code Review"| QuarEnv2
+    InnEnv3 -.->|"Cherry-pick<br/>Approved Changes"| QuarEnv3
+    InnEnv4 -.->|"Air-gapped<br/>Code Transfer"| QuarEnv4
+    
+    QuarEnv1 -.->|"Manual Approval<br/>After Scanning"| IntEnv1
+    QuarEnv2 -.->|"Compliance<br/>Verification"| IntEnv2
+    QuarEnv3 -.->|"Security<br/>Sign-off"| IntEnv3
+    QuarEnv4 -.->|"Internal<br/>Deployment"| IntEnv4
+    
+    %% Network isolation
+    InnTGW -.->|"🌐 Internet Access"| Internet["Public Internet<br/>Package Repositories<br/>External APIs"]
+    QuarTGW -.->|"❌ No Internet"| NoInternet1["❌ Blocked"]
+    IntTGW -.->|"❌ No Internet"| NoInternet2["❌ Blocked"]
     
     style PublicZone fill:#e1f5fe
     style QuarantineZone fill:#fff3e0
     style InternalZone fill:#f3e5f5
+    style InnAcct1 fill:#e8f4fd
+    style InnAcct2 fill:#e8f4fd
+    style InnAcct3 fill:#e8f4fd
+    style QuarAcct1 fill:#fef7e0
+    style QuarAcct2 fill:#fef7e0
+    style QuarAcct3 fill:#fef7e0
+    style IntAcct1 fill:#f8f4f8
+    style IntAcct2 fill:#f8f4f8
+    style IntAcct3 fill:#f8f4f8
 ```
 
 ### Anti-Stagnation Mechanisms in Action
