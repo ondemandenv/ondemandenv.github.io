@@ -76,20 +76,25 @@ flowchart TD
             T1EKSVPC["☸️ EKS Platform VPC<br/>192.168.2.0/24<br/>K8s Cluster + Registry"]
         end
         
-        subgraph T1Apps["📱 APPLICATION ENVER VPCs"]
-            T1App1VPC["🚀 App-A VPC<br/>192.168.10.0/24<br/>React + Node.js<br/>(AWS Account 1)"]
-            T1App2VPC["🚀 App-B VPC<br/>192.168.11.0/24<br/>Python ML<br/>(AWS Account 1)"]
-            T1App3VPC["🚀 App-C VPC<br/>192.168.20.0/24<br/>Java Spring Boot<br/>(AWS Account 2)"]
-            T1App4VPC["🚀 App-D VPC<br/>192.168.30.0/24<br/>Go Microservices<br/>(GCP Project)"]
+        subgraph T1Apps["📱 APPLICATION ENVER VPCs + DYNAMIC BRANCHES"]
+            T1App1VPC["🚀 App-A Main VPC<br/>192.168.10.0/24<br/>React + Node.js<br/>(AWS Account 1)"]
+            T1App1Branch["🌿 App-A feature/auth VPC<br/>192.168.10.128/25<br/>Auto-created on Git branch<br/>(Same AWS Account)"]
+            T1App2VPC["🚀 App-B Main VPC<br/>192.168.11.0/24<br/>Python ML<br/>(AWS Account 1)"]
+            T1App3VPC["🚀 App-C Main VPC<br/>192.168.20.0/24<br/>Java Spring Boot<br/>(AWS Account 2)"]
+            T1App4VPC["🚀 App-D Main VPC<br/>192.168.30.0/24<br/>Go Microservices<br/>(GCP Project)"]
         end
         
         %% TGW Connections
         T1TGW === T1DBVPC
         T1TGW === T1EKSVPC
         T1TGW === T1App1VPC
+        T1TGW === T1App1Branch
         T1TGW === T1App2VPC
         T1TGW === T1App3VPC
         T1TGW === T1App4VPC
+        
+        %% Dynamic Enver Creation
+        T1App1VPC -.->|"odmd: create@main<br/>Git Branch → Auto VPC"| T1App1Branch
         
         %% Platform serves Apps
         T1Platform ==> T1Apps
@@ -131,8 +136,8 @@ flowchart TD
         %% Platform serves Apps
         T2Platform ==> T2Apps
         
-        %% No Internet Access
-        T2TGW -.->|"❌ Air-Gapped"| Blocked1["❌ No Internet"]
+        %% No Internet Access - Internal Repos Only
+        T2TGW -.->|"📦 Internal Repos Only"| T2InternalRepo["Internal Artifactory<br/>Pre-approved Packages<br/>Container Registry"]
     end
     
     %% ========================================
@@ -172,8 +177,8 @@ flowchart TD
         %% Platform serves Apps
         T3Platform ==> T3Apps
         
-        %% Zero Internet Access
-        T3TGW -.->|"❌ Zero Internet"| Blocked2["❌ Complete Isolation"]
+        %% Zero Internet Access - Internal Repos Only
+        T3TGW -.->|"📦 Internal Repos Only"| T3InternalRepo["Internal Artifactory<br/>Approved Packages Only<br/>Private Container Registry"]
     end
     
     %% ========================================
@@ -198,6 +203,16 @@ flowchart TD
     T1Platform -.->|"Platform Git Fork<br/>Security Tools Integration"| T2Platform
     T2Platform -.->|"Platform Git Fork<br/>Internal POC Configuration"| T3Platform
     
+    %% ========================================
+    %% DYNAMIC ENVER CREATION CAPABILITY
+    %% ========================================
+    
+    subgraph DynamicCapability["🌿 DYNAMIC ENVER CREATION ON ANY GIT BRANCH"]
+        BranchFlow["Git Branch Created<br/>↓<br/>odmd: create@source-enver<br/>↓<br/>Platform Auto-Creates:<br/>• New VPC (auto-allocated CIDR)<br/>• New Infrastructure<br/>• Complete Isolated SDLC<br/>↓<br/>Full Application Environment<br/>Ready for Development"]
+        
+        AppliesTo["🎯 APPLIES TO ALL ENVERS:<br/>• Application Envers<br/>• Database Platform Envers<br/>• EKS Platform Envers<br/>• Network Platform Envers<br/>• Any Enver in Any Tier"]
+    end
+    
     %% Tier styling
     style Tier1 fill:#e1f5fe,stroke:#0277bd,stroke-width:3px
     style Tier2 fill:#fff3e0,stroke:#ff8f00,stroke-width:3px
@@ -217,6 +232,10 @@ flowchart TD
     style T1Apps fill:#e8f4fd,stroke:#039be5,stroke-width:1px
     style T2Apps fill:#fef7e0,stroke:#ffa000,stroke-width:1px
     style T3Apps fill:#f8f4f8,stroke:#9c27b0,stroke-width:1px
+    
+    %% Dynamic capability styling
+    style DynamicCapability fill:#e8f5e8,stroke:#4caf50,stroke-width:3px
+    style T1App1Branch fill:#c8e6c9,stroke:#66bb6a,stroke-width:2px
 
 </div>
 </div>
