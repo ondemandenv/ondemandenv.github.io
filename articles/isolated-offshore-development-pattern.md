@@ -37,6 +37,15 @@ ONDEMANDENV's **Three-Tier Security Pattern** breaks the stagnation cycle by imp
 
 ### Architecture Overview
 
+<div class="diagram-container">
+<div class="diagram-controls">
+<button class="fullscreen-btn" onclick="toggleFullscreen(document.getElementById('architecture-diagram'))">🔍 View Fullscreen</button>
+<button class="zoom-btn" onclick="zoomIn()">🔍 +</button>
+<button class="zoom-btn" onclick="zoomOut()">🔍 -</button>
+<button class="zoom-btn" onclick="resetZoom()">↻ Reset</button>
+</div>
+<div class="mermaid-diagram" id="architecture-diagram">
+
 ```mermaid
 flowchart TB
     subgraph PublicZone["🌍 TIER 1: INNOVATION LAB NETWORK (Public PKI)"]
@@ -128,6 +137,267 @@ flowchart TB
     style IntAcct2 fill:#f8f4f8
     style IntAcct3 fill:#f8f4f8
 ```
+
+</div>
+</div>
+
+<style>
+.diagram-container {
+    position: relative;
+    margin: 2rem 0;
+    border: 1px solid #e1e5e9;
+    border-radius: 8px;
+    background: #f8f9fa;
+    padding: 1rem;
+}
+
+.diagram-controls {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 10;
+    display: flex;
+    gap: 5px;
+}
+
+.fullscreen-btn, .zoom-btn {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.2s;
+    min-width: 40px;
+}
+
+.fullscreen-btn:hover, .zoom-btn:hover {
+    background: #0056b3;
+}
+
+.zoom-btn {
+    background: #28a745;
+}
+
+.zoom-btn:hover {
+    background: #1e7e34;
+}
+
+.mermaid-diagram {
+    transition: all 0.3s ease;
+    overflow: auto;
+    cursor: grab;
+    position: relative;
+    max-height: 600px;
+}
+
+.mermaid-diagram:active {
+    cursor: grabbing;
+}
+
+.mermaid-diagram svg {
+    transition: transform 0.2s ease;
+    transform-origin: center center;
+}
+
+.mermaid-diagram.fullscreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: white;
+    z-index: 1000;
+    padding: 2rem;
+    box-sizing: border-box;
+    overflow: auto;
+}
+
+.mermaid-diagram.fullscreen svg {
+    max-width: none !important;
+    max-height: none !important;
+    width: 100% !important;
+    height: auto !important;
+}
+
+.fullscreen-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.8);
+    z-index: 999;
+}
+
+.fullscreen-close {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1001;
+    background: #dc3545;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+@media (max-width: 768px) {
+    .mermaid-diagram.fullscreen {
+        padding: 1rem;
+    }
+    
+    .fullscreen-close {
+        top: 10px;
+        right: 10px;
+        padding: 8px 12px;
+        font-size: 14px;
+    }
+}
+</style>
+
+<script>
+let currentZoom = 1;
+let isDragging = false;
+let startX, startY, scrollLeft, scrollTop;
+
+function toggleFullscreen(element) {
+    if (element.classList.contains('fullscreen')) {
+        // Exit fullscreen
+        element.classList.remove('fullscreen');
+        const overlay = document.querySelector('.fullscreen-overlay');
+        const closeBtn = document.querySelector('.fullscreen-close');
+        if (overlay) overlay.remove();
+        if (closeBtn) closeBtn.remove();
+        document.body.style.overflow = 'auto';
+    } else {
+        // Enter fullscreen
+        element.classList.add('fullscreen');
+        
+        // Create overlay
+        const overlay = document.createElement('div');
+        overlay.className = 'fullscreen-overlay';
+        document.body.appendChild(overlay);
+        
+        // Create close button
+        const closeBtn = document.createElement('button');
+        closeBtn.className = 'fullscreen-close';
+        closeBtn.innerHTML = '✕ Close';
+        closeBtn.onclick = () => toggleFullscreen(element);
+        document.body.appendChild(closeBtn);
+        
+        document.body.style.overflow = 'hidden';
+        
+        // Close on overlay click
+        overlay.onclick = () => toggleFullscreen(element);
+        
+        // Close on escape key
+        document.onkeydown = (e) => {
+            if (e.key === 'Escape' && element.classList.contains('fullscreen')) {
+                toggleFullscreen(element);
+            }
+        };
+    }
+}
+
+function zoomIn() {
+    currentZoom = Math.min(currentZoom * 1.2, 3); // Max zoom 3x
+    applyZoom();
+}
+
+function zoomOut() {
+    currentZoom = Math.max(currentZoom / 1.2, 0.5); // Min zoom 0.5x
+    applyZoom();
+}
+
+function resetZoom() {
+    currentZoom = 1;
+    applyZoom();
+}
+
+function applyZoom() {
+    const diagram = document.getElementById('architecture-diagram');
+    const svg = diagram.querySelector('svg');
+    if (svg) {
+        svg.style.transform = `scale(${currentZoom})`;
+        svg.style.transformOrigin = 'center center';
+    }
+}
+
+// Initialize zoom and pan functionality when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    const diagram = document.getElementById('architecture-diagram');
+    
+    // Mouse wheel zoom
+    diagram.addEventListener('wheel', function(e) {
+        e.preventDefault();
+        if (e.deltaY < 0) {
+            zoomIn();
+        } else {
+            zoomOut();
+        }
+    });
+    
+    // Pan functionality
+    diagram.addEventListener('mousedown', function(e) {
+        isDragging = true;
+        startX = e.pageX - diagram.offsetLeft;
+        startY = e.pageY - diagram.offsetTop;
+        scrollLeft = diagram.scrollLeft;
+        scrollTop = diagram.scrollTop;
+        diagram.style.cursor = 'grabbing';
+    });
+    
+    diagram.addEventListener('mouseleave', function() {
+        isDragging = false;
+        diagram.style.cursor = 'grab';
+    });
+    
+    diagram.addEventListener('mouseup', function() {
+        isDragging = false;
+        diagram.style.cursor = 'grab';
+    });
+    
+    diagram.addEventListener('mousemove', function(e) {
+        if (!isDragging) return;
+        e.preventDefault();
+        const x = e.pageX - diagram.offsetLeft;
+        const y = e.pageY - diagram.offsetTop;
+        const walkX = (x - startX) * 1;
+        const walkY = (y - startY) * 1;
+        diagram.scrollLeft = scrollLeft - walkX;
+        diagram.scrollTop = scrollTop - walkY;
+    });
+    
+    // Touch support for mobile
+    let touchStartX, touchStartY;
+    
+    diagram.addEventListener('touchstart', function(e) {
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+    });
+    
+    diagram.addEventListener('touchmove', function(e) {
+        if (!touchStartX || !touchStartY) return;
+        
+        const touchX = e.touches[0].clientX;
+        const touchY = e.touches[0].clientY;
+        const diffX = touchStartX - touchX;
+        const diffY = touchStartY - touchY;
+        
+        diagram.scrollLeft += diffX;
+        diagram.scrollTop += diffY;
+        
+        touchStartX = touchX;
+        touchStartY = touchY;
+        
+        e.preventDefault();
+    });
+});
+</script>
 
 ### Anti-Stagnation Mechanisms in Action
 
