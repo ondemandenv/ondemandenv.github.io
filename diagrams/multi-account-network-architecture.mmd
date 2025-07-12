@@ -4,57 +4,79 @@ flowchart TB
     end
 
     subgraph ProdNetwork["🔒 PRODUCTION NETWORK"]
-        subgraph NetAcctProd["🌐 AWS Account: Networking (Prod)"]
+        subgraph NetAcctProd["🌐 AWS Account: Networking (Prod)<br/>Account ID: 590183907424"]
             TGWProd["🔗 Transit Gateway<br/>Network Hub"]
             NATProd["🌍 NAT Gateway<br/>Internet Access"]
             IPAMProd["📊 IPAM Pool<br/>10.0.0.0/8<br/>IP Management"]
+            CentralVPCProd["🏗️ Central VPC<br/>10.1.0.0/16"]
+            NetDeployProd["🚀 Network Deployment Functions<br/>• VPC sharing approval<br/>• Route table management<br/>• Cross-account connectivity"]
         end
         
-        subgraph EKSAcctProd["⚙️ AWS Account: EKS Platform"]
+        subgraph EKSAcctProd["⚙️ AWS Account: EKS Platform<br/>Account ID: 975050243618"]
             EKSVPCProd["📦 VPC: 10.2.0.0/16"]
-            EKSProd["EKS Cluster + Deployment Functions"]
+            EKSProd["☸️ EKS Cluster"]
+            EKSDeployProd["🚀 K8s Deployment Functions<br/>• Manifest deployment<br/>• ServiceAccount management<br/>• IRSA configuration"]
         end
         
-        subgraph RDSAcctProd["🗄️ AWS Account: RDS Platform"]
+        subgraph RDSAcctProd["🗄️ AWS Account: RDS Platform<br/>Account ID: 975050243618"]
             RDSVPCProd["📦 VPC: 10.3.0.0/16"]
-            RDSProd["RDS Cluster + Management Functions"]
+            RDSProd["🗄️ RDS Cluster"]
+            RDSDeployProd["🚀 DB Deployment Functions<br/>• Schema deployment<br/>• Role/user management<br/>• Access control"]
         end
         
-        subgraph App1AcctProd["📱 AWS Account: App Workload 1"]
+        subgraph App1AcctProd["📱 AWS Account: App Workload 1 (Enver 1)<br/>Account ID: 590184130740"]
             App1VPCProd["📦 VPC: 10.4.0.0/16"]
-            App1ResProd["Application Resources"]
+            App1ResProd["💾 Application Resources<br/>• IAM Role 1 (DynamoDB)<br/>• IAM Role 2 (RDS)<br/>• S3 buckets, secrets"]
+            App1ManifestProd["📋 K8s Manifests<br/>• Deployment definitions<br/>• ServiceAccount configs"]
+            App1SchemaProd["🗃️ DB Schema/Roles<br/>• Application database<br/>• User permissions"]
         end
         
-        subgraph App2AcctProd["📱 AWS Account: App Workload 2"]
+        subgraph App2AcctProd["📱 AWS Account: App Workload 2 (Enver 2)<br/>Account ID: 590184130740"]
             App2VPCProd["📦 VPC: 10.5.0.0/16"]
-            App2ResProd["Application Resources"]
+            App2ResProd["💾 Application Resources<br/>• IAM Role A (DB via TGW)<br/>• IAM Role B (S3)<br/>• Configuration"]
+            App2ManifestProd["📋 K8s Manifests<br/>• Deployment definitions<br/>• ServiceAccount configs"]
+        end
+        
+        subgraph CentralAcctProd["🎯 AWS Account: Central (Platform Orchestration)<br/>Account ID: 590184031795"]
+            CentralControlProd["🎯 Platform Orchestration<br/>• Cross-account deployment coordination<br/>• Environment versioning<br/>• Policy as Code Engine"]
         end
     end
 
     subgraph LENetwork["🛠️ LOWER ENVIRONMENT NETWORK"]
-        subgraph NetAcctLE["🌐 AWS Account: Networking (LE)"]
+        subgraph NetAcctLE["🌐 AWS Account: Networking (LE)<br/>Account ID: 590183907424"]
             TGWLE["🔗 Transit Gateway<br/>Network Hub"]
             NATLE["🌍 NAT Gateway<br/>Internet Access"]
             IPAMLE["📊 IPAM Pool<br/>172.16.0.0/12<br/>IP Management"]
+            CentralVPCLE["🏗️ Central VPC<br/>172.16.1.0/16"]
+            NetDeployLE["🚀 Network Deployment Functions<br/>• VPC sharing approval<br/>• Route table management<br/>• Cross-account connectivity"]
         end
         
-        subgraph EKSAcctLE["⚙️ AWS Account: EKS Platform"]
+        subgraph EKSAcctLE["⚙️ AWS Account: EKS Platform<br/>Account ID: 975050243618"]
             EKSVPCLENet["📦 VPC: 172.16.2.0/16"]
-            EKSLENet["EKS Cluster + Deployment Functions"]
+            EKSLENet["☸️ EKS Cluster"]
+            EKSDeployLE["🚀 K8s Deployment Functions<br/>• Manifest deployment<br/>• ServiceAccount management<br/>• IRSA configuration"]
         end
         
-        subgraph RDSAcctLE["🗄️ AWS Account: RDS Platform"]
+        subgraph RDSAcctLE["🗄️ AWS Account: RDS Platform<br/>Account ID: 975050243618"]
             RDSVPCLENet["📦 VPC: 172.16.3.0/16"]
-            RDSLENet["RDS Cluster + Management Functions"]
+            RDSLENet["🗄️ RDS Cluster"]
+            RDSDeployLE["🚀 DB Deployment Functions<br/>• Schema deployment<br/>• Role/user management<br/>• Access control"]
         end
         
-        subgraph App1AcctLE["📱 AWS Account: App Workload 1"]
+        subgraph App1AcctLE["📱 AWS Account: App Workload 1<br/>Account ID: 590184130740"]
             App1VPCLENet["📦 VPC: 172.16.4.0/16"]
-            App1ResLENet["Application Resources"]
+            App1ResLENet["💾 Application Resources<br/>• IAM roles<br/>• S3 buckets, secrets<br/>• Configuration"]
+            App1ManifestLE["📋 K8s Manifests<br/>• Deployment definitions<br/>• ServiceAccount configs"]
+            App1SchemaLE["🗃️ DB Schema/Roles<br/>• Application database<br/>• User permissions"]
+        end
+        
+        subgraph CentralAcctLE["🎯 AWS Account: Central (Platform Orchestration)<br/>Account ID: 590184031795"]
+            CentralControlLE["🎯 Platform Orchestration<br/>• Cross-account deployment coordination<br/>• Environment versioning<br/>• Policy as Code Engine"]
         end
     end
 
     %% Production Network Connections
+    TGWProd === CentralVPCProd
     TGWProd === EKSVPCProd
     TGWProd === RDSVPCProd
     TGWProd === App1VPCProd
@@ -62,6 +84,7 @@ flowchart TB
     TGWProd --> NATProd
     
     %% LE Network Connections
+    TGWLE === CentralVPCLE
     TGWLE === EKSVPCLENet
     TGWLE === RDSVPCLENet
     TGWLE === App1VPCLENet
@@ -72,30 +95,76 @@ flowchart TB
     NATLE --> ExtServices
 
     %% IPAM Management
+    IPAMProd -.-> CentralVPCProd
     IPAMProd -.-> EKSVPCProd
     IPAMProd -.-> RDSVPCProd
     IPAMProd -.-> App1VPCProd
     IPAMProd -.-> App2VPCProd
     
+    IPAMLE -.-> CentralVPCLE
     IPAMLE -.-> EKSVPCLENet
     IPAMLE -.-> RDSVPCLENet
     IPAMLE -.-> App1VPCLENet
 
-    %% Platform Service Communication (within same network)
-    App1ResProd -.-> EKSProd
-    App1ResProd -.-> RDSProd
-    App2ResProd -.-> EKSProd
-    App2ResProd -.-> RDSProd
+    %% Cross-Account Deployment Flows (Production)
+    %% Central Account Orchestration
+    CentralControlProd -.->|"🎯 Orchestrate Cross-Account Deployments"| NetDeployProd
+    CentralControlProd -.->|"🎯 Orchestrate Cross-Account Deployments"| EKSDeployProd
+    CentralControlProd -.->|"🎯 Orchestrate Cross-Account Deployments"| RDSDeployProd
     
-    App1ResLENet -.-> EKSLENet
-    App1ResLENet -.-> RDSLENet
+    %% Enver 1 Deployment Flow (Account 590184130740 → 975050243618)
+    App1ManifestProd ==>|"🚀 Cross-Account Deploy<br/>590184130740 → 975050243618"| EKSDeployProd
+    EKSDeployProd ==>|"☸️ Deploy to Cluster"| EKSProd
+    App1SchemaProd ==>|"🚀 Cross-Account Deploy<br/>590184130740 → 975050243618"| RDSDeployProd
+    RDSDeployProd ==>|"🗄️ Deploy to Database"| RDSProd
+    
+    %% Enver 2 Deployment Flow (Account 590184130740 → 975050243618, No VPC needed)
+    App2ManifestProd ==>|"🚀 Cross-Account Deploy<br/>590184130740 → 975050243618"| EKSDeployProd
+    
+    %% Network Management Flows (590183907424 → Application Accounts)
+    NetDeployProd -.->|"🔗 Cross-Account VPC Sharing<br/>590183907424 → 590184130740"| App1VPCProd
+    NetDeployProd -.->|"🔗 Cross-Account VPC Sharing<br/>590183907424 → 590184130740"| App2VPCProd
+    NetDeployProd -.->|"🔗 Route Management"| TGWProd
+
+    %% Runtime Communication (Production - Cross-Account via TGW)
+    %% Enver 1: Pod assuming IAM Role 1 to access DynamoDB, IAM Role 2 to access RDS via TGW
+    EKSProd -.->|"🔐 Cross-Account IRSA<br/>975050243618 → 590184130740<br/>IAM Role 1 → DynamoDB"| App1ResProd
+    EKSProd -.->|"🔐 Cross-Account IRSA<br/>975050243618 → 975050243618<br/>IAM Role 2 → RDS via TGW"| RDSProd
+    
+    %% Enver 2: Pod assuming IAM Role A to access DB via TGW, IAM Role B to access S3
+    EKSProd -.->|"🔐 Cross-Account IRSA<br/>975050243618 → 975050243618<br/>IAM Role A → DB via TGW"| RDSProd
+    EKSProd -.->|"🔐 Cross-Account IRSA<br/>975050243618 → 590184130740<br/>IAM Role B → S3"| App2ResProd
+
+    %% LE Environment Deployment Flows (Cross-Account)
+    CentralControlLE -.->|"🎯 Orchestrate Cross-Account Deployments"| NetDeployLE
+    CentralControlLE -.->|"🎯 Orchestrate Cross-Account Deployments"| EKSDeployLE
+    CentralControlLE -.->|"🎯 Orchestrate Cross-Account Deployments"| RDSDeployLE
+    
+    App1ManifestLE ==>|"🚀 Cross-Account Deploy<br/>590184130740 → 975050243618"| EKSDeployLE
+    EKSDeployLE ==>|"☸️ Deploy to Cluster"| EKSLENet
+    App1SchemaLE ==>|"🚀 Cross-Account Deploy<br/>590184130740 → 975050243618"| RDSDeployLE
+    RDSDeployLE ==>|"🗄️ Deploy to Database"| RDSLENet
+    
+    NetDeployLE -.->|"🔗 Cross-Account VPC Sharing<br/>590183907424 → 590184130740"| App1VPCLENet
+    NetDeployLE -.->|"🔗 Route Management"| TGWLE
 
     %% VPC Components
+    CentralVPCProd --- NetDeployProd
     EKSVPCProd --- EKSProd
+    EKSVPCProd --- EKSDeployProd
     RDSVPCProd --- RDSProd
+    RDSVPCProd --- RDSDeployProd
     App1VPCProd --- App1ResProd
+    App1VPCProd --- App1ManifestProd
+    App1VPCProd --- App1SchemaProd
     App2VPCProd --- App2ResProd
+    App2VPCProd --- App2ManifestProd
     
+    CentralVPCLE --- NetDeployLE
     EKSVPCLENet --- EKSLENet
+    EKSVPCLENet --- EKSDeployLE
     RDSVPCLENet --- RDSLENet
+    RDSVPCLENet --- RDSDeployLE
     App1VPCLENet --- App1ResLENet
+    App1VPCLENet --- App1ManifestLE
+    App1VPCLENet --- App1SchemaLE
