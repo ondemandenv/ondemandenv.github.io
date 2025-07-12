@@ -1,0 +1,101 @@
+flowchart TB
+    subgraph Internet["🌍 Internet"]
+        ExtServices["External Services"]
+    end
+
+    subgraph ProdNetwork["🔒 PRODUCTION NETWORK"]
+        subgraph NetAcctProd["🌐 AWS Account: Networking (Prod)"]
+            TGWProd["🔗 Transit Gateway<br/>Network Hub"]
+            NATProd["🌍 NAT Gateway<br/>Internet Access"]
+            IPAMProd["📊 IPAM Pool<br/>10.0.0.0/8<br/>IP Management"]
+        end
+        
+        subgraph EKSAcctProd["⚙️ AWS Account: EKS Platform"]
+            EKSVPCProd["📦 VPC: 10.2.0.0/16"]
+            EKSProd["EKS Cluster + Deployment Functions"]
+        end
+        
+        subgraph RDSAcctProd["🗄️ AWS Account: RDS Platform"]
+            RDSVPCProd["📦 VPC: 10.3.0.0/16"]
+            RDSProd["RDS Cluster + Management Functions"]
+        end
+        
+        subgraph App1AcctProd["📱 AWS Account: App Workload 1"]
+            App1VPCProd["📦 VPC: 10.4.0.0/16"]
+            App1ResProd["Application Resources"]
+        end
+        
+        subgraph App2AcctProd["📱 AWS Account: App Workload 2"]
+            App2VPCProd["📦 VPC: 10.5.0.0/16"]
+            App2ResProd["Application Resources"]
+        end
+    end
+
+    subgraph LENetwork["🛠️ LOWER ENVIRONMENT NETWORK"]
+        subgraph NetAcctLE["🌐 AWS Account: Networking (LE)"]
+            TGWLE["🔗 Transit Gateway<br/>Network Hub"]
+            NATLE["🌍 NAT Gateway<br/>Internet Access"]
+            IPAMLE["📊 IPAM Pool<br/>172.16.0.0/12<br/>IP Management"]
+        end
+        
+        subgraph EKSAcctLE["⚙️ AWS Account: EKS Platform"]
+            EKSVPCLENet["📦 VPC: 172.16.2.0/16"]
+            EKSLENet["EKS Cluster + Deployment Functions"]
+        end
+        
+        subgraph RDSAcctLE["🗄️ AWS Account: RDS Platform"]
+            RDSVPCLENet["📦 VPC: 172.16.3.0/16"]
+            RDSLENet["RDS Cluster + Management Functions"]
+        end
+        
+        subgraph App1AcctLE["📱 AWS Account: App Workload 1"]
+            App1VPCLENet["📦 VPC: 172.16.4.0/16"]
+            App1ResLENet["Application Resources"]
+        end
+    end
+
+    %% Production Network Connections
+    TGWProd === EKSVPCProd
+    TGWProd === RDSVPCProd
+    TGWProd === App1VPCProd
+    TGWProd === App2VPCProd
+    TGWProd --> NATProd
+    
+    %% LE Network Connections
+    TGWLE === EKSVPCLENet
+    TGWLE === RDSVPCLENet
+    TGWLE === App1VPCLENet
+    TGWLE --> NATLE
+
+    %% Internet Access
+    NATProd --> ExtServices
+    NATLE --> ExtServices
+
+    %% IPAM Management
+    IPAMProd -.-> EKSVPCProd
+    IPAMProd -.-> RDSVPCProd
+    IPAMProd -.-> App1VPCProd
+    IPAMProd -.-> App2VPCProd
+    
+    IPAMLE -.-> EKSVPCLENet
+    IPAMLE -.-> RDSVPCLENet
+    IPAMLE -.-> App1VPCLENet
+
+    %% Platform Service Communication (within same network)
+    App1ResProd -.-> EKSProd
+    App1ResProd -.-> RDSProd
+    App2ResProd -.-> EKSProd
+    App2ResProd -.-> RDSProd
+    
+    App1ResLENet -.-> EKSLENet
+    App1ResLENet -.-> RDSLENet
+
+    %% VPC Components
+    EKSVPCProd --- EKSProd
+    RDSVPCProd --- RDSProd
+    App1VPCProd --- App1ResProd
+    App2VPCProd --- App2ResProd
+    
+    EKSVPCLENet --- EKSLENet
+    RDSVPCLENet --- RDSLENet
+    App1VPCLENet --- App1ResLENet

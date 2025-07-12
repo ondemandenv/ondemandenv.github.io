@@ -1,0 +1,34 @@
+sequenceDiagram
+    participant Dev as Developer
+    participant Ticket as Ticket System
+    participant Ops as Operations Team
+    participant Istio as Service Mesh Console
+    participant Service as Target Service
+    
+    Note over Dev,Service: The Bottleneck Cycle
+    
+    Dev->>+Ticket: Submit routing change request
+    Note over Ticket: Ticket sits in queue for days
+    
+    Ticket->>+Ops: Ops reviews request
+    Note over Ops: Ops does not understand business context
+    
+    Ops->>Dev: Request clarification
+    Dev->>Ops: Provide business context
+    
+    Ops->>Istio: Make configuration change
+    Note over Istio: Change breaks something else
+    
+    Istio->>Service: Route traffic
+    Service->>Istio: Error response
+    
+    Istio->>Ops: Alert Service failing
+    Ops->>Ticket: Create rollback ticket
+    
+    Note over Dev,Service: Days later still not working
+    
+    Ops->>Dev: Working as designed
+    Dev->>Ticket: Escalate to management
+    
+    Ticket-->>-Ops: Close ticket
+    Ops-->>-Ticket: Ticket closed

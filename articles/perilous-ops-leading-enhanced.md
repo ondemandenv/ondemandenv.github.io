@@ -24,36 +24,9 @@ This comprehensive analysis explores how operator-led decomposition, coupled wit
 
 Before exploring the perilous path, let's establish what a properly functioning Phase 1 monolith looks like:
 
-<div class="mermaid">
-graph TD
-    subgraph "Phase 1: Classic Monolith (The Right Starting Point)"
-        A1[Order Request] --> B1[Monolithic Application]
-        B1 --> C1[Single Transaction]
-        
-        subgraph "Business Logic in One Process"
-            D1[Validate Inventory]
-            E1[Process Payment] 
-            F1[Update Inventory]
-            G1[Send Notification]
-        end
-        
-        C1 --> D1
-        D1 --> E1
-        E1 --> F1
-        F1 --> G1
-        
-        G1 --> H1[Single RDS Database]
-        H1 --> I1[ACID Guarantees]
-        I1 --> J1[Consistent Response]
-    end
-    
-    classDef goodPhase fill:#ccffcc,stroke:#00aa00
-    classDef process fill:#e1f5fe,stroke:#0277bd
-    classDef database fill:#fff3e0,stroke:#f57c00
-    
-    class A1,B1,C1,J1 goodPhase
-    class D1,E1,F1,G1 process
-    class H1,I1 database
+<div id="phase1-classic-monolith" 
+     class="mermaid" 
+     data-external-diagram="/diagrams/phase1-classic-monolith.mmd">
 </div>
 
 **Key Characteristics of Phase 1:**
@@ -67,70 +40,9 @@ graph TD
 
 Now contrast this with the perilous path - the forced decomposition approach:
 
-<div class="mermaid">
-graph TD
-    subgraph "Anti-Pattern: Distributed Monolith with Service Mesh"
-        A2[Order Request] --> B2[Inventory Service]
-        
-        subgraph "Ops-Controlled Istio Hub"
-            ISTIO[Service Mesh Control Plane]
-            OPS_TEAM[Ops Team Controls Everything]
-            CONSOLE[Istio Control Console]
-            
-            OPS_TEAM --> CONSOLE
-            CONSOLE --> ISTIO
-        end
-        
-        subgraph "Isolated Services - Blind to Each Other"
-            B2[Inventory Service]
-            C2[Payment Service]
-            D2[Fulfillment Service]
-            E2[Notification Service]
-        end
-        
-        subgraph "Separate Databases - Lost ACID"
-            F2[Inventory RDS]
-            G2[Payment RDS]
-            H2[Fulfillment RDS]
-            I2[Notification RDS]
-        end
-        
-        B2 --> F2
-        C2 --> G2
-        D2 --> H2
-        E2 --> I2
-        
-        B2 --> |Sync Call| ISTIO
-        ISTIO --> |Routes to| C2
-        C2 --> |Sync Call| ISTIO
-        ISTIO --> |Routes to| D2
-        D2 --> |Sync Call| ISTIO
-        ISTIO --> |Routes to| E2
-        
-        subgraph "Developer Frustration"
-            DEV1[Dev Team A - Need routing change]
-            DEV2[Dev Team B - Need policy update]
-            DEV3[Dev Team C - Need traffic split]
-            
-            DEV1 --> |Ticket| OPS_TEAM
-            DEV2 --> |Ticket| OPS_TEAM
-            DEV3 --> |Ticket| OPS_TEAM
-        end
-        
-        E2 --> J2[Fragile Response Chain]
-    end
-    
-    classDef antiPattern fill:#ffcccc,stroke:#ff0000
-    classDef opsControl fill:#fff3e0,stroke:#f57c00
-    classDef services fill:#e8f5e8,stroke:#4caf50
-    classDef databases fill:#f3e5f5,stroke:#9c27b0
-    classDef frustration fill:#ffebee,stroke:#f44336
-    
-    class A2,J2 antiPattern
-    class ISTIO,OPS_TEAM,CONSOLE opsControl
-    class B2,C2,D2,E2 services
-    class F2,G2,H2,I2 databases
-    class DEV1,DEV2,DEV3 frustration
+<div id="distributed-monolith-service-mesh" 
+     class="mermaid" 
+     data-external-diagram="/diagrams/distributed-monolith-service-mesh.mmd">
 </div>
 
 ---
@@ -151,41 +63,9 @@ One of the most insidious aspects of this anti-pattern is how operations teams m
 
 ### The Ticket Queue Death Spiral
 
-<div class="mermaid">
-sequenceDiagram
-    participant Dev as Developer
-    participant Ticket as Ticket System
-    participant Ops as Operations Team
-    participant Istio as Service Mesh Console
-    participant Service as Target Service
-    
-    Note over Dev,Service: The Bottleneck Cycle
-    
-    Dev->>+Ticket: Submit routing change request
-    Note over Ticket: Ticket sits in queue for days
-    
-    Ticket->>+Ops: Ops reviews request
-    Note over Ops: Ops does not understand business context
-    
-    Ops->>Dev: Request clarification
-    Dev->>Ops: Provide business context
-    
-    Ops->>Istio: Make configuration change
-    Note over Istio: Change breaks something else
-    
-    Istio->>Service: Route traffic
-    Service->>Istio: Error response
-    
-    Istio->>Ops: Alert Service failing
-    Ops->>Ticket: Create rollback ticket
-    
-    Note over Dev,Service: Days later still not working
-    
-    Ops->>Dev: Working as designed
-    Dev->>Ticket: Escalate to management
-    
-    Ticket-->>-Ops: Close ticket
-    Ops-->>-Ticket: Ticket closed
+<div id="ops-bottleneck-sequence" 
+     class="mermaid" 
+     data-external-diagram="/diagrams/ops-bottleneck-sequence.mmd">
 </div>
 
 ### The YAML Configuration Hell
@@ -228,43 +108,9 @@ spec:
 
 The most devastating aspect of this anti-pattern is the loss of ACID properties while maintaining synchronous call patterns:
 
-<div class="mermaid">
-sequenceDiagram
-    participant Client
-    participant ServiceA
-    participant ServiceB
-    participant ServiceC
-    participant ServiceD
-    participant RDSA as RDS A
-    participant RDSB as RDS B
-    participant RDSC as RDS C
-    participant RDSD as RDS D
-    participant Istio as Service Mesh
-    
-    Note over Client,RDSD: Anti-Pattern: Synchronous Chain with Individual Databases
-    
-    Client->>+ServiceA: Process Order
-    ServiceA->>+RDSA: Save partial state
-    RDSA-->>-ServiceA: OK
-    
-    ServiceA->>+Istio: Route to Service B
-    Istio->>+ServiceB: Validate Inventory
-    ServiceB->>+RDSB: Check stock
-    RDSB-->>-ServiceB: Stock available
-    ServiceB-->>-Istio: Validation OK
-    Istio-->>-ServiceA: Response
-    
-    ServiceA->>+Istio: Route to Service C
-    Istio->>+ServiceC: Process Payment
-    ServiceC->>+RDSC: Charge card
-    Note over ServiceC,RDSC: Network failure!
-    RDSC-->>ServiceC: Timeout
-    ServiceC-->>-Istio: Payment Failed
-    Istio-->>-ServiceA: Error
-    
-    Note over ServiceA: Now what? Partial state in RDS A<br/>No distributed transaction<br/>Manual compensation required
-    
-    ServiceA-->>-Client: Error (after partial processing)
+<div id="sync-chain-failure-pattern" 
+     class="mermaid" 
+     data-external-diagram="/diagrams/sync-chain-failure-pattern.mmd">
 </div>
 
 ### The Compensation Pattern Nightmare
@@ -436,50 +282,9 @@ spec:
 
 Instead of forced decomposition, the proper evolution path follows these phases:
 
-<div class="mermaid">
-flowchart TD
-    subgraph "The Perilous Evolution Path"
-        START[Phase 1: Monolith with RDS]
-        
-        subgraph "Wrong Turn"
-            CHOP[Artificially Chop into Services]
-            MESH[Add Service Mesh]
-            OPS[Ops Takes Control]
-        end
-        
-        subgraph "Distributed Monolith Hell"
-            SYNC[Still Synchronous Calls]
-            MULTI_DB[Multiple RDS Instances]
-            TIGHT[Tightly Coupled Services]
-            CONSOLE_HOG[Ops Hogging Service Mesh Console]
-        end
-        
-        subgraph "Right Path (Not Taken)"
-            ASYNC[Event-Driven Architecture]
-            PLATFORM[Platform-as-a-Service]
-            DECOUPLE[True Service Independence]
-        end
-    end
-    
-    START --> CHOP
-    CHOP --> MESH
-    MESH --> OPS
-    OPS --> SYNC
-    OPS --> MULTI_DB
-    OPS --> TIGHT
-    OPS --> CONSOLE_HOG
-    
-    START -.-> |"Should evolve to"| ASYNC
-    ASYNC -.-> PLATFORM
-    PLATFORM -.-> DECOUPLE
-    
-    classDef wrongPath fill:#ffcccc,stroke:#ff0000
-    classDef rightPath fill:#ccffcc,stroke:#00aa00
-    classDef hell fill:#ff9999,stroke:#cc0000
-    
-    class CHOP,MESH,OPS wrongPath
-    class SYNC,MULTI_DB,TIGHT,CONSOLE_HOG hell
-    class ASYNC,PLATFORM,DECOUPLE rightPath
+<div id="perilous-evolution-path" 
+     class="mermaid" 
+     data-external-diagram="/diagrams/perilous-evolution-path.mmd">
 </div>
 
 **The Right Evolution Phases:**

@@ -1,0 +1,25 @@
+flowchart TD
+    subgraph "Phase 1: RDS-Centric Monolithic Architecture"
+        P1_User["👤 User Request<br/>Buy 2 iPhones, $2000"]
+        P1_User --> P1_LB["⚖️ Load Balancer<br/>NGINX / AWS ALB"]
+        P1_LB --> P1_App["📱 Monolithic Application Server<br/>🏗️ SINGLE DEPLOYMENT UNIT<br/>Tech: Java Spring Boot<br/>Team: Single Development Team"]
+        
+        P1_App --> P1_Trans["🔒 BEGIN TRANSACTION<br/>ACID Guarantees"]
+        P1_Trans --> P1_S1["📦 Step 1: Validate Inventory<br/>SELECT qty FROM products WHERE id='iPhone'<br/>Result: qty=50 >= 2 ✅"]
+        
+        P1_S1 --> P1_S2["💳 Step 2: Process Payment<br/>INSERT INTO payments + Call Payment API<br/>Result: $2000 charged ✅"]
+        
+        P1_S2 --> P1_S3["📉 Step 3: Update Inventory<br/>UPDATE products SET qty=qty-2 WHERE id='iPhone'<br/>Result: iPhone qty now 48 ✅"]
+        
+        P1_S3 --> P1_S4["📧 Step 4: Send Notification<br/>INSERT INTO notifications + Call Email API<br/>Result: Email sent ✅"]
+        
+        P1_S4 --> P1_Commit["✨ COMMIT TRANSACTION<br/>All-or-Nothing Guarantee"]
+        P1_Commit --> P1_DB[("🗄️ SINGLE RDS DATABASE<br/>PostgreSQL / MySQL<br/>ALL data in one place:<br/>• products table<br/>• payments table<br/>• orders table<br/>• notifications table")]
+        
+        P1_DB --> P1_Response["✅ Immediate Consistent Response<br/>Order Complete - Strong Consistency!"]
+        P1_Response --> P1_User
+        
+        subgraph "🎯 PHASE 1 KEY CHARACTERISTICS"
+            P1_Insight["💡 Simple but Limited:<br/>• Single point of failure (app + DB)<br/>• Strong consistency via ACID<br/>• Vertical scaling only<br/>• Fast development for small teams<br/>• All components share resources<br/>• Technology lock-in (single stack)"]
+        end
+    end

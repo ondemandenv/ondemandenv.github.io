@@ -1,0 +1,63 @@
+graph TD
+    subgraph "Anti-Pattern: Distributed Monolith with Service Mesh"
+        A2[Order Request] --> B2[Inventory Service]
+        
+        subgraph "Ops-Controlled Istio Hub"
+            ISTIO[Service Mesh Control Plane]
+            OPS_TEAM[Ops Team Controls Everything]
+            CONSOLE[Istio Control Console]
+            
+            OPS_TEAM --> CONSOLE
+            CONSOLE --> ISTIO
+        end
+        
+        subgraph "Isolated Services - Blind to Each Other"
+            B2[Inventory Service]
+            C2[Payment Service]
+            D2[Fulfillment Service]
+            E2[Notification Service]
+        end
+        
+        subgraph "Separate Databases - Lost ACID"
+            F2[Inventory RDS]
+            G2[Payment RDS]
+            H2[Fulfillment RDS]
+            I2[Notification RDS]
+        end
+        
+        B2 --> F2
+        C2 --> G2
+        D2 --> H2
+        E2 --> I2
+        
+        B2 --> |Sync Call| ISTIO
+        ISTIO --> |Routes to| C2
+        C2 --> |Sync Call| ISTIO
+        ISTIO --> |Routes to| D2
+        D2 --> |Sync Call| ISTIO
+        ISTIO --> |Routes to| E2
+        
+        subgraph "Developer Frustration"
+            DEV1[Dev Team A - Need routing change]
+            DEV2[Dev Team B - Need policy update]
+            DEV3[Dev Team C - Need traffic split]
+            
+            DEV1 --> |Ticket| OPS_TEAM
+            DEV2 --> |Ticket| OPS_TEAM
+            DEV3 --> |Ticket| OPS_TEAM
+        end
+        
+        E2 --> J2[Fragile Response Chain]
+    end
+    
+    classDef antiPattern fill:#ffcccc,stroke:#ff0000
+    classDef opsControl fill:#fff3e0,stroke:#f57c00
+    classDef services fill:#e8f5e8,stroke:#4caf50
+    classDef databases fill:#f3e5f5,stroke:#9c27b0
+    classDef frustration fill:#ffebee,stroke:#f44336
+    
+    class A2,J2 antiPattern
+    class ISTIO,OPS_TEAM,CONSOLE opsControl
+    class B2,C2,D2,E2 services
+    class F2,G2,H2,I2 databases
+    class DEV1,DEV2,DEV3 frustration

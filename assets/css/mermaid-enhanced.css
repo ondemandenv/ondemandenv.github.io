@@ -1,0 +1,259 @@
+/**
+ * Mermaid Enhanced Styles
+ * Standardized styling for enhanced mermaid diagrams with fullscreen, zoom, and pan
+ */
+
+/* Base diagram container */
+.diagram-container {
+    position: relative;
+    margin: 2rem 0;
+    border: 1px solid #e1e5e9;
+    border-radius: 8px;
+    background: #f8f9fa;
+    padding: 1rem;
+    overflow: hidden;
+}
+
+/* Controls positioning */
+.diagram-controls {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 10;
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+/* Button base styling */
+.diagram-btn {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    min-height: 32px;
+    line-height: 1;
+}
+
+.diagram-btn:hover {
+    background: #0056b3;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.diagram-btn:active {
+    transform: translateY(0);
+}
+
+/* Specific button types */
+.fullscreen-btn {
+    background: #28a745;
+}
+
+.fullscreen-btn:hover {
+    background: #1e7e34;
+}
+
+.zoom-controls {
+    display: flex;
+    gap: 2px;
+}
+
+.zoom-controls .diagram-btn {
+    padding: 8px;
+    min-width: 32px;
+    justify-content: center;
+}
+
+/* Mermaid diagram styling */
+.mermaid {
+    transition: all 0.3s ease;
+    text-align: center;
+    background: white;
+    border-radius: 4px;
+    min-height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mermaid svg {
+    max-width: 100%;
+    height: auto;
+    cursor: grab;
+}
+
+.mermaid svg:active {
+    cursor: grabbing;
+}
+
+/* Fullscreen mode */
+.diagram-container.fullscreen-mode {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+    z-index: 999999 !important;
+    padding: 20px !important;
+    background: #ffffff !important;
+}
+
+.fullscreen-mode .mermaid {
+    height: calc(100vh - 80px);
+    min-height: unset;
+    overflow: hidden;
+}
+
+.fullscreen-mode .mermaid svg {
+    max-width: none;
+    max-height: none;
+    width: auto;
+    height: auto;
+}
+
+.fullscreen-mode .diagram-controls {
+    top: 20px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 5px;
+    border-radius: 6px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+/* Error state */
+.diagram-error {
+    padding: 2rem;
+    text-align: center;
+    border: 1px solid #dc3545;
+    border-radius: 8px;
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.diagram-error h4 {
+    color: #721c24;
+    margin-bottom: 1rem;
+}
+
+.diagram-error .error-detail {
+    font-size: 0.9em;
+    color: #6c757d;
+    font-family: monospace;
+}
+
+/* Loading state */
+.diagram-loading {
+    padding: 2rem;
+    text-align: center;
+    color: #6c757d;
+}
+
+.diagram-loading::after {
+    content: '';
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #dee2e6;
+    border-top: 2px solid #007bff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-left: 10px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .diagram-container {
+        padding: 0.5rem;
+    }
+    
+    .diagram-controls {
+        top: 5px;
+        right: 5px;
+        gap: 2px;
+    }
+    
+    .diagram-btn {
+        padding: 6px 8px;
+        font-size: 12px;
+        min-height: 28px;
+    }
+    
+    .zoom-controls .diagram-btn {
+        padding: 6px;
+        min-width: 28px;
+    }
+    
+    .fullscreen-mode {
+        padding: 10px !important;
+    }
+    
+    .fullscreen-mode .mermaid {
+        height: calc(100vh - 60px);
+    }
+    
+    .fullscreen-mode .diagram-controls {
+        top: 10px;
+        right: 10px;
+    }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    .diagram-container {
+        background: #2d3748;
+        border-color: #4a5568;
+    }
+    
+    .mermaid {
+        background: #1a202c;
+    }
+    
+    .fullscreen-mode {
+        background: #1a202c !important;
+    }
+    
+    .fullscreen-mode .diagram-controls {
+        background: rgba(45, 55, 72, 0.9);
+    }
+}
+
+/* Animation for smooth transitions */
+.diagram-container,
+.mermaid,
+.diagram-btn {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Focus states for accessibility */
+.diagram-btn:focus {
+    outline: 2px solid #007bff;
+    outline-offset: 2px;
+}
+
+/* Print styles */
+@media print {
+    .diagram-controls {
+        display: none !important;
+    }
+    
+    .diagram-container {
+        border: 1px solid #ccc;
+        background: white;
+        break-inside: avoid;
+    }
+}

@@ -1,0 +1,37 @@
+flowchart TD
+    subgraph "Phase 3: Step-Level Queue Architecture"
+        P3_User["👤 User Request<br/>Buy 2 iPhones, $2000"]
+        P3_User --> P3_LB["⚖️ Load Balancer"]
+        P3_LB --> P3_API["📱 API Server<br/>🏗️ STILL MONOLITHIC DEPLOYMENT<br/>Tech: Java Spring Boot<br/>Team: Single Development Team"]
+        
+        P3_API --> P3_Q1["📮 Inventory Queue<br/>Managed Message Platform"]
+        P3_Q1 --> P3_Response["⚡ Immediate Response<br/>Order Processing Started"]
+        P3_Response --> P3_User
+        
+        subgraph "🔥 KEY INSIGHT: Step-Level Fault Isolation"
+            P3_Q1 --> P3_W1["⚙️ Inventory Worker<br/>Specialized for validation logic"]
+            P3_W1 --> P3_S1["📦 Step 1: Validate Inventory<br/>SELECT qty FROM products WHERE id='iPhone'<br/>Result: qty=50 >= 2 ✅"]
+            P3_S1 --> P3_DB[("🗄️ SHARED DATABASE<br/>Read: products table")]
+            
+            P3_S1 --> P3_Q2["📮 Payment Queue<br/>Intermediate result passed"]
+            P3_Q2 --> P3_W2["⚙️ Payment Worker<br/>Specialized for payment logic"]
+            P3_W2 --> P3_S2["💳 Step 2: Process Payment<br/>INSERT INTO payments + Call API<br/>Result: $2000 charged ✅"]
+            P3_S2 --> P3_DB2[("🗄️ SHARED DATABASE<br/>Write: payments table")]
+            
+            P3_S2 --> P3_Q3["📮 Update Queue<br/>Payment success confirmation"]
+            P3_Q3 --> P3_W3["⚙️ Update Worker<br/>Specialized for inventory updates"]
+            P3_W3 --> P3_S3["📉 Step 3: Update Inventory<br/>UPDATE products SET qty=qty-2<br/>Result: iPhone qty now 48 ✅"]
+            P3_S3 --> P3_DB3[("🗄️ SHARED DATABASE<br/>Update: products table")]
+            
+            P3_S3 --> P3_Q4["📮 Notification Queue<br/>Order fulfillment confirmation"]
+            P3_Q4 --> P3_W4["⚙️ Notification Worker<br/>Specialized for communications"]
+            P3_W4 --> P3_S4["📧 Step 4: Send Notification<br/>INSERT INTO notifications + Call API<br/>Result: Email sent ✅"]
+            P3_S4 --> P3_DB4[("🗄️ SHARED DATABASE<br/>Write: notifications table")]
+        end
+        
+        P3_DB4 --> P3_Complete["✅ All Steps Complete<br/>Efficient step-level retries"]
+        
+        subgraph "🎯 PHASE 3 CRITICAL REALIZATION"
+            P3_Insight["💡 The Hidden Monolith Problem:<br/>• Step-level efficiency achieved<br/>• Each step can retry independently<br/>• Workers specialized but still coupled<br/>• Same deployment unit = shared fate<br/>• Same technology stack limitations<br/>❓ Why keep them together if queues decouple them?"]
+        end
+    end

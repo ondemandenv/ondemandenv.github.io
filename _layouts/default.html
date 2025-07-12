@@ -28,19 +28,20 @@
         pre { background-color: #f0f0f0; padding: 1rem; border-radius: 5px; overflow-x: auto; }
         code { font-family: monospace; font-size: 0.9em; }
         pre > code { background-color: transparent; padding: 0; }
-        /* Mermaid diagram styling */
-        .mermaid { 
-            text-align: center; 
-            margin: 2rem 0; 
-            background-color: white; 
-            border: 1px solid #e1e4e8; 
-            border-radius: 6px; 
-            padding: 1rem; 
-        }
     </style>
     
-    <!-- Mermaid.js for diagram rendering -->
+    <!-- Enhanced Mermaid Styles -->
+    <link rel="stylesheet" href="{{ '/assets/css/mermaid-enhanced.css' | relative_url }}">
+    
+    <!-- Required Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/screenfull@6.0.2/dist/screenfull.min.js"></script>
+    
+    <!-- Enhanced Mermaid Functionality -->
+    <script src="{{ '/assets/js/mermaid-enhanced.js' | relative_url }}"></script>
+    <script src="{{ '/assets/js/external-diagram-loader.js' | relative_url }}"></script>
+    
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             mermaid.initialize({ 
@@ -93,7 +94,12 @@
             }
             
             if (foundMermaid) {
-                mermaid.run();
+                mermaid.run().then(() => {
+                    // Initialize enhanced functionality after mermaid renders
+                    if (window.MermaidEnhanced) {
+                        window.MermaidEnhanced.enhanceAllDiagrams();
+                    }
+                });
             }
             
             // Debug: log what we found

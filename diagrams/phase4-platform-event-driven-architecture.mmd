@@ -1,0 +1,36 @@
+flowchart TD
+    subgraph "Phase 4: Platform-as-a-Service Event-Driven Architecture"
+        P4_User["👤 User Request<br/>Buy 2 iPhones, $2000"]
+        P4_User --> P4_API["📱 Order API Gateway"]
+        
+        P4_API --> P4_Platform["🌩️ MANAGED EVENT STREAMING PLATFORM<br/>AWS Kinesis / Apache Kafka / Azure Event Hub<br/>📡 Handles: Durability, Scaling, Partitioning, Ordering"]
+        P4_Platform --> P4_Response["⚡ Immediate Response<br/>Order Placed Successfully"]
+        P4_Response --> P4_User
+        
+        subgraph "🔥 KEY INSIGHT: Services Never Talk Directly!"
+            P4_Platform -.->|"OrderPlacedEvent"| P4_IS["🏪 Inventory Service<br/>📦 INDEPENDENT DEPLOYMENT<br/>Tech: Go + Redis<br/>Team: Inventory Team"]
+            P4_IS --> P4_S1["📦 Step 1: Validate Inventory<br/>SELECT qty FROM products WHERE id='iPhone'<br/>Result: qty=50 >= 2 ✅"]
+            P4_S1 --> P4_DB1[("🗄️ Inventory Database<br/>PostgreSQL<br/>Owned by Inventory Service")]
+            
+            P4_S1 --> P4_Platform
+            P4_Platform -.->|"InventoryValidatedEvent"| P4_PS["💰 Payment Service<br/>💳 INDEPENDENT DEPLOYMENT<br/>Tech: Java + Spring<br/>Team: Payment Team"]
+            P4_PS --> P4_S2["💳 Step 2: Process Payment<br/>Call Stripe API + Store locally<br/>Result: $2000 charged ✅"]
+            P4_S2 --> P4_DB2[("🗄️ Payment Database<br/>MySQL<br/>Owned by Payment Service")]
+            
+            P4_S2 --> P4_Platform
+            P4_Platform -.->|"PaymentProcessedEvent"| P4_IS2["🏪 Inventory Service<br/>Same service, different handler"]
+            P4_IS2 --> P4_S3["📉 Step 3: Update Inventory<br/>UPDATE products SET qty=qty-2<br/>Result: iPhone qty now 48 ✅"]
+            P4_S3 --> P4_DB1
+            
+            P4_S3 --> P4_Platform
+            P4_Platform -.->|"InventoryUpdatedEvent"| P4_NS["📬 Notification Service<br/>📧 INDEPENDENT DEPLOYMENT<br/>Tech: Python + FastAPI<br/>Team: Communication Team"]
+            P4_NS --> P4_S4["📧 Step 4: Send Notification<br/>Call SendGrid API + Store logs<br/>Result: Email sent ✅"]
+            P4_S4 --> P4_DB4[("🗄️ Notification Database<br/>MongoDB<br/>Owned by Notification Service")]
+        end
+        
+        P4_DB4 --> P4_Complete["✅ Eventually Consistent Complete<br/>All services coordinated via events only!"]
+        
+        subgraph "🎯 THE AHA MOMENT"
+            P4_Insight["💡 Platform abstracts complexity:<br/>• No direct service-to-service calls<br/>• Each service owns its data & technology<br/>• Teams deploy independently<br/>• Event streaming handles coordination<br/>• Managed service handles infrastructure"]
+        end
+    end

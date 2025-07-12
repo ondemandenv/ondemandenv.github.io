@@ -54,32 +54,9 @@ To illustrate how these phases differ, let's examine how each one handles the **
 
 The traditional approach where all business logic executes within database transactions, providing strong consistency at the cost of scalability and resilience.
 
-<div class="mermaid">
-flowchart TD
-    subgraph "Phase 1: RDS-Centric Monolithic Architecture"
-        P1_User["👤 User Request<br/>Buy 2 iPhones, $2000"]
-        P1_User --> P1_LB["⚖️ Load Balancer<br/>NGINX / AWS ALB"]
-        P1_LB --> P1_App["📱 Monolithic Application Server<br/>🏗️ SINGLE DEPLOYMENT UNIT<br/>Tech: Java Spring Boot<br/>Team: Single Development Team"]
-        
-        P1_App --> P1_Trans["🔒 BEGIN TRANSACTION<br/>ACID Guarantees"]
-        P1_Trans --> P1_S1["📦 Step 1: Validate Inventory<br/>SELECT qty FROM products WHERE id='iPhone'<br/>Result: qty=50 >= 2 ✅"]
-        
-        P1_S1 --> P1_S2["💳 Step 2: Process Payment<br/>INSERT INTO payments + Call Payment API<br/>Result: $2000 charged ✅"]
-        
-        P1_S2 --> P1_S3["📉 Step 3: Update Inventory<br/>UPDATE products SET qty=qty-2 WHERE id='iPhone'<br/>Result: iPhone qty now 48 ✅"]
-        
-        P1_S3 --> P1_S4["📧 Step 4: Send Notification<br/>INSERT INTO notifications + Call Email API<br/>Result: Email sent ✅"]
-        
-        P1_S4 --> P1_Commit["✨ COMMIT TRANSACTION<br/>All-or-Nothing Guarantee"]
-        P1_Commit --> P1_DB[("🗄️ SINGLE RDS DATABASE<br/>PostgreSQL / MySQL<br/>ALL data in one place:<br/>• products table<br/>• payments table<br/>• orders table<br/>• notifications table")]
-        
-        P1_DB --> P1_Response["✅ Immediate Consistent Response<br/>Order Complete - Strong Consistency!"]
-        P1_Response --> P1_User
-        
-        subgraph "🎯 PHASE 1 KEY CHARACTERISTICS"
-            P1_Insight["💡 Simple but Limited:<br/>• Single point of failure (app + DB)<br/>• Strong consistency via ACID<br/>• Vertical scaling only<br/>• Fast development for small teams<br/>• All components share resources<br/>• Technology lock-in (single stack)"]
-        end
-    end
+<div id="phase1-rds-monolithic-architecture" 
+     class="mermaid" 
+     data-external-diagram="/diagrams/phase1-rds-monolithic-architecture.mmd">
 </div>
 
 #### When Phase 1 Excels:
@@ -115,37 +92,9 @@ public class OrderService {
 
 Evolution that introduces message queues to decouple client requests from processing, improving responsiveness while maintaining transactional processing.
 
-<div class="mermaid">
-flowchart TD
-    subgraph "Phase 2: Queue-Based Asynchronous Processing"
-        P2_User["👤 User Request<br/>Buy 2 iPhones, $2000"]
-        P2_User --> P2_LB["⚖️ Load Balancer"]
-        P2_LB --> P2_API["📱 API Server<br/>🏗️ STILL SINGLE DEPLOYMENT<br/>Tech: Java Spring Boot<br/>Team: Single Development Team"]
-        
-        P2_API --> P2_Queue["📮 MANAGED MESSAGE QUEUE<br/>AWS SQS / RabbitMQ / Redis<br/>🌩️ Platform handles: Persistence, Delivery, Retries"]
-        P2_Queue --> P2_Response["⚡ Immediate Response<br/>Order Queued - Fire & Forget!"]
-        P2_Response --> P2_User
-        
-        subgraph "🔥 KEY INSIGHT: Client Decoupling via Platform"
-            P2_Queue --> P2_Worker["⚙️ Background Worker Process<br/>Same codebase, different process<br/>Scales independently from API"]
-            
-            P2_Worker --> P2_S1["📦 Step 1: Validate Inventory<br/>SELECT qty FROM products WHERE id='iPhone'<br/>Result: qty=50 >= 2 ✅"]
-            
-            P2_S1 --> P2_S2["💳 Step 2: Process Payment<br/>INSERT INTO payments + Call Payment API<br/>Result: $2000 charged ✅"]
-            
-            P2_S2 --> P2_S3["📉 Step 3: Update Inventory<br/>UPDATE products SET qty=qty-2 WHERE id='iPhone'<br/>Result: iPhone qty now 48 ✅"]
-            
-            P2_S3 --> P2_S4["📧 Step 4: Send Notification<br/>INSERT INTO notifications + Call Email API<br/>Result: Email sent ✅"]
-        end
-        
-        P2_S4 --> P2_DB[("🗄️ SHARED RDS DATABASE<br/>PostgreSQL / MySQL<br/>Same schema as Phase 1:<br/>• products table<br/>• payments table<br/>• orders table<br/>• notifications table")]
-        
-        P2_DB --> P2_Complete["✅ Async Processing Complete<br/>User notified via email"]
-        
-        subgraph "🎯 PHASE 2 KEY BREAKTHROUGH"
-            P2_Insight["💡 Async Benefits via Platform:<br/>• Client responsiveness improved<br/>• Queue platform handles reliability<br/>• Worker can retry failed operations<br/>• Better resource utilization<br/>• Still single codebase/deployment<br/>• Worker becomes new bottleneck"]
-        end
-    end
+<div id="phase2-queue-async-processing" 
+     class="mermaid" 
+     data-external-diagram="/diagrams/phase2-queue-async-processing.mmd">
 </div>
 
 #### The Platform Breakthrough:
@@ -191,44 +140,9 @@ public class OrderWorker {
 
 Further evolution that introduces queues between each processing step, enabling step-level retries and fault isolation while maintaining deployment coupling.
 
-<div class="mermaid">
-flowchart TD
-    subgraph "Phase 3: Step-Level Queue Architecture"
-        P3_User["👤 User Request<br/>Buy 2 iPhones, $2000"]
-        P3_User --> P3_LB["⚖️ Load Balancer"]
-        P3_LB --> P3_API["📱 API Server<br/>🏗️ STILL MONOLITHIC DEPLOYMENT<br/>Tech: Java Spring Boot<br/>Team: Single Development Team"]
-        
-        P3_API --> P3_Q1["📮 Inventory Queue<br/>Managed Message Platform"]
-        P3_Q1 --> P3_Response["⚡ Immediate Response<br/>Order Processing Started"]
-        P3_Response --> P3_User
-        
-        subgraph "🔥 KEY INSIGHT: Step-Level Fault Isolation"
-            P3_Q1 --> P3_W1["⚙️ Inventory Worker<br/>Specialized for validation logic"]
-            P3_W1 --> P3_S1["📦 Step 1: Validate Inventory<br/>SELECT qty FROM products WHERE id='iPhone'<br/>Result: qty=50 >= 2 ✅"]
-            P3_S1 --> P3_DB[("🗄️ SHARED DATABASE<br/>Read: products table")]
-            
-            P3_S1 --> P3_Q2["📮 Payment Queue<br/>Intermediate result passed"]
-            P3_Q2 --> P3_W2["⚙️ Payment Worker<br/>Specialized for payment logic"]
-            P3_W2 --> P3_S2["💳 Step 2: Process Payment<br/>INSERT INTO payments + Call API<br/>Result: $2000 charged ✅"]
-            P3_S2 --> P3_DB2[("🗄️ SHARED DATABASE<br/>Write: payments table")]
-            
-            P3_S2 --> P3_Q3["📮 Update Queue<br/>Payment success confirmation"]
-            P3_Q3 --> P3_W3["⚙️ Update Worker<br/>Specialized for inventory updates"]
-            P3_W3 --> P3_S3["📉 Step 3: Update Inventory<br/>UPDATE products SET qty=qty-2<br/>Result: iPhone qty now 48 ✅"]
-            P3_S3 --> P3_DB3[("🗄️ SHARED DATABASE<br/>Update: products table")]
-            
-            P3_S3 --> P3_Q4["📮 Notification Queue<br/>Order fulfillment confirmation"]
-            P3_Q4 --> P3_W4["⚙️ Notification Worker<br/>Specialized for communications"]
-            P3_W4 --> P3_S4["📧 Step 4: Send Notification<br/>INSERT INTO notifications + Call API<br/>Result: Email sent ✅"]
-            P3_S4 --> P3_DB4[("🗄️ SHARED DATABASE<br/>Write: notifications table")]
-        end
-        
-        P3_DB4 --> P3_Complete["✅ All Steps Complete<br/>Efficient step-level retries"]
-        
-        subgraph "🎯 PHASE 3 CRITICAL REALIZATION"
-            P3_Insight["💡 The Hidden Monolith Problem:<br/>• Step-level efficiency achieved<br/>• Each step can retry independently<br/>• Workers specialized but still coupled<br/>• Same deployment unit = shared fate<br/>• Same technology stack limitations<br/>❓ Why keep them together if queues decouple them?"]
-        end
-    end
+<div id="phase3-step-level-queue-architecture" 
+     class="mermaid" 
+     data-external-diagram="/diagrams/phase3-step-level-queue-architecture.mmd">
 </div>
 
 #### The Critical Realization:
@@ -275,43 +189,9 @@ public class PaymentWorker {
 
 The architectural breakthrough where managed event streaming platforms enable true service independence, with each service owning its data, technology choices, and deployment lifecycle.
 
-<div class="mermaid">
-flowchart TD
-    subgraph "Phase 4: Platform-as-a-Service Event-Driven Architecture"
-        P4_User["👤 User Request<br/>Buy 2 iPhones, $2000"]
-        P4_User --> P4_API["📱 Order API Gateway"]
-        
-        P4_API --> P4_Platform["🌩️ MANAGED EVENT STREAMING PLATFORM<br/>AWS Kinesis / Apache Kafka / Azure Event Hub<br/>📡 Handles: Durability, Scaling, Partitioning, Ordering"]
-        P4_Platform --> P4_Response["⚡ Immediate Response<br/>Order Placed Successfully"]
-        P4_Response --> P4_User
-        
-        subgraph "🔥 KEY INSIGHT: Services Never Talk Directly!"
-            P4_Platform -.->|"OrderPlacedEvent"| P4_IS["🏪 Inventory Service<br/>📦 INDEPENDENT DEPLOYMENT<br/>Tech: Go + Redis<br/>Team: Inventory Team"]
-            P4_IS --> P4_S1["📦 Step 1: Validate Inventory<br/>SELECT qty FROM products WHERE id='iPhone'<br/>Result: qty=50 >= 2 ✅"]
-            P4_S1 --> P4_DB1[("🗄️ Inventory Database<br/>PostgreSQL<br/>Owned by Inventory Service")]
-            
-            P4_S1 --> P4_Platform
-            P4_Platform -.->|"InventoryValidatedEvent"| P4_PS["💰 Payment Service<br/>💳 INDEPENDENT DEPLOYMENT<br/>Tech: Java + Spring<br/>Team: Payment Team"]
-            P4_PS --> P4_S2["💳 Step 2: Process Payment<br/>Call Stripe API + Store locally<br/>Result: $2000 charged ✅"]
-            P4_S2 --> P4_DB2[("🗄️ Payment Database<br/>MySQL<br/>Owned by Payment Service")]
-            
-            P4_S2 --> P4_Platform
-            P4_Platform -.->|"PaymentProcessedEvent"| P4_IS2["🏪 Inventory Service<br/>Same service, different handler"]
-            P4_IS2 --> P4_S3["📉 Step 3: Update Inventory<br/>UPDATE products SET qty=qty-2<br/>Result: iPhone qty now 48 ✅"]
-            P4_S3 --> P4_DB1
-            
-            P4_S3 --> P4_Platform
-            P4_Platform -.->|"InventoryUpdatedEvent"| P4_NS["📬 Notification Service<br/>📧 INDEPENDENT DEPLOYMENT<br/>Tech: Python + FastAPI<br/>Team: Communication Team"]
-            P4_NS --> P4_S4["📧 Step 4: Send Notification<br/>Call SendGrid API + Store logs<br/>Result: Email sent ✅"]
-            P4_S4 --> P4_DB4[("🗄️ Notification Database<br/>MongoDB<br/>Owned by Notification Service")]
-        end
-        
-        P4_DB4 --> P4_Complete["✅ Eventually Consistent Complete<br/>All services coordinated via events only!"]
-        
-        subgraph "🎯 THE AHA MOMENT"
-            P4_Insight["💡 Platform abstracts complexity:<br/>• No direct service-to-service calls<br/>• Each service owns its data & technology<br/>• Teams deploy independently<br/>• Event streaming handles coordination<br/>• Managed service handles infrastructure"]
-        end
-    end
+<div id="phase4-platform-event-driven-architecture" 
+     class="mermaid" 
+     data-external-diagram="/diagrams/phase4-platform-event-driven-architecture.mmd">
 </div>
 
 #### The "Aha!" Moment:

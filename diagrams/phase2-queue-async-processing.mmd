@@ -1,0 +1,30 @@
+flowchart TD
+    subgraph "Phase 2: Queue-Based Asynchronous Processing"
+        P2_User["👤 User Request<br/>Buy 2 iPhones, $2000"]
+        P2_User --> P2_LB["⚖️ Load Balancer"]
+        P2_LB --> P2_API["📱 API Server<br/>🏗️ STILL SINGLE DEPLOYMENT<br/>Tech: Java Spring Boot<br/>Team: Single Development Team"]
+        
+        P2_API --> P2_Queue["📮 MANAGED MESSAGE QUEUE<br/>AWS SQS / RabbitMQ / Redis<br/>🌩️ Platform handles: Persistence, Delivery, Retries"]
+        P2_Queue --> P2_Response["⚡ Immediate Response<br/>Order Queued - Fire & Forget!"]
+        P2_Response --> P2_User
+        
+        subgraph "🔥 KEY INSIGHT: Client Decoupling via Platform"
+            P2_Queue --> P2_Worker["⚙️ Background Worker Process<br/>Same codebase, different process<br/>Scales independently from API"]
+            
+            P2_Worker --> P2_S1["📦 Step 1: Validate Inventory<br/>SELECT qty FROM products WHERE id='iPhone'<br/>Result: qty=50 >= 2 ✅"]
+            
+            P2_S1 --> P2_S2["💳 Step 2: Process Payment<br/>INSERT INTO payments + Call Payment API<br/>Result: $2000 charged ✅"]
+            
+            P2_S2 --> P2_S3["📉 Step 3: Update Inventory<br/>UPDATE products SET qty=qty-2 WHERE id='iPhone'<br/>Result: iPhone qty now 48 ✅"]
+            
+            P2_S3 --> P2_S4["📧 Step 4: Send Notification<br/>INSERT INTO notifications + Call Email API<br/>Result: Email sent ✅"]
+        end
+        
+        P2_S4 --> P2_DB[("🗄️ SHARED RDS DATABASE<br/>PostgreSQL / MySQL<br/>Same schema as Phase 1:<br/>• products table<br/>• payments table<br/>• orders table<br/>• notifications table")]
+        
+        P2_DB --> P2_Complete["✅ Async Processing Complete<br/>User notified via email"]
+        
+        subgraph "🎯 PHASE 2 KEY BREAKTHROUGH"
+            P2_Insight["💡 Async Benefits via Platform:<br/>• Client responsiveness improved<br/>• Queue platform handles reliability<br/>• Worker can retry failed operations<br/>• Better resource utilization<br/>• Still single codebase/deployment<br/>• Worker becomes new bottleneck"]
+        end
+    end

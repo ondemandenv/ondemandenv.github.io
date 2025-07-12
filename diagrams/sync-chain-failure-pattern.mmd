@@ -1,0 +1,36 @@
+sequenceDiagram
+    participant Client
+    participant ServiceA
+    participant ServiceB
+    participant ServiceC
+    participant ServiceD
+    participant RDSA as RDS A
+    participant RDSB as RDS B
+    participant RDSC as RDS C
+    participant RDSD as RDS D
+    participant Istio as Service Mesh
+    
+    Note over Client,RDSD: Anti-Pattern: Synchronous Chain with Individual Databases
+    
+    Client->>+ServiceA: Process Order
+    ServiceA->>+RDSA: Save partial state
+    RDSA-->>-ServiceA: OK
+    
+    ServiceA->>+Istio: Route to Service B
+    Istio->>+ServiceB: Validate Inventory
+    ServiceB->>+RDSB: Check stock
+    RDSB-->>-ServiceB: Stock available
+    ServiceB-->>-Istio: Validation OK
+    Istio-->>-ServiceA: Response
+    
+    ServiceA->>+Istio: Route to Service C
+    Istio->>+ServiceC: Process Payment
+    ServiceC->>+RDSC: Charge card
+    Note over ServiceC,RDSC: Network failure!
+    RDSC-->>ServiceC: Timeout
+    ServiceC-->>-Istio: Payment Failed
+    Istio-->>-ServiceA: Error
+    
+    Note over ServiceA: Now what? Partial state in RDS A<br/>No distributed transaction<br/>Manual compensation required
+    
+    ServiceA-->>-Client: Error (after partial processing)
