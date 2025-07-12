@@ -62,85 +62,70 @@ ONDEMANDENV's **Three-Tier Security Pattern** breaks the stagnation cycle by imp
 <div class="mermaid-diagram mermaid" id="architecture-diagram">
 flowchart TB
     subgraph PublicZone["🌍 TIER 1: INNOVATION LAB NETWORK (Public PKI)"]
-        subgraph InnPlatform["Platform Infrastructure (Shared)"]
+        subgraph InnPlatform["Platform Infrastructure (Shared) - 192.168.0.0/16"]
             InnDB["🗄️ Database Platform Enver<br/>• MongoDB Cluster<br/>• PostgreSQL Cluster<br/>• MySQL Cluster"]
             InnEKS["☸️ EKS Platform Enver<br/>• Kubernetes Cluster<br/>• Container Registry"]
-            InnNet["🌐 Networking Platform Enver<br/>• VPC + Transit Gateway<br/>• 192.168.0.0/16"]
+            InnNet["🌐 Networking Platform Enver<br/>• VPC + Transit Gateway<br/>• Public Internet Access"]
+            
+            subgraph InnAcct1["AWS Account: offshore-team-1<br/>192.168.10.0/24"]
+                InnEnv1["🚀 App-A Innovation Enver<br/>• React Frontend + Node.js<br/>• Consumes: DB + EKS Platform"]
+                InnEnv2["🚀 App-B Innovation Enver<br/>• Python ML Service<br/>• Consumes: DB + EKS Platform"]
+            end
+            
+            subgraph InnAcct2["AWS Account: offshore-team-2<br/>192.168.20.0/24"]
+                InnEnv3["🚀 App-C Innovation Enver<br/>• Java Spring Boot<br/>• Consumes: DB + EKS Platform"]
+            end
+            
+            subgraph InnAcct3["GCP Project: innovation-lab<br/>192.168.30.0/24"]
+                InnEnv4["🚀 App-D Innovation Enver<br/>• Go Microservices<br/>• Consumes: DB + EKS Platform"]
+            end
         end
-        
-        subgraph InnAcct1["AWS Account: offshore-team-1<br/>192.168.10.0/24"]
-            InnEnv1["🚀 App-A Innovation Enver<br/>• React Frontend + Node.js<br/>• Consumes: DB + EKS Platform"]
-            InnEnv2["🚀 App-B Innovation Enver<br/>• Python ML Service<br/>• Consumes: DB + EKS Platform"]
-        end
-        
-        subgraph InnAcct2["AWS Account: offshore-team-2<br/>192.168.20.0/24"]
-            InnEnv3["🚀 App-C Innovation Enver<br/>• Java Spring Boot<br/>• Consumes: DB + EKS Platform"]
-        end
-        
-        subgraph InnAcct3["GCP Project: innovation-lab<br/>192.168.30.0/24"]
-            InnEnv4["🚀 App-D Innovation Enver<br/>• Go Microservices<br/>• Consumes: DB + EKS Platform"]
-        end
-        
-        InnEnv1 -.->|"Platform Service Consumer"| InnPlatform
-        InnEnv2 -.->|"Platform Service Consumer"| InnPlatform
-        InnEnv3 -.->|"Platform Service Consumer"| InnPlatform
-        InnEnv4 -.->|"Platform Service Consumer"| InnPlatform
         
         InnNet -.->|"🌐 Internet Access"| Internet["Public Internet<br/>Package Repositories<br/>External APIs"]
     end
     
     subgraph QuarantineZone["🔍 TIER 2: QUARANTINE NETWORK (Hybrid PKI)"]
-        subgraph QuarPlatform["Platform Infrastructure (Shared)"]
+        subgraph QuarPlatform["Platform Infrastructure (Shared) - 172.16.0.0/12"]
             QuarDB["🗄️ Database Platform Enver<br/>• Isolated DB Clusters<br/>• Security Scanning Tools"]
             QuarEKS["☸️ EKS Platform Enver<br/>• Security Scan Cluster<br/>• Internal Registry"]
-            QuarNet["🌐 Networking Platform Enver<br/>• VPC + Transit Gateway<br/>• 172.16.0.0/12"]
+            QuarNet["🌐 Networking Platform Enver<br/>• VPC + Transit Gateway<br/>• Air-Gapped from Internet"]
+            
+            subgraph QuarAcct1["AWS Account: security-scan-1<br/>172.16.10.0/24"]
+                QuarEnv1["🛡️ App-A Quarantine Enver<br/>• Security Scanning<br/>• Consumes: Security Platform"]
+                QuarEnv2["🛡️ App-B Quarantine Enver<br/>• License Compliance<br/>• Consumes: Security Platform"]
+            end
+            
+            subgraph QuarAcct2["AWS Account: security-scan-2<br/>172.16.20.0/24"]
+                QuarEnv3["🛡️ App-C Quarantine Enver<br/>• Container Scanning<br/>• Consumes: Security Platform"]
+            end
+            
+            subgraph QuarAcct3["GCP Project: security-quarantine<br/>172.16.30.0/24"]
+                QuarEnv4["🛡️ App-D Quarantine Enver<br/>• Binary Analysis<br/>• Consumes: Security Platform"]
+            end
         end
-        
-        subgraph QuarAcct1["AWS Account: security-scan-1<br/>172.16.10.0/24"]
-            QuarEnv1["🛡️ App-A Quarantine Enver<br/>• Security Scanning<br/>• Consumes: Security Platform"]
-            QuarEnv2["🛡️ App-B Quarantine Enver<br/>• License Compliance<br/>• Consumes: Security Platform"]
-        end
-        
-        subgraph QuarAcct2["AWS Account: security-scan-2<br/>172.16.20.0/24"]
-            QuarEnv3["🛡️ App-C Quarantine Enver<br/>• Container Scanning<br/>• Consumes: Security Platform"]
-        end
-        
-        subgraph QuarAcct3["GCP Project: security-quarantine<br/>172.16.30.0/24"]
-            QuarEnv4["🛡️ App-D Quarantine Enver<br/>• Binary Analysis<br/>• Consumes: Security Platform"]
-        end
-        
-        QuarEnv1 -.->|"Platform Service Consumer"| QuarPlatform
-        QuarEnv2 -.->|"Platform Service Consumer"| QuarPlatform
-        QuarEnv3 -.->|"Platform Service Consumer"| QuarPlatform
-        QuarEnv4 -.->|"Platform Service Consumer"| QuarPlatform
         
         QuarNet -.->|"❌ No Internet"| NoInternet1["❌ Blocked"]
     end
     
     subgraph InternalZone["🔒 TIER 3: INTERNAL POC NETWORK (Private PKI)"]
-        subgraph IntPlatform["Platform Infrastructure (Shared)"]
+        subgraph IntPlatform["Platform Infrastructure (Shared) - 10.0.0.0/8"]
             IntDB["🗄️ Database Platform Enver<br/>• Private PKI DB Clusters<br/>• VPC Endpoints Only"]
             IntEKS["☸️ EKS Platform Enver<br/>• Internal POC Cluster<br/>• Private Registry"]
-            IntNet["🌐 Networking Platform Enver<br/>• VPC + Transit Gateway<br/>• 10.0.0.0/8"]
+            IntNet["🌐 Networking Platform Enver<br/>• VPC + Transit Gateway<br/>• Zero Internet Access"]
+            
+            subgraph IntAcct1["AWS Account: internal-poc-1<br/>10.1.0.0/24"]
+                IntEnv1["⚙️ App-A Internal Enver<br/>• Private PKI Application<br/>• Consumes: Internal Platform"]
+                IntEnv2["⚙️ App-B Internal Enver<br/>• Zero Internet Access<br/>• Consumes: Internal Platform"]
+            end
+            
+            subgraph IntAcct2["AWS Account: internal-poc-2<br/>10.2.0.0/24"]
+                IntEnv3["⚙️ App-C Internal Enver<br/>• Internal POC App<br/>• Consumes: Internal Platform"]
+            end
+            
+            subgraph IntAcct3["GCP Project: internal-secure<br/>10.3.0.0/24"]
+                IntEnv4["⚙️ App-D Internal Enver<br/>• Secure Internal App<br/>• Consumes: Internal Platform"]
+            end
         end
-        
-        subgraph IntAcct1["AWS Account: internal-poc-1<br/>10.1.0.0/24"]
-            IntEnv1["⚙️ App-A Internal Enver<br/>• Private PKI Application<br/>• Consumes: Internal Platform"]
-            IntEnv2["⚙️ App-B Internal Enver<br/>• Zero Internet Access<br/>• Consumes: Internal Platform"]
-        end
-        
-        subgraph IntAcct2["AWS Account: internal-poc-2<br/>10.2.0.0/24"]
-            IntEnv3["⚙️ App-C Internal Enver<br/>• Internal POC App<br/>• Consumes: Internal Platform"]
-        end
-        
-        subgraph IntAcct3["GCP Project: internal-secure<br/>10.3.0.0/24"]
-            IntEnv4["⚙️ App-D Internal Enver<br/>• Secure Internal App<br/>• Consumes: Internal Platform"]
-        end
-        
-        IntEnv1 -.->|"Platform Service Consumer"| IntPlatform
-        IntEnv2 -.->|"Platform Service Consumer"| IntPlatform
-        IntEnv3 -.->|"Platform Service Consumer"| IntPlatform
-        IntEnv4 -.->|"Platform Service Consumer"| IntPlatform
         
         IntNet -.->|"❌ No Internet"| NoInternet2["❌ Blocked"]
     end
