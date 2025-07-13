@@ -105,9 +105,12 @@ class MermaidEnhanced {
 
     initializePanZoom(diagramId) {
         const diagram = document.getElementById(diagramId);
-        const svg = diagram.querySelector('svg');
+        console.log('Initializing pan/zoom for diagram:', diagramId, 'diagram element:', diagram);
+        const svg = diagram?.querySelector('svg');
+        console.log('Found SVG:', svg);
         
         if (!svg || this.panZoomInstances.has(diagramId)) {
+            console.log('Skipping pan/zoom init - no SVG or already initialized');
             return;
         }
 
@@ -126,6 +129,7 @@ class MermaidEnhanced {
             });
 
             this.panZoomInstances.set(diagramId, panZoomInstance);
+            console.log('Successfully initialized pan/zoom for diagram:', diagramId);
         } catch (error) {
             console.warn('Failed to initialize pan/zoom for diagram:', diagramId, error);
         }
