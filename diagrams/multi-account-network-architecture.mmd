@@ -1,3 +1,4 @@
+%%{init: {"flowchart": {"htmlLabels": false}, "theme": "base", "themeVariables": {"primaryColor": "#ffffff", "primaryTextColor": "#000000", "primaryBorderColor": "#000000", "lineColor": "#000000"}}}%%
 flowchart TB
     %% ========================================
     %% NETWORKING ACCOUNT - Contains Both Networks
@@ -169,22 +170,22 @@ flowchart TB
     %% ========================================
     
     %% PRODUCTION: Apps → Production Hub → Platforms
-    App1ManifestProd ==> CentralControlProd
-    App1SchemaProd ==> CentralControlProd
-    App2ManifestProd ==> CentralControlProd
+    App1ManifestProd ==>|"📤 Manifests"| CentralControlProd
+    App1SchemaProd ==>|"📤 Schema"| CentralControlProd
+    App2ManifestProd ==>|"📤 Manifests"| CentralControlProd
     
-    CentralControlProd ==> EKSDeployProd
-    CentralControlProd ==> RDSDeployProd
+    CentralControlProd ==>|"🔧 Deploy Prod"| EKSDeployProd
+    CentralControlProd ==>|"🔧 Deploy Prod"| RDSDeployProd
     
     EKSDeployProd ==> EKSProd
     RDSDeployProd ==> RDSProd
     
     %% LOWER ENVIRONMENT: Apps → LE Hub → Platforms  
-    App1ManifestLE ==> CentralControlLE
-    App1SchemaLE ==> CentralControlLE
+    App1ManifestLE ==>|"📤 Manifests"| CentralControlLE
+    App1SchemaLE ==>|"📤 Schema"| CentralControlLE
     
-    CentralControlLE ==> EKSDeployLE
-    CentralControlLE ==> RDSDeployLE
+    CentralControlLE ==>|"🔧 Deploy LE"| EKSDeployLE
+    CentralControlLE ==>|"🔧 Deploy LE"| RDSDeployLE
     
     EKSDeployLE ==> EKSLENet
     RDSDeployLE ==> RDSLENet
@@ -194,9 +195,10 @@ flowchart TB
     %% ========================================
     
     %% Enver 1 & 2 Runtime Access
-    EKSProd -.-> App1ResProd
-    EKSProd -.-> RDSProd
-    EKSProd -.-> App2ResProd
+    EKSProd -.->|"🔐 Role 1 → DynamoDB"| App1ResProd
+    EKSProd -.->|"🔐 Role 2 → RDS"| RDSProd
+    EKSProd -.->|"🔐 Role A → DB"| RDSProd  
+    EKSProd -.->|"🔐 Role B → S3"| App2ResProd
 
     %% ========================================
     %% STYLING

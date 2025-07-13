@@ -127,7 +127,7 @@
                             console.log('Enhancing diagrams with zoom/pan/fullscreen functionality');
                             window.MermaidEnhanced.enhanceAllDiagrams();
                         }
-                    }, 1000);
+                    }, 500);
                 }
             } else {
                 console.log('Enhancement libraries not available - diagrams will display without interactive features');
@@ -145,16 +145,13 @@
                 }
                 
                 const diagramContent = await response.text();
-                // Use the original ID from the container if it exists, otherwise generate one
-                const originalId = container.id;
-                const diagramId = originalId || ('mermaid-diagram-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9));
+                const diagramId = 'mermaid-diagram-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
                 
                 // Use mermaid.render to convert the diagram content to SVG
                 const { svg } = await mermaid.render(diagramId, diagramContent);
                 
-                // Insert the rendered SVG into the container and preserve the original ID
+                // Insert the rendered SVG into the container
                 container.innerHTML = svg;
-                container.id = diagramId;
                 console.log('External diagram loaded successfully:', diagramPath);
                 
             } catch (error) {
