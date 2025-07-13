@@ -8,10 +8,10 @@ This shows how to replace the complex custom implementation in `isolated-offshor
 <!-- Complex custom implementation with fullscreen, zoom, pan -->
 <div class="diagram-container">
 <div class="diagram-controls">
-<button class="fullscreen-btn" onclick="toggleFullscreen(document.getElementById('architecture-diagram'))">🔍 View Fullscreen</button>
+<button class="fullscreen-btn" onclick="toggleFullscreen(document.getElementById('architecture-diagram-example'))">🔍 View Fullscreen</button>
 <!-- ... many more controls and complex JavaScript -->
 </div>
-<div class="mermaid-diagram mermaid" id="architecture-diagram">
+<div class="mermaid-diagram mermaid" id="architecture-diagram-example">
 </div>
 </div>
 
@@ -29,7 +29,7 @@ This shows how to replace the complex custom implementation in `isolated-offshor
 ### Option 1: External Diagram (Recommended)
 ```html
 <!-- Load external diagram with automatic enhancement -->
-<div id="architecture-diagram" 
+<div id="architecture-diagram-example" 
      class="mermaid" 
      data-external-diagram="/diagrams/three-tier-security-architecture.mmd">
 </div>

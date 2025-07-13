@@ -24,7 +24,7 @@ This comprehensive analysis explores how operator-led decomposition, coupled wit
 
 Before exploring the perilous path, let's establish what a properly functioning Phase 1 monolith looks like:
 
-<div id="phase1-classic-monolith" 
+<div id="phase1-classic-monolith-diagram" 
      class="mermaid" 
      data-external-diagram="/diagrams/phase1-classic-monolith.mmd">
 </div>
@@ -40,7 +40,7 @@ Before exploring the perilous path, let's establish what a properly functioning 
 
 Now contrast this with the perilous path - the forced decomposition approach:
 
-<div id="distributed-monolith-service-mesh" 
+<div id="distributed-monolith-service-mesh-diagram" 
      class="mermaid" 
      data-external-diagram="/diagrams/distributed-monolith-service-mesh.mmd">
 </div>
@@ -63,7 +63,7 @@ One of the most insidious aspects of this anti-pattern is how operations teams m
 
 ### The Ticket Queue Death Spiral
 
-<div id="ops-bottleneck-sequence" 
+<div id="ops-bottleneck-sequence-diagram" 
      class="mermaid" 
      data-external-diagram="/diagrams/ops-bottleneck-sequence.mmd">
 </div>
@@ -108,7 +108,7 @@ spec:
 
 The most devastating aspect of this anti-pattern is the loss of ACID properties while maintaining synchronous call patterns:
 
-<div id="sync-chain-failure-pattern" 
+<div id="sync-chain-failure-pattern-diagram" 
      class="mermaid" 
      data-external-diagram="/diagrams/sync-chain-failure-pattern.mmd">
 </div>
@@ -282,7 +282,7 @@ spec:
 
 Instead of forced decomposition, the proper evolution path follows these phases:
 
-<div id="perilous-evolution-path" 
+<div id="perilous-evolution-path-diagram" 
      class="mermaid" 
      data-external-diagram="/diagrams/perilous-evolution-path.mmd">
 </div>
