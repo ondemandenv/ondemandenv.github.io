@@ -1,110 +1,137 @@
 flowchart TB
     %% ========================================
-    %% PRODUCTION NETWORK - 10.0.0.0/8
+    %% NETWORKING ACCOUNT - Contains Both Networks
     %% ========================================
-    subgraph ProdNetwork["🔒 PRODUCTION NETWORK - 10.0.0.0/8"]
+    subgraph NetworkingAccount["🌐 NETWORKING ACCOUNT (590183907424)"]
         direction TB
         
-        subgraph ProdCentral["🎯 CENTRAL ORCHESTRATION (Account: 590184031795)"]
-            direction TB
-            CentralControlProd["🎯 Platform Orchestration<br/>• Cross-account deployment coordination<br/>• Environment versioning<br/>• Policy as Code Engine"]
+        %% Production Network Infrastructure
+        subgraph ProdNetInfra["🔒 Production Network Infrastructure"]
+            direction LR
+            TGWProd["🔗 Transit Gateway<br/>10.0.0.1"]
+            NATProd["🌍 NAT Gateway"]
+            IPAMProd["📊 IPAM<br/>10.0.0.0/8"]
         end
         
-        subgraph ProdNetworking["🌐 NETWORKING PLATFORM (Account: 590183907424)"]
-            direction TB
-            subgraph ProdNetInfra["Network Infrastructure"]
-                direction LR
-                TGWProd["🔗 Transit Gateway<br/>Network Hub<br/>10.0.0.1"]
-                NATProd["🌍 NAT Gateway<br/>Internet Access"]
-                IPAMProd["📊 IPAM Pool<br/>10.0.0.0/8<br/>IP Management"]
-            end
-            CentralVPCProd["🏗️ Central VPC: 10.1.0.0/16"]
-            NetDeployProd["🚀 Network Functions<br/>• VPC sharing approval<br/>• Route table management<br/>• Cross-account connectivity"]
-        end
-        
-        subgraph ProdPlatforms["🏗️ PLATFORM SERVICES (Account: 975050243618)"]
-            direction TB
-            subgraph ProdEKS["⚙️ EKS Platform"]
-                direction TB
-                EKSVPCProd["📦 VPC: 10.2.0.0/16"]
-                EKSProd["☸️ EKS Cluster"]
-                EKSDeployProd["🚀 K8s Functions<br/>• Manifest deployment<br/>• ServiceAccount mgmt<br/>• IRSA configuration"]
-            end
-            subgraph ProdRDS["🗄️ RDS Platform"]
-                direction TB
-                RDSVPCProd["📦 VPC: 10.3.0.0/16"]
-                RDSProd["🗄️ RDS Cluster"]
-                RDSDeployProd["🚀 DB Functions<br/>• Schema deployment<br/>• Role/user management<br/>• Access control"]
-            end
-        end
-        
-        subgraph ProdApps["📱 APPLICATION WORKLOADS (Account: 590184130740)"]
-            direction TB
-            subgraph ProdEnver1["🚀 Enver 1 - Complete Vertical Slice"]
-                direction TB
-                App1VPCProd["📦 VPC: 10.4.0.0/16"]
-                App1ResProd["💾 Resources<br/>• IAM Role 1 (DynamoDB)<br/>• IAM Role 2 (RDS)<br/>• S3 buckets, secrets"]
-                App1ManifestProd["📋 K8s Manifests<br/>• Deployment definitions<br/>• ServiceAccount configs"]
-                App1SchemaProd["🗃️ DB Schema/Roles<br/>• Application database<br/>• User permissions"]
-            end
-            subgraph ProdEnver2["🚀 Enver 2 - No VPC Needed"]
-                direction TB
-                App2VPCProd["📦 VPC: 10.5.0.0/16"]
-                App2ResProd["💾 Resources<br/>• IAM Role A (DB via TGW)<br/>• IAM Role B (S3)<br/>• Configuration"]
-                App2ManifestProd["📋 K8s Manifests<br/>• Deployment definitions<br/>• ServiceAccount configs"]
-            end
+        %% LE Network Infrastructure  
+        subgraph LENetInfra["🛠️ LE Network Infrastructure"]
+            direction LR
+            TGWLE["🔗 Transit Gateway<br/>172.16.0.1"]
+            NATLE["🌍 NAT Gateway"]
+            IPAMLE["📊 IPAM<br/>172.16.0.0/12"]
         end
     end
 
     %% ========================================
+    %% CENTRAL ORCHESTRATION ACCOUNT - Contains VPCs for Both Networks
+    %% ========================================
+    subgraph CentralAccount["🎯 CENTRAL ORCHESTRATION ACCOUNT (590184031795)"]
+        direction LR
+        
+        %% Production Network Central VPC with its deployment hub
+        subgraph ProdCentralVPC["🔒 Production Central VPC<br/>10.1.0.0/16"]
+            direction TB
+            CentralControlProd["🎯 Production Deployment Hub<br/>🔧 Lambda Functions<br/>• K8s manifest deployment<br/>• DB schema deployment<br/>• VPC management<br/>🔐 Cross-account IAM roles"]
+        end
+        
+        %% LE Network Central VPC with its deployment hub
+        subgraph LECentralVPC["🛠️ LE Central VPC<br/>172.16.1.0/16"]
+            direction TB
+            CentralControlLE["🎯 LE Deployment Hub<br/>🔧 Lambda Functions<br/>• K8s manifest deployment<br/>• DB schema deployment<br/>• VPC management<br/>🔐 Cross-account IAM roles"]
+        end
+    end
+
+    %% ========================================
+    %% PRODUCTION NETWORK - 10.0.0.0/8
+    %% Envers surrounding the network infrastructure
+    %% ========================================
+    subgraph ProdNetwork["🔒 PRODUCTION NETWORK - 10.0.0.0/8"]
+        direction TB
+        
+        
+        %% Left: Application Envers
+        subgraph ProdApp1["📱 APP ENVER 1 (Account: 590184130740)"]
+            direction TB
+            subgraph ProdEnver1["🚀 Application Enver 1"]
+                App1ManifestProd["📋 K8s Manifests"]
+                App1SchemaProd["🗃️ DB Schema/Roles"]
+                App1ResProd["💾 IAM Roles & Resources"]
+                App1VPCProd["📦 VPC: 10.4.0.0/16"]
+            end
+        end
+        
+        subgraph ProdApp2["📱 APP ENVER 2 (Account: 590184130741)"]
+            direction TB
+            subgraph ProdEnver2["🚀 Application Enver 2"]
+                App2ManifestProd["📋 K8s Manifests"]
+                App2ResProd["💾 IAM Roles & Resources"]
+                App2VPCProd["📦 VPC: 10.5.0.0/16"]
+            end
+        end
+        
+        %% Right: Platform Services
+        subgraph ProdEKSAccount["⚙️ EKS PLATFORM ACCOUNT (975050243618)"]
+            direction TB
+            subgraph ProdEKS["⚙️ EKS Platform Service"]
+                EKSVPCProd["📦 VPC: 10.2.0.0/16"]
+                EKSProd["☸️ EKS Cluster"]
+                EKSDeployProd["🚀 K8s Functions"]
+            end
+        end
+        
+        subgraph ProdRDSAccount["🗄️ RDS PLATFORM ACCOUNT (975050243619)"]
+            direction TB
+            subgraph ProdRDS["🗄️ RDS Platform Service"]
+                RDSVPCProd["📦 VPC: 10.3.0.0/16"]
+                RDSProd["🗄️ RDS Cluster"]
+                RDSDeployProd["🚀 DB Functions"]
+            end
+        end
+        
+        %% Position around network infrastructure
+        ProdNetInfra
+    end
+
+    %% ========================================
     %% LOWER ENVIRONMENT NETWORK - 172.16.0.0/12
+    %% Envers surrounding the network infrastructure
     %% ========================================
     subgraph LENetwork["🛠️ LOWER ENVIRONMENT NETWORK - 172.16.0.0/12"]
         direction TB
         
-        subgraph LECentral["🎯 CENTRAL ORCHESTRATION (Account: 590184031795)"]
-            direction TB
-            CentralControlLE["🎯 Platform Orchestration<br/>• Cross-account deployment coordination<br/>• Environment versioning<br/>• Policy as Code Engine"]
-        end
         
-        subgraph LENetworking["🌐 NETWORKING PLATFORM (Account: 590183907424)"]
-            direction TB
-            subgraph LENetInfra["Network Infrastructure"]
-                direction LR
-                TGWLE["🔗 Transit Gateway<br/>Network Hub<br/>172.16.0.1"]
-                NATLE["🌍 NAT Gateway<br/>Internet Access"]
-                IPAMLE["📊 IPAM Pool<br/>172.16.0.0/12<br/>IP Management"]
-            end
-            CentralVPCLE["🏗️ Central VPC: 172.16.1.0/16"]
-            NetDeployLE["🚀 Network Functions<br/>• VPC sharing approval<br/>• Route table management<br/>• Cross-account connectivity"]
-        end
-        
-        subgraph LEPlatforms["🏗️ PLATFORM SERVICES (Account: 975050243618)"]
-            direction TB
-            subgraph LEEKS["⚙️ EKS Platform"]
-                direction TB
-                EKSVPCLENet["📦 VPC: 172.16.2.0/16"]
-                EKSLENet["☸️ EKS Cluster"]
-                EKSDeployLE["🚀 K8s Functions<br/>• Manifest deployment<br/>• ServiceAccount mgmt<br/>• IRSA configuration"]
-            end
-            subgraph LERDS["🗄️ RDS Platform"]
-                direction TB
-                RDSVPCLENet["📦 VPC: 172.16.3.0/16"]
-                RDSLENet["🗄️ RDS Cluster"]
-                RDSDeployLE["🚀 DB Functions<br/>• Schema deployment<br/>• Role/user management<br/>• Access control"]
-            end
-        end
-        
-        subgraph LEApps["📱 APPLICATION WORKLOADS (Account: 590184130740)"]
+        %% Left: Application Envers
+        subgraph LEApp1["📱 APP ENVER 1 (Account: 590184130740)"]
             direction TB
             subgraph LEEnver1["🚀 Application Enver"]
-                direction TB
+                App1ManifestLE["📋 K8s Manifests"]
+                App1SchemaLE["🗃️ DB Schema/Roles"]
+                App1ResLENet["💾 IAM Roles & Resources"]
                 App1VPCLENet["📦 VPC: 172.16.4.0/16"]
-                App1ResLENet["💾 Resources<br/>• IAM roles<br/>• S3 buckets, secrets<br/>• Configuration"]
-                App1ManifestLE["📋 K8s Manifests<br/>• Deployment definitions<br/>• ServiceAccount configs"]
-                App1SchemaLE["🗃️ DB Schema/Roles<br/>• Application database<br/>• User permissions"]
             end
         end
+        
+        %% Right: Platform Services
+        subgraph LEEKSAccount["⚙️ EKS PLATFORM ACCOUNT (975050243618)"]
+            direction TB
+            subgraph LEEKS["⚙️ EKS Platform Service"]
+                EKSVPCLENet["📦 VPC: 172.16.2.0/16"]
+                EKSLENet["☸️ EKS Cluster"]
+                EKSDeployLE["🚀 K8s Functions"]
+            end
+        end
+        
+        subgraph LERDSAccount["🗄️ RDS PLATFORM ACCOUNT (975050243619)"]
+            direction TB
+            subgraph LERDS["🗄️ RDS Platform Service"]
+                RDSVPCLENet["📦 VPC: 172.16.3.0/16"]
+                RDSLENet["🗄️ RDS Cluster"]
+                RDSDeployLE["🚀 DB Functions"]
+            end
+        end
+        
+        %% Position around network infrastructure
+        LENetInfra
     end
 
     %% ========================================
@@ -115,91 +142,62 @@ flowchart TB
     end
 
     %% ========================================
-    %% NETWORK CONNECTIONS
+    %% NETWORK BACKBONE CONNECTIONS
     %% ========================================
     
-    %% Production Network Connections
-    TGWProd === CentralVPCProd
+    %% Central VPCs connect to their respective TGWs
+    ProdCentralVPC === TGWProd
+    LECentralVPC === TGWLE
+    
+    %% Production TGW Hub - connecting all VPCs in production network
     TGWProd === EKSVPCProd
     TGWProd === RDSVPCProd
     TGWProd === App1VPCProd
     TGWProd === App2VPCProd
-    TGWProd --> NATProd
     
-    %% LE Network Connections
-    TGWLE === CentralVPCLE
+    %% LE TGW Hub - connecting all VPCs in LE network
     TGWLE === EKSVPCLENet
     TGWLE === RDSVPCLENet
     TGWLE === App1VPCLENet
-    TGWLE --> NATLE
-
+    
     %% Internet Access
-    NATProd --> ExtServices
-    NATLE --> ExtServices
-
-    %% IPAM Management
-    IPAMProd -.-> CentralVPCProd
-    IPAMProd -.-> EKSVPCProd
-    IPAMProd -.-> RDSVPCProd
-    IPAMProd -.-> App1VPCProd
-    IPAMProd -.-> App2VPCProd
-    
-    IPAMLE -.-> CentralVPCLE
-    IPAMLE -.-> EKSVPCLENet
-    IPAMLE -.-> RDSVPCLENet
-    IPAMLE -.-> App1VPCLENet
+    TGWProd --> NATProd --> ExtServices
+    TGWLE --> NATLE --> ExtServices
 
     %% ========================================
-    %% CROSS-ACCOUNT DEPLOYMENT FLOWS
+    %% APPLICATION-CENTRIC DEPLOYMENT FLOWS
     %% ========================================
     
-    %% Central Account Orchestration (Production)
-    CentralControlProd -.->|"🎯 Orchestrate"| NetDeployProd
-    CentralControlProd -.->|"🎯 Orchestrate"| EKSDeployProd
-    CentralControlProd -.->|"🎯 Orchestrate"| RDSDeployProd
+    %% PRODUCTION: Apps → Production Hub → Platforms
+    App1ManifestProd ==>|"📤 Manifests"| CentralControlProd
+    App1SchemaProd ==>|"📤 Schema"| CentralControlProd
+    App2ManifestProd ==>|"📤 Manifests"| CentralControlProd
     
-    %% Enver 1 Deployment Flow (590184130740 → 975050243618)
-    App1ManifestProd ==>|"🚀 Cross-Account Deploy<br/>590184130740 → 975050243618"| EKSDeployProd
-    EKSDeployProd ==>|"☸️ Deploy to Cluster"| EKSProd
-    App1SchemaProd ==>|"🚀 Cross-Account Deploy<br/>590184130740 → 975050243618"| RDSDeployProd
-    RDSDeployProd ==>|"🗄️ Deploy to Database"| RDSProd
+    CentralControlProd ==>|"🔧 Deploy Prod"| EKSDeployProd
+    CentralControlProd ==>|"🔧 Deploy Prod"| RDSDeployProd
     
-    %% Enver 2 Deployment Flow (590184130740 → 975050243618)
-    App2ManifestProd ==>|"🚀 Cross-Account Deploy<br/>590184130740 → 975050243618"| EKSDeployProd
+    EKSDeployProd ==> EKSProd
+    RDSDeployProd ==> RDSProd
     
-    %% Network Management Flows (590183907424 → 590184130740)
-    NetDeployProd -.->|"🔗 Cross-Account VPC Sharing<br/>590183907424 → 590184130740"| App1VPCProd
-    NetDeployProd -.->|"🔗 Cross-Account VPC Sharing<br/>590183907424 → 590184130740"| App2VPCProd
-
+    %% LOWER ENVIRONMENT: Apps → LE Hub → Platforms  
+    App1ManifestLE ==>|"📤 Manifests"| CentralControlLE
+    App1SchemaLE ==>|"📤 Schema"| CentralControlLE
+    
+    CentralControlLE ==>|"🔧 Deploy LE"| EKSDeployLE
+    CentralControlLE ==>|"🔧 Deploy LE"| RDSDeployLE
+    
+    EKSDeployLE ==> EKSLENet
+    RDSDeployLE ==> RDSLENet
+    
     %% ========================================
-    %% RUNTIME COMMUNICATION (CROSS-ACCOUNT IRSA)
-    %% ========================================
-    
-    %% Enver 1: Pod assuming IAM roles across accounts
-    EKSProd -.->|"🔐 Cross-Account IRSA<br/>975050243618 → 590184130740<br/>IAM Role 1 → DynamoDB"| App1ResProd
-    EKSProd -.->|"🔐 Cross-Account IRSA<br/>975050243618 → 975050243618<br/>IAM Role 2 → RDS via TGW"| RDSProd
-    
-    %% Enver 2: Pod assuming IAM roles across accounts  
-    EKSProd -.->|"🔐 Cross-Account IRSA<br/>975050243618 → 975050243618<br/>IAM Role A → DB via TGW"| RDSProd
-    EKSProd -.->|"🔐 Cross-Account IRSA<br/>975050243618 → 590184130740<br/>IAM Role B → S3"| App2ResProd
-
-    %% ========================================
-    %% LE ENVIRONMENT DEPLOYMENT FLOWS
+    %% RUNTIME COMMUNICATION (IRSA)
     %% ========================================
     
-    %% Central Account Orchestration (LE)
-    CentralControlLE -.->|"🎯 Orchestrate"| NetDeployLE
-    CentralControlLE -.->|"🎯 Orchestrate"| EKSDeployLE
-    CentralControlLE -.->|"🎯 Orchestrate"| RDSDeployLE
-    
-    %% LE Application Deployment
-    App1ManifestLE ==>|"🚀 Cross-Account Deploy<br/>590184130740 → 975050243618"| EKSDeployLE
-    EKSDeployLE ==>|"☸️ Deploy to Cluster"| EKSLENet
-    App1SchemaLE ==>|"🚀 Cross-Account Deploy<br/>590184130740 → 975050243618"| RDSDeployLE
-    RDSDeployLE ==>|"🗄️ Deploy to Database"| RDSLENet
-    
-    %% LE Network Management
-    NetDeployLE -.->|"🔗 Cross-Account VPC Sharing<br/>590183907424 → 590184130740"| App1VPCLENet
+    %% Enver 1 & 2 Runtime Access
+    EKSProd -.->|"🔐 Role 1 → DynamoDB"| App1ResProd
+    EKSProd -.->|"🔐 Role 2 → RDS"| RDSProd
+    EKSProd -.->|"🔐 Role A → DB"| RDSProd  
+    EKSProd -.->|"🔐 Role B → S3"| App2ResProd
 
     %% ========================================
     %% STYLING
@@ -209,23 +207,32 @@ flowchart TB
     style ProdNetwork fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
     style LENetwork fill:#e8f4fd,stroke:#039be5,stroke-width:3px
     
-    %% Central orchestration styling
-    style ProdCentral fill:#fff3e0,stroke:#e65100,stroke-width:2px
-    style LECentral fill:#fff3e0,stroke:#e65100,stroke-width:2px
+    %% Networking account styling
+    style NetworkingAccount fill:#e8f5e8,stroke:#4caf50,stroke-width:3px
     
-    %% Network platform styling
-    style ProdNetworking fill:#81c784,stroke:#388e3c,stroke-width:2px
-    style LENetworking fill:#81c784,stroke:#388e3c,stroke-width:2px
+    %% Central account styling
+    style CentralAccount fill:#fff3e0,stroke:#e65100,stroke-width:3px
     
-    %% Platform services styling  
-    style ProdPlatforms fill:#bbdefb,stroke:#0288d1,stroke-width:2px
-    style LEPlatforms fill:#bbdefb,stroke:#0288d1,stroke-width:2px
+    %% Platform account styling  
+    style ProdEKSAccount fill:#bbdefb,stroke:#0288d1,stroke-width:2px
+    style ProdRDSAccount fill:#ffcdd2,stroke:#d32f2f,stroke-width:2px
+    style LEEKSAccount fill:#bbdefb,stroke:#0288d1,stroke-width:2px
+    style LERDSAccount fill:#ffcdd2,stroke:#d32f2f,stroke-width:2px
     
-    %% Application styling
-    style ProdApps fill:#e8f4fd,stroke:#039be5,stroke-width:1px
-    style LEApps fill:#e8f4fd,stroke:#039be5,stroke-width:1px
+    %% Application account styling
+    style ProdApp1 fill:#e8f4fd,stroke:#039be5,stroke-width:2px
+    style ProdApp2 fill:#e8f4fd,stroke:#039be5,stroke-width:2px
+    style LEApp1 fill:#e8f4fd,stroke:#039be5,stroke-width:2px
     
     %% Enver styling
     style ProdEnver1 fill:#c8e6c9,stroke:#66bb6a,stroke-width:2px
     style ProdEnver2 fill:#c8e6c9,stroke:#66bb6a,stroke-width:2px
     style LEEnver1 fill:#c8e6c9,stroke:#66bb6a,stroke-width:2px
+    
+    %% Central VPC styling
+    style ProdCentralVPC fill:#ffe0b2,stroke:#f57c00,stroke-width:2px
+    style LECentralVPC fill:#ffe0b2,stroke:#f57c00,stroke-width:2px
+    
+    %% Network infrastructure styling
+    style ProdNetInfra fill:#ffecb3,stroke:#ffa000,stroke-width:2px
+    style LENetInfra fill:#ffecb3,stroke:#ffa000,stroke-width:2px
