@@ -224,14 +224,14 @@ public class MonolithApp {
 // Payment Service JVM: jackson-2.8 (business requirement)
 // Analytics Service JVM: jackson-2.15 (business requirement)
 // Order Service JVM: jackson-2.12 (business requirement)
-// Result: JAR conflicts eliminated, business complexity remains linear
+// Result: JAR conflicts eliminated, focus restored to business problems
 ```
 
-**Complexity Transformation**:
+**Experience Transformation**:
 - **Accidental complexity**: Eliminated (no more JAR hell)
-- **Essential complexity**: Remains linear to business functions
+- **Essential complexity**: Focused on actual business problems  
 - **Coordination complexity**: Automated by platform
-- **Developer time on business logic**: 40% → 90%
+- **Developer focus**: Shifted from dependency debugging to business logic
 
 #### Example Implementation:
 ```java

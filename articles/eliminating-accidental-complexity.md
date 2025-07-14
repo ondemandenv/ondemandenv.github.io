@@ -15,16 +15,11 @@ keywords: ["accidental complexity", "domain driven design", "exponential growth"
 
 ## The Core Problem: Exponential vs Linear Complexity
 
-**Accidental complexity** emerges when business domains are forced to share boundaries. This isn't inherent to your business problem - it's unnecessary technical overhead that grows exponentially when domains are entangled.
+**Accidental complexity** emerges when business domains are forced to share boundaries. This isn't inherent to your business problem - it's unnecessary technical overhead that compounds when domains are entangled.
 
-```
-Monolithic Domain Entanglement:
-Business domains: 1, 2, 3, 4, 5... (linear)
-Cross-domain conflicts: 1, 4, 9, 16, 25... (exponential)
-Result: Accidental complexity overwhelms business logic
-```
+Every experienced engineer recognizes this pattern: what starts as a simple change becomes a coordination nightmare across multiple teams and systems. The more domains you force together, the harder everything becomes.
 
-**Domain-driven boundaries + platform automation** keeps complexity linear to actual business functions.
+**Domain-driven boundaries + platform automation** focus complexity where it belongs: on actual business problems, not artificial coordination overhead.
 
 ---
 
@@ -99,22 +94,22 @@ public class OrderService {
 
 ### 4. Team Communication Overhead
 
-**Technical boundaries create exponential coordination**:
+**Technical boundaries create coordination chaos**:
 ```
-Technical Team Structure (5 teams):
-├── Frontend Team ←→ Backend Team (1 interface)
-├── Backend Team ←→ Database Team (1 interface)  
-├── Database Team ←→ DevOps Team (1 interface)
-├── DevOps Team ←→ QA Team (1 interface)
-├── Cross-cutting concerns: 5×4/2 = 10 coordination relationships
+Technical Team Structure:
+├── Frontend Team needs Backend Team for API changes
+├── Backend Team needs Database Team for schema changes
+├── Database Team needs DevOps Team for deployment
+├── DevOps Team needs QA Team for environment validation
+├── Result: Every change requires multiple team coordination
 
-Domain Team Structure (5 domains):
-├── Payment Domain (self-contained)
-├── Analytics Domain (self-contained)
-├── Order Domain (self-contained)  
-├── Inventory Domain (self-contained)
-├── Customer Domain (self-contained)
-├── Cross-domain interfaces: Event contracts only
+Domain Team Structure:
+├── Payment Domain (complete ownership)
+├── Analytics Domain (complete ownership)
+├── Order Domain (complete ownership)  
+├── Inventory Domain (complete ownership)
+├── Customer Domain (complete ownership)
+├── Cross-domain coordination: Async events only
 ```
 
 ### 5. Deployment Coordination Complexity
