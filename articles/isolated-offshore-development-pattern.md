@@ -258,6 +258,12 @@ Internet Access (Public PKI)
 **Primary Risk**: Package vulnerabilities and malicious dependencies
 **Mitigation**: Risk is contained by the **no sensitive data** rule - vulnerabilities cannot compromise customer data that doesn't exist in this tier
 
+**Critical Security Insight**: Dependency hell creates accidental complexity that makes security patching nearly impossible. When multiple domains share a JVM, upgrading any dependency for security requires resolving conflicts across ALL domains - often taking weeks or months. **This creates a major security problem where known vulnerabilities remain unpatched due to dependency coordination overhead.**
+
+**The architectural solution**: Decompose into independent services where each domain can upgrade dependencies immediately without cross-domain conflicts. Service isolation eliminates the accidental complexity that blocks security patches.
+
+See [Eliminating Accidental Complexity](/articles/eliminating-accidental-complexity/) for detailed analysis of how dependency conflicts prevent timely security updates.
+
 **Secondary Risk**: Intellectual property leakage
 **Mitigation**: 
 - Automated code scanning for proprietary patterns
