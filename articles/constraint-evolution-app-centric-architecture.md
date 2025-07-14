@@ -73,29 +73,37 @@ Modern cloud platforms have largely eliminated physical constraints, making **bu
 
 As systems reach cloud-native scale, a **fourth constraint layer** emerges that operates independently of physical, platform, and logical constraints:
 
-#### The Programming-Level Constraints:
-- **Dependency Hell**: JAR conflicts, diamond dependencies, and version incompatibilities
-- **Classpath Pollution**: Shared runtime environments causing unpredictable behavior
-- **Transitive Dependency Explosion**: Combinatorial complexity of library interdependencies
-- **Version Lock-in Cascade**: Inability to upgrade without coordinating across entire system
-- **Security Patch Deployment**: Weeks-to-months timeline for dependency vulnerability fixes
+#### The Accidental Complexity Layer:
+Multiple forms of accidental complexity emerge when domains share boundaries:
 
-#### The Constraint Compounding Effect:
-Programming constraints **multiply** rather than replace earlier constraint layers:
+- **Dependency Conflicts**: JAR hell from cross-domain version incompatibilities
+- **Schema Coupling**: Database foreign keys creating cross-domain dependencies  
+- **Business Logic Entanglement**: Domain-specific rules mixed across business contexts
+- **Team Coordination Overhead**: Exponential communication needs across domain boundaries
+- **Deployment Coupling**: All domains forced into shared release cycles
+
+**Key insight**: This is **accidental complexity** - unnecessary technical overhead that grows exponentially and can be eliminated through proper domain boundaries.
+
+#### The Exponential Growth Problem:
+Unlike essential business complexity, accidental complexity compounds exponentially across multiple dimensions:
 
 ```
-Single System Experiencing All Four Constraint Layers:
+Monolithic Domain Entanglement:
+Business domains: 1, 2, 3, 4, 5... (linear growth)
+Cross-domain conflicts: 1, 4, 9, 16, 25... (exponential growth)
 
-Layer 1 (Physical): Shared database bottleneck
-Layer 2 (Platform): API gateway rate limiting  
-Layer 3 (Logical): Cross-team coordination overhead
-Layer 4 (Programming): JAR hell preventing upgrades
+Examples:
+├── JAR conflicts: n² dependency combinations
+├── Schema coupling: n² foreign key relationships
+├── Team coordination: n² communication pathways  
+├── Deployment risks: n² integration test scenarios
+└── Business rule conflicts: n² domain interaction cases
 
-Result: Exponential coordination complexity making 
-        innovation structurally impossible
+Result: Accidental complexity overwhelms business logic
+Solution: Domain boundaries eliminate cross-domain conflicts entirely
 ```
 
-This programming constraint layer provides the **mathematical foundation** for why service isolation becomes architecturally necessary beyond organizational benefits. See [Dependency Hell as Architectural Necessity](/articles/dependency-hell-architectural-necessity/) for detailed technical analysis.
+Domain-driven boundaries don't just organize complexity differently - they **eliminate multiple forms of exponential accidental complexity** while keeping essential business complexity linear. See [Eliminating Accidental Complexity](/articles/eliminating-accidental-complexity/) for comprehensive analysis.
 
 #### The Logical-First Partitioning Strategy:
 With physical constraints abstracted, **business-domain-first partitioning** becomes optimal:
