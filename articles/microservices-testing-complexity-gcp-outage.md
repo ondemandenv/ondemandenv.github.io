@@ -215,8 +215,8 @@ The choice is clear: continue applying monolithic testing approaches to distribu
 [4] https://techcrunch.com/2025/06/12/google-cloud-outage-brings-down-a-lot-of-the-internet/
 [5] https://hyperframeresearch.com/2025/06/24/google-cloud-anatomy-of-a-systemic-failure/
 [6] https://www.gremlin.com/blog/how-to-be-prepared-for-cloud-provider-outages
-[7] https://ondemandenv.dev/articles/app-centric-infra1/
-[8] https://ondemandenv.dev/articles/app-centric-infra3/
+[7] https://ondemandenv.dev/articles/embracing-application-centric-infrastructure-cloud-1/
+[8] https://ondemandenv.dev/articles/implementing-application-centricity-declarative-contracts/
 [9] https://ondemandenv.dev/concepts.html
 [10] https://ondemandenv.dev/articles/architectural-prevention-paradigm/
 [11] https://ondemandenv.dev/articles/fragmentation-trap/

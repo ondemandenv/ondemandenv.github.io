@@ -9,7 +9,7 @@ permalink: /articles/app-centric-infra3/
 
 Continuing our series on Application-Centric Infrastructure (ACI)
 
-In [Part 1](app-centric-infra1.html), we introduced the concept of Application-Centric Infrastructure (ACI) and why it's crucial for managing modern distributed systems. In [Part 2](app-centric-infra2.html), we explored the common pitfalls of traditional, infrastructure-centric approaches and the limitations of simplistic GitOps models. Now, in Part 3, we dive into the "how": How does ONDEMANDENV enable true ACI through its core components, specifically `contractsLib` and the concept of independent, comparable environments (`Envers`)?
+In [Part 1](embracing-application-centric-infrastructure-cloud-1.html), we introduced the concept of Application-Centric Infrastructure (ACI) and why it's crucial for managing modern distributed systems. In [Part 2](aws-cdk-eks-falling-short-multi-account-kubernetes.html), we explored the common pitfalls of traditional, infrastructure-centric approaches and the limitations of simplistic GitOps models. Now, in Part 3, we dive into the "how": How does ONDEMANDENV enable true ACI through its core components, specifically `contractsLib` and the concept of independent, comparable environments (`Envers`)?
 
 ## The Traditional Gridlock: Silos, Static Environments, and Scope Blindness
 

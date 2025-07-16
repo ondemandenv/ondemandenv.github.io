@@ -140,4 +140,12 @@
     <priority>0.8</priority>
   </url>
 
+  <!-- merge hell myth article -->
+  <url>
+    <loc>https://ondemandenv.github.io/articles/merge-hell-myth-x-ops-contamination/</loc>
+    <lastmod>2025-01-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
 </urlset> 
