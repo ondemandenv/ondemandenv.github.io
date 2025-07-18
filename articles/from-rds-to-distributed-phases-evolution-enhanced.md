@@ -59,6 +59,14 @@ The traditional approach where all business logic executes within database trans
      data-external-diagram="/diagrams/phase1-rds-monolithic-architecture.mmd">
 </div>
 
+<div style="text-align: center; margin: 1rem 0;">
+    <a href="/mmd-render.html?mmd=diagrams/phase1-rds-monolithic-architecture.mmd" 
+       target="_blank" 
+       style="display: inline-flex; align-items: center; gap: 0.5rem; background: #0366d6; color: white; padding: 0.5rem 1rem; border-radius: 4px; text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease;">
+        🔍 View Fullscreen
+    </a>
+</div>
+
 #### When Phase 1 Excels:
 - **Small to Medium Scale**: Under 10,000 concurrent users
 - **Strong Consistency Critical**: Financial transactions, regulatory compliance
@@ -95,6 +103,14 @@ Evolution that introduces message queues to decouple client requests from proces
 <div id="phase2-queue-async-processing-diagram" 
      class="mermaid-diagram-simple" 
      data-external-diagram="/diagrams/phase2-queue-async-processing.mmd">
+</div>
+
+<div style="text-align: center; margin: 1rem 0;">
+    <a href="/mmd-render.html?mmd=diagrams/phase2-queue-async-processing.mmd" 
+       target="_blank" 
+       style="display: inline-flex; align-items: center; gap: 0.5rem; background: #0366d6; color: white; padding: 0.5rem 1rem; border-radius: 4px; text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease;">
+        🔍 View Fullscreen
+    </a>
 </div>
 
 #### The Platform Breakthrough:
@@ -145,6 +161,14 @@ Further evolution that introduces queues between each processing step, enabling 
      data-external-diagram="/diagrams/phase3-step-level-queue-architecture.mmd">
 </div>
 
+<div style="text-align: center; margin: 1rem 0;">
+    <a href="/mmd-render.html?mmd=diagrams/phase3-step-level-queue-architecture.mmd" 
+       target="_blank" 
+       style="display: inline-flex; align-items: center; gap: 0.5rem; background: #0366d6; color: white; padding: 0.5rem 1rem; border-radius: 4px; text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease;">
+        🔍 View Fullscreen
+    </a>
+</div>
+
 #### The Critical Realization:
 Phase 3 often reveals the **"Hidden Monolith Problem"** - despite logical separation, components remain deployment-coupled, leading to the key question: *"If these steps are already communicating asynchronously via queues, why are we still packaging them together?"*
 
@@ -192,6 +216,14 @@ The architectural breakthrough where managed event streaming platforms enable tr
 <div id="phase4-platform-event-driven-architecture-diagram" 
      class="mermaid-diagram-simple" 
      data-external-diagram="/diagrams/phase4-platform-event-driven-architecture.mmd">
+</div>
+
+<div style="text-align: center; margin: 1rem 0;">
+    <a href="/mmd-render.html?mmd=diagrams/phase4-platform-event-driven-architecture.mmd" 
+       target="_blank" 
+       style="display: inline-flex; align-items: center; gap: 0.5rem; background: #0366d6; color: white; padding: 0.5rem 1rem; border-radius: 4px; text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease;">
+        🔍 View Fullscreen
+    </a>
 </div>
 
 #### The "Aha!" Moment:

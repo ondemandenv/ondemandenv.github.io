@@ -29,6 +29,14 @@ Before exploring the perilous path, let's establish what a properly functioning 
      data-external-diagram="/diagrams/phase1-classic-monolith.mmd">
 </div>
 
+<div style="text-align: center; margin: 1rem 0;">
+    <a href="/mmd-render.html?mmd=diagrams/phase1-classic-monolith.mmd" 
+       target="_blank" 
+       style="display: inline-flex; align-items: center; gap: 0.5rem; background: #0366d6; color: white; padding: 0.5rem 1rem; border-radius: 4px; text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease;">
+        🔍 View Fullscreen
+    </a>
+</div>
+
 **Key Characteristics of Phase 1:**
 - **Single Transaction Boundary**: All business logic executes within one database transaction
 - **ACID Guarantees**: Full consistency, isolation, and durability
@@ -43,6 +51,14 @@ Now contrast this with the perilous path - the forced decomposition approach:
 <div id="distributed-monolith-service-mesh-diagram" 
      class="mermaid-diagram-simple" 
      data-external-diagram="/diagrams/distributed-monolith-service-mesh.mmd">
+</div>
+
+<div style="text-align: center; margin: 1rem 0;">
+    <a href="/mmd-render.html?mmd=diagrams/distributed-monolith-service-mesh.mmd" 
+       target="_blank" 
+       style="display: inline-flex; align-items: center; gap: 0.5rem; background: #0366d6; color: white; padding: 0.5rem 1rem; border-radius: 4px; text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease;">
+        🔍 View Fullscreen
+    </a>
 </div>
 
 ---
@@ -66,6 +82,14 @@ One of the most insidious aspects of this anti-pattern is how operations teams m
 <div id="ops-bottleneck-sequence-diagram" 
      class="mermaid-diagram-simple" 
      data-external-diagram="/diagrams/ops-bottleneck-sequence.mmd">
+</div>
+
+<div style="text-align: center; margin: 1rem 0;">
+    <a href="/mmd-render.html?mmd=diagrams/ops-bottleneck-sequence.mmd" 
+       target="_blank" 
+       style="display: inline-flex; align-items: center; gap: 0.5rem; background: #0366d6; color: white; padding: 0.5rem 1rem; border-radius: 4px; text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease;">
+        🔍 View Fullscreen
+    </a>
 </div>
 
 ### The YAML Configuration Hell
@@ -111,6 +135,14 @@ The most devastating aspect of this anti-pattern is the loss of ACID properties 
 <div id="sync-chain-failure-pattern-diagram" 
      class="mermaid-diagram-simple" 
      data-external-diagram="/diagrams/sync-chain-failure-pattern.mmd">
+</div>
+
+<div style="text-align: center; margin: 1rem 0;">
+    <a href="/mmd-render.html?mmd=diagrams/sync-chain-failure-pattern.mmd" 
+       target="_blank" 
+       style="display: inline-flex; align-items: center; gap: 0.5rem; background: #0366d6; color: white; padding: 0.5rem 1rem; border-radius: 4px; text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease;">
+        🔍 View Fullscreen
+    </a>
 </div>
 
 ### The Compensation Pattern Nightmare
@@ -285,6 +317,14 @@ Instead of forced decomposition, the proper evolution path follows these phases:
 <div id="perilous-evolution-path-diagram" 
      class="mermaid-diagram-simple" 
      data-external-diagram="/diagrams/perilous-evolution-path.mmd">
+</div>
+
+<div style="text-align: center; margin: 1rem 0;">
+    <a href="/mmd-render.html?mmd=diagrams/perilous-evolution-path.mmd" 
+       target="_blank" 
+       style="display: inline-flex; align-items: center; gap: 0.5rem; background: #0366d6; color: white; padding: 0.5rem 1rem; border-radius: 4px; text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease;">
+        🔍 View Fullscreen
+    </a>
 </div>
 
 **The Right Evolution Phases:**

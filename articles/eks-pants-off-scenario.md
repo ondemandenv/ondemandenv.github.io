@@ -58,6 +58,14 @@ The diagram below illustrates the fundamental difference between EKS and ECS app
      data-external-diagram="/diagrams/eks-ecs-complexity-comparison.mmd">
 </div>
 
+<div style="text-align: center; margin: 1rem 0;">
+    <a href="/mmd-render.html?mmd=diagrams/eks-ecs-complexity-comparison.mmd" 
+       target="_blank" 
+       style="display: inline-flex; align-items: center; gap: 0.5rem; background: #0366d6; color: white; padding: 0.5rem 1rem; border-radius: 4px; text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease;">
+        🔍 View Fullscreen
+    </a>
+</div>
+
 **Key Observations:**
 
 1. **Accidental Complexity**: EKS requires multiple translation layers (red boxes) - each YAML manifest goes through Kubernetes API server, etcd storage, multiple in-cluster controllers, and IRSA token exchange before reaching AWS APIs. ECS goes directly from CDK to AWS APIs (green boxes).

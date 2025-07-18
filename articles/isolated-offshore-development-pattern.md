@@ -42,6 +42,14 @@ ONDEMANDENV's **Three-Tier Security Pattern** breaks the stagnation cycle by imp
      data-external-diagram="/diagrams/three-tier-security-architecture.mmd">
 </div>
 
+<div style="text-align: center; margin: 1rem 0;">
+    <a href="/mmd-render.html?mmd=diagrams/three-tier-security-architecture.mmd" 
+       target="_blank" 
+       style="display: inline-flex; align-items: center; gap: 0.5rem; background: #0366d6; color: white; padding: 0.5rem 1rem; border-radius: 4px; text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease;">
+        🔍 View Fullscreen
+    </a>
+</div>
+
 ### Anti-Stagnation Mechanisms in Action
 
 This pattern demonstrates how ONDEMANDENV systematically eliminates stagnation through:

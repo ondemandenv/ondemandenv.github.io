@@ -73,6 +73,14 @@ The diagram below illustrates how **Transit Gateway creates unified networks** t
      data-external-diagram="/diagrams/multi-account-network-architecture.mmd">
 </div>
 
+<div style="text-align: center; margin: 1rem 0;">
+    <a href="/mmd-render.html?mmd=diagrams/multi-account-network-architecture.mmd" 
+       target="_blank" 
+       style="display: inline-flex; align-items: center; gap: 0.5rem; background: #0366d6; color: white; padding: 0.5rem 1rem; border-radius: 4px; text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease;">
+        🔍 View Fullscreen
+    </a>
+</div>
+
 This architecture demonstrates the critical networking foundation that CDK ignores:
 
 1. **Two Isolated Networks**: Production Network (10.0.0.0/8) and Lower Environment Network (172.16.0.0/12) with no cross-communication
