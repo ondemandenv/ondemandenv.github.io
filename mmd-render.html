@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mermaid Diagram Viewer - ONDEMANDENV.dev</title>
+    <meta name="description" content="Interactive Mermaid diagram viewer with zoom and pan functionality">
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-HLWV6BZQE1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-HLWV6BZQE1');
+    </script>
+    
+    <!-- Mermaid.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.0/dist/mermaid.min.js"></script>
+    
+    <!-- Pan and Zoom Library -->
+    <script src="https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js"></script>
+    
+    <style>
+        /* Diagram viewer specific styles */
+        .diagram-viewer {
+            position: relative;
+            width: 100%;
+            height: calc(100vh - 8rem);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: white;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .diagram-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            background: white;
+        }
+        
+        .diagram-content {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        #mermaid-diagram svg {
+            max-width: none !important;
+            max-height: none !important;
+            width: auto !important;
+            height: auto !important;
+        }
+        
+        .controls {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            gap: 8px;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 8px;
+            border-radius: 6px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+        
+        .control-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .control-btn:hover {
+            background: #0256c7;
+            transform: translateY(-1px);
+        }
+        
+        .control-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .diagram-info {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            color: #666;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+        
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            height: 100%;
+            color: #666;
+        }
+        
+        .loading::after {
+            content: '';
+            display: block;
+            width: 40px;
+            height: 40px;
+            border: 3px solid #e1e5e9;
+            border-top: 3px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-top: 1rem;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .error {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            height: 100%;
+            color: #dc3545;
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .error h3 {
+            margin-bottom: 1rem;
+            color: #dc3545;
+        }
+        
+        .error-detail {
+            font-family: monospace;
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-top: 1rem;
+            font-size: 12px;
+            color: #666;
+            max-width: 600px;
+            word-break: break-all;
+        }
+        
+        .toolbar {
+            background: var(--secondary-color);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .toolbar h1 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+        
+        .toolbar-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .file-info {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.9rem;
+        }
+        
+        .btn-toolbar {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s ease;
+        }
+        
+        .btn-toolbar:hover {
+            background: #0256c7;
+            transform: translateY(-1px);
+        }
+        
+        @media (max-width: 768px) {
+            .toolbar {
+                padding: 1rem;
+            }
+            
+            .toolbar h1 {
+                font-size: 1.2rem;
+            }
+            
+            .controls {
+                top: 5px;
+                right: 5px;
+                padding: 6px;
+            }
+            
+            .control-btn {
+                padding: 6px 8px;
+                font-size: 12px;
+            }
+            
+            .diagram-info {
+                bottom: 5px;
+                left: 5px;
+                padding: 6px 8px;
+                font-size: 11px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="toolbar">
+        <h1>📊 Mermaid Diagram Viewer</h1>
+        <div class="toolbar-actions">
+            <div class="file-info" id="file-info">No file loaded</div>
+            <a href="index.html" class="btn-toolbar">🏠 Home</a>
+            <a href="https://github.com/ondemandenv/ondemandenv.github.io" class="btn-toolbar" target="_blank">📁 Source</a>
+        </div>
+    </div>
+
+    <main style="margin-top: 0; padding: 2rem;">
+        <div class="diagram-viewer">
+            <div class="controls">
+                <button class="control-btn" id="zoom-in" title="Zoom In">🔍+</button>
+                <button class="control-btn" id="zoom-out" title="Zoom Out">🔍-</button>
+                <button class="control-btn" id="zoom-reset" title="Reset Zoom">🎯</button>
+                <button class="control-btn" id="center" title="Center Diagram">📍</button>
+                <button class="control-btn" id="fullscreen" title="Toggle Fullscreen">⛶</button>
+            </div>
+            
+            <div class="diagram-container">
+                <div class="diagram-content" id="diagram-content">
+                    <div class="loading">Loading diagram...</div>
+                </div>
+            </div>
+            
+            <div class="diagram-info" id="diagram-info">
+                Use mouse wheel or controls to zoom • Drag to pan
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({
+            startOnLoad: false,
+            theme: 'default',
+            themeVariables: {
+                primaryColor: '#0366d6',
+                primaryTextColor: '#24292e',
+                primaryBorderColor: '#e1e4e8',
+                lineColor: '#6a737d',
+                backgroundColor: '#ffffff'
+            },
+            flowchart: {
+                useMaxWidth: false,
+                htmlLabels: true
+            },
+            sequence: {
+                useMaxWidth: false
+            },
+            gantt: {
+                useMaxWidth: false
+            }
+        });
+
+        class MermaidViewer {
+            constructor() {
+                this.panZoom = null;
+                this.currentMmdFile = null;
+                this.init();
+            }
+
+            init() {
+                this.setupEventListeners();
+                this.loadDiagramFromUrl();
+            }
+
+            setupEventListeners() {
+                // Control buttons
+                document.getElementById('zoom-in').addEventListener('click', () => this.zoomIn());
+                document.getElementById('zoom-out').addEventListener('click', () => this.zoomOut());
+                document.getElementById('zoom-reset').addEventListener('click', () => this.resetZoom());
+                document.getElementById('center').addEventListener('click', () => this.centerDiagram());
+                document.getElementById('fullscreen').addEventListener('click', () => this.toggleFullscreen());
+
+                // Keyboard shortcuts
+                document.addEventListener('keydown', (e) => {
+                    if (e.target.tagName.toLowerCase() === 'input') return;
+                    
+                    switch(e.key) {
+                        case '=':
+                        case '+':
+                            e.preventDefault();
+                            this.zoomIn();
+                            break;
+                        case '-':
+                            e.preventDefault();
+                            this.zoomOut();
+                            break;
+                        case '0':
+                            e.preventDefault();
+                            this.resetZoom();
+                            break;
+                        case 'c':
+                            e.preventDefault();
+                            this.centerDiagram();
+                            break;
+                        case 'f':
+                            e.preventDefault();
+                            this.toggleFullscreen();
+                            break;
+                        case 'Escape':
+                            if (document.fullscreenElement) {
+                                document.exitFullscreen();
+                            }
+                            break;
+                    }
+                });
+
+                // Window resize
+                window.addEventListener('resize', () => {
+                    if (this.panZoom) {
+                        this.panZoom.resize();
+                    }
+                });
+            }
+
+            async loadDiagramFromUrl() {
+                const urlParams = new URLSearchParams(window.location.search);
+                const mmdFile = urlParams.get('mmd');
+
+                if (!mmdFile) {
+                    this.showError('No diagram file specified', 'Add ?mmd=path/to/file.mmd to the URL');
+                    return;
+                }
+
+                this.currentMmdFile = mmdFile;
+                document.getElementById('file-info').textContent = mmdFile;
+                document.title = `${mmdFile} - Mermaid Diagram Viewer`;
+
+                try {
+                    await this.loadMermaidFile(mmdFile);
+                } catch (error) {
+                    this.showError('Failed to load diagram', error.message);
+                }
+            }
+
+            async loadMermaidFile(filePath) {
+                try {
+                    const response = await fetch(filePath);
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    }
+
+                    const mmdContent = await response.text();
+                    await this.renderMermaid(mmdContent);
+                } catch (error) {
+                    throw new Error(`Cannot load ${filePath}: ${error.message}`);
+                }
+            }
+
+            async renderMermaid(mmdContent) {
+                const container = document.getElementById('diagram-content');
+                
+                try {
+                    // Clear existing content
+                    container.innerHTML = '<div class="loading">Rendering diagram...</div>';
+
+                    // Create a unique ID for this diagram
+                    const diagramId = 'mermaid-diagram-' + Date.now();
+
+                    // Render the mermaid diagram
+                    const { svg } = await mermaid.render(diagramId, mmdContent);
+                    
+                    // Create diagram container
+                    container.innerHTML = `<div id="mermaid-diagram">${svg}</div>`;
+
+                    // Initialize pan and zoom
+                    this.initializePanZoom();
+
+                    // Update info
+                    this.updateDiagramInfo();
+
+                } catch (error) {
+                    this.showError('Failed to render diagram', error.message);
+                }
+            }
+
+            initializePanZoom() {
+                const svgElement = document.querySelector('#mermaid-diagram svg');
+                if (!svgElement) return;
+
+                // Destroy existing pan-zoom instance
+                if (this.panZoom) {
+                    this.panZoom.destroy();
+                }
+
+                // Initialize new pan-zoom
+                this.panZoom = svgPanZoom(svgElement, {
+                    zoomEnabled: true,
+                    controlIconsEnabled: false,
+                    fit: true,
+                    center: true,
+                    minZoom: 0.1,
+                    maxZoom: 10,
+                    zoomScaleSensitivity: 0.5,
+                    dblClickZoomEnabled: true,
+                    mouseWheelZoomEnabled: true,
+                    preventMouseEventsDefault: true,
+                    eventsListenerElement: svgElement.parentElement
+                });
+
+                // Enable controls
+                this.enableControls();
+            }
+
+            enableControls() {
+                const controls = document.querySelectorAll('.control-btn');
+                controls.forEach(btn => btn.disabled = false);
+            }
+
+            disableControls() {
+                const controls = document.querySelectorAll('.control-btn');
+                controls.forEach(btn => btn.disabled = true);
+            }
+
+            zoomIn() {
+                if (this.panZoom) {
+                    this.panZoom.zoomIn();
+                    this.updateDiagramInfo();
+                }
+            }
+
+            zoomOut() {
+                if (this.panZoom) {
+                    this.panZoom.zoomOut();
+                    this.updateDiagramInfo();
+                }
+            }
+
+            resetZoom() {
+                if (this.panZoom) {
+                    this.panZoom.resetZoom();
+                    this.updateDiagramInfo();
+                }
+            }
+
+            centerDiagram() {
+                if (this.panZoom) {
+                    this.panZoom.center();
+                    this.panZoom.fit();
+                    this.updateDiagramInfo();
+                }
+            }
+
+            toggleFullscreen() {
+                const viewer = document.querySelector('.diagram-viewer');
+                
+                if (!document.fullscreenElement) {
+                    viewer.requestFullscreen().then(() => {
+                        document.getElementById('fullscreen').innerHTML = '⛶ Exit';
+                        if (this.panZoom) {
+                            this.panZoom.resize();
+                        }
+                    });
+                } else {
+                    document.exitFullscreen().then(() => {
+                        document.getElementById('fullscreen').innerHTML = '⛶';
+                        if (this.panZoom) {
+                            this.panZoom.resize();
+                        }
+                    });
+                }
+            }
+
+            updateDiagramInfo() {
+                if (!this.panZoom) return;
+
+                const zoom = Math.round(this.panZoom.getZoom() * 100);
+                const info = document.getElementById('diagram-info');
+                info.textContent = `Zoom: ${zoom}% • Use mouse wheel or controls to zoom • Drag to pan`;
+            }
+
+            showError(title, detail) {
+                const container = document.getElementById('diagram-content');
+                container.innerHTML = `
+                    <div class="error">
+                        <h3>⚠️ ${title}</h3>
+                        <p>Please check the file path and try again.</p>
+                        ${detail ? `<div class="error-detail">${detail}</div>` : ''}
+                    </div>
+                `;
+                this.disableControls();
+            }
+        }
+
+        // Initialize the viewer when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new MermaidViewer();
+        });
+    </script>
+</body>
+</html>
