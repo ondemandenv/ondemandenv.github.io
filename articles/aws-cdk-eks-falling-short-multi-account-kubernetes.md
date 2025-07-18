@@ -5,8 +5,6 @@ permalink: /articles/app-centric-infra2/
 ---
 
 
-# AWS CDK for EKS: Falling Short in Real-World, Multi-Account Kubernetes Deployments
-
 *Part 2 of "Embracing Application-Centric Infrastructure in the Cloud"*
 
 AWS Cloud Development Kit (CDK) aims to simplify cloud infrastructure provisioning using familiar programming languages. While its EKS module promises to streamline Kubernetes cluster creation and management, a closer look reveals significant shortcomings when implementing **application-centric infrastructure** patterns in multi-account environments.

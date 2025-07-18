@@ -4,7 +4,7 @@ title: "Kubernetes, Bounded Contexts, and Accidental Complexity"
 permalink: /articles/kubernetes-bounded-contexts/
 ---
 
-# Kubernetes, Bounded Contexts, and Accidental Complexity  
+  
 _A pragmatic DDD-first guide to deciding when clusters help—and when they just get in the way_
 
 ## 1. Why Some Readers Think I'm "Anti-K8s"

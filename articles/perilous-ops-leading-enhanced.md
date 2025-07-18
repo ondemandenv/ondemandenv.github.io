@@ -8,7 +8,6 @@ author: "Architecture Evolution Series"
 tags: ["microservices", "anti-patterns", "service-mesh", "distributed-systems", "operations"]
 ---
 
-# The Perilous Path: How Operator-Led Microservices Create Distributed Monoliths
 
 ## Executive Summary
 

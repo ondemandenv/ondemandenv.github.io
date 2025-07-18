@@ -9,7 +9,6 @@ featured: true
 keywords: ["merge hell", "x-ops contamination", "trunk-based development", "parallel evolution", "innovation", "git", "administrative convenience", "ONDEMANDENV", "divergent evolution"]
 ---
 
-# The "Merge Hell" Myth: How X-Ops Contamination Destroyed Innovation Through False Constraints
 
 *The software industry has been sold a lie so pervasive, so seemingly reasonable, that questioning it feels like heresy. That lie is the notion of "merge hell" and the supposed problem of "branch divergence."*
 

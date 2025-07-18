@@ -4,7 +4,6 @@ title: "The Provocative SRE Manifesto: Breaking Free from the Constraint Trap"
 permalink: /articles/provocative-sre-manifesto/
 ---
 
-# The Provocative SRE Manifesto: Breaking Free from the Constraint Trap
 
 *Why Traditional SRE is a Relic of the Metal Era—And How to Build Reliability That Actually Enables Innovation*
 

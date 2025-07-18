@@ -5,7 +5,6 @@ permalink: /articles/app-centric-infra1/
 ---
 
 
-# Embracing Application-Centric Infrastructure in the Cloud 1
 
 In the world of cloud computing, managing infrastructure and applications has often been a tale of two philosophies. On one side, we have tools like AWS CloudFormation, born from an engineering mindset focused on certainty and consistency. CloudFormation excels at defining infrastructure as code, ensuring predictable deployments and automated rollbacks. On the other side, Kubernetes emerged from the operations world, emphasizing ad-hoc operations and mitigation for dynamic, containerized applications. While Kubernetes is unparalleled in container orchestration, it traditionally lacked the broader infrastructure management capabilities of CloudFormation.
 

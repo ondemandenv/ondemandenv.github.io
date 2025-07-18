@@ -4,7 +4,6 @@ title: "The Blurring Lines Between Development and Operations in Modern Cloud Ar
 permalink: /articles/blurring-lines-dev-ops-modern-cloud/
 ---
 
-# The Blurring Lines Between Development and Operations in Modern Cloud Architecture
 
 The traditional boundary between development and operations is rapidly dissolving in modern cloud environments. This transformation is particularly evident in scenarios where application code directly manages infrastructure behavior, error handling, and data lifecycle—responsibilities that were once firmly in the operations domain. As James Hamilton noted over a decade ago, "A clear division between ops and dev leads to an over-the-wall approach that is too slow and too inefficient"[^8]. Today's cloud-native architectures have accelerated this convergence, creating what many now call BizDevOps—a modern approach that blends business, development, and operations to streamline processes and accelerate delivery[^1].
 

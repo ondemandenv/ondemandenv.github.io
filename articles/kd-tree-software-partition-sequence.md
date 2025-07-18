@@ -4,7 +4,6 @@ title: "The K-D Tree of Software: Why Partition Sequence Determines System Compl
 permalink: /articles/kd-tree-software-partition-sequence/
 ---
 
-# The K-D Tree of Software: Why Partition Sequence Determines System Complexity
 
 Across the rapidly evolving landscape of software architecture—from Spring Integration to Apache Kafka, from distributed databases like DynamoDB and Cassandra to the threading models deep within Java—there is a unifying philosophy that transcends technology stacks and use cases: **partition first, process in parallel, and let the system handle coordination**. Whether the context is messaging, event streaming, or distributed storage, this methodology is the backbone of scalable, resilient, and maintainable systems.
 

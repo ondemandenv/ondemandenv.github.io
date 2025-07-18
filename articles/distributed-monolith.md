@@ -5,7 +5,6 @@ permalink: /articles/distributed-monolith/
 ---
 
 
-# The Perils of the Distributed Monolith: Why Monolithic Thinking Fails in Distributed Systems
 
 The nature of distributed systems is inherently asynchronous, event-driven, and built upon the principle of eventual consistency. However, a common pitfall in the world of microservices is attempting to build these systems with a monolithic mindset. This often leads to architectures that are, in essence, distributed monoliths: systems that inherit the complexities of distribution without reaping the intended benefits of a microservices approach. A key symptom of this anti-pattern is the reliance on service meshes to manage synchronous calls between services, often compounded by the inappropriate use of relational databases (RDS) across the distributed landscape. This article will delve into the problems arising from this monolithic approach to distributed systems, exploring why it can be significantly worse than a traditional monolith and how to avoid these pitfalls.
 

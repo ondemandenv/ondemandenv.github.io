@@ -9,7 +9,6 @@ featured: true
 keywords: ["accidental complexity", "domain driven design", "exponential growth", "linear scaling", "service isolation", "ONDEMANDENV", "DDD"]
 ---
 
-# From Exponential to Linear: How Domain Boundaries Eliminate Accidental Complexity
 
 *Proper domain boundaries eliminate multiple forms of exponential accidental complexity. JAR hell is just one concrete example of this broader DDD pattern.*
 

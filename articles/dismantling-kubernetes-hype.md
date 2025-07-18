@@ -5,7 +5,6 @@ permalink: /articles/dismantling-kubernetes-hype/
 ---
 
 
-# Dismantling the Kubernetes Hype: Why It's Not the Cloud Native Panacea You Think It Is
 
 ## Introduction: The K8s Emperor and the Gell-Mann Amnesia Effect
 

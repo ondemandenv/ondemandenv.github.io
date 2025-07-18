@@ -4,7 +4,6 @@ title: "The Fundamental Impossibility of Declarative Infrastructure: Why IaC Wil
 permalink: /articles/fundamental-impossibility-declarative-infrastructure/
 ---
 
-# The Fundamental Impossibility of Declarative Infrastructure: Why IaC Will Always Be Incomplete
 
 *A deep dive into the mathematical and philosophical limitations of Infrastructure as Code*
 

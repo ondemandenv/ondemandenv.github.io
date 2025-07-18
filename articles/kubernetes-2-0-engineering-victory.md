@@ -8,7 +8,6 @@ description: "How the era of YAML-driven infrastructure is ending, replaced by t
 keywords: ["kubernetes", "yaml", "typescript", "platform engineering", "devops", "infrastructure", "abstraction", "helm", "cdk8s", "anti-stagnation", "fragmentation trap", "engineering", "administration"]
 ---
 
-# **Kubernetes 2.0: From YAML and Administrative Ops to Typed Abstractions and Engineering**
 
 ## Introduction: The Great Paradigm Shift
 

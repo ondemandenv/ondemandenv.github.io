@@ -4,7 +4,6 @@ title: "The Cognitive Architecture of Code: Taming Ambiguity and Accidental Comp
 permalink: /articles/cognitive-architecture-of-code/
 ---
 
-# The Cognitive Architecture of Code: Taming Ambiguity and Accidental Complexity
 
 The "Coding in the Kitchen" metaphor offers a charmingly simple way to contrast the free-form creativity of dynamic languages with the rigorous discipline of static ones. The home cook, like a Python or JavaScript developer, can improvise and create quickly, while the commercial kitchen chef, like a Rust or Java programmer, relies on strict recipes and processes to ensure consistency and safety at scale. While insightful, this analogy only scratches the surface.
 
