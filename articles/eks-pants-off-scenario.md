@@ -53,7 +53,8 @@ But the journey isn't over. For an ACK-managed resource like an RDS instance des
 
 The diagram below illustrates the fundamental difference between EKS and ECS approaches. Both ultimately make the same AWS API calls to provision the same AWS services (ALB, RDS, Route53, VPC, IAM), but EKS introduces multiple translation layers that create accidental complexity, resource overhead, and engineering friction:
 
-<div class="mermaid-diagram" 
+<div id="eks-ecs-complexity-comparison-diagram" 
+     class="mermaid-diagram-simple" 
      data-external-diagram="/diagrams/eks-ecs-complexity-comparison.mmd">
 </div>
 

@@ -54,7 +54,6 @@ graph TB
             H5[IAM Roles & Policies]
         end
         
-        %% Connect APIs to infrastructure
         API1 --> H1
         API2 --> H4
         API3 --> H2
@@ -63,7 +62,6 @@ graph TB
         API6 --> H5
     end
     
-    %% Connect both paths to same AWS APIs
     D1 --> API1
     D1 --> API2
     D1 --> API3
@@ -78,11 +76,10 @@ graph TB
     F4 --> API5
     F4 --> API6
     
-    %% Style the complexity layers
     classDef complexity fill:#ffcccc,stroke:#ff6666,stroke-width:2px
     classDef direct fill:#ccffcc,stroke:#66ff66,stroke-width:2px
     classDef aws fill:#fff2cc,stroke:#d6b656,stroke-width:2px
     
     class A1,A2,A3,A4,A5,B1,B2,B3,B4,B5,C1,C2,C3,C4 complexity
-    class F1,F2,F3,F4 direct
-    class H1,H2,H3,H4,H5 aws 
+    class F1,F2,F3,F4,D1 direct
+    class H1,H2,H3,H4,H5 aws

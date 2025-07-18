@@ -324,3 +324,56 @@
     border-radius: 5px;
     z-index: 10;
 }
+
+/* Simple diagram display with hover fullscreen button */
+.mermaid-diagram-simple {
+    position: relative;
+    text-align: center;
+    background: white;
+    border: 1px solid #e1e5e9;
+    border-radius: 8px;
+    padding: 1rem;
+    margin: 2rem 0;
+    overflow: auto;
+}
+
+.mermaid-diagram-simple svg {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+
+.mermaid-diagram-simple .simple-fullscreen-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    z-index: 10;
+}
+
+.mermaid-diagram-simple:hover .simple-fullscreen-btn {
+    opacity: 1;
+}
+
+.mermaid-diagram-simple .simple-fullscreen-btn:hover {
+    background: #0056b3;
+}
+
+@media (prefers-color-scheme: dark) {
+    .mermaid-diagram-simple {
+        background: #1a202c;
+        border-color: #4a5568;
+    }
+}
