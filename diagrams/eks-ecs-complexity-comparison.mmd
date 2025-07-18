@@ -1,0 +1,88 @@
+graph TB
+    subgraph "EKS: Translation Layer Complexity"
+        direction TB
+        A1[YAML Manifests<br/>Deployment, Service, Ingress<br/>ServiceAccount, ConfigMap] --> A2[kubectl apply]
+        A2 --> A3[Kubernetes API Server<br/>Authentication + Authorization]
+        A3 --> A4[etcd Storage]
+        A4 --> A5[Multiple Controllers<br/>Running in Pods]
+        
+        subgraph "Controller Translation Layer"
+            A5 --> B1[AWS Load Balancer Controller<br/>Ingress → ALB]
+            A5 --> B2[AWS EBS CSI Driver<br/>PVC → EBS]
+            A5 --> B3[AWS VPC CNI<br/>Pod IPs → ENI]
+            A5 --> B4[External DNS Controller<br/>Service → Route53]
+            A5 --> B5[ACK Controllers<br/>K8s CRDs → AWS Resources]
+        end
+        
+        subgraph "IRSA Translation"
+            B1 --> C1[ServiceAccount]
+            B2 --> C1
+            B3 --> C1
+            B4 --> C1
+            B5 --> C1
+            C1 --> C2[OIDC Provider]
+            C2 --> C3[IAM Role Assumption]
+            C3 --> C4[AWS STS Token Exchange]
+        end
+        
+        C4 --> D1[AWS API Calls]
+    end
+    
+    subgraph "ECS: Direct AWS Integration"
+        direction TB
+        F1[CDK/CloudFormation<br/>Infrastructure as Code] --> F2[CloudFormation Engine]
+        F2 --> F3[Dependency Resolution<br/>& Orchestration]
+        F3 --> F4[Direct AWS API Calls]
+    end
+    
+    subgraph "Same AWS Services"
+        direction TB
+        subgraph "AWS APIs"
+            API1[ALB/ELB API]
+            API2[EC2/Fargate API]
+            API3[RDS API]
+            API4[Route53 API]
+            API5[VPC/Security Groups API]
+            API6[IAM API]
+        end
+        
+        subgraph "AWS Infrastructure"
+            H1[Application Load Balancer]
+            H2[RDS Database]
+            H3[Route53 DNS]
+            H4[VPC Networking]
+            H5[IAM Roles & Policies]
+        end
+        
+        %% Connect APIs to infrastructure
+        API1 --> H1
+        API2 --> H4
+        API3 --> H2
+        API4 --> H3
+        API5 --> H4
+        API6 --> H5
+    end
+    
+    %% Connect both paths to same AWS APIs
+    D1 --> API1
+    D1 --> API2
+    D1 --> API3
+    D1 --> API4
+    D1 --> API5
+    D1 --> API6
+    
+    F4 --> API1
+    F4 --> API2
+    F4 --> API3
+    F4 --> API4
+    F4 --> API5
+    F4 --> API6
+    
+    %% Style the complexity layers
+    classDef complexity fill:#ffcccc,stroke:#ff6666,stroke-width:2px
+    classDef direct fill:#ccffcc,stroke:#66ff66,stroke-width:2px
+    classDef aws fill:#fff2cc,stroke:#d6b656,stroke-width:2px
+    
+    class A1,A2,A3,A4,A5,B1,B2,B3,B4,B5,C1,C2,C3,C4 complexity
+    class F1,F2,F3,F4 direct
+    class H1,H2,H3,H4,H5 aws 

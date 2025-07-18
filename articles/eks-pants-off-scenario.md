@@ -53,87 +53,9 @@ But the journey isn't over. For an ACK-managed resource like an RDS instance des
 
 The diagram below illustrates the fundamental difference between EKS and ECS approaches. Both ultimately make the same AWS API calls to provision the same AWS services (ALB, RDS, Route53, VPC, IAM), but EKS introduces multiple translation layers that create accidental complexity, resource overhead, and engineering friction:
 
-```mermaid
-graph TB
-    subgraph "EKS: Translation Layer Complexity"
-        direction TB
-        A1[YAML Manifests<br/>Deployment, Service, Ingress<br/>ServiceAccount, ConfigMap] --> A2[kubectl apply]
-        A2 --> A3[Kubernetes API Server<br/>Authentication + Authorization]
-        A3 --> A4[etcd Storage]
-        A4 --> A5[Multiple Controllers<br/>Running in Pods]
-        
-        subgraph "Controller Translation Layer"
-            A5 --> B1[AWS Load Balancer Controller<br/>Ingress → ALB]
-            A5 --> B2[AWS EBS CSI Driver<br/>PVC → EBS]
-            A5 --> B3[AWS VPC CNI<br/>Pod IPs → ENI]
-            A5 --> B4[External DNS Controller<br/>Service → Route53]
-            A5 --> B5[ACK Controllers<br/>K8s CRDs → AWS Resources]
-        end
-        
-        subgraph "IRSA Translation"
-            B1 --> C1[ServiceAccount]
-            B2 --> C1
-            B3 --> C1
-            B4 --> C1
-            B5 --> C1
-            C1 --> C2[OIDC Provider]
-            C2 --> C3[IAM Role Assumption]
-            C3 --> C4[AWS STS Token Exchange]
-        end
-        
-        C4 --> D1[AWS API Calls]
-        D1 --> E1[ALB/ELB API]
-        D1 --> E2[EC2 API]
-        D1 --> E3[RDS API]
-        D1 --> E4[Route53 API]
-        D1 --> E5[VPC/Security Groups]
-    end
-    
-    subgraph "ECS: Direct AWS Integration"
-        direction TB
-        F1[CDK/CloudFormation<br/>Infrastructure as Code] --> F2[CloudFormation Engine]
-        F2 --> F3[Dependency Resolution<br/>& Orchestration]
-        F3 --> F4[Direct AWS API Calls]
-        F4 --> G1[ALB/ELB API]
-        F4 --> G2[EC2/Fargate API]
-        F4 --> G3[RDS API]
-        F4 --> G4[Route53 API]
-        F4 --> G5[VPC/Security Groups]
-        F4 --> G6[IAM API]
-    end
-    
-    subgraph "Same AWS Services"
-        direction LR
-        H1[Application Load Balancer]
-        H2[RDS Database]
-        H3[Route53 DNS]
-        H4[VPC Networking]
-        H5[IAM Roles & Policies]
-    end
-    
-    %% Connect both paths to same AWS services
-    E1 --> H1
-    E2 --> H4
-    E3 --> H2
-    E4 --> H3
-    E5 --> H4
-    
-    G1 --> H1
-    G2 --> H4
-    G3 --> H2
-    G4 --> H3
-    G5 --> H4
-    G6 --> H5
-    
-    %% Style the complexity layers
-    classDef complexity fill:#ffcccc,stroke:#ff6666,stroke-width:2px
-    classDef direct fill:#ccffcc,stroke:#66ff66,stroke-width:2px
-    classDef aws fill:#fff2cc,stroke:#d6b656,stroke-width:2px
-    
-    class A1,A2,A3,A4,A5,B1,B2,B3,B4,B5,C1,C2,C3,C4 complexity
-    class F1,F2,F3,F4 direct
-    class H1,H2,H3,H4,H5 aws
-```
+<div class="mermaid-diagram" 
+     data-external-diagram="/diagrams/eks-ecs-complexity-comparison.mmd">
+</div>
 
 **Key Observations:**
 
