@@ -38,7 +38,7 @@ ONDEMANDENV's **Three-Tier Security Pattern** breaks the stagnation cycle by imp
 ### Architecture Overview
 
 <div id="three-tier-security-architecture-diagram" 
-     class="mermaid" 
+     class="mermaid-diagram-simple" 
      data-external-diagram="/diagrams/three-tier-security-architecture.mmd">
 </div>
 

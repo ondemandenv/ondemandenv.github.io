@@ -55,7 +55,7 @@ To illustrate how these phases differ, let's examine how each one handles the **
 The traditional approach where all business logic executes within database transactions, providing strong consistency at the cost of scalability and resilience.
 
 <div id="phase1-rds-monolithic-architecture-diagram" 
-     class="mermaid" 
+     class="mermaid-diagram-simple" 
      data-external-diagram="/diagrams/phase1-rds-monolithic-architecture.mmd">
 </div>
 
@@ -93,7 +93,7 @@ public class OrderService {
 Evolution that introduces message queues to decouple client requests from processing, improving responsiveness while maintaining transactional processing.
 
 <div id="phase2-queue-async-processing-diagram" 
-     class="mermaid" 
+     class="mermaid-diagram-simple" 
      data-external-diagram="/diagrams/phase2-queue-async-processing.mmd">
 </div>
 
@@ -141,7 +141,7 @@ public class OrderWorker {
 Further evolution that introduces queues between each processing step, enabling step-level retries and fault isolation while maintaining deployment coupling.
 
 <div id="phase3-step-level-queue-architecture-diagram" 
-     class="mermaid" 
+     class="mermaid-diagram-simple" 
      data-external-diagram="/diagrams/phase3-step-level-queue-architecture.mmd">
 </div>
 
@@ -190,7 +190,7 @@ public class PaymentWorker {
 The architectural breakthrough where managed event streaming platforms enable true service independence, with each service owning its data, technology choices, and deployment lifecycle.
 
 <div id="phase4-platform-event-driven-architecture-diagram" 
-     class="mermaid" 
+     class="mermaid-diagram-simple" 
      data-external-diagram="/diagrams/phase4-platform-event-driven-architecture.mmd">
 </div>
 

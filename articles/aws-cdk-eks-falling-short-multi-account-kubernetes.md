@@ -69,7 +69,7 @@ Rather than forcing applications to understand infrastructure details, platform 
 The diagram below illustrates how **Transit Gateway creates unified networks** that span multiple AWS accounts, addressing CDK's single-account limitations:
 
 <div id="multi-account-network-architecture-diagram" 
-     class="mermaid" 
+     class="mermaid-diagram-simple" 
      data-external-diagram="/diagrams/multi-account-network-architecture.mmd">
 </div>
 
