@@ -300,6 +300,6 @@ Continue exploring how infrastructure limitations corrupt software development:
 
 - [Branch Conflicts as System Architecture Signals](branch-conflicts-architectural-signals/)  
 - [The 'Merge Hell' Myth: How Ops Incompetence Manufactured a Crisis](merge-hell-myth-x-ops-contamination/)
-- [Business Logic Branch Conflicts: How Transaction 'Failures' Are Innovation Opportunities](business-logic-branch-conflicts-innovation-opportunities/)
+- [Business Logic Branch Conflicts: How Your Team's Business Decisions Became Political Warfare Too](business-logic-branch-conflicts-political-warfare/)
 
 **Ready to break free from queue-based development?** [Explore ONDEMANDENV](https://ondemandenv.dev) and discover how proper environment provisioning enables natural parallel evolution. 
