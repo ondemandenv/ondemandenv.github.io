@@ -28,6 +28,7 @@ header {
     top: 0;
     z-index: 1000;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    min-height: 4rem; /* Ensure consistent header height */
 }
 
 nav {
@@ -36,6 +37,7 @@ nav {
     align-items: center;
     max-width: 1200px;
     margin: 0 auto;
+    min-height: 3rem; /* Ensure nav has consistent height */
 }
 
 .logo {
@@ -67,8 +69,8 @@ nav {
 }
 
 main {
-    margin-top: 6rem;
-    padding: 1rem;
+    margin-top: 5.5rem;
+    padding: 2rem;
     max-width: 1200px;
     margin-left: auto;
     margin-right: auto;
@@ -231,7 +233,7 @@ footer a:hover {
     }
 
     header {
-        padding: 1rem 1.5rem;
+        padding: 0.75rem 1.5rem;
     }
 
     nav {
@@ -239,7 +241,7 @@ footer a:hover {
     }
 
     main {
-        margin-top: 4rem;
+        margin-top: 5rem;
         padding: 1rem;
     }
 
@@ -263,6 +265,17 @@ footer a:hover {
 
     .feature, .challenge, .philosophy-item {
         padding: 1.5rem;
+    }
+
+    /* Fix button layout for mobile */
+    .cta-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .btn-enhanced {
+        width: 100%;
+        max-width: 280px;
     }
 }
 
@@ -1060,22 +1073,9 @@ footer a:hover {
 .articles-list a { text-decoration: none; color: var(--primary-color); }
 .articles-list a:hover { text-decoration: underline; }
 
-.cta-buttons {
-    margin-top: 2rem;
-    text-align: center;
-}
 
-.cta-buttons .btn-enhanced {
-    margin: 0.5rem;
-}
 
-@media (max-width: 768px) {
-    .cta-buttons {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-}
+
 
 /* Mobile Navigation Enhancement */
 .mobile-menu-toggle {
@@ -1196,17 +1196,13 @@ p {
     font-size: 1rem;
 }
 
-/* Fix button layout */
+/* Default button layout - horizontal for desktop */
 .cta-buttons {
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: 0.75rem;
-}
-
-.btn-enhanced {
-    width: 100%;
-    max-width: 280px;
+    margin-top: 2rem;
     text-align: center;
 }
 
@@ -1222,6 +1218,39 @@ p {
 
     .comparison-grid {
         gap: 1.5rem;
+    }
+}
+
+/* Desktop styles - ensure proper layout */
+@media (min-width: 769px) {
+    .mobile-menu-toggle {
+        display: none !important;
+    }
+    
+    .nav-menu {
+        display: flex !important;
+        position: static !important;
+        flex-direction: row !important;
+        background: none !important;
+        box-shadow: none !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        transform: none !important;
+        padding: 0 !important;
+    }
+    
+    .nav-menu li.language-switcher {
+        margin-left: 1rem;
+    }
+    
+    .cta-buttons {
+        flex-direction: row;
+        justify-content: center;
+    }
+    
+    .btn-enhanced {
+        width: auto;
+        max-width: none;
     }
 }
 
