@@ -204,16 +204,17 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('AI button shown');
     }, 1000);
 
-    // Handle AI service selection with event delegation
-    document.addEventListener('click', function(e) {
-        // Check if click is on AI option or its child elements
+    // Handle clicks on the main AI button
+    aiButton.addEventListener('click', function(e) {
+        console.log('Main AI button clicked');
+        
+        // Check if click is on dropdown options
         let target = e.target;
-        let aiOption = null;
         
         // Find the ai-option element (could be the target or a parent)
         while (target && !target.classList.contains('ai-option')) {
             target = target.parentElement;
-            if (!target || target === document.body) break;
+            if (!target || target === aiButton) break;
         }
         
         if (target && target.classList.contains('ai-option')) {
@@ -222,7 +223,23 @@ document.addEventListener('DOMContentLoaded', function() {
             e.stopPropagation();
             const service = target.getAttribute('data-service');
             openAIService(service);
+        } else {
+            // If user clicked the main button (not an option), default to ChatGPT
+            console.log('Main button clicked - defaulting to ChatGPT');
+            openAIService('chatgpt');
         }
+    });
+
+    // Also handle hover state for showing options
+    let isHovering = false;
+    aiButton.addEventListener('mouseenter', function() {
+        isHovering = true;
+        console.log('Hovering over AI button - options should be visible');
+    });
+    
+    aiButton.addEventListener('mouseleave', function() {
+        isHovering = false;
+        console.log('Left AI button hover area');
     });
 
     function openAIService(service) {
