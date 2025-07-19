@@ -27,6 +27,7 @@ header {
     width: 100%;
     top: 0;
     z-index: 1000;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 nav {
@@ -44,27 +45,30 @@ nav {
     flex-shrink: 0;
 }
 
-nav ul {
+.nav-menu {
     display: flex;
     list-style: none;
     flex-wrap: wrap;
     justify-content: center;
 }
 
-nav ul li a {
+.nav-menu li a {
     color: white;
     text-decoration: none;
-    padding: 0.5rem 1rem;
+    padding: 0.75rem 1rem;
     transition: color 0.3s ease;
+    display: block;
+    border-radius: 4px;
 }
 
-nav ul li a:hover {
+.nav-menu li a:hover {
     color: var(--primary-color);
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
 main {
     margin-top: 6rem;
-    padding: 2rem;
+    padding: 1rem;
     max-width: 1200px;
     margin-left: auto;
     margin-right: auto;
@@ -181,18 +185,84 @@ footer a:hover {
 }
 
 @media (max-width: 768px) {
-    nav {
-        flex-direction: column;
-        gap: 1rem;
+    .mobile-menu-toggle {
+        display: block;
     }
 
-    nav ul {
+    .nav-menu {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background-color: var(--secondary-color);
         flex-direction: column;
-        align-items: center;
+        align-items: stretch;
+        padding: 1rem 0;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        transform: translateY(-100%);
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+    }
+
+    .nav-menu.open {
+        transform: translateY(0);
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .nav-menu li {
+        margin: 0;
+    }
+
+    .nav-menu li a {
+        padding: 1rem 2rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .nav-menu li:last-child a {
+        border-bottom: none;
+    }
+
+    .language-switcher {
+        margin: 1rem 2rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        padding-top: 1rem;
+    }
+
+    header {
+        padding: 1rem 1.5rem;
+    }
+
+    nav {
+        position: relative;
+    }
+
+    main {
+        margin-top: 4rem;
+        padding: 1rem;
+    }
+
+    #hero {
+        padding: 3rem 1rem;
     }
 
     #hero h1 {
-        font-size: 2rem;
+        font-size: clamp(1.5rem, 8vw, 2rem);
+        margin-bottom: 1rem;
+    }
+
+    section {
+        padding: 2rem 0;
+    }
+
+    .features, .challenges-grid, .philosophy-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .feature, .challenge, .philosophy-item {
+        padding: 1.5rem;
     }
 }
 
@@ -725,13 +795,12 @@ footer a:hover {
 }
 
 .language-switcher select {
-    background: var(--secondary-color);
-    color: white;
-    border: 1px solid #444;
+    padding: 0.5rem;
     border-radius: 4px;
-    padding: 0.25rem 0.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
     font-size: 0.9rem;
-    cursor: pointer;
 }
 
 .language-switcher select:hover {
@@ -1005,5 +1074,357 @@ footer a:hover {
         display: flex;
         flex-direction: column;
         align-items: center;
+    }
+}
+
+/* Mobile Navigation Enhancement */
+.mobile-menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.mobile-menu-toggle:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.mobile-menu-toggle:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* Enhanced responsive typography */
+html {
+    font-size: 16px;
+}
+
+h1 {
+    font-size: clamp(1.75rem, 4vw, 3rem);
+    line-height: 1.2;
+    margin-bottom: 1rem;
+}
+
+h2 {
+    font-size: clamp(1.5rem, 3vw, 2.5rem);
+    line-height: 1.3;
+    margin: 2rem 0 1rem;
+}
+
+h3 {
+    font-size: clamp(1.25rem, 2.5vw, 2rem);
+    line-height: 1.4;
+    margin: 1.5rem 0 0.75rem;
+}
+
+p {
+    font-size: clamp(1rem, 2vw, 1.125rem);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+/* Improved button styling for mobile */
+.btn-enhanced, .btn-primary, .btn-secondary, .btn-demo, .btn-prevention {
+    padding: 0.875rem 1.5rem;
+    margin: 0.25rem;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    display: inline-block;
+    border: none;
+    cursor: pointer;
+    min-width: 44px;
+    min-height: 44px;
+    text-align: center;
+}
+
+/* Enhanced grid layouts for mobile */
+.features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.challenges-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.philosophy-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+/* Improve comparison grid for mobile */
+.comparison-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+}
+
+.prevention-highlights {
+    flex-direction: column;
+    align-items: center;
+}
+
+.highlight {
+    text-align: center;
+    margin: 0.25rem 0;
+}
+
+/* Better article list spacing */
+.articles-list li {
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+}
+
+/* Improve form elements */
+.language-switcher select {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1rem;
+}
+
+/* Fix button layout */
+.cta-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.btn-enhanced {
+    width: 100%;
+    max-width: 280px;
+    text-align: center;
+}
+
+/* Tablet styles */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .features, .challenges-grid, .philosophy-grid {
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
+
+    main {
+        padding: 1.5rem;
+    }
+
+    .comparison-grid {
+        gap: 1.5rem;
+    }
+}
+
+/* Large screen optimizations */
+@media (min-width: 1025px) {
+    .features {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .challenges-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    main {
+        padding: 2rem;
+    }
+}
+
+/* Touch-friendly improvements */
+@media (hover: none) and (pointer: coarse) {
+    .btn-enhanced:hover, .btn-primary:hover, .btn-secondary:hover {
+        transform: none;
+        box-shadow: none;
+    }
+
+    .challenge:hover, .philosophy-item:hover, .next-step-card:hover {
+        transform: none;
+    }
+
+    .btn-enhanced:active, .btn-primary:active, .btn-secondary:active {
+        transform: scale(0.98);
+    }
+}
+
+/* Focus improvements for accessibility */
+a:focus, button:focus, select:focus, input:focus {
+    outline: 3px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* Skip to main content link for screen readers */
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 6px;
+    background: var(--secondary-color);
+    color: white;
+    padding: 8px;
+    text-decoration: none;
+    border-radius: 0 0 4px 4px;
+    z-index: 10000;
+}
+
+.skip-link:focus {
+    top: 0;
+}
+
+/* Better text contrast on mobile */
+@media (max-width: 768px) {
+    /* Ensure text remains readable on small screens */
+    body {
+        font-size: 16px; /* Prevent iOS zoom on form inputs */
+    }
+    
+    /* Improve readability of text */
+    p, li {
+        font-size: 1rem;
+        line-height: 1.6;
+    }
+    
+    /* Better heading hierarchy on mobile */
+    h1 {
+        font-size: 1.75rem;
+        line-height: 1.2;
+        margin-bottom: 1rem;
+    }
+    
+    h2 {
+        font-size: 1.5rem;
+        line-height: 1.3;
+        margin: 1.5rem 0 1rem;
+    }
+    
+    h3 {
+        font-size: 1.25rem;
+        line-height: 1.4;
+        margin: 1rem 0 0.5rem;
+    }
+    
+    /* Improve list spacing */
+    ul, ol {
+        padding-left: 1.5rem;
+    }
+    
+    li {
+        margin-bottom: 0.5rem;
+    }
+    
+    /* Better article content spacing */
+    article p {
+        margin-bottom: 1.25rem;
+    }
+    
+    /* Improve code blocks on mobile */
+    pre {
+        padding: 1rem;
+        border-radius: 6px;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    code {
+        font-size: 0.9rem;
+        word-break: break-word;
+    }
+    
+    /* Better table handling on mobile */
+    table {
+        width: 100%;
+        overflow-x: auto;
+        display: block;
+        white-space: nowrap;
+    }
+    
+    /* Improve form elements */
+    input, textarea, select {
+        font-size: 16px; /* Prevent iOS zoom */
+        padding: 0.75rem;
+        border-radius: 4px;
+        border: 1px solid var(--border-color);
+    }
+    
+    /* Better image handling */
+    img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 4px;
+    }
+    
+    /* Improve footer on mobile */
+    footer {
+        padding: 2rem 1rem;
+        text-align: center;
+    }
+    
+    footer a {
+        display: block;
+        margin: 0.5rem 0;
+        padding: 0.5rem;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    :root {
+        --text-color: #000000;
+        --background-color: #ffffff;
+        --border-color: #000000;
+    }
+    
+    .hero-enhanced, #hero {
+        background: #000000;
+        color: #ffffff;
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+    
+    .nav-menu {
+        transition: none;
+    }
+    
+    .btn-enhanced:hover, .challenge:hover, .philosophy-item:hover {
+        transform: none;
+    }
+}
+
+/* Better print styles */
+@media print {
+    header, footer, .mobile-menu-toggle, .language-switcher {
+        display: none;
+    }
+    
+    main {
+        margin-top: 0;
+        padding: 0;
+    }
+    
+    a {
+        color: #000 !important;
+        text-decoration: underline !important;
+    }
+    
+    .hero-enhanced, #hero {
+        background: white !important;
+        color: black !important;
+        border: 1px solid #ccc;
     }
 }
