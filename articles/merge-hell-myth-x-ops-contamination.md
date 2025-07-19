@@ -170,7 +170,7 @@ Every time the industry chooses "merge hell avoidance" over proper evaluation, w
 ### Microservices Sharing Monolithic Test Environments
 Architectures designed for independence forced back into shared dependencies because provisioning separate environments is "too complex" for the ops team.
 
-### Feature Flags Instead of Feature Branches  
+### Feature Flags Instead of Feature Branches
 Rather than allowing features to evolve in dedicated environments, we force them to coexist behind toggles - creating the exact complexity we were trying to avoid.
 
 ### Premature Architectural Decisions
