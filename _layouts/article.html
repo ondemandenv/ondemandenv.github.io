@@ -8,4 +8,274 @@ layout: default
     {% endif %}
     
     {{ content }}
-</article> 
+</article>
+
+<!-- AI Analysis Floating Button -->
+<div id="ai-analysis-btn" class="ai-analysis-floating-btn" title="Analyze this article with AI">
+    <div class="ai-btn-icon">🤖</div>
+    <div class="ai-btn-text">Analyze with AI</div>
+    <div class="ai-options-dropdown" id="ai-options-dropdown">
+        <button class="ai-option" data-service="chatgpt">
+            <span class="ai-logo">💬</span>
+            ChatGPT
+        </button>
+        <button class="ai-option" data-service="gemini">
+            <span class="ai-logo">✨</span>
+            Gemini
+        </button>
+        <button class="ai-option" data-service="claude">
+            <span class="ai-logo">🔮</span>
+            Claude
+        </button>
+    </div>
+</div>
+
+<style>
+/* AI Analysis Floating Button Styles */
+.ai-analysis-floating-btn {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    background: linear-gradient(135deg, var(--primary-color), #4f46e5);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    padding: 12px 20px;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    opacity: 0.9;
+    user-select: none;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    min-width: 60px;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+}
+
+.ai-analysis-floating-btn:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    opacity: 1;
+    background: linear-gradient(135deg, #0451a5, #4338ca);
+}
+
+.ai-analysis-floating-btn:active {
+    transform: translateY(0) scale(0.98);
+}
+
+.ai-btn-icon {
+    font-size: 20px;
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
+}
+
+.ai-btn-text {
+    white-space: nowrap;
+    opacity: 0;
+    width: 0;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.ai-analysis-floating-btn:hover .ai-btn-text {
+    opacity: 1;
+    width: auto;
+    margin-left: 0;
+}
+
+.ai-analysis-floating-btn:hover .ai-btn-icon {
+    transform: rotate(10deg);
+}
+
+/* AI Options Dropdown */
+.ai-options-dropdown {
+    position: absolute;
+    bottom: calc(100% + 10px);
+    right: 0;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px) scale(0.95);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+    min-width: 140px;
+}
+
+.ai-analysis-floating-btn:hover .ai-options-dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+}
+
+.ai-option {
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    color: var(--text-color);
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.ai-option:hover {
+    background-color: #f8f9fa;
+}
+
+.ai-option:not(:last-child) {
+    border-bottom: 1px solid var(--border-color);
+}
+
+.ai-logo {
+    font-size: 16px;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .ai-analysis-floating-btn {
+        right: 15px;
+        bottom: 15px;
+        padding: 10px 16px;
+        font-size: 13px;
+    }
+    
+    .ai-btn-icon {
+        font-size: 18px;
+    }
+    
+    .ai-options-dropdown {
+        right: -10px;
+        min-width: 120px;
+    }
+    
+    .ai-option {
+        padding: 10px 12px;
+        font-size: 13px;
+    }
+}
+
+/* Animation for entrance */
+@keyframes slideInUp {
+    from {
+        transform: translateY(100px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 0.9;
+    }
+}
+
+.ai-analysis-floating-btn.show {
+    animation: slideInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const aiButton = document.getElementById('ai-analysis-btn');
+    const aiOptions = document.getElementById('ai-options-dropdown');
+    let showTimeout;
+
+    // Show button after a short delay
+    setTimeout(() => {
+        aiButton.classList.add('show');
+    }, 1000);
+
+    // Handle AI service selection
+    aiOptions.addEventListener('click', function(e) {
+        if (e.target.classList.contains('ai-option') || e.target.parentElement.classList.contains('ai-option')) {
+            const button = e.target.classList.contains('ai-option') ? e.target : e.target.parentElement;
+            const service = button.getAttribute('data-service');
+            openAIService(service);
+        }
+    });
+
+    function openAIService(service) {
+        const currentUrl = window.location.href;
+        const articleTitle = document.querySelector('h1') ? document.querySelector('h1').textContent.trim() : 'this article';
+        
+        // Create the prompt
+        const prompt = `Please analyze and summarize this article about software engineering and distributed systems: "${articleTitle}"
+
+Article URL: ${currentUrl}
+
+Please provide:
+1. A concise summary of the main points
+2. Key takeaways and insights
+3. How this relates to current trends in software engineering
+4. Any questions or discussion points this raises
+
+Focus on the technical and architectural concepts discussed.`;
+
+        const encodedPrompt = encodeURIComponent(prompt);
+        
+        let url;
+        switch(service) {
+            case 'chatgpt':
+                url = `https://chat.openai.com/?q=${encodedPrompt}`;
+                break;
+            case 'gemini':
+                url = `https://gemini.google.com/app?q=${encodedPrompt}`;
+                break;
+            case 'claude':
+                url = `https://claude.ai/chat?q=${encodedPrompt}`;
+                break;
+            default:
+                return;
+        }
+        
+        // Open in new tab
+        window.open(url, '_blank', 'noopener,noreferrer');
+        
+        // Optional: Track usage (if you have analytics)
+        if (typeof gtag !== 'undefined') {
+            gtag('event', 'ai_analysis_click', {
+                'ai_service': service,
+                'article_url': currentUrl,
+                'article_title': articleTitle
+            });
+        }
+    }
+
+    // Hide button when scrolling near bottom (so it doesn't cover footer)
+    let ticking = false;
+    function updateButtonVisibility() {
+        if (!ticking) {
+            requestAnimationFrame(() => {
+                const scrolled = window.scrollY;
+                const windowHeight = window.innerHeight;
+                const documentHeight = document.documentElement.scrollHeight;
+                const scrolledPercentage = (scrolled + windowHeight) / documentHeight;
+                
+                // Hide button when user is in the last 10% of the page
+                if (scrolledPercentage > 0.9) {
+                    aiButton.style.transform = 'translateY(100px)';
+                    aiButton.style.opacity = '0';
+                } else {
+                    aiButton.style.transform = 'translateY(0)';
+                    aiButton.style.opacity = '0.9';
+                }
+                
+                ticking = false;
+            });
+        }
+        ticking = true;
+    }
+
+    window.addEventListener('scroll', updateButtonVisibility);
+});
+</script> 
