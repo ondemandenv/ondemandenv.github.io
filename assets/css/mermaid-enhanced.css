@@ -16,11 +16,11 @@
   --transition-fast: all 0.2s ease;
 }
 
-/* Dark mode custom properties */
+/* Dark mode custom properties - keep diagrams white */
 @media (prefers-color-scheme: dark) {
   :root {
     --border-color: #4a5568;
-    --bg-white: #1a202c;
+    /* Keep --bg-white as white for diagrams */
     --text-muted: #a0aec0;
   }
 }
@@ -29,7 +29,7 @@
 .mermaid-diagram-simple {
   position: relative;
   text-align: center;
-  background: var(--bg-white);
+  background: #ffffff !important; /* Force white background for diagrams */
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
   padding: 1rem;
@@ -42,6 +42,16 @@
   height: auto;
   display: block;
   margin: 0 auto;
+  background: #ffffff !important; /* Force white background for SVG */
+}
+
+/* Ensure all mermaid diagrams have white backgrounds */
+.mermaid {
+  background: #ffffff !important;
+}
+
+.mermaid svg {
+  background: #ffffff !important;
 }
 
 /* Simple fullscreen button */
@@ -145,7 +155,15 @@
   
   .mermaid-diagram-simple {
     border: 1px solid #ccc;
-    background: white;
+    background: white !important;
     break-inside: avoid;
+  }
+  
+  .mermaid {
+    background: white !important;
+  }
+  
+  .mermaid svg {
+    background: white !important;
   }
 }

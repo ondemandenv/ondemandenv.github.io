@@ -4,7 +4,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Mermaid Diagram Viewer - ONDEMANDENV.dev</title>
     <meta name="description" content="Interactive Mermaid diagram viewer with zoom and pan functionality">
     <link rel="stylesheet" href="styles.css">
@@ -42,6 +42,13 @@
             height: 100%;
             position: relative;
             background: white;
+            touch-action: pan-x pan-y pinch-zoom;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
         }
         
         .diagram-content {
@@ -85,6 +92,9 @@
             display: flex;
             align-items: center;
             gap: 4px;
+            min-width: 44px;
+            min-height: 44px;
+            touch-action: manipulation;
         }
         
         .control-btn:hover {
@@ -134,6 +144,47 @@
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
+        }
+
+        /* Mobile-specific improvements */
+        @media (max-width: 768px) {
+            .controls {
+                top: 5px;
+                right: 5px;
+                padding: 6px;
+                gap: 6px;
+            }
+            
+            .control-btn {
+                padding: 10px 14px;
+                font-size: 16px;
+                min-width: 48px;
+                min-height: 48px;
+            }
+            
+            .diagram-info {
+                bottom: 5px;
+                left: 5px;
+                font-size: 11px;
+                padding: 6px 10px;
+            }
+            
+            .diagram-viewer {
+                height: calc(100vh - 6rem);
+            }
+        }
+
+        /* Touch device optimizations */
+        @media (hover: none) and (pointer: coarse) {
+            .control-btn:hover {
+                background: var(--primary-color);
+                transform: none;
+            }
+            
+            .control-btn:active {
+                background: #0256c7;
+                transform: scale(0.95);
+            }
         }
         
         .error {
@@ -275,7 +326,7 @@
             </div>
             
             <div class="diagram-info" id="diagram-info">
-                Use mouse wheel or controls to zoom • Drag to pan
+                Loading...
             </div>
         </div>
     </main>
@@ -290,7 +341,9 @@
                 primaryTextColor: '#24292e',
                 primaryBorderColor: '#e1e4e8',
                 lineColor: '#6a737d',
-                backgroundColor: '#ffffff'
+                backgroundColor: '#ffffff',
+                mainBkg: '#ffffff',
+                secondaryBkg: '#ffffff'
             },
             flowchart: {
                 useMaxWidth: false,
@@ -436,7 +489,7 @@
                     this.panZoom.destroy();
                 }
 
-                // Initialize new pan-zoom
+                // Initialize new pan-zoom with mobile touch support
                 this.panZoom = svgPanZoom(svgElement, {
                     zoomEnabled: true,
                     controlIconsEnabled: false,
@@ -448,8 +501,23 @@
                     dblClickZoomEnabled: true,
                     mouseWheelZoomEnabled: true,
                     preventMouseEventsDefault: true,
-                    eventsListenerElement: svgElement.parentElement
+                    eventsListenerElement: svgElement.parentElement,
+                    // Mobile touch support
+                    panEnabled: true,
+                    dragEnabled: true,
+                    // Touch gesture support
+                    beforeZoom: function(oldZoom, newZoom) {
+                        // Allow zoom changes
+                        return true;
+                    },
+                    onZoom: (newZoom) => {
+                        // Update zoom info on mobile
+                        this.updateDiagramInfo();
+                    }
                 });
+
+                // Add touch gesture support for mobile devices
+                this.addTouchGestureSupport(svgElement);
 
                 // Enable controls
                 this.enableControls();
@@ -519,7 +587,114 @@
 
                 const zoom = Math.round(this.panZoom.getZoom() * 100);
                 const info = document.getElementById('diagram-info');
-                info.textContent = `Zoom: ${zoom}% • Use mouse wheel or controls to zoom • Drag to pan`;
+                const isMobile = 'ontouchstart' in window;
+                const panInstructions = isMobile ? 'Pinch to zoom • Drag to pan' : 'Use mouse wheel or controls to zoom • Drag to pan';
+                info.textContent = `Zoom: ${zoom}% • ${panInstructions}`;
+            }
+
+            addTouchGestureSupport(svgElement) {
+                if (!('ontouchstart' in window)) {
+                    // Not a touch device, skip touch gesture support
+                    return;
+                }
+
+                let initialDistance = 0;
+                let initialZoom = 1;
+                let touches = [];
+
+                const getDistance = (touch1, touch2) => {
+                    return Math.sqrt(
+                        Math.pow(touch2.clientX - touch1.clientX, 2) +
+                        Math.pow(touch2.clientY - touch1.clientY, 2)
+                    );
+                };
+
+                const handleTouchStart = (e) => {
+                    touches = Array.from(e.touches);
+                    
+                    if (touches.length === 2) {
+                        // Two fingers - prepare for pinch
+                        e.preventDefault();
+                        e.stopPropagation();
+                        initialDistance = getDistance(touches[0], touches[1]);
+                        initialZoom = this.panZoom.getZoom();
+                        
+                        // Disable pan temporarily during pinch
+                        this.panZoom.disablePan();
+                    } else if (touches.length === 1) {
+                        // Single touch - allow normal pan behavior
+                        this.panZoom.enablePan();
+                    }
+                };
+
+                const handleTouchMove = (e) => {
+                    if (e.touches.length === 2 && initialDistance > 0) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        
+                        try {
+                            const currentDistance = getDistance(e.touches[0], e.touches[1]);
+                            const zoomFactor = currentDistance / initialDistance;
+                            const newZoom = initialZoom * zoomFactor;
+                            
+                            // Apply zoom constraints
+                            const minZoom = this.panZoom.getMinZoom();
+                            const maxZoom = this.panZoom.getMaxZoom();
+                            const constrainedZoom = Math.max(minZoom, Math.min(maxZoom, newZoom));
+                            
+                            // Calculate center point between two touches
+                            const centerX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+                            const centerY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
+                            
+                            // Get SVG coordinates
+                            const svgRect = svgElement.getBoundingClientRect();
+                            const svgX = centerX - svgRect.left;
+                            const svgY = centerY - svgRect.top;
+                            
+                            // Zoom to the center point
+                            this.panZoom.zoomAtPoint(constrainedZoom, {x: svgX, y: svgY});
+                            
+                            // Update info
+                            this.updateDiagramInfo();
+                        } catch (error) {
+                            console.warn('Touch zoom error:', error);
+                        }
+                    }
+                };
+
+                const handleTouchEnd = (e) => {
+                    if (e.touches.length < 2) {
+                        // End of pinch gesture
+                        initialDistance = 0;
+                        initialZoom = 1;
+                        
+                        // Re-enable pan
+                        this.panZoom.enablePan();
+                    }
+                };
+
+                // Add touch event listeners with proper options
+                const touchOptions = { passive: false, capture: true };
+                
+                svgElement.addEventListener('touchstart', handleTouchStart, touchOptions);
+                svgElement.addEventListener('touchmove', handleTouchMove, touchOptions);
+                svgElement.addEventListener('touchend', handleTouchEnd, touchOptions);
+                
+                // Also add to parent container for better touch area
+                const container = svgElement.parentElement;
+                if (container) {
+                    container.addEventListener('touchstart', handleTouchStart, touchOptions);
+                    container.addEventListener('touchmove', handleTouchMove, touchOptions);
+                    container.addEventListener('touchend', handleTouchEnd, touchOptions);
+                }
+
+                // Prevent default touch behaviors that might interfere
+                const diagramContent = document.getElementById('diagram-content');
+                if (diagramContent) {
+                    diagramContent.style.touchAction = 'pan-x pan-y pinch-zoom';
+                }
+
+                console.log('Touch gesture support enabled for mobile devices');
             }
 
             showError(title, detail) {
