@@ -233,7 +233,7 @@ It's time to stop accepting ops limitations as engineering constraints. **Demand
 Explore how infrastructure limitations corrupt every aspect of software engineering:
 
 - [The PR Queue: A Humiliation for Software Engineering](https://www.linkedin.com/pulse/pr-queue-humiliation-software-engineering-gary-yang-cowee/)
-- [Face the Brutal Truth: Merging Code and Distributed Transactions Are Not Just Technical Problems](https://www.linkedin.com/pulse/face-brutal-truth-merging-code-distributed-transaction-gary-yang-1nlce/)
+- [Business Logic Branch Conflicts: How Transaction 'Failures' Are Innovation Opportunities](business-logic-branch-conflicts-innovation-opportunities/)
 - [The X-Ops Railroading of Software Architecture](x-ops-railroading-software-architecture/)
 - [YAML Stagnation: The Container Comfort Zone Trap](yaml-stagnation-container-comfort-zone/)
 
