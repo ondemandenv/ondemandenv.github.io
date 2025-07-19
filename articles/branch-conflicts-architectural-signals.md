@@ -290,6 +290,35 @@ This evaluation framework requires infrastructure capabilities that most ops tea
 
 **Result:** Architectural intelligence gets reduced to arbitrary conflict resolution in IDEs.
 
+## The Political Corruption: How Infrastructure Gaps Kill Merit-Based Decisions
+
+The most destructive effect of the evaluation gap isn't just poor technical decisions—**it's how it corrupts engineering teams into political organizations.**
+
+### When Merit Becomes Impossible
+Without proper evaluation environments, **teams can't prove which approach is better:**
+
+- **Architectural decisions become political** → Based on who can argue more convincingly, not evidence
+- **Innovation gets avoided** → Complex changes will conflict, so teams avoid them
+- **First-to-merge wins** → Race to implement before competitors can create conflicts  
+- **Technical debt accumulates** → Quick/dirty approaches beat thoughtful ones in the political game
+- **Best engineers leave** → Talented people won't tolerate politics over technical excellence
+
+### The Bribery Economy
+**PR approval becomes a currency:**
+- **"I'll approve yours if you approve mine"** → Reciprocal approval regardless of merit
+- **Coalition building** → Form alliances to get changes through
+- **Avoid reviewing complex PRs** → Don't want to be responsible for architectural decisions
+- **Gaming the system** → Submit trivial changes to build approval capital
+
+### The Innovation Death Spiral  
+**Architectural intelligence gets actively suppressed:**
+- **Foundational improvements** → Too risky because they'll conflict with everyone
+- **Performance optimizations** → Can't be proven better without proper testing
+- **Security enhancements** → Complex changes become politically toxic
+- **Code quality improvements** → Avoided because they'll force others to rework
+
+**When infrastructure incompetence makes merit-based evaluation impossible, engineering teams degrade into political lobbying organizations.**
+
 ## The Connection to Broader Infrastructure Incompetence
 
 This architectural signal loss is just one symptom of the broader problem: **ops teams that can't provide the infrastructure that intelligent engineering decisions require**.

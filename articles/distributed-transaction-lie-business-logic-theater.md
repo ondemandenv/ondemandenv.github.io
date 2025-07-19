@@ -239,6 +239,34 @@ The same infrastructure incompetence that creates merge hell drives distributed 
 
 **Result:** Teams build technical frameworks for business problems they haven't properly explored.
 
+## The Political Avoidance: How Infrastructure Gaps Create Business Logic Theater
+
+The same political corruption that destroys merge decisions also corrupts business logic design. **When teams can't properly test business scenarios, they avoid making hard business decisions entirely.**
+
+### The Business Decision Avoidance Pattern
+**Instead of confronting business complexity, teams build technical workarounds:**
+
+- **Saga frameworks** → Avoid deciding what "rollback" actually means for the business
+- **Compensation patterns** → Technical solution for undecided business policies  
+- **Retry mechanisms** → Avoid defining business rules for failure scenarios
+- **Complex orchestration** → Technical theater covering for business logic gaps
+
+### The Political Safe Harbor
+**Technical frameworks become politically safe:**
+- **"We'll implement a Saga"** → Sounds sophisticated, avoids business decisions
+- **"Advanced compensation logic"** → Technical complexity hiding business avoidance
+- **"Industry best practices"** → Appeal to authority rather than business requirements
+- **"Framework will handle it"** → Delegate business decisions to code
+
+### The Innovation Death Spiral
+**Business innovation dies when infrastructure can't support proper evaluation:**
+- **New business models** → Can't be tested, so stick to known patterns
+- **Customer experience improvements** → Too risky without proper testing  
+- **Process optimizations** → Avoided because consequences can't be evaluated
+- **Market differentiation** → Killed by infrastructure limitations
+
+**When teams can't properly evaluate business scenarios, they retreat into technical theater rather than confronting the real business complexity.**
+
 ## The Alternative: Business Logic First, Frameworks Last
 
 ### Step 1: Business Rule Archaeology  

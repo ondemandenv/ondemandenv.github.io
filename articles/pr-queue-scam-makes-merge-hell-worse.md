@@ -61,6 +61,38 @@ Each PR must be updated to work with the new context:
 
 **The queue doesn't solve conflicts—it turns one contextual change into cascading invalidation of all subsequent work.**
 
+## The Political Corruption: How Queues Turn Engineers Into Lobbyists
+
+The most toxic effect of PR queues isn't just technical inefficiency—**it's how they corrupt engineering teams into political organizations.**
+
+### The Merge-First Competition
+When proper evaluation is impossible, **position in the queue becomes everything:**
+
+- **Race to merge first** → Avoid conflicts by beating everyone else to mainline
+- **Political maneuvering** → "Bribe" reviewers, promise future favors, build coalitions  
+- **Rush approvals** → Push PRs through before competitors can create conflicts
+- **Gaming the system** → Submit trivial changes to establish queue position
+- **Avoid complex work** → Don't attempt architectural changes that will conflict with others
+
+**Engineering decisions become political lobbying rather than technical evaluation.**
+
+### The Innovation Death Spiral
+**Complex architectural improvements become politically toxic:**
+- **Too risky** → Will conflict with everyone else's work
+- **Too slow** → Others will merge first and force rework
+- **Too controversial** → Can't prove value without proper testing environment  
+- **Too collaborative** → Requires coordination that the queue actively prevents
+
+**Result:** Teams avoid exactly the kind of foundational work that creates real value.
+
+### The Cultural Toxicity
+- **Trust erodes** → Everyone is competing rather than collaborating
+- **Merit disappears** → Success based on political positioning, not technical quality
+- **Innovation dies** → Only safe, non-conflicting changes get attempted  
+- **Talent leaves** → Best engineers won't tolerate political games over technical excellence
+
+**The PR queue doesn't just create merge conflicts—it turns engineering teams into dysfunctional political organizations.**
+
 ## The Workshop Streamline Fallacy Exposed
 
 The PR queue treats software development like manufacturing:
