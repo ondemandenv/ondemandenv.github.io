@@ -24,9 +24,6 @@
     <!-- Pan and Zoom Library -->
     <script src="https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js"></script>
     
-    <!-- Hammer.js for touch gestures -->
-    <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8/hammer.min.js"></script>
-    
     <style>
         /* Diagram viewer specific styles */
         .diagram-viewer {
@@ -45,11 +42,6 @@
             height: 100%;
             position: relative;
             background: white;
-            touch-action: none;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
         }
         
         .diagram-content {
@@ -93,9 +85,6 @@
             display: flex;
             align-items: center;
             gap: 4px;
-            min-width: 44px;
-            min-height: 44px;
-            touch-action: manipulation;
         }
         
         .control-btn:hover {
@@ -145,47 +134,6 @@
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
-        }
-
-        /* Mobile-specific improvements */
-        @media (max-width: 768px) {
-            .controls {
-                top: 5px;
-                right: 5px;
-                padding: 6px;
-                gap: 6px;
-            }
-            
-            .control-btn {
-                padding: 10px 14px;
-                font-size: 16px;
-                min-width: 48px;
-                min-height: 48px;
-            }
-            
-            .diagram-info {
-                bottom: 5px;
-                left: 5px;
-                font-size: 11px;
-                padding: 6px 10px;
-            }
-            
-            .diagram-viewer {
-                height: calc(100vh - 6rem);
-            }
-        }
-
-        /* Touch device optimizations */
-        @media (hover: none) and (pointer: coarse) {
-            .control-btn:hover {
-                background: var(--primary-color);
-                transform: none;
-            }
-            
-            .control-btn:active {
-                background: #0256c7;
-                transform: scale(0.95);
-            }
         }
         
         .error {
@@ -327,7 +275,7 @@
             </div>
             
             <div class="diagram-info" id="diagram-info">
-                Loading...
+                Use mouse wheel or controls to zoom • Drag to pan
             </div>
         </div>
     </main>
@@ -342,9 +290,7 @@
                 primaryTextColor: '#24292e',
                 primaryBorderColor: '#e1e4e8',
                 lineColor: '#6a737d',
-                backgroundColor: '#ffffff',
-                mainBkg: '#ffffff',
-                secondaryBkg: '#ffffff'
+                backgroundColor: '#ffffff'
             },
             flowchart: {
                 useMaxWidth: false,
@@ -361,7 +307,6 @@
         class MermaidViewer {
             constructor() {
                 this.panZoom = null;
-                this.hammer = null;
                 this.currentMmdFile = null;
                 this.init();
             }
@@ -491,7 +436,7 @@
                     this.panZoom.destroy();
                 }
 
-                // Initialize svg-pan-zoom with Hammer.js touch support
+                // Initialize new pan-zoom
                 this.panZoom = svgPanZoom(svgElement, {
                     zoomEnabled: true,
                     controlIconsEnabled: false,
@@ -503,135 +448,7 @@
                     dblClickZoomEnabled: true,
                     mouseWheelZoomEnabled: true,
                     preventMouseEventsDefault: true,
-                    panEnabled: true,
-                    contain: false,
-                    // Add custom events handler for touch support
-                    customEventsHandler: {
-                        // Halt default touch events to avoid conflicts
-                        haltEventListeners: ['touchstart', 'touchend', 'touchmove', 'touchleave', 'touchcancel'],
-                        
-                        // Initialize Hammer.js
-                        init: (options) => {
-                            console.log('Initializing Hammer.js touch gestures...');
-                            
-                            // Check if Hammer is available
-                            if (typeof Hammer === 'undefined') {
-                                console.warn('Hammer.js not available, touch gestures disabled');
-                                return;
-                            }
-                            
-                            try {
-                                // Create Hammer instance
-                                this.hammer = new Hammer(options.svgElement);
-                                
-                                // Enable pinch and pan recognizers
-                                this.hammer.get('pinch').set({ enable: true });
-                                this.hammer.get('pan').set({ 
-                                    direction: Hammer.DIRECTION_ALL,
-                                    threshold: 0
-                                });
-                                
-                                // Enable tap recognizer for double tap
-                                this.hammer.get('tap').set({ 
-                                    taps: 2,
-                                    interval: 300,
-                                    threshold: 30
-                                });
-                            
-                            // Handle pinch gestures for zooming
-                            let initialZoom = 1;
-                            let initialCenter = { x: 0, y: 0 };
-                            
-                            this.hammer.on('pinchstart', (e) => {
-                                initialZoom = options.instance.getZoom();
-                                const rect = options.svgElement.getBoundingClientRect();
-                                initialCenter = {
-                                    x: e.center.x - rect.left,
-                                    y: e.center.y - rect.top
-                                };
-                            });
-                            
-                            this.hammer.on('pinchmove', (e) => {
-                                const newZoom = initialZoom * e.scale;
-                                const constrainedZoom = Math.max(
-                                    Math.min(newZoom, options.instance.getMaxZoom()),
-                                    options.instance.getMinZoom()
-                                );
-                                options.instance.zoomAtPoint(constrainedZoom, initialCenter);
-                            });
-                            
-                            // Handle pan gestures  
-                            let isPanning = false;
-                            let startPan = { x: 0, y: 0 };
-                            let lastValidPan = { x: 0, y: 0 };
-                            
-                            this.hammer.on('panstart', (e) => {
-                                // Only handle single-finger touch panning
-                                if (e.maxPointers === 1) {
-                                    isPanning = true;
-                                    startPan = options.instance.getPan();
-                                    lastValidPan = { x: e.deltaX, y: e.deltaY };
-                                }
-                            });
-                            
-                            this.hammer.on('panmove', (e) => {
-                                if (isPanning && e.maxPointers === 1) {
-                                    try {
-                                        const zoom = options.instance.getZoom();
-                                        const deltaX = (e.deltaX - lastValidPan.x) / zoom;
-                                        const deltaY = (e.deltaY - lastValidPan.y) / zoom;
-                                        
-                                        const currentPan = options.instance.getPan();
-                                        options.instance.pan({
-                                            x: currentPan.x + deltaX,
-                                            y: currentPan.y + deltaY
-                                        });
-                                        
-                                        lastValidPan = { x: e.deltaX, y: e.deltaY };
-                                    } catch (error) {
-                                        console.warn('Pan move error:', error);
-                                    }
-                                }
-                            });
-                            
-                            this.hammer.on('panend', (e) => {
-                                isPanning = false;
-                                lastValidPan = { x: 0, y: 0 };
-                            });
-                            
-                            // Handle double tap for zoom
-                            this.hammer.on('doubletap', (e) => {
-                                const rect = options.svgElement.getBoundingClientRect();
-                                const point = {
-                                    x: e.center.x - rect.left,
-                                    y: e.center.y - rect.top
-                                };
-                                const currentZoom = options.instance.getZoom();
-                                const newZoom = currentZoom < 2 ? 2 : 1;
-                                options.instance.zoomAtPoint(newZoom, point);
-                            });
-                                
-                            console.log('Hammer.js touch gestures initialized successfully');
-                            
-                        } catch (error) {
-                            console.error('Error initializing Hammer.js:', error);
-                            this.hammer = null;
-                        }
-                    },
-                        
-                        // Destroy Hammer instance
-                        destroy: () => {
-                            if (this.hammer) {
-                                this.hammer.destroy();
-                                this.hammer = null;
-                                console.log('Hammer.js destroyed');
-                            }
-                        }
-                    },
-                    // Callbacks
-                    onZoom: (newZoom) => {
-                        this.updateDiagramInfo();
-                    }
+                    eventsListenerElement: svgElement.parentElement
                 });
 
                 // Enable controls
@@ -702,12 +519,8 @@
 
                 const zoom = Math.round(this.panZoom.getZoom() * 100);
                 const info = document.getElementById('diagram-info');
-                const isMobile = 'ontouchstart' in window && typeof Hammer !== 'undefined';
-                const panInstructions = isMobile ? 'Pinch to zoom • Drag to pan • Double-tap to zoom' : 'Use mouse wheel or controls to zoom • Drag to pan';
-                info.textContent = `Zoom: ${zoom}% • ${panInstructions}`;
+                info.textContent = `Zoom: ${zoom}% • Use mouse wheel or controls to zoom • Drag to pan`;
             }
-
-
 
             showError(title, detail) {
                 const container = document.getElementById('diagram-content');
