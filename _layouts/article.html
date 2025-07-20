@@ -27,6 +27,15 @@ layout: default
             <span class="ai-logo">💻</span>
             Phind
         </button>
+        <hr style="margin: 8px 0; border: none; border-top: 1px solid var(--border-color);">
+        <button class="ai-option" data-service="chatgpt">
+            <span class="ai-logo">💬</span>
+            ChatGPT
+        </button>
+        <button class="ai-option" data-service="gemini">
+            <span class="ai-logo">✨</span>
+            Gemini
+        </button>
     </div>
 </div>
 
@@ -98,7 +107,7 @@ layout: default
     position: absolute;
     bottom: calc(100% + 10px);
     right: 0;
-    background: white;
+    background: white !important;
     border-radius: 12px;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
     opacity: 0;
@@ -106,14 +115,31 @@ layout: default
     transform: translateY(10px) scale(0.95);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     border: 1px solid var(--border-color);
-    overflow: hidden;
+    overflow: visible;
     min-width: 140px;
+    z-index: 9999 !important;
+    pointer-events: none;
+
+    /* Backup positioning in case bottom doesn't work */
+    /* top: -200px; */
+}
+
+/* Debug version - always visible for testing */
+.ai-options-dropdown.debug-show {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: translateY(0) scale(1) !important;
+    pointer-events: auto !important;
+    border: 3px solid red !important;
+    background: yellow !important;
 }
 
 .ai-analysis-floating-btn:hover .ai-options-dropdown {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0) scale(1);
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: translateY(0) scale(1) !important;
+    z-index: 1001 !important;
+    pointer-events: auto !important;
 }
 
 .ai-option {
@@ -135,8 +161,13 @@ layout: default
     background-color: #f8f9fa;
 }
 
-.ai-option:not(:last-child) {
+.ai-option:not(:last-child):not([data-service="phind"]) {
     border-bottom: 1px solid var(--border-color);
+}
+
+/* Hide the automatic border for the option before separator */
+.ai-option[data-service="phind"] {
+    border-bottom: none !important;
 }
 
 .ai-logo {
