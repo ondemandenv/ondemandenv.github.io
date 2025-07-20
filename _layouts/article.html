@@ -317,25 +317,7 @@ Focus on the technical and architectural concepts discussed.`;
                 console.error('Unknown service:', service);
                 return;
         }
-        
-        console.log('Opening URL:', url);
-        
-        // Open in new tab
-        const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
-        
-        if (!newWindow) {
-            console.error('Failed to open new window - popup blocked?');
-            alert('Please allow popups and try again, or manually open ' + url);
-        }
-        
-        // Optional: Track usage (if you have analytics)
-        if (typeof gtag !== 'undefined') {
-            gtag('event', 'ai_analysis_click', {
-                'ai_service': service,
-                'article_url': currentUrl,
-                'article_title': articleTitle
-            });
-        }
+
     }
     
 
