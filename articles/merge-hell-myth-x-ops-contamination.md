@@ -1,7 +1,7 @@
 ---
 layout: article
 title: "The 'Merge Hell' Myth: How Ops Incompetence Manufactured a Crisis to Hide Their Failure"
-permalink: /articles/merge-hell-myth-x-ops-contamination/
+permalink: /articles/merge-hell-myth-x-ops-contamination
 description: "The software industry has been sold a lie: that 'merge hell' is a developer problem requiring workflow changes. In reality, it's ops teams covering for their inability to provide proper evaluation environments, forcing premature engineering decisions that corrupt software architecture."
 author: "Gary Yang"
 date: 2025-07-16
