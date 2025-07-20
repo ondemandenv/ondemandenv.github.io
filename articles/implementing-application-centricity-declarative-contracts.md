@@ -1,7 +1,7 @@
 ---
 layout: article
 title: "Implementing Application-Centricity Part 3: The Power of Declarative Contracts and Platform Abstraction"
-permalink: /articles/app-centric-infra3/
+permalink: /articles/implementing-application-centricity-declarative-contracts/
 ---
 
 
