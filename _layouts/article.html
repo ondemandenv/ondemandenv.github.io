@@ -317,6 +317,9 @@ Focus on the technical and architectural concepts discussed.`;
                 console.error('Unknown service:', service);
                 return;
         }
+        console.log('Opening URL:', url);
+
+        window.open(url, '_blank', 'noopener,noreferrer');
 
     }
     
