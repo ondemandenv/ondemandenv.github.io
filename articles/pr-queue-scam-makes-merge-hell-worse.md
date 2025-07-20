@@ -297,6 +297,42 @@ Multiple solutions need separate but comparable environments with production-par
 
 **This is why the article's critique matters:** Queues aren't chosen because they're effective - they're imposed by infrastructure constraints that ops teams can't or won't solve.
 
+### The Architecture Trap: When Queues "Work," You Have Bigger Problems
+
+**There's a fundamental architectural contradiction that exposes an even deeper issue:**
+
+**If PR queues actually worked without contextual invalidation cascades, that would mean:**
+- Changes in one part don't affect other parts of the system
+- Different features and services are truly independent  
+- Code can be merged sequentially without conflicts or integration issues
+
+**But if that's actually the case, then you have a monolithic repository containing completely unrelated code - which is horrible architecture!**
+
+### The Architectural Logic Trap
+
+**Three possible scenarios, all problematic:**
+
+**Scenario 1: Well-Architected Systems**  
+If your services have proper domain boundaries and clear interfaces, **they shouldn't be in the same repository requiring a shared merge queue.** Different bounded contexts should be in separate repositories with independent deployment pipelines.
+
+**Scenario 2: Poorly-Architected Monoliths**  
+If your queue "works" because code changes don't affect each other, **you have a pile of unrelated functionality thrown into the same repository.** This isn't architecture - it's accidental code sharing that creates maintenance nightmares.
+
+**Scenario 3: Interdependent Architecture (Reality)**  
+If your code has real architectural relationships and shared concerns, **the queue creates exactly the contextual invalidation cascades this article describes.** Changes in one area invalidate work in related areas.
+
+### The Real Issue: Queues Mask Architectural Problems
+
+**Organizations use PR queues to avoid confronting architectural reality:**
+
+**Instead of asking "Why are all these unrelated features in the same repository?"** teams implement queue processes to manage the coordination overhead.
+
+**Instead of asking "Why do changes in authentication break the payment system?"** teams create queue workflows to serialize the conflicts.
+
+**Instead of asking "Why can't our services evolve independently?"** teams build political processes to manage the dependencies.
+
+**The queue becomes a procedural band-aid over architectural dysfunction.**
+
 ## Conclusion: The Queue Is the Problem, Not the Solution
 
 The PR queue represents one of software engineering's greatest self-inflicted wounds: **taking a problem created by infrastructure inadequacy and institutionalizing it as "best practice."**
