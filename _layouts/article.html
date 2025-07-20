@@ -107,7 +107,7 @@ layout: default
     position: absolute;
     bottom: calc(100% + 10px);
     right: 0;
-    background: white;
+    background: white !important;
     border-radius: 12px;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
     opacity: 0;
@@ -115,10 +115,23 @@ layout: default
     transform: translateY(10px) scale(0.95);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     border: 1px solid var(--border-color);
-    overflow: hidden;
+    overflow: visible;
     min-width: 140px;
-    z-index: 1001;
+    z-index: 9999 !important;
     pointer-events: none;
+    
+    /* Backup positioning in case bottom doesn't work */
+    /* top: -200px; */
+}
+
+/* Debug version - always visible for testing */
+.ai-options-dropdown.debug-show {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: translateY(0) scale(1) !important;
+    pointer-events: auto !important;
+    border: 3px solid red !important;
+    background: yellow !important;
 }
 
 .ai-analysis-floating-btn:hover .ai-options-dropdown {
@@ -257,10 +270,38 @@ document.addEventListener('DOMContentLoaded', function() {
         const dropdown = document.getElementById('ai-options-dropdown');
         if (dropdown) {
             console.log('📋 Dropdown element found, forcing visibility for debugging');
-            dropdown.style.opacity = '1';
-            dropdown.style.visibility = 'visible';
-            dropdown.style.transform = 'translateY(0) scale(1)';
-            dropdown.style.pointerEvents = 'auto';
+            
+            // More aggressive style forcing
+            dropdown.style.setProperty('opacity', '1', 'important');
+            dropdown.style.setProperty('visibility', 'visible', 'important');
+            dropdown.style.setProperty('transform', 'translateY(0) scale(1)', 'important');
+            dropdown.style.setProperty('pointer-events', 'auto', 'important');
+            dropdown.style.setProperty('display', 'block', 'important');
+            dropdown.style.setProperty('background', 'white', 'important');
+            dropdown.style.setProperty('border', '2px solid red', 'important'); // Red border for debugging
+            
+            // Check styles after forcing
+            console.log('📊 After forcing styles:', {
+                opacity: getComputedStyle(dropdown).opacity,
+                visibility: getComputedStyle(dropdown).visibility,
+                transform: getComputedStyle(dropdown).transform,
+                display: getComputedStyle(dropdown).display,
+                position: getComputedStyle(dropdown).position,
+                top: getComputedStyle(dropdown).top,
+                right: getComputedStyle(dropdown).right,
+                zIndex: getComputedStyle(dropdown).zIndex
+            });
+            
+            // Check element dimensions
+            const rect = dropdown.getBoundingClientRect();
+            console.log('📐 Dropdown position/size:', {
+                x: rect.x,
+                y: rect.y,
+                width: rect.width,
+                height: rect.height,
+                top: rect.top,
+                left: rect.left
+            });
         }
     });
     
@@ -429,6 +470,17 @@ Focus on the technical and architectural concepts discussed.`;
             position: getComputedStyle(debugDropdown).position,
             zIndex: getComputedStyle(debugDropdown).zIndex
         });
+        
+        // TEST: Force dropdown to be always visible for debugging
+        console.log('🧪 TESTING: Making dropdown always visible with yellow background');
+        debugDropdown.classList.add('debug-show');
+        
+        // Also add a test button to toggle visibility
+        setTimeout(() => {
+            console.log('🔄 After 3 seconds, removing always-visible debug class');
+            debugDropdown.classList.remove('debug-show');
+        }, 3000);
+        
     } else {
         console.error('❌ AI dropdown element NOT found in DOM!');
     }
