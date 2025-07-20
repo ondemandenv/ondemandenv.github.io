@@ -27,15 +27,6 @@ layout: default
             <span class="ai-logo">💻</span>
             Phind
         </button>
-        <hr style="margin: 8px 0; border: none; border-top: 1px solid var(--border-color);">
-        <button class="ai-option" data-service="chatgpt">
-            <span class="ai-logo">💬</span>
-            ChatGPT
-        </button>
-        <button class="ai-option" data-service="gemini">
-            <span class="ai-logo">✨</span>
-            Gemini
-        </button>
     </div>
 </div>
 
@@ -107,7 +98,7 @@ layout: default
     position: absolute;
     bottom: calc(100% + 10px);
     right: 0;
-    background: white !important;
+    background: white;
     border-radius: 12px;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
     opacity: 0;
@@ -115,31 +106,14 @@ layout: default
     transform: translateY(10px) scale(0.95);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     border: 1px solid var(--border-color);
-    overflow: visible;
+    overflow: hidden;
     min-width: 140px;
-    z-index: 9999 !important;
-    pointer-events: none;
-    
-    /* Backup positioning in case bottom doesn't work */
-    /* top: -200px; */
-}
-
-/* Debug version - always visible for testing */
-.ai-options-dropdown.debug-show {
-    opacity: 1 !important;
-    visibility: visible !important;
-    transform: translateY(0) scale(1) !important;
-    pointer-events: auto !important;
-    border: 3px solid red !important;
-    background: yellow !important;
 }
 
 .ai-analysis-floating-btn:hover .ai-options-dropdown {
-    opacity: 1 !important;
-    visibility: visible !important;
-    transform: translateY(0) scale(1) !important;
-    z-index: 1001 !important;
-    pointer-events: auto !important;
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
 }
 
 .ai-option {
@@ -161,13 +135,8 @@ layout: default
     background-color: #f8f9fa;
 }
 
-.ai-option:not(:last-child):not([data-service="phind"]) {
+.ai-option:not(:last-child) {
     border-bottom: 1px solid var(--border-color);
-}
-
-/* Hide the automatic border for the option before separator */
-.ai-option[data-service="phind"] {
-    border-bottom: none !important;
 }
 
 .ai-logo {
@@ -261,62 +230,16 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Also handle hover state for showing options (with debugging)
+    // Also handle hover state for showing options
     let isHovering = false;
     aiButton.addEventListener('mouseenter', function() {
         isHovering = true;
-        console.log('🐭 HOVER ENTER: AI button - dropdown should show now');
-        // Force show dropdown for debugging
-        const dropdown = document.getElementById('ai-options-dropdown');
-        if (dropdown) {
-            console.log('📋 Dropdown element found, forcing visibility for debugging');
-            
-            // More aggressive style forcing
-            dropdown.style.setProperty('opacity', '1', 'important');
-            dropdown.style.setProperty('visibility', 'visible', 'important');
-            dropdown.style.setProperty('transform', 'translateY(0) scale(1)', 'important');
-            dropdown.style.setProperty('pointer-events', 'auto', 'important');
-            dropdown.style.setProperty('display', 'block', 'important');
-            dropdown.style.setProperty('background', 'white', 'important');
-            dropdown.style.setProperty('border', '2px solid red', 'important'); // Red border for debugging
-            
-            // Check styles after forcing
-            console.log('📊 After forcing styles:', {
-                opacity: getComputedStyle(dropdown).opacity,
-                visibility: getComputedStyle(dropdown).visibility,
-                transform: getComputedStyle(dropdown).transform,
-                display: getComputedStyle(dropdown).display,
-                position: getComputedStyle(dropdown).position,
-                top: getComputedStyle(dropdown).top,
-                right: getComputedStyle(dropdown).right,
-                zIndex: getComputedStyle(dropdown).zIndex
-            });
-            
-            // Check element dimensions
-            const rect = dropdown.getBoundingClientRect();
-            console.log('📐 Dropdown position/size:', {
-                x: rect.x,
-                y: rect.y,
-                width: rect.width,
-                height: rect.height,
-                top: rect.top,
-                left: rect.left
-            });
-        }
+        console.log('Hovering over AI button - options should be visible');
     });
     
     aiButton.addEventListener('mouseleave', function() {
         isHovering = false;
-        console.log('🐭 HOVER LEAVE: Left AI button hover area');
-        // Allow CSS to hide dropdown
-        const dropdown = document.getElementById('ai-options-dropdown');
-        if (dropdown) {
-            console.log('📋 Removing forced visibility');
-            dropdown.style.opacity = '';
-            dropdown.style.visibility = '';
-            dropdown.style.transform = '';
-            dropdown.style.pointerEvents = '';
-        }
+        console.log('Left AI button hover area');
     });
 
     function openAIService(service) {
@@ -343,40 +266,26 @@ Focus on the technical and architectural concepts discussed.`;
 
         console.log('Generated prompt:', prompt);
         
-        let url;
-        let useClipboard = false;
+        // URL encode the prompt for use in query parameters
+        const encodedPrompt = encodeURIComponent(prompt);
         
+        let url;
         switch(service) {
-            // Services that support URL parameters (seamless experience)
             case 'perplexity':
-                url = `https://perplexity.ai/?q=${encodeURIComponent(prompt)}`;
+                // Perplexity supports URL parameters with ?q=
+                url = `https://perplexity.ai/?q=${encodedPrompt}`;
                 break;
             case 'you':
-                url = `https://you.com/search?q=${encodeURIComponent(prompt)}`;
+                // You.com supports URL parameters with ?q=
+                url = `https://you.com/search?q=${encodedPrompt}`;
                 break;
             case 'phind':
-                url = `https://www.phind.com/search?q=${encodeURIComponent(prompt)}`;
+                // Phind supports URL parameters with ?q=
+                url = `https://www.phind.com/search?q=${encodedPrompt}`;
                 break;
-            
-            // Major AI services that require clipboard (popular but manual)
-            case 'chatgpt':
-                url = 'https://chat.openai.com/';
-                useClipboard = true;
-                break;
-            case 'gemini':
-                url = 'https://gemini.google.com/app';
-                useClipboard = true;
-                break;
-            
             default:
                 console.error('Unknown service:', service);
                 return;
-        }
-        
-        // Handle clipboard services
-        if (useClipboard) {
-            copyToClipboard(prompt);
-            alert(`Prompt copied to clipboard! 📋\n\nPaste it into ${service === 'chatgpt' ? 'ChatGPT' : 'Gemini'} and hit enter.`);
         }
         
         console.log('Opening URL:', url);
@@ -399,37 +308,7 @@ Focus on the technical and architectural concepts discussed.`;
         }
     }
     
-    function copyToClipboard(text) {
-        if (navigator.clipboard && window.isSecureContext) {
-            // Use modern clipboard API
-            navigator.clipboard.writeText(text).then(() => {
-                console.log('Prompt copied to clipboard successfully');
-            }).catch(err => {
-                console.error('Failed to copy to clipboard:', err);
-                fallbackCopyToClipboard(text);
-            });
-        } else {
-            // Fallback for older browsers or non-HTTPS
-            fallbackCopyToClipboard(text);
-        }
-    }
-    
-    function fallbackCopyToClipboard(text) {
-        const textArea = document.createElement('textarea');
-        textArea.value = text;
-        textArea.style.position = 'fixed';
-        textArea.style.top = '-9999px';
-        document.body.appendChild(textArea);
-        textArea.focus();
-        textArea.select();
-        try {
-            document.execCommand('copy');
-            console.log('Prompt copied using fallback method');
-        } catch (err) {
-            console.error('Fallback copy failed:', err);
-        }
-        document.body.removeChild(textArea);
-    }
+
 
     // Hide button when scrolling near bottom (so it doesn't cover footer)
     let ticking = false;
@@ -459,30 +338,5 @@ Focus on the technical and architectural concepts discussed.`;
     window.addEventListener('scroll', updateButtonVisibility);
     
     console.log('AI Analysis button script fully loaded and ready!');
-    
-    // Debug: Check if dropdown element exists
-    const debugDropdown = document.getElementById('ai-options-dropdown');
-    if (debugDropdown) {
-        console.log('✅ AI dropdown element found in DOM');
-        console.log('📊 Dropdown computed styles:', {
-            opacity: getComputedStyle(debugDropdown).opacity,
-            visibility: getComputedStyle(debugDropdown).visibility,
-            position: getComputedStyle(debugDropdown).position,
-            zIndex: getComputedStyle(debugDropdown).zIndex
-        });
-        
-        // TEST: Force dropdown to be always visible for debugging
-        console.log('🧪 TESTING: Making dropdown always visible with yellow background');
-        debugDropdown.classList.add('debug-show');
-        
-        // Also add a test button to toggle visibility
-        setTimeout(() => {
-            console.log('🔄 After 3 seconds, removing always-visible debug class');
-            debugDropdown.classList.remove('debug-show');
-        }, 3000);
-        
-    } else {
-        console.error('❌ AI dropdown element NOT found in DOM!');
-    }
 });
 </script> 

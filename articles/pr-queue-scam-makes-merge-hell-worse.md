@@ -250,33 +250,52 @@ Teams should be able to compare different approaches with realistic load and dat
 ### Democratic Release Systems
 Infrastructure should support A/B testing and gradual rollout of competing approaches.
 
-## The BDD Framework for Queue-Free Development
+## The Infrastructure Reality: Why Organizations Default to Queues
 
-```gherkin
-Feature: Parallel Development Without Queue Constraints
+**The fundamental question the industry refuses to ask:** If parallel development is obviously superior to sequential processing, why do almost all organizations use PR queues?
 
-Scenario: Multiple features develop simultaneously
-  Given three teams working on related functionality  
-  When each team develops in isolated environments
-  Then they can observe each other's progress
-  And identify natural integration points
-  And merge when approaches align
-  Without artificial sequencing
+**The uncomfortable answer:** Because most ops teams cannot provide the infrastructure that queue-free development requires.
 
-Scenario: Architectural changes propagate naturally  
-  Given a foundational system needs updating
-  When dependent features develop against the new architecture
-  Then changes evolve together in parallel
-  And integration happens at natural boundaries  
-  Without cascading rework
+### What Queue-Free Development Actually Requires
 
-Scenario: Competing approaches coexist until selection
-  Given two viable solutions to the same problem
-  When both develop in parallel environments  
-  Then performance and usability can be compared
-  And selection happens based on evidence
-  Without premature forced convergence
-```
+**For multiple teams to develop simultaneously without queue constraints:**
+
+Each team needs isolated environments with full system context - not just their service, but all dependencies, databases, and integration points. Teams need visibility into each other's parallel work to identify natural integration boundaries. Infrastructure must support dynamic merging and splitting of environments as approaches converge or diverge.
+
+**For architectural changes to propagate naturally:**
+
+Foundational changes need to be testable in environments where dependent features can develop against the new architecture simultaneously. Changes must evolve together without cascading rework, which requires infrastructure that can maintain multiple parallel reality contexts and gradually merge them as integration points become clear.
+
+**For competing approaches to coexist until evidence-based selection:**
+
+Multiple solutions need separate but comparable environments with production-parity data and realistic user traffic. Performance and usability comparison requires A/B testing infrastructure and meaningful business outcome measurement across different architectural approaches.
+
+### The Infrastructure Gap That Forces Queues
+
+**Current ops reality in most organizations:**
+- **One environment per "stage"** (dev, staging, prod)
+- **One version of each service** per environment  
+- **Manual environment management** that makes parallel development "too expensive"
+- **No infrastructure for A/B testing** architectural approaches
+- **No tooling for environment merging/splitting** as teams collaborate
+
+**Result:** Organizations fall back to the PR queue because **it's the only workflow that works with inadequate infrastructure.**
+
+### Why This Makes Queues a "Necessary Evil"
+
+**Teams don't choose queues because they're good - they choose queues because:**
+- **Infrastructure limitations** make parallel development impossible
+- **Sequential processing** is the only pattern their ops can support  
+- **Shared environments** force artificial coordination constraints
+- **Manual deployment** makes parallel approaches "too complex"
+
+**The queue becomes a workaround for infrastructure incompetence, not a deliberate engineering choice.**
+
+### The Honest Assessment
+
+**Queue-free development is only possible with infrastructure that most organizations don't have.** Without environment provisioning that supports parallel development, teams are stuck with sequential processing regardless of its obvious problems.
+
+**This is why the article's critique matters:** Queues aren't chosen because they're effective - they're imposed by infrastructure constraints that ops teams can't or won't solve.
 
 ## Conclusion: The Queue Is the Problem, Not the Solution
 
