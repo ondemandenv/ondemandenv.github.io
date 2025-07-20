@@ -117,12 +117,16 @@ layout: default
     border: 1px solid var(--border-color);
     overflow: hidden;
     min-width: 140px;
+    z-index: 1001;
+    pointer-events: none;
 }
 
 .ai-analysis-floating-btn:hover .ai-options-dropdown {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0) scale(1);
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: translateY(0) scale(1) !important;
+    z-index: 1001 !important;
+    pointer-events: auto !important;
 }
 
 .ai-option {
@@ -244,16 +248,34 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Also handle hover state for showing options
+    // Also handle hover state for showing options (with debugging)
     let isHovering = false;
     aiButton.addEventListener('mouseenter', function() {
         isHovering = true;
-        console.log('Hovering over AI button - options should be visible');
+        console.log('🐭 HOVER ENTER: AI button - dropdown should show now');
+        // Force show dropdown for debugging
+        const dropdown = document.getElementById('ai-options-dropdown');
+        if (dropdown) {
+            console.log('📋 Dropdown element found, forcing visibility for debugging');
+            dropdown.style.opacity = '1';
+            dropdown.style.visibility = 'visible';
+            dropdown.style.transform = 'translateY(0) scale(1)';
+            dropdown.style.pointerEvents = 'auto';
+        }
     });
     
     aiButton.addEventListener('mouseleave', function() {
         isHovering = false;
-        console.log('Left AI button hover area');
+        console.log('🐭 HOVER LEAVE: Left AI button hover area');
+        // Allow CSS to hide dropdown
+        const dropdown = document.getElementById('ai-options-dropdown');
+        if (dropdown) {
+            console.log('📋 Removing forced visibility');
+            dropdown.style.opacity = '';
+            dropdown.style.visibility = '';
+            dropdown.style.transform = '';
+            dropdown.style.pointerEvents = '';
+        }
     });
 
     function openAIService(service) {
@@ -396,5 +418,19 @@ Focus on the technical and architectural concepts discussed.`;
     window.addEventListener('scroll', updateButtonVisibility);
     
     console.log('AI Analysis button script fully loaded and ready!');
+    
+    // Debug: Check if dropdown element exists
+    const debugDropdown = document.getElementById('ai-options-dropdown');
+    if (debugDropdown) {
+        console.log('✅ AI dropdown element found in DOM');
+        console.log('📊 Dropdown computed styles:', {
+            opacity: getComputedStyle(debugDropdown).opacity,
+            visibility: getComputedStyle(debugDropdown).visibility,
+            position: getComputedStyle(debugDropdown).position,
+            zIndex: getComputedStyle(debugDropdown).zIndex
+        });
+    } else {
+        console.error('❌ AI dropdown element NOT found in DOM!');
+    }
 });
 </script> 
