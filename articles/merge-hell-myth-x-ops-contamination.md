@@ -36,7 +36,7 @@ The entire "merge hell" discourse treats conflicts as technical obstacles to ove
 - Speed vs compliance implementations
 - **Dependency conflicts** (JAR hell, version incompatibilities)  
 - **Signal:** Strategic decision needed, not technical merge
-- **Special case:** Dependency conflicts often signal monolith should decompose into microservices ([dependency hell as architectural necessity](dependency-hell-architectural-necessity/) and [architectural evolution phases](from-rds-to-distributed-phases-evolution-enhanced/))
+- **Special case:** Dependency conflicts often signal monolith should decompose into microservices ([dependency hell as architectural necessity](../dependency-hell-architectural-necessity/) and [architectural evolution phases](../from-rds-to-distributed-phases-evolution-enhanced/))
 
 **2. Evolution Into Something New (Hybrid Solutions)**
 - Legacy system + cloud-native adaptation
