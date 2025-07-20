@@ -27,9 +27,12 @@
 </head>
 <body>
 <header>
-     <nav>
+    <nav>
         <div class="logo">ONDEMANDENV.dev</div>
-        <ul>
+        <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle mobile menu">
+            ☰
+        </button>
+        <ul class="nav-menu" id="nav-menu">
             <li><a href="index.html">Home</a></li>
             <li><a href="concepts.html">Core Concepts</a></li>
             <li><a href="patterns.html">Patterns & Use Cases</a></li>
@@ -37,14 +40,14 @@
             <li><a href="articles.html">Articles</a></li>
             <li><a href="https://github.com/ondemandenv" target="_blank">GitHub Org</a></li>
             <li><a href="mailto:contacts@ondemandenv.dev">Request Demo</a></li>
+            <li class="language-switcher">
+                <select onchange="window.location.href=this.value;">
+                    <option value="concepts.html" selected>English</option>
+                    <option value="ja/concepts.html">日本語</option>
+                    <option value="zh-TW/concepts.html">繁體中文</option>
+                </select>
+            </li>
         </ul>
-        <div class="language-switcher">
-            <select onchange="window.location.href=this.value;">
-                <option value="concepts.html" selected>English</option>
-                <option value="ja/concepts.html">日本語</option>
-                <option value="zh-TW/concepts.html">繁體中文</option>
-            </select>
-        </div>
     </nav>
 </header>
 
@@ -119,6 +122,55 @@
     <p>&copy; 2025 ONDEMANDENV.dev. All rights reserved.</p>
     <!-- Add footer links if needed -->
 </footer>
+
+<script>
+// Mobile menu toggle functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+    const navMenu = document.getElementById('nav-menu');
+    
+    if (mobileMenuToggle && navMenu) {
+        mobileMenuToggle.addEventListener('click', function() {
+            navMenu.classList.toggle('open');
+            
+            // Update aria-expanded for accessibility
+            const isOpen = navMenu.classList.contains('open');
+            mobileMenuToggle.setAttribute('aria-expanded', isOpen);
+            
+            // Change hamburger icon
+            mobileMenuToggle.textContent = isOpen ? '×' : '☰';
+        });
+        
+        // Close menu when clicking on a link (for better UX)
+        const menuLinks = navMenu.querySelectorAll('a');
+        menuLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                navMenu.classList.remove('open');
+                mobileMenuToggle.setAttribute('aria-expanded', 'false');
+                mobileMenuToggle.textContent = '☰';
+            });
+        });
+        
+        // Close menu when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!mobileMenuToggle.contains(event.target) && !navMenu.contains(event.target)) {
+                navMenu.classList.remove('open');
+                mobileMenuToggle.setAttribute('aria-expanded', 'false');
+                mobileMenuToggle.textContent = '☰';
+            }
+        });
+        
+        // Close menu on window resize to desktop size
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) {
+                navMenu.classList.remove('open');
+                mobileMenuToggle.setAttribute('aria-expanded', 'false');
+                mobileMenuToggle.textContent = '☰';
+            }
+        });
+    }
+});
+</script>
 
 </body>
 </html> 
