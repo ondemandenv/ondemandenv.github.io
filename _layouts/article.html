@@ -283,17 +283,15 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('Article Title:', articleTitle);
         
         // Create the prompt
-        const prompt = `Think ultra hard and analyze/summarize this article about software engineering and distributed systems: "${articleTitle}"
+        const prompt = `As very senior software engineer/architect, think ultra hard and analyze/summarize this article about software engineering and distributed systems
 
 Article URL: ${currentUrl}
 
-Please provide:
-1. A concise summary of the main points
-2. Key takeaways and insights
-3. How this relates to current trends in software engineering
-4. How unique, original and novel is this article's ideas/perspectives/insights
-
-Focus on the technical and architectural concepts discussed.`;
+Provide:
+1. A concise summary of the main points, key takeaways and insights.
+2. How is this valuable relates to current trends in software engineering in depth.
+3. How unique, original and novel is this article's ideas/perspectives/insights/approaches.
+`;
 
         console.log('Generated prompt:', prompt);
         
