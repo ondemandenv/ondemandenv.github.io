@@ -235,8 +235,8 @@ It's time to stop accepting ops limitations as engineering constraints. **Demand
 Explore how infrastructure limitations corrupt every aspect of software engineering:
 
 - [The PR Queue: A Humiliation for Software Engineering](https://www.linkedin.com/pulse/pr-queue-humiliation-software-engineering-gary-yang-cowee/)
-- [Business Logic Branch Conflicts: How Your Team's Business Decisions Became Political Warfare Too](business-logic-branch-conflicts-political-warfare/)
-- [The X-Ops Railroading of Software Architecture](x-ops-railroading-software-architecture/)
-- [YAML Stagnation: The Container Comfort Zone Trap](yaml-stagnation-container-comfort-zone/)
+- [Business Logic Branch Conflicts: How Your Team's Business Decisions Became Political Warfare Too](https://ondemandenv.dev/articles/business-logic-branch-conflicts-political-warfare/)
+- [The X-Ops Railroading of Software Architecture](https://ondemandenv.dev/articles/x-ops-railroading-software-architecture/)
+- [YAML Stagnation: The Container Comfort Zone Trap](https://ondemandenv.dev/articles/yaml-stagnation-container-comfort-zone/)
 
 **Ready to demand better infrastructure?** [Explore ONDEMANDENV](https://ondemandenv.dev) and discover how application-centric infrastructure enables evidence-based engineering decisions. 

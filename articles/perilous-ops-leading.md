@@ -4,7 +4,7 @@ title: "The Perilous Path: Operator-Led SDLC in the Age of Microservices"
 permalink: /articles/perilous-ops-leading/
 ---
 
-> **Enhanced Version Available**: This article has been significantly expanded with detailed diagrams, case studies, and comprehensive analysis. Read the [enhanced version](/articles/perilous-ops-leading-enhanced) for a complete exploration of how operator-led microservices create distributed monoliths.
+> **Enhanced Version Available**: This article has been significantly expanded with detailed diagrams, case studies, and comprehensive analysis. Read the [enhanced version](https://ondemandenv.dev/articles/perilous-ops-leading-enhanced/) for a complete exploration of how operator-led microservices create distributed monoliths.
 
 The promise of Service-Oriented Architectures (SOA) and microservices is compelling: increased agility, scalability, and resilience through independently deployable and manageable services. As organizations adopt these architectures, a natural tendency emerges – to entrust the Software Development Lifecycle (SDLC) to operations teams. After all, operations teams are traditionally responsible for deployment, infrastructure, and keeping systems running. However, while seemingly practical on the surface, operator-led SDLC in the complex world of microservices can lead down a perilous path, fraught with challenges, particularly in managing source control complexity and configuration.
 

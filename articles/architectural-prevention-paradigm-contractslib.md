@@ -164,4 +164,4 @@ The future belongs to organizations that prevent problems rather than react to t
 
 ---
 
-*Ready to eliminate the fragmentation trap in your organization? [Get started with ONDEMANDENV](../documentation.html) and transform your distributed systems through architectural prevention.* 
+*Ready to eliminate the fragmentation trap in your organization? [Get started with ONDEMANDENV](https://ondemandenv.dev/documentation.html) and transform your distributed systems through architectural prevention.* 

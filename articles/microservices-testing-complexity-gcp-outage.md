@@ -65,7 +65,7 @@ Modern approaches use application-layer isolation rather than environment isolat
 - **Context propagation** to maintain isolation through call chains
 - **Smart load balancing** to separate test and production traffic
 
-**Note**: For stateful services with data schema changes, request-level isolation alone is insufficient. These scenarios require the more sophisticated [dimensional partitioning and data migration strategies](articles/stateful-deployment-dimensional-partitioning/) that ONDEMANDENV's platform enables through DDD-aligned bounded contexts.
+**Note**: For stateful services with data schema changes, request-level isolation alone is insufficient. These scenarios require the more sophisticated [dimensional partitioning and data migration strategies](https://ondemandenv.dev/articles/stateful-deployment-dimensional-partitioning/) that ONDEMANDENV's platform enables through DDD-aligned bounded contexts.
 
 ONDEMANDENV implements this through its contractsLib governance model, where service interactions are explicitly defined and validated before deployment[9].
 
@@ -78,7 +78,7 @@ If Google had implemented ONDEMANDENV's architectural prevention approach:
 3. **Design-time validation** would have prevented the architectural violation from ever reaching production
 4. **Selective duplication** would have isolated the risk to the specific service under test
 
-**Note**: Google's Service Control system manages policy data, which is stateful. A complete solution would require the [dimensional partitioning strategies](articles/stateful-deployment-dimensional-partitioning/) for migrating policy data between service versions, ensuring that both code and data changes are validated together in isolation.
+**Note**: Google's Service Control system manages policy data, which is stateful. A complete solution would require the [dimensional partitioning strategies](https://ondemandenv.dev/articles/stateful-deployment-dimensional-partitioning/) for migrating policy data between service versions, ensuring that both code and data changes are validated together in isolation.
 
 This approach would have maintained the independence that makes microservices valuable while preventing the cascading failure that brought down the internet.
 
@@ -120,7 +120,7 @@ Organizations must embrace **genuine loose coupling in testing** by implementing
 - Implement context propagation to maintain isolation through distributed call chains
 - Share infrastructure while maintaining application-layer separation
 
-**ONDEMANDENV Implementation**: The platform's Enver system enables isolation by spinning up service-specific environments that share stable platform infrastructure[8]. For stateless services, this uses request-level routing; for stateful services, this involves the [dimensional partitioning strategies](articles/stateful-deployment-dimensional-partitioning/) that enable data migration between service versions.
+**ONDEMANDENV Implementation**: The platform's Enver system enables isolation by spinning up service-specific environments that share stable platform infrastructure[8]. For stateless services, this uses request-level routing; for stateful services, this involves the [dimensional partitioning strategies](https://ondemandenv.dev/articles/stateful-deployment-dimensional-partitioning/) that enable data migration between service versions.
 
 #### **Selective Replication Strategy**
 - **Replicate**: Services under active development or those with frequent breaking changes
@@ -206,7 +206,7 @@ The choice is clear: continue applying monolithic testing approaches to distribu
 
 ---
 
-*This article complements our existing analysis of the [GCP outage from a shared environments perspective](articles/gcp-outage-contracts-cure/). Together, they demonstrate how ONDEMANDENV's architectural prevention approach addresses both the operational and testing challenges that plague modern distributed systems.*
+*This article complements our existing analysis of the [GCP outage from a shared environments perspective](https://ondemandenv.dev/articles/gcp-outage-contracts-cure/). Together, they demonstrate how ONDEMANDENV's architectural prevention approach addresses both the operational and testing challenges that plague modern distributed systems.*
 
 [1] https://www.thousandeyes.com/blog/google-cloud-outage-analysis-june-12-2025
 [2] https://status.cloud.google.com/incidents/ow5i3PPK96RduMcb1SsW

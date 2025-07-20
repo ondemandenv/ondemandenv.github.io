@@ -335,8 +335,8 @@ Ideas → Parallel Exploration → Evidence Collection → Selection → Continu
 
 See how the merge hell scandal connects to the broader innovation platform vision:
 
-- [The PR Queue Scam: How the Industry's 'Solution' Makes Merge Hell Infinitely Worse](pr-queue-scam-makes-merge-hell-worse/)
-- [Branch Conflicts as System Architecture Signals](branch-conflicts-architectural-signals/)  
-- [The 'Merge Hell' Myth: How Ops Incompetence Manufactured a Crisis](merge-hell-myth-x-ops-contamination/)
+- [The PR Queue Scam: How the Industry's 'Solution' Makes Merge Hell Infinitely Worse](https://ondemandenv.dev/articles/pr-queue-scam-makes-merge-hell-worse/)
+- [Branch Conflicts as System Architecture Signals](https://ondemandenv.dev/articles/branch-conflicts-architectural-signals/)  
+- [The 'Merge Hell' Myth: How Ops Incompetence Manufactured a Crisis](https://ondemandenv.dev/articles/merge-hell-myth-x-ops-contamination/)
 
 **Ready to transform conflicts into competitive advantages?** [Explore ONDEMANDENV](https://ondemandenv.dev) and discover how branch diversity and idea exploration become the foundation for engineering innovation. 
