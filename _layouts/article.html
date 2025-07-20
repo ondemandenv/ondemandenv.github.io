@@ -15,17 +15,17 @@ layout: default
     <div class="ai-btn-icon">🤖</div>
     <div class="ai-btn-text">Analyze with AI</div>
     <div class="ai-options-dropdown" id="ai-options-dropdown">
-        <button class="ai-option" data-service="chatgpt">
-            <span class="ai-logo">💬</span>
-            ChatGPT
+        <button class="ai-option" data-service="perplexity">
+            <span class="ai-logo">🔍</span>
+            Perplexity
         </button>
-        <button class="ai-option" data-service="gemini">
-            <span class="ai-logo">✨</span>
-            Gemini
+        <button class="ai-option" data-service="you">
+            <span class="ai-logo">🤖</span>
+            You.com
         </button>
-        <button class="ai-option" data-service="claude">
-            <span class="ai-logo">🔮</span>
-            Claude
+        <button class="ai-option" data-service="phind">
+            <span class="ai-logo">💻</span>
+            Phind
         </button>
     </div>
 </div>
@@ -224,9 +224,9 @@ document.addEventListener('DOMContentLoaded', function() {
             const service = target.getAttribute('data-service');
             openAIService(service);
         } else {
-            // If user clicked the main button (not an option), default to ChatGPT
-            console.log('Main button clicked - defaulting to ChatGPT');
-            openAIService('chatgpt');
+            // If user clicked the main button (not an option), default to Perplexity
+            console.log('Main button clicked - defaulting to Perplexity');
+            openAIService('perplexity');
         }
     });
 
@@ -266,27 +266,22 @@ Focus on the technical and architectural concepts discussed.`;
 
         console.log('Generated prompt:', prompt);
         
+        // URL encode the prompt for use in query parameters
+        const encodedPrompt = encodeURIComponent(prompt);
+        
         let url;
         switch(service) {
-            case 'chatgpt':
-                // ChatGPT doesn't support URL parameters for pre-filled prompts
-                // We'll open ChatGPT and user will need to paste the prompt
-                url = 'https://chat.openai.com/';
-                // Copy prompt to clipboard
-                copyToClipboard(prompt);
-                alert('Prompt copied to clipboard! Paste it into ChatGPT.');
+            case 'perplexity':
+                // Perplexity supports URL parameters with ?q=
+                url = `https://perplexity.ai/?q=${encodedPrompt}`;
                 break;
-            case 'gemini':
-                // Gemini also doesn't support URL parameters for prompts
-                url = 'https://gemini.google.com/app';
-                copyToClipboard(prompt);
-                alert('Prompt copied to clipboard! Paste it into Gemini.');
+            case 'you':
+                // You.com supports URL parameters with ?q=
+                url = `https://you.com/search?q=${encodedPrompt}`;
                 break;
-            case 'claude':
-                // Claude also doesn't support URL parameters
-                url = 'https://claude.ai/chat';
-                copyToClipboard(prompt);
-                alert('Prompt copied to clipboard! Paste it into Claude.');
+            case 'phind':
+                // Phind supports URL parameters with ?q=
+                url = `https://www.phind.com/search?q=${encodedPrompt}`;
                 break;
             default:
                 console.error('Unknown service:', service);
@@ -313,37 +308,7 @@ Focus on the technical and architectural concepts discussed.`;
         }
     }
     
-    function copyToClipboard(text) {
-        if (navigator.clipboard && window.isSecureContext) {
-            // Use modern clipboard API
-            navigator.clipboard.writeText(text).then(() => {
-                console.log('Prompt copied to clipboard successfully');
-            }).catch(err => {
-                console.error('Failed to copy to clipboard:', err);
-                fallbackCopyToClipboard(text);
-            });
-        } else {
-            // Fallback for older browsers or non-HTTPS
-            fallbackCopyToClipboard(text);
-        }
-    }
-    
-    function fallbackCopyToClipboard(text) {
-        const textArea = document.createElement('textarea');
-        textArea.value = text;
-        textArea.style.position = 'fixed';
-        textArea.style.top = '-9999px';
-        document.body.appendChild(textArea);
-        textArea.focus();
-        textArea.select();
-        try {
-            document.execCommand('copy');
-            console.log('Prompt copied using fallback method');
-        } catch (err) {
-            console.error('Fallback copy failed:', err);
-        }
-        document.body.removeChild(textArea);
-    }
+
 
     // Hide button when scrolling near bottom (so it doesn't cover footer)
     let ticking = false;
