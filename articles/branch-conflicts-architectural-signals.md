@@ -13,6 +13,17 @@ keywords: ["branch conflicts", "architectural signals", "system boundaries", "ev
 
 ---
 
+## 🧠 **MERGE HELL SCANDAL SERIES** - Article 2 of 4
+
+*Having exposed the ops incompetence behind "merge hell," we now reveal what conflicts really are: architectural intelligence. Continue the investigation:*
+
+**→ Previous:** [**The Foundation**] [The Ops Incompetence Crisis](https://ondemandenv.dev/articles/merge-hell-myth-x-ops-contamination/)  
+**→ Current:** [**The Intelligence**] Branch Conflicts as Architectural Signals  
+**→ Next:** [**The Cascade**] [The PR Queue Scam Makes It Worse](https://ondemandenv.dev/articles/pr-queue-scam-makes-merge-hell-worse/)  
+**→ Finale:** [**The Solution**] [Branch Diversity and Innovation](https://ondemandenv.dev/articles/business-logic-branch-conflicts-political-warfare/)
+
+---
+
 ## The Intelligence Hidden in Plain Sight
 
 Every time developers encounter a merge conflict, they're witnessing something profound: **two different visions of the same system attempting to coexist**. The conflict isn't a bug—it's information. It's your codebase trying to tell you something about boundaries, dependencies, and architectural assumptions.

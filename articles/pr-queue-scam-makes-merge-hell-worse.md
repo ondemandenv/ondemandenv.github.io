@@ -13,6 +13,17 @@ keywords: ["PR queue", "contextual invalidation", "merge hell", "pull request", 
 
 ---
 
+## ⚡ **MERGE HELL SCANDAL SERIES** - Article 3 of 4
+
+*After exposing ops incompetence and revealing conflicts as architectural intelligence, we now demolish the industry's supposed "solution." Follow the complete cascade analysis:*
+
+**→ Foundation:** [**The Crisis**] [The Ops Incompetence Behind Merge Hell](https://ondemandenv.dev/articles/merge-hell-myth-x-ops-contamination/)  
+**→ Intelligence:** [**The Signals**] [Branch Conflicts as Architecture](https://ondemandenv.dev/articles/branch-conflicts-architectural-signals/)  
+**→ Current:** [**The Cascade**] The PR Queue Scam Makes It Worse  
+**→ Finale:** [**The Solution**] [Branch Diversity and Innovation](https://ondemandenv.dev/articles/business-logic-branch-conflicts-political-warfare/)
+
+---
+
 ## The Sequential Processing Delusion
 
 The PR queue operates on a fundamentally flawed assumption: **that software development works like a factory assembly line**. Code changes are treated as discrete items moving through a linear process—development → review → merge—with each step happening in strict sequence.
