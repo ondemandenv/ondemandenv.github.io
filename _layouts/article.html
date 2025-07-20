@@ -27,6 +27,15 @@ layout: default
             <span class="ai-logo">💻</span>
             Phind
         </button>
+        <hr style="margin: 8px 0; border: none; border-top: 1px solid var(--border-color);">
+        <button class="ai-option" data-service="chatgpt">
+            <span class="ai-logo">💬</span>
+            ChatGPT
+        </button>
+        <button class="ai-option" data-service="gemini">
+            <span class="ai-logo">✨</span>
+            Gemini
+        </button>
     </div>
 </div>
 
@@ -135,8 +144,13 @@ layout: default
     background-color: #f8f9fa;
 }
 
-.ai-option:not(:last-child) {
+.ai-option:not(:last-child):not([data-service="phind"]) {
     border-bottom: 1px solid var(--border-color);
+}
+
+/* Hide the automatic border for the option before separator */
+.ai-option[data-service="phind"] {
+    border-bottom: none !important;
 }
 
 .ai-logo {
@@ -266,26 +280,40 @@ Focus on the technical and architectural concepts discussed.`;
 
         console.log('Generated prompt:', prompt);
         
-        // URL encode the prompt for use in query parameters
-        const encodedPrompt = encodeURIComponent(prompt);
-        
         let url;
+        let useClipboard = false;
+        
         switch(service) {
+            // Services that support URL parameters (seamless experience)
             case 'perplexity':
-                // Perplexity supports URL parameters with ?q=
-                url = `https://perplexity.ai/?q=${encodedPrompt}`;
+                url = `https://perplexity.ai/?q=${encodeURIComponent(prompt)}`;
                 break;
             case 'you':
-                // You.com supports URL parameters with ?q=
-                url = `https://you.com/search?q=${encodedPrompt}`;
+                url = `https://you.com/search?q=${encodeURIComponent(prompt)}`;
                 break;
             case 'phind':
-                // Phind supports URL parameters with ?q=
-                url = `https://www.phind.com/search?q=${encodedPrompt}`;
+                url = `https://www.phind.com/search?q=${encodeURIComponent(prompt)}`;
                 break;
+            
+            // Major AI services that require clipboard (popular but manual)
+            case 'chatgpt':
+                url = 'https://chat.openai.com/';
+                useClipboard = true;
+                break;
+            case 'gemini':
+                url = 'https://gemini.google.com/app';
+                useClipboard = true;
+                break;
+            
             default:
                 console.error('Unknown service:', service);
                 return;
+        }
+        
+        // Handle clipboard services
+        if (useClipboard) {
+            copyToClipboard(prompt);
+            alert(`Prompt copied to clipboard! 📋\n\nPaste it into ${service === 'chatgpt' ? 'ChatGPT' : 'Gemini'} and hit enter.`);
         }
         
         console.log('Opening URL:', url);
@@ -308,7 +336,37 @@ Focus on the technical and architectural concepts discussed.`;
         }
     }
     
-
+    function copyToClipboard(text) {
+        if (navigator.clipboard && window.isSecureContext) {
+            // Use modern clipboard API
+            navigator.clipboard.writeText(text).then(() => {
+                console.log('Prompt copied to clipboard successfully');
+            }).catch(err => {
+                console.error('Failed to copy to clipboard:', err);
+                fallbackCopyToClipboard(text);
+            });
+        } else {
+            // Fallback for older browsers or non-HTTPS
+            fallbackCopyToClipboard(text);
+        }
+    }
+    
+    function fallbackCopyToClipboard(text) {
+        const textArea = document.createElement('textarea');
+        textArea.value = text;
+        textArea.style.position = 'fixed';
+        textArea.style.top = '-9999px';
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        try {
+            document.execCommand('copy');
+            console.log('Prompt copied using fallback method');
+        } catch (err) {
+            console.error('Fallback copy failed:', err);
+        }
+        document.body.removeChild(textArea);
+    }
 
     // Hide button when scrolling near bottom (so it doesn't cover footer)
     let ticking = false;
