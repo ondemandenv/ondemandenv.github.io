@@ -1,7 +1,7 @@
 ---
 layout: article
 title: "AWS CDK for EKS: Falling Short in Real-World, Multi-Account Kubernetes Deployments"
-permalink: /articles/app-centric-infra2/
+permalink: /articles/embracing-application-centric-infrastructure-cloud-2/
 ---
 
 

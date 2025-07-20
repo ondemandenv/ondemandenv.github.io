@@ -1,7 +1,7 @@
 ---
 layout: article
 title: "The Great Constraint Shift: From Physical to Logical Partitioning in Modern Systems"
-permalink: /articles/constraint-evolution-app-centric-architecture/
+permalink: /articles/great-constraint-shift-physical-logical-partitioning/
 ---
 
 # The Great Constraint Shift: From Physical to Logical Partitioning in Modern Systems

@@ -73,7 +73,7 @@ This pattern demonstrates how ONDEMANDENV systematically eliminates stagnation t
 
 **No Network Connectivity Between Tiers**: Each tier operates in complete isolation with only manual, air-gapped code promotion between repository forks.
 
-> 💡 **Technical Deep Dive**: For detailed multi-account network architecture patterns using Transit Gateway, VPC sharing, and IPAM that enable secure cross-account platform services within each tier, see [AWS CDK for EKS: Multi-Account Network Architecture](/articles/app-centric-infra2/#multi-account-network-architecture).
+> 💡 **Technical Deep Dive**: For detailed multi-account network architecture patterns using Transit Gateway, VPC sharing, and IPAM that enable secure cross-account platform services within each tier, see [AWS CDK for EKS: Multi-Account Network Architecture](/articles/embracing-application-centric-infrastructure-cloud-2/#multi-account-network-architecture).
 
 ## Understanding Envers: Complete SDLC Isolation vs. Shared Environments
 

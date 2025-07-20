@@ -540,7 +540,7 @@ The journey from RDS-centric to distributed systems isn't just about technologyâ
 ## Related Articles
 
 - [Eliminating Accidental Complexity](/articles/eliminating-accidental-complexity/) - How service isolation eliminates exponential JAR hell while keeping business complexity linear
-- [The Great Constraint Shift: From Physical to Logical Partitioning](/articles/constraint-evolution-app-centric-architecture/) - How dependency constraints fit into broader constraint evolution patterns
+- [The Great Constraint Shift: From Physical to Logical Partitioning](/articles/great-constraint-shift-physical-logical-partitioning/) - How dependency constraints fit into broader constraint evolution patterns
 - [The Blurring Lines Between Development and Operations in Modern Cloud Architecture](/articles/blurring-lines-dev-ops-modern-cloud/) - How cloud platforms eliminate traditional dev-ops boundaries
 - [The K-D Tree of Software: Why Partition Sequence Determines System Complexity](/articles/kd-tree-software-partition-sequence/) - The mathematical foundation of partitioning strategy
 

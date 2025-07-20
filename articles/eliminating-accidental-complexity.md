@@ -473,6 +473,6 @@ Your business has inherent complexity. Don't let accidental technical complexity
 
 ## Related Articles
 
-- [The Great Constraint Shift: From Physical to Logical Partitioning](/articles/constraint-evolution-app-centric-architecture/) - How dependency constraints force architectural evolution
+- [The Great Constraint Shift: From Physical to Logical Partitioning](/articles/great-constraint-shift-physical-logical-partitioning/) - How dependency constraints force architectural evolution
 - [From RDS-Centric to Distributed Systems: An Evolution Through Architectural Phases](/articles/from-rds-to-distributed-phases-evolution-enhanced/) - Detailed phase analysis showing complexity transformation
 - [The K-D Tree of Software: Why Partition Sequence Determines System Complexity](/articles/kd-tree-software-partition-sequence/) - Mathematical foundation of complexity organization

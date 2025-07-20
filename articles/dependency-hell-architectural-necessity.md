@@ -108,7 +108,7 @@ public class EverythingApp {
 
 ## Programming-Level Constraints: The Fourth Layer
 
-Building on the [constraint evolution framework](/articles/constraint-evolution-app-centric-architecture/), dependency management represents a **fourth constraint layer** that operates independently of physical, platform, and logical constraints:
+Building on the [constraint evolution framework](/articles/great-constraint-shift-physical-logical-partitioning/), dependency management represents a **fourth constraint layer** that operates independently of physical, platform, and logical constraints:
 
 ### The Four Constraint Layers
 
@@ -1057,5 +1057,5 @@ The future belongs to organizations that recognize dependency hell not as a prob
 ## Related Articles
 
 - [Eliminating Accidental Complexity](/articles/eliminating-accidental-complexity/) - **Core framework** showing how DDD eliminates multiple forms of exponential accidental complexity (JAR hell, schema coupling, team coordination, etc.)
-- [The Great Constraint Shift: From Physical to Logical Partitioning in Modern Systems](/articles/constraint-evolution-app-centric-architecture/) - How dependency constraints fit into the broader constraint evolution pattern
+- [The Great Constraint Shift: From Physical to Logical Partitioning in Modern Systems](/articles/great-constraint-shift-physical-logical-partitioning/) - How dependency constraints fit into the broader constraint evolution pattern
 - [From RDS-Centric to Distributed Systems: An Evolution Through Architectural Phases](/articles/from-rds-to-distributed-phases-evolution-enhanced/) - How domain boundaries enable Phase 4 distributed architectures
