@@ -8,8 +8,6 @@ tags: ["Platform Engineering", "DevOps", "Architecture", "SDLC", "Engineering Pr
 permalink: /articles/skewer-problem-fake-engineering-ops/
 ---
 
-# The Skewer Problem: How Fake Engineering in Ops Hijacked the SDLC
-
 *They call it engineering. It's not. It's templated automation wrapped in the illusion of design. And it's choking the craft of software development.*
 
 ## The Great Inversion: From Support to Stranglehold
