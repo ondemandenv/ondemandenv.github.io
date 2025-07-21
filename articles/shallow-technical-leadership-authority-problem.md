@@ -8,8 +8,6 @@ tags: ["Engineering Leadership", "Technical Management", "Engineering Culture", 
 permalink: /articles/shallow-technical-leadership-authority-problem/
 ---
 
-# The Authority Problem: How Shallow Technical Leadership Destroys Engineering Culture
-
 *The ops theater problem becomes existentially dangerous when it reaches senior technical leadership. Many Staff Engineers and Engineering Directors at major companies have bypassed fundamental engineering education entirely—and their authority depends on keeping it that way.*
 
 ## The Leadership Catastrophe: Architectural Authority Without Architectural Competence
