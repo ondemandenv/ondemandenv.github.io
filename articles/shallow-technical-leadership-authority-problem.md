@@ -979,7 +979,7 @@ Shallow Leader: "If the tests pass, it should work. We don't need to simulate ev
 
 ### The Real Engineering Prevention
 
-**The connection to the first article**: The **simulation and behavior modeling capabilities** that represent **real engineering** are **systematically prevented** by the **same leadership incompetence** that creates the **need for simulation** in the first place.
+**The connection to the [first article](https://ondemandenv.dev/articles/skewer-problem-fake-engineering-ops/)**: The **simulation and behavior modeling capabilities** that represent **real engineering** are **systematically prevented** by the **same leadership incompetence** that creates the **need for simulation** in the first place.
 
 **The vicious cycle**:
 1. **Shallow leadership** makes **poor architectural decisions**
@@ -1012,7 +1012,7 @@ Shallow Leader: "If the tests pass, it should work. We don't need to simulate ev
 
 ### The Complete Engineering Prevention System
 
-**The final insight**: The **leadership incompetence problem** from this article **directly causes** the **fake engineering problem** from the first article.
+**The final insight**: The **leadership incompetence problem** from this article **directly causes** the **fake engineering problem** from the [first article](https://ondemandenv.dev/articles/skewer-problem-fake-engineering-ops/).
 
 **Shallow technical leadership**:
 - **Cannot build** simulation environments (lack engineering expertise)
