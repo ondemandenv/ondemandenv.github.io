@@ -4,8 +4,6 @@ title: "The Art of Strategic Partitioning: Lessons from K-d Trees, Domain-Driven
 permalink: /articles/k-d-tree/
 ---
 
-# The Art of Strategic Partitioning: Lessons from K-d Trees, Domain-Driven Design, and Event Sourcing
-
 In software architecture, complexity is inevitable—but how we partition that complexity determines whether we build systems that scale gracefully or collapse under their own weight. The theoretical foundation for understanding effective partitioning comes from k-d trees, a data structure that demonstrates how different partitioning strategies yield dramatically different outcomes[1][6]. However, translating this theoretical clarity into practical software architecture reveals why so many systems fail despite good intentions.
 
 ## The K-d Tree Foundation: Theory Meets Reality
