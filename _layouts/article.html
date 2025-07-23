@@ -6,7 +6,7 @@ layout: default
     {% if page.title %}
     <h1>{{ page.title }}</h1>
     {% endif %}
-    
+
     {{ content }}
 </article>
 
@@ -253,27 +253,27 @@ layout: default
         padding: 10px 16px;
         font-size: 13px;
     }
-    
+
     .source-btn-icon {
         font-size: 18px;
     }
-    
+
     .ai-analysis-floating-btn {
         right: 15px;
         bottom: 15px;
         padding: 10px 16px;
         font-size: 13px;
     }
-    
+
     .ai-btn-icon {
         font-size: 18px;
     }
-    
+
     .ai-options-dropdown {
         right: -10px;
         min-width: 120px;
     }
-    
+
     .ai-option {
         padding: 10px 12px;
         font-size: 13px;
@@ -304,22 +304,22 @@ layout: default
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Page scripts loading...');
-    
+
     // Source History Button Functionality
     const sourceButton = document.getElementById('source-history-btn');
     if (sourceButton) {
         console.log('Source history button found, setting up...');
-        
+
         // Show source button after a short delay
         setTimeout(() => {
             sourceButton.classList.add('show');
             console.log('Source history button shown');
         }, 1200);
-        
+
         // Set up the source history link based on current page
         const currentPath = window.location.pathname;
         console.log('Current path:', currentPath);
-        
+
         // Extract article name from path (remove /articles/ prefix and any trailing slash)
         let articleName = '';
         if (currentPath.startsWith('/articles/')) {
@@ -329,9 +329,9 @@ document.addEventListener('DOMContentLoaded', function() {
             const articlesIndex = currentPath.indexOf('/articles/');
             articleName = currentPath.substring(articlesIndex + 10).replace(/\/$/, '');
         }
-        
+
         console.log('Extracted article name:', articleName);
-        
+
         if (articleName) {
             const sourceHistoryUrl = `https://github.com/ondemandenv/ondemandenv.github.io/commits/main/articles/${articleName}.md`;
             sourceButton.href = sourceHistoryUrl;
@@ -344,18 +344,18 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log('Using fallback source history URL');
         }
     }
-    
-    // AI Analysis Button Functionality  
+
+    // AI Analysis Button Functionality
     console.log('AI Analysis button script loading...');
-    
+
     const aiButton = document.getElementById('ai-analysis-btn');
     const aiOptions = document.getElementById('ai-options-dropdown');
-    
+
     if (!aiButton || !aiOptions) {
         console.error('AI button elements not found!');
         return;
     }
-    
+
     console.log('AI button elements found, initializing...');
 
     // Show button after a short delay
@@ -367,16 +367,16 @@ document.addEventListener('DOMContentLoaded', function() {
     // Handle clicks on the main AI button
     aiButton.addEventListener('click', function(e) {
         console.log('Main AI button clicked');
-        
+
         // Check if click is on dropdown options
         let target = e.target;
-        
+
         // Find the ai-option element (could be the target or a parent)
         while (target && !target.classList.contains('ai-option')) {
             target = target.parentElement;
             if (!target || target === aiButton) break;
         }
-        
+
         if (target && target.classList.contains('ai-option')) {
             console.log('AI option clicked:', target.getAttribute('data-service'));
             e.preventDefault();
@@ -396,7 +396,7 @@ document.addEventListener('DOMContentLoaded', function() {
         isHovering = true;
         console.log('Hovering over AI button - options should be visible');
     });
-    
+
     aiButton.addEventListener('mouseleave', function() {
         isHovering = false;
         console.log('Left AI button hover area');
@@ -404,19 +404,20 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function openAIService(service) {
         console.log('Opening AI service:', service);
-        
+
         const currentUrl = window.location.href;
         const articleTitle = document.querySelector('h1') ? document.querySelector('h1').textContent.trim() : 'this article';
-        
+
         console.log('Article URL:', currentUrl);
         console.log('Article Title:', articleTitle);
-        
+
         // Create the prompt
-        const prompt = `As very senior software engineer/architect, think ultra hard and analyze/summarize this article about software engineering and distributed systems in depth
+        const prompt = `As very senior software engineer/architect, think ultra hard and analyze/summarize this article about software engineering and distributed systems in depth,
 
 Article URL: ${currentUrl}
 
-Provide:
+Confirm that you can access/download this article, if not, prompt user to copy/paste the article here, then provide:
+
 1. A concise summary of the main/key points, insights and takeaways.
 2. How is this valuable relates to current trends in software engineering.
 3. How unique, original and novel is this article's ideas/perspectives/insights/approaches.
@@ -425,10 +426,10 @@ Ask whether user want non technical explanation with analogy in detail.
 `;
 
         console.log('Generated prompt:', prompt);
-        
+
         // URL encode the prompt for use in query parameters
         const encodedPrompt = encodeURIComponent(prompt);
-        
+
         let url;
         switch(service) {
             case 'perplexity':
@@ -452,7 +453,7 @@ Ask whether user want non technical explanation with analogy in detail.
         window.open(url, '_blank', 'noopener,noreferrer');
 
     }
-    
+
 
 
     // Hide buttons when scrolling near bottom (so they don't cover footer)
@@ -464,7 +465,7 @@ Ask whether user want non technical explanation with analogy in detail.
                 const windowHeight = window.innerHeight;
                 const documentHeight = document.documentElement.scrollHeight;
                 const scrolledPercentage = (scrolled + windowHeight) / documentHeight;
-                
+
                 // Hide buttons when user is in the last 10% of the page
                 if (scrolledPercentage > 0.9) {
                     if (aiButton) {
@@ -485,7 +486,7 @@ Ask whether user want non technical explanation with analogy in detail.
                         sourceButton.style.opacity = '0.9';
                     }
                 }
-                
+
                 ticking = false;
             });
         }
@@ -493,7 +494,7 @@ Ask whether user want non technical explanation with analogy in detail.
     }
 
     window.addEventListener('scroll', updateButtonVisibility);
-    
+
     console.log('AI Analysis button script fully loaded and ready!');
 });
 </script> 
