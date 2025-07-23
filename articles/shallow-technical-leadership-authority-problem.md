@@ -309,6 +309,9 @@ This creates a **systematic disconnect** between **decision-making authority** a
 
 ### The Ford vs. Ferrari Pattern: When Corporate Process Crushes Engineering Excellence
 
+![Go Like Hell - Ken Miles unleashing engineering potential](/assets/go-like-hell.png)
+*The moment when engineering expertise is finally unleashed from corporate constraints*
+
 The 2019 film "Ford v Ferrari" provides a perfect illustration of this dynamic. **Ken Miles** (the engineer) understands exactly what the car needs to win Le Mans, but **corporate executives** (the management layer) make decisions based on politics, optics, and internal power struggles rather than engineering reality.
 
 **The pattern repeats in modern tech organizations**:
@@ -327,6 +330,8 @@ The 2019 film "Ford v Ferrari" provides a perfect illustration of this dynamic. 
 **The tragic irony**: In both cases, the **people with the expertise to succeed** are **systematically prevented** from applying that expertise by **people whose authority depends on maintaining control** rather than achieving excellence.
 
 **The competitive reality**: Just as Ferrari's **engineering-first culture** initially dominated the track, organizations that **trust their engineers** outcompete those that **constrain them with process theater**.
+
+**The "Go Like Hell" moment**: What your organization could achieve if it stopped constraining its Ken Miles—the engineers who know exactly what needs to be fixed but are held back by those who prioritize control over competence.
 
 ## The Compound Damage: How Bad Leadership Compounds Over Time
 
