@@ -6,6 +6,8 @@ permalink: /articles/strategic-partitioning-k-d-trees-ddd-event-sourcing/
 
 In software architecture, complexity is inevitable—but how we partition that complexity determines whether we build systems that scale gracefully or collapse under their own weight. The theoretical foundation for understanding effective partitioning comes from k-d trees, a data structure that demonstrates how different partitioning strategies yield dramatically different outcomes[1][6]. However, translating this theoretical clarity into practical software architecture reveals why so many systems fail despite good intentions.
 
+**Prerequisites:** This article assumes familiarity with the universal principles of boundaries and coupling across systems. For foundational understanding of why boundaries work as universal patterns in software, society, and nature, see [Boundaries, Coupling, and Complexity: Lessons from Software, Society, and Nature](/articles/boundaries-coupling-complexity-lessons-software-society-nature/).
+
 ## The K-d Tree Foundation: Theory Meets Reality
 
 K-d trees provide the theoretical underpinning for understanding partitioning strategies[1][5]. In a k-d tree, points in k-dimensional space are recursively partitioned by selecting splitting hyperplanes perpendicular to chosen dimensions[1][6]. The algorithm cycles through dimensions (x-axis, then y-axis, then z-axis) and typically selects the median point as the pivot to create balanced subdivisions[1].
