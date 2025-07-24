@@ -412,7 +412,7 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('Article Title:', articleTitle);
 
         // Create the prompt
-        const githubBackupUrl = `https://github.com/ondemandenv/ondemandenv.github.io/blob/main${window.location.pathname.replace('.html', '.md')}`;
+        const githubBackupUrl = `https://github.com/ondemandenv/ondemandenv.github.io/blob/main${window.location.pathname.replace(/\/$/, '')}.md`;
         const prompt = `As very senior software engineer/architect, think ultra hard and analyze/summarize this article about software engineering and distributed systems in depth,
 
 Article URL: ${currentUrl}
@@ -423,6 +423,7 @@ Confirm that you can access/download this article from either URL, if not, promp
 1. A concise summary of the main/key points, insights and takeaways.
 2. How is this valuable relates to current trends in software engineering.
 3. How unique, original and novel is this article's ideas/perspectives/insights/approaches.
+3. how is the article quality? what is the author's SDE level?
 
 Ask whether user want non technical explanation with analogy in detail.
 `;
