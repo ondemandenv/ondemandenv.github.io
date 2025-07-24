@@ -2,6 +2,9 @@
 layout: article
 title: "The Art of Strategic Partitioning: Lessons from K-d Trees, Domain-Driven Design, and Event Sourcing"
 permalink: /articles/strategic-partitioning-k-d-trees-ddd-event-sourcing/
+author: "Gary Yang"
+date: "2025-01-20"
+tags: ["k-d-trees", "domain-driven-design", "event-sourcing", "partitioning", "microservices", "devops"]
 ---
 
 In software architecture, complexity is inevitable—but how we partition that complexity determines whether we build systems that scale gracefully or collapse under their own weight. The theoretical foundation for understanding effective partitioning comes from k-d trees, a data structure that demonstrates how different partitioning strategies yield dramatically different outcomes[1][6]. However, translating this theoretical clarity into practical software architecture reveals why so many systems fail despite good intentions.
@@ -232,6 +235,17 @@ The path forward requires both technical and organizational solutions:
 Most importantly, teams must recognize that partitioning strategy is not just a technical decision—it's a fundamental constraint that shapes every future architectural choice. Like selecting dimensions in a k-d tree, the quality of initial partitioning decisions determines whether the system will scale gracefully or require increasingly complex workarounds to manage its accidental complexity.
 
 The goal is not to avoid partitioning challenges but to approach them with the wisdom that comes from understanding both the theoretical foundation and the practical constraints—including organizational dysfunctions—that shape how software systems evolve in the real world.
+
+---
+
+**About the Author:** Gary Yang is Founding Engineer at ONDEMANDENV, championing Application-Centric Infrastructure (ACI) & Contract-First Architectures.
+
+**Related Articles:** 
+- [Boundaries, Coupling, and Complexity: Lessons from Software, Society, and Nature](/articles/boundaries-coupling-complexity-lessons-software-society-nature/) - Universal principles foundation
+- [The K-D Tree of Software: Why Partition Sequence Determines System Complexity](/articles/kd-tree-software-partition-sequence/) - Mathematical foundations
+- [From Exponential to Linear: How Domain Boundaries Eliminate Accidental Complexity](/articles/eliminating-accidental-complexity/) - Complexity elimination through boundaries
+
+*This article is part of the ONDEMANDENV.dev knowledge base on distributed systems architecture and engineering excellence.*
 
 Citations:
 [1] https://en.wikipedia.org/wiki/K-d_tree

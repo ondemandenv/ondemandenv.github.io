@@ -3,7 +3,7 @@ layout: article
 title: "Kubernetes 2.0: From YAML and Administrative Ops to Typed Abstractions and Engineering"
 permalink: /articles/kubernetes-2-0-engineering-victory/
 date: 2025-01-13
-author: "ONDEMANDENV Team"
+author: "Gary Yang"
 description: "How the era of YAML-driven infrastructure is ending, replaced by typed abstractions and platform engineering that transforms ops from administration to engineering. The decisive victory of engineering over administration."
 keywords: ["kubernetes", "yaml", "typescript", "platform engineering", "devops", "infrastructure", "abstraction", "helm", "cdk8s", "anti-stagnation", "fragmentation trap", "engineering", "administration"]
 ---
@@ -829,3 +829,14 @@ This transformation isn't optional—it's driven by the **anti-stagnation impera
 > **And abstraction becomes a first-class citizen.**
 
 This isn't just technological evolution—it's **organizational evolution** toward patterns that **scale with complexity** rather than **collapse under it**. The question isn't whether this transformation will happen, but whether your organization will **escape the fragmentation trap** or **be consumed by it**.
+
+---
+
+**About the Author:** Gary Yang is Founding Engineer at ONDEMANDENV, championing Application-Centric Infrastructure (ACI) & Contract-First Architectures.
+
+**Related Articles:** 
+- [The Skewer Problem: How Fake Engineering in Ops Hijacked the SDLC](/articles/skewer-problem-fake-engineering-ops/) - Technical critique of ops tooling
+- [The Authority Problem: How Shallow Technical Leadership Destroys Engineering Culture](/articles/shallow-technical-leadership-authority-problem/) - Organizational anti-patterns
+- [The Fragmentation Trap: How YAML/Container-Centric GitOps are Hindering Cloud-Native Evolution](/articles/fragmentation-trap/) - YAML complexity analysis
+
+*This article is part of the ONDEMANDENV.dev knowledge base on distributed systems architecture and engineering excellence.*

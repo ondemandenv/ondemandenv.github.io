@@ -2,6 +2,9 @@
 layout: article
 title: "The Architectural Prevention Paradigm: How contractsLib Eliminates the Fragmentation Trap"
 permalink: /articles/architectural-prevention-paradigm/
+author: "Gary Yang"
+date: "2025-01-12"
+tags: ["architectural-prevention", "contractslib", "fragmentation-trap", "distributed-systems", "prevention-paradigm"]
 ---
 
 # The Architectural Prevention Paradigm: How contractsLib Eliminates the Fragmentation Trap
@@ -164,4 +167,11 @@ The future belongs to organizations that prevent problems rather than react to t
 
 ---
 
-*Ready to eliminate the fragmentation trap in your organization? [Get started with ONDEMANDENV](https://ondemandenv.dev/documentation.html) and transform your distributed systems through architectural prevention.* 
+**About the Author:** Gary Yang is Founding Engineer at ONDEMANDENV, championing Application-Centric Infrastructure (ACI) & Contract-First Architectures.
+
+**Related Articles:** 
+- [The Fragmentation Trap: How YAML/Container-Centric GitOps are Hindering Cloud-Native Evolution](/articles/fragmentation-trap/) - Problem analysis
+- [The GCP Outage We Should Have Seen Coming: How Shared Environments Breed Chaos and Why Contracts are the Cure](/articles/gcp-outage-contracts-cure/) - Real-world prevention case study
+- [Implementing Application-Centricity Part 3: The Power of Declarative Contracts and Platform Abstraction](/articles/implementing-application-centricity-declarative-contracts/) - Implementation details
+
+*This article is part of the ONDEMANDENV.dev knowledge base on distributed systems architecture and engineering excellence.* 

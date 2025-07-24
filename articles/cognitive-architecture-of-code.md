@@ -2,6 +2,10 @@
 layout: article
 title: "The Cognitive Architecture of Code: Taming Ambiguity and Accidental Complexity"
 permalink: /articles/cognitive-architecture-of-code/
+author: "Gary Yang"
+date: "2025-01-15"
+original_publication: "https://www.linkedin.com/pulse/cognitive-architecture-code-taming-ambiguity-accidental-gary-yang-4mzxe"
+tags: ["cognitive-architecture", "type-systems", "accidental-complexity", "typescript", "ambiguity"]
 ---
 
 
@@ -70,5 +74,13 @@ Strong typing, conversely, is an investment in clarity. It forces the difficult 
 ONDEMANDENV.dev represents this philosophy applied to distributed systems architecture—using explicit contracts and strong typing to tame the cognitive complexity of managing microservices at scale.
 
 ---
+
+**About the Author:** Gary Yang is Founding Engineer at ONDEMANDENV, championing Application-Centric Infrastructure (ACI) & Contract-First Architectures.
+
+**Original Publication:** [LinkedIn Article](https://www.linkedin.com/pulse/cognitive-architecture-code-taming-ambiguity-accidental-gary-yang-4mzxe) - January 2025
+
+**Related Articles:** 
+- [From Exponential to Linear: How Domain Boundaries Eliminate Accidental Complexity](/articles/eliminating-accidental-complexity/) - Domain boundaries and complexity reduction
+- [The Architectural Prevention Paradigm: How contractsLib Eliminates the Fragmentation Trap](/articles/architectural-prevention-paradigm-contractslib/) - Contract-first prevention
 
 *This article explores how type systems serve as cognitive architecture tools, directly relating to ONDEMANDENV's approach of using explicit contracts to manage distributed system complexity.* 

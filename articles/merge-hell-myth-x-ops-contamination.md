@@ -243,11 +243,17 @@ It's time to stop accepting ops limitations as engineering constraints. **Demand
 
 ## Further Reading
 
-Explore how infrastructure limitations corrupt every aspect of software engineering:
+---
 
-- [The PR Queue: A Humiliation for Software Engineering](https://www.linkedin.com/pulse/pr-queue-humiliation-software-engineering-gary-yang-cowee/)
-- [Business Logic Branch Conflicts: How Your Team's Business Decisions Became Political Warfare Too](https://ondemandenv.dev/articles/business-logic-branch-conflicts-political-warfare/)
-- [The X-Ops Railroading of Software Architecture](https://ondemandenv.dev/articles/x-ops-railroading-software-architecture/)
-- [YAML Stagnation: The Container Comfort Zone Trap](https://ondemandenv.dev/articles/yaml-stagnation-container-comfort-zone/)
+**About the Author:** Gary Yang is Founding Engineer at ONDEMANDENV, championing Application-Centric Infrastructure (ACI) & Contract-First Architectures.
 
-**Ready to demand better infrastructure?** [Explore ONDEMANDENV](https://ondemandenv.dev) and discover how application-centric infrastructure enables evidence-based engineering decisions. 
+**Series Articles:** 
+- [Branch Conflicts as System Architecture Signals: The Evaluation Framework Missing from Every Git Guide](/articles/branch-conflicts-architectural-signals/) - Intelligence framework for conflicts
+- [The PR Queue Scam: How the Industry's 'Solution' Makes Merge Hell Infinitely Worse](/articles/pr-queue-scam-makes-merge-hell-worse/) - Cascade exposure
+- [Branch Diversity and Innovation: How ONDEMANDENV Transforms Conflicts into Competitive Advantages](/articles/business-logic-branch-conflicts-political-warfare/) - Innovation platform solution
+
+**Related Infrastructure Analysis:**
+- [The X-Ops Railroading of Software Architecture](/articles/x-ops-railroading-software-architecture/) - How ops fragmented system design
+- [YAML Stagnation: The Container Comfort Zone Trap](/articles/yaml-stagnation-container-comfort-zone/) - Developer retreat patterns
+
+*This article is part of the ONDEMANDENV.dev knowledge base on distributed systems architecture and engineering excellence.* 

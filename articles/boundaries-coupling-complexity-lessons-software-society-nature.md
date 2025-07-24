@@ -2,6 +2,10 @@
 layout: article
 title: "Boundaries, Coupling, and Complexity: Lessons from Software, Society, and Nature"
 permalink: /articles/boundaries-coupling-complexity-lessons-software-society-nature/
+author: "Gary Yang"
+date: "2025-01-21"
+original_publication: "https://www.linkedin.com/pulse/boundaries-coupling-complexity-lessons-from-software-society-yang-gy7we/"
+tags: ["domain-driven-design", "boundaries", "coupling", "complexity", "software-architecture"]
 ---
 
 In the world of software engineering, the concepts of boundaries, coupling, and system decomposition are not just technical jargon—they are reflections of universal patterns found throughout human society and the natural world. As our digital systems grow in scale and complexity, understanding these principles becomes crucial not only for building robust technology but also for appreciating the parallels with how countries, communities, and even biological organisms organize and evolve.
@@ -77,4 +81,16 @@ When ops and tools are not up to the job of respecting proper boundaries, the so
 
 The journey from tightly coupled, workflow-centric systems to loosely coupled, event-driven architectures mirrors broader patterns in society and nature. Boundaries, cohesion, and clear protocols for interaction are not just technical necessities—they are universal strategies for managing complexity and enabling growth.
 
-As our systems—digital, social, or biological—become ever more intricate, the wisdom of respecting boundaries and embracing loose coupling becomes increasingly clear. In software, as in life, it is the ability to adapt, evolve, and interact across well-defined boundaries that determines long-term resilience and success. 
+As our systems—digital, social, or biological—become ever more intricate, the wisdom of respecting boundaries and embracing loose coupling becomes increasingly clear. In software, as in life, it is the ability to adapt, evolve, and interact across well-defined boundaries that determines long-term resilience and success.
+
+---
+
+**About the Author:** Gary Yang is Founding Engineer at ONDEMANDENV, championing Application-Centric Infrastructure (ACI) & Contract-First Architectures.
+
+**Original Publication:** [LinkedIn Article](https://www.linkedin.com/pulse/boundaries-coupling-complexity-lessons-from-software-society-yang-gy7we/) - January 2025
+
+**Related Articles:** 
+- [The Art of Strategic Partitioning: Lessons from K-d Trees, Domain-Driven Design, and Event Sourcing](/articles/strategic-partitioning-k-d-trees-ddd-event-sourcing/) - Technical implementation of partitioning strategies
+- [From Exponential to Linear: How Domain Boundaries Eliminate Accidental Complexity](/articles/eliminating-accidental-complexity/) - Domain boundaries and complexity reduction
+
+*This article is part of the ONDEMANDENV.dev knowledge base on distributed systems architecture and engineering excellence.* 
