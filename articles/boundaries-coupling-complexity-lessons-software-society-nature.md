@@ -10,7 +10,7 @@ tags: ["domain-driven-design", "boundaries", "coupling", "complexity", "software
 
 In the world of software engineering, the concepts of boundaries, coupling, and system decomposition are not just technical jargon—they are reflections of universal patterns found throughout human society and the natural world. As our digital systems grow in scale and complexity, understanding these principles becomes crucial not only for building robust technology but also for appreciating the parallels with how countries, communities, and even biological organisms organize and evolve.
 
-<img src="../assets/software-society-nature.png" alt="Boundaries, Coupling, and Complexity in Software, Society, and Nature" style="width: 100%; height: auto; max-width: 100%; object-fit: contain;" />
+<img src="/assets/software-society-nature.png" alt="Boundaries, Coupling, and Complexity in Software, Society, and Nature" style="width: 100%; height: auto; max-width: 100%; object-fit: contain;" />
 
 ## The Universal Principle of Boundaries
 
