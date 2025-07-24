@@ -2,6 +2,7 @@
 title: "The Siren Song of AI Vibe Coding and the Shore of Accidental Complexity"
 layout: article
 permalink: /articles/siren-song-ai-vibe-coding-accidental-complexity/
+author: "Gary Yang"
 ---
 
 The rapid advancements in AI, particularly Large Language Models (LLMs), offer a tantalizing promise: accelerated development, instant code generation, and on-demand problem-solving. Developers, when faced with a specific coding challenge or a need to extend functionality, might turn to an AI assistant. The AI, in turn, provides a solution tailored to the immediate query. This iterative process, where AI assists in adding feature upon feature or fix upon fix, can feel highly productive—an "AI vibe coding" experience where progress seems swift.

@@ -2,6 +2,7 @@
 layout: article
 title: "The Perils of the Distributed Monolith: Why Monolithic Thinking Fails in Distributed Systems"
 permalink: /articles/distributed-monolith/
+author: "Gary Yang"
 ---
 
 

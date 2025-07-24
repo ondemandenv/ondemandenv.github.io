@@ -4,7 +4,7 @@ title: "The X-Ops Railroading of Software Architecture: How Operational Convenie
 permalink: /articles/x-ops-railroading-software-architecture/
 description: "A comprehensive analysis of how DevOps, Kubernetes, and operational tooling have systematically destroyed architectural excellence and created a generation of container tenants instead of system architects."
 keywords: "DevOps, Kubernetes, microservices, chaos engineering, domain-driven design, software architecture, engineering excellence"
-author: "ONDEMANDENV Team"
+author: "Gary Yang"
 date: 2025-01-09
 featured: true
 ---

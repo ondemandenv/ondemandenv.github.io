@@ -2,6 +2,7 @@
 layout: article
 title: "The Blurring Lines Between Development and Operations in Modern Cloud Architecture"
 permalink: /articles/blurring-lines-dev-ops-modern-cloud/
+author: "Gary Yang"
 ---
 
 

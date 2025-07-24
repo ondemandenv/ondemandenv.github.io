@@ -2,6 +2,7 @@
 layout: article
 title: "The K-D Tree of Software: Why Partition Sequence Determines System Complexity"
 permalink: /articles/kd-tree-software-partition-sequence/
+author: "Gary Yang"
 ---
 
 

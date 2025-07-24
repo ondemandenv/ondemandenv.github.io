@@ -2,6 +2,7 @@
 layout: article
 title: "Spring Framework: The Monolith Enabler in a Microservices World"
 permalink: /articles/spring-monolith-enabler/
+author: "Gary Yang"
 ---
 
 ## Introduction

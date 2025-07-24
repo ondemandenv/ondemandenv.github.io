@@ -2,6 +2,7 @@
 layout: article
 title: "Breaking the Stateful Deployment Ceiling: Dimensional Partitioning for DevOps"
 permalink: /articles/stateful-deployment-dimensional-partitioning/
+author: "Gary Yang"
 ---
 
 ## **Breaking the Stateful Deployment Ceiling: Dimensional Partitioning for DevOps**

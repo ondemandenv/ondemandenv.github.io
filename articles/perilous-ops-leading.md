@@ -2,6 +2,7 @@
 layout: article
 title: "The Perilous Path: Operator-Led SDLC in the Age of Microservices"
 permalink: /articles/perilous-ops-leading/
+author: "Gary Yang"
 ---
 
 > **Enhanced Version Available**: This article has been significantly expanded with detailed diagrams, case studies, and comprehensive analysis. Read the [enhanced version](https://ondemandenv.dev/articles/perilous-ops-leading-enhanced/) for a complete exploration of how operator-led microservices create distributed monoliths.

@@ -3,7 +3,7 @@ layout: article
 title: "The Skewer Problem: How Fake Engineering in Ops Hijacked the SDLC"
 description: "Why tool mastery disguised as engineering is strangling software development, and what real engineering actually looks like"
 date: 2025-07-21
-author: "ONDEMANDENV Platform Team"
+author: "Gary Yang"
 tags: ["Platform Engineering", "DevOps", "Architecture", "SDLC", "Engineering Principles"]
 permalink: /articles/skewer-problem-fake-engineering-ops/
 ---

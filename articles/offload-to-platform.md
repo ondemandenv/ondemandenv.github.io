@@ -2,6 +2,7 @@
 layout: article
 title: "Abstracting and Offloading Infrastructure: Transforming the Software Development Lifecycle"
 permalink: /articles/offload-to-platform/
+author: "Gary Yang"
 ---
 
 ## The Power of Abstraction: How Offloading Infrastructure Logic Transforms the Entire SDLC

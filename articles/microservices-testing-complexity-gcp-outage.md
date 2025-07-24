@@ -2,6 +2,7 @@
 layout: article
 title: "The Root Cause of Microservices Testing Complexity: Architectural Lessons from Cloud Platform Outages"
 permalink: /articles/microservices-testing-complexity-gcp-outage/
+author: "Gary Yang"
 ---
 
 

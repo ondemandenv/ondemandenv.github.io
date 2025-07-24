@@ -2,6 +2,7 @@
 layout: article
 title: "Embracing Application-Centric Infrastructure in the Cloud 1"
 permalink: /articles/embracing-application-centric-infrastructure-cloud-1/
+author: "Gary Yang"
 ---
 
 

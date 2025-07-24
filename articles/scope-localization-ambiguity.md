@@ -2,6 +2,7 @@
 layout: article
 title: "The Entanglement of Complexity: Fragmentation, Inconsistency, and Ambiguity in Modern SDLC/DevOps"
 permalink: /articles/scope-localization-ambiguity/
+author: "Gary Yang"
 ---
 
 The evolution of software development towards distributed systems, microservices, and cloud-native architectures has undeniably unlocked unprecedented scalability and feature velocity. However, this evolution comes at a cost. As systems grow in complexity, development and operations teams grapple with a triad of interconnected challenges: fragmentation, environment inconsistency (often termed "snowflaking"), and pervasive ambiguity. While appearing as distinct issues, they often stem from a deeper, underlying difficulty in managing complex systems holistically – a phenomenon we can term "scope localization." This article explores these challenges and their root cause, painting a picture of the operational friction inherent in managing today's intricate software landscapes.

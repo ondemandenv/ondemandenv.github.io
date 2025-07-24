@@ -2,6 +2,7 @@
 layout: article
 title: "Kubernetes, Bounded Contexts, and Accidental Complexity"
 permalink: /articles/kubernetes-bounded-contexts/
+author: "Gary Yang"
 ---
 
   

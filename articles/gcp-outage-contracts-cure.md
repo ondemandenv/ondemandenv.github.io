@@ -2,6 +2,7 @@
 title: "The GCP Outage We Should Have Seen Coming: How Shared Environments Breed Chaos and Why Contracts are the Cure"
 layout: article
 permalink: /articles/gcp-outage-contracts-cure/
+author: "Gary Yang"
 ---
 
 

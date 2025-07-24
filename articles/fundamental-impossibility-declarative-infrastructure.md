@@ -2,6 +2,7 @@
 layout: article
 title: "The Fundamental Impossibility of Declarative Infrastructure: Why IaC Will Always Be Incomplete"
 permalink: /articles/fundamental-impossibility-declarative-infrastructure/
+author: "Gary Yang"
 ---
 
 

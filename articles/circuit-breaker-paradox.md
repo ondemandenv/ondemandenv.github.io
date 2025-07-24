@@ -2,6 +2,7 @@
 layout: article
 title: "The Circuit Breaker Paradox: Resilience Savior or Symptom of a Deeper Malaise?"
 permalink: /articles/circuit-breaker-paradox/
+author: "Gary Yang"
 ---
 
 

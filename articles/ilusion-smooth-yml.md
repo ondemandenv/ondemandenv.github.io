@@ -2,6 +2,7 @@
 layout: article
 title: "The Illusion of Smoothness: How Oversimplified Technologies Mask Real Conflicts in Modern Software and kill innovation"
 permalink: /articles/ilusion-smooth-yml/
+author: "Gary Yang"
 ---
 
 We live in an era that prizes seamlessness and automation. Technologies like GitOps and relational database transactions promise streamlined workflows and data consistency, often presented as elegant solutions to complex problems. But beneath the surface of this apparent smoothness, a critical question emerges: are we truly solving the root issues, or are we merely masking fundamental complexities, potentially to our detriment?

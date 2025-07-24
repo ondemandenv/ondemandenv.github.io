@@ -2,6 +2,7 @@
 layout: article
 title: "Dismantling the Kubernetes Hype: Why It's Not the Cloud Native Panacea You Think It Is"
 permalink: /articles/dismantling-kubernetes-hype/
+author: "Gary Yang"
 ---
 
 

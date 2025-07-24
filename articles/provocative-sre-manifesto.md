@@ -2,6 +2,7 @@
 layout: article
 title: "The Provocative SRE Manifesto: Breaking Free from the Constraint Trap"
 permalink: /articles/provocative-sre-manifesto/
+author: "Gary Yang"
 ---
 
 

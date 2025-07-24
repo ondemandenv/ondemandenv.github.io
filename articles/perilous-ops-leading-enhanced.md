@@ -4,7 +4,7 @@ title: "The Perilous Path: How Operator-Led Microservices Create Distributed Mon
 description: "An in-depth analysis of the anti-pattern where ops teams forcibly decompose monoliths into service mesh-connected microservices, creating worse complexity than the original system while hogging control consoles and blocking developer productivity."
 permalink: /articles/perilous-ops-leading-enhanced/
 date: 2024-01-15
-author: "Architecture Evolution Series"
+author: "Gary Yang"
 tags: ["microservices", "anti-patterns", "service-mesh", "distributed-systems", "operations"]
 ---
 

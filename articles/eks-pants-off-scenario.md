@@ -2,6 +2,7 @@
 layout: article
 title: 'The EKS "Pants Off to Fart" Scenario: Accidental Complexity vs. ECS/CDK Simplicity in the SDLC'
 permalink: /articles/eks-pants-off-scenario/
+author: "Gary Yang"
 ---
 
 Deploying a standard web application – a Spring Boot or Express container, secured with a certificate and DNS, fronted by an Application Load Balancer (ALB), and backed by an RDS database – is a common pattern. However, the journey through the Software Development Life Cycle (SDLC) diverges dramatically depending on whether you choose Amazon EKS (Elastic Kubernetes Service) or a more integrated AWS-native approach like ECS (Elastic Container Service) with the AWS CDK (Cloud Development Kit) and CloudFormation.

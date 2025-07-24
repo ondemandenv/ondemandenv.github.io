@@ -2,6 +2,7 @@
 layout: article
 title: "The Compounding Complexity Trap: Navigating Engineering's Messy Reality to Design Simpler Futures"
 permalink: /articles/compounding-complexity-trap/
+author: "Gary Yang"
 ---
 
 

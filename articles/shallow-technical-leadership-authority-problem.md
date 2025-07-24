@@ -3,7 +3,7 @@ layout: article
 title: "The Authority Problem: How Shallow Technical Leadership Destroys Engineering Culture"
 description: "Why leaders built on fake engineering actively suppress real engineering to protect their power base, and how to recognize the patterns"
 date: 2025-07-21
-author: "ONDEMANDENV Platform Team"
+author: "Gary Yang"
 tags: ["Engineering Leadership", "Technical Management", "Engineering Culture", "Organizational Dysfunction"]
 permalink: /articles/shallow-technical-leadership-authority-problem/
 ---
