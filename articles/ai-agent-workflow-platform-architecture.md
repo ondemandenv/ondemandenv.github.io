@@ -35,6 +35,70 @@ This document outlines the architecture for an enterprise-grade AI agent workflo
     </a>
 </div>
 
+### External Integration Requirements
+
+The platform's workflow execution engine requires integration with customer's existing business systems and APIs to provide real-world functionality:
+
+#### Customer API Dependencies
+**Business Operations APIs:**
+- **Kitchen Status API**: Real-time kitchen capacity, equipment status, order queue information
+- **Inventory Management API**: Stock levels, ingredient availability, supply chain data
+- **Point of Sale (POS) API**: Order processing, payment status, customer information
+- **Staff Scheduling API**: Employee availability, shift schedules, labor costs
+- **Delivery/Logistics API**: Driver availability, delivery tracking, route optimization
+
+**Integration Patterns:**
+- **REST/GraphQL APIs**: Standard HTTP-based integration for most business systems
+- **Webhook Subscriptions**: Real-time event notifications from customer systems
+- **Database Connections**: Direct database access for legacy systems without APIs
+- **Message Queue Integration**: Enterprise message buses (RabbitMQ, Apache Kafka)
+- **Third-Party Connectors**: Pre-built integrations for common business platforms
+
+#### API Capability Requirements
+For workflows to function effectively, customer APIs must provide:
+
+**Mandatory Capabilities:**
+- **Authentication**: OAuth2/API key support for secure access
+- **Rate Limiting Information**: API quotas and throttling policies
+- **Error Handling**: Standardized error codes and retry mechanisms
+- **Data Validation**: Input validation and constraint checking
+
+**Recommended Capabilities:**
+- **Idempotency**: Safe retry mechanisms for critical operations
+- **Bulk Operations**: Batch processing for efficiency
+- **Real-time Updates**: WebSocket or webhook support for live data
+- **Filtering/Pagination**: Efficient data retrieval for large datasets
+
+#### Workflow DSL Integration Pattern
+```
+Workflow: Order Processing
+├── Trigger: Customer places order
+├── Step 1: Check kitchen capacity → Customer Kitchen API
+├── Step 2: Verify inventory → Customer Inventory API  
+├── Step 3: Schedule preparation → Customer Kitchen API
+└── Result: Order confirmed or rejected
+
+External Dependencies:
+- Customer.KitchenAPI.getCapacity()
+- Customer.InventoryAPI.checkStock(items)
+- Customer.KitchenAPI.scheduleOrder(order, time)
+```
+
+#### Customer Onboarding Requirements
+**Technical Prerequisites:**
+- **API Documentation**: OpenAPI/Swagger specifications for all integrated endpoints
+- **Test Environment**: Sandbox APIs for workflow development and testing
+- **Monitoring Access**: API health metrics and performance data
+- **Security Compliance**: Authentication mechanisms and data encryption standards
+
+**Business Prerequisites:**
+- **Process Documentation**: Clear business process definitions and rules
+- **Data Mapping**: Field mappings between customer systems and workflow DSL
+- **Error Scenarios**: Exception handling and business rule validation
+- **Performance SLAs**: Expected response times and availability requirements
+
+This external integration layer is critical for the platform's value proposition - without access to customer's business systems, workflows remain abstract and cannot drive real operational outcomes.
+
 ### Detailed Platform Services Flow (Business-First Architecture)
 
 <div id="ai-agent-platform-detailed-services-flow-diagram" 
@@ -86,145 +150,72 @@ This document outlines the architecture for an enterprise-grade AI agent workflo
 
 Each business service owns its data schema, managed by dedicated database operators:
 
-### Platform Service Database Schema
-```sql
--- Account and tenant management (Platform Service owns this)
-CREATE TABLE accounts (
-    account_id UUID PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    tier VARCHAR(50) DEFAULT 'standard',
-    created_at TIMESTAMP DEFAULT NOW(),
-    settings JSONB,
-    resource_limits JSONB
-);
-
--- Authentication and authorization
-CREATE TABLE auth_sessions (
-    session_id UUID PRIMARY KEY,
-    account_id UUID REFERENCES accounts(account_id),
-    user_id VARCHAR(255) NOT NULL,
-    expires_at TIMESTAMP NOT NULL,
-    created_at TIMESTAMP DEFAULT NOW()
-);
-
--- Tenant-level configuration and routing
-CREATE TABLE tenant_configs (
-    config_id UUID PRIMARY KEY,
-    account_id UUID REFERENCES accounts(account_id),
-    config_type VARCHAR(100) NOT NULL,
-    config_data JSONB NOT NULL,
-    updated_at TIMESTAMP DEFAULT NOW()
-);
+### Platform Service Data Schema
+```
+Platform Service Database:
+├── Account Management
+│   ├── Tenant accounts and tiers
+│   ├── Resource limits and quotas
+│   └── Billing and subscription data
+├── Authentication & Sessions
+│   ├── User session tracking
+│   ├── JWT token validation cache
+│   └── Authorization policy cache
+└── System Configuration
+    ├── Tenant-specific settings
+    ├── Feature flags and capabilities
+    └── Runtime configuration data
 ```
 
-### Conversation Service Database Schema
-```sql
--- Conversation management (Conversation Service owns this)
-CREATE TABLE conversations (
-    conversation_id UUID PRIMARY KEY,
-    account_id UUID NOT NULL,
-    parent_conversation_id UUID REFERENCES conversations(conversation_id),
-    title VARCHAR(500),
-    created_at TIMESTAMP DEFAULT NOW(),
-    metadata JSONB
-);
-
--- Message storage with file references
-CREATE TABLE messages (
-    message_id UUID PRIMARY KEY,
-    conversation_id UUID REFERENCES conversations(conversation_id),
-    account_id UUID NOT NULL,
-    role VARCHAR(50) NOT NULL, -- 'user', 'assistant', 'system'
-    content_path VARCHAR(1000), -- File path in service's storage
-    created_at TIMESTAMP DEFAULT NOW(),
-    metadata JSONB
-);
-
--- Conversation analytics and search
-CREATE TABLE conversation_analytics (
-    analytics_id UUID PRIMARY KEY,
-    conversation_id UUID REFERENCES conversations(conversation_id),
-    account_id UUID NOT NULL,
-    metrics JSONB,
-    computed_at TIMESTAMP DEFAULT NOW()
-);
+### Conversation Service Data Schema
+```
+Conversation Service Database:
+├── Conversation Management
+│   ├── Conversation metadata and hierarchy
+│   ├── User-AI interaction sessions
+│   └── Conversation branching and threading
+├── Message Storage
+│   ├── Message content and attachments
+│   ├── Role-based message types (user/assistant/system)
+│   └── Message versioning and edits
+└── Analytics & Search
+    ├── Conversation performance metrics
+    ├── User engagement patterns
+    └── Content search indexing
 ```
 
-### Workflow Service Database Schema
-```sql
--- Workflow definitions and versioning (Workflow Service owns this)
-CREATE TABLE workflows (
-    workflow_id UUID PRIMARY KEY,
-    account_id UUID NOT NULL,
-    name VARCHAR(255) NOT NULL,
-    version INTEGER NOT NULL,
-    dsl_definition JSONB NOT NULL,
-    source_conversation_id UUID, -- Logical reference only, no FK constraint
-    status VARCHAR(50) DEFAULT 'draft',
-    created_at TIMESTAMP DEFAULT NOW(),
-    
-    UNIQUE(account_id, name, version)
-);
-
--- Workflow execution tracking
-CREATE TABLE workflow_executions (
-    execution_id UUID PRIMARY KEY,
-    workflow_id UUID REFERENCES workflows(workflow_id),
-    account_id UUID NOT NULL,
-    status VARCHAR(50) DEFAULT 'running',
-    started_at TIMESTAMP DEFAULT NOW(),
-    completed_at TIMESTAMP,
-    execution_context JSONB,
-    result JSONB
-);
-
--- Task execution details
-CREATE TABLE task_executions (
-    task_execution_id UUID PRIMARY KEY,
-    execution_id UUID REFERENCES workflow_executions(execution_id),
-    task_id VARCHAR(255) NOT NULL,
-    status VARCHAR(50) DEFAULT 'pending',
-    started_at TIMESTAMP,
-    completed_at TIMESTAMP,
-    task_result JSONB
-);
+### Workflow Service Data Schema
+```
+Workflow Service Database:
+├── Workflow Definitions
+│   ├── DSL workflow specifications
+│   ├── Version management and history
+│   └── Source conversation linkage
+├── Execution Management
+│   ├── Workflow execution instances
+│   ├── Execution state and progress
+│   └── Performance and timing metrics
+└── Task Orchestration
+    ├── Individual task executions
+    ├── Task dependencies and scheduling
+    └── Error handling and retry logic
 ```
 
-### Agent Service Database Schema
-```sql
--- Agent configurations (Agent Service owns this)
-CREATE TABLE agent_configs (
-    agent_id UUID PRIMARY KEY,
-    account_id UUID NOT NULL,
-    agent_name VARCHAR(255) NOT NULL,
-    llm_preferences JSONB,
-    personality_config JSONB,
-    created_at TIMESTAMP DEFAULT NOW()
-);
-
--- Agent memory and learning
-CREATE TABLE agent_memory (
-    memory_id UUID PRIMARY KEY,
-    agent_id UUID REFERENCES agent_configs(agent_id),
-    account_id UUID NOT NULL,
-    memory_type VARCHAR(50), -- 'context', 'preference', 'history'
-    content JSONB,
-    expires_at TIMESTAMP,
-    created_at TIMESTAMP DEFAULT NOW()
-);
-
--- LLM usage tracking and optimization
-CREATE TABLE llm_usage_logs (
-    log_id UUID PRIMARY KEY,
-    agent_id UUID REFERENCES agent_configs(agent_id),
-    account_id UUID NOT NULL,
-    llm_provider VARCHAR(100),
-    model_used VARCHAR(100),
-    tokens_used INTEGER,
-    cost_estimate DECIMAL(10,4),
-    response_time_ms INTEGER,
-    logged_at TIMESTAMP DEFAULT NOW()
-);
+### Agent Service Data Schema
+```
+Agent Service Database:
+├── Agent Configuration
+│   ├── Agent personality and behavior settings
+│   ├── LLM provider preferences
+│   └── Custom agent capabilities
+├── Memory Management
+│   ├── Long-term conversation context
+│   ├── User preference learning
+│   └── Knowledge base and facts
+└── Usage Analytics
+    ├── LLM provider usage and costs
+    ├── Performance metrics and optimization
+    └── Model selection and routing data
 ```
 
 **Note**: Cross-service references (like `source_conversation_id` in Workflow Service) are logical references only - services communicate via events, not direct database foreign keys.
@@ -252,148 +243,67 @@ The platform supports the following workflow creation lifecycle once deployed:
 
 The platform is deployed using CDK8s templates that generate Kubernetes manifests:
 
-```typescript
-// Generated K8s manifests structure  
-export interface PlatformDeployment {
-  // Infrastructure Controllers (Manage Infrastructure)
-  controllers: InfrastructureControllers;
-  
-  // Application Services (Use Controller CRDs)
-  services: ApplicationServices;
-}
+```
+Platform Deployment Structure:
+├── Infrastructure Controllers
+│   ├── Database Controller (PostgreSQL management)
+│   ├── Cache Controller (Redis management)
+│   ├── Event Bus Controller (Message routing)
+│   ├── Storage Controller (Volume management)
+│   ├── LLM Controller (Model serving)
+│   └── Observability Controller (Monitoring)
+└── Application Services
+    ├── API Gateway (Request routing)
+    ├── Conversation Service (AI interactions)
+    ├── Workflow Service (Process orchestration)
+    ├── Agent Service (AI agent management)
+    └── Platform Service (System management)
+```
 
-// Kubernetes controllers that manage infrastructure
-export interface InfrastructureControllers {
-  databaseController: PostgreSQLController;
-  cacheController: RedisController;
-  eventBusController: EventBusController;
-  storageController: StorageController;
-  llmController: LLMController;
-  observabilityController: ObservabilityController;
-}
-
-// Business domain services with internal layered architecture
-export interface ApplicationServices {
-  // Infrastructure Service
-  apiGateway: BusinessServiceConfig;
-  
-  // Business Domain Services  
-  conversationService: BusinessServiceConfig;
-  workflowService: BusinessServiceConfig;
-  agentService: BusinessServiceConfig;
-  platformService: BusinessServiceConfig;
-}
-
-// Each business service contains multiple internal layers
-export interface BusinessServiceConfig {
-  // Internal layers within the business service
-  layers: {
-    apiLayer: ServiceDeployment;        // External interface
-    businessLayer: ServiceDeployment;   // Business logic
-    database: ServiceDeployment;        // Database access
-  };
-  
-  // Infrastructure needs for the entire business service
-  infrastructureRequests: {
-    database: DatabaseRequest;          // Each service gets its own DB
-    cache: CacheRequest;               // Each service gets its own cache  
-    storage?: StorageRequest;          // Optional file storage
-    eventTopics: EventTopicRequest[];  // Service-specific topics
-    specializedNeeds?: {
-      timeseries?: TimeSeriesRequest;
-      search?: SearchRequest;
-      vectorDB?: VectorDBRequest;
-      llmAccess?: LLMAccessRequest;
-    };
-  };
-  
-  // Inter-service communication contracts
-  eventContracts: {
-    publishes: string[];  // Events this service publishes
-    subscribes: string[]; // Events this service subscribes to
-  };
-}
+```
+Service Configuration Pattern:
+Each Business Service Contains:
+├── Internal Layers
+│   ├── API Layer (External interface)
+│   ├── Business Layer (Domain logic)
+│   └── Database Layer (Data access)
+├── Infrastructure Requests
+│   ├── Database (Dedicated per service)
+│   ├── Cache (Dedicated per service)
+│   ├── Storage (Optional file storage)
+│   ├── Event Topics (Service-specific)
+│   └── Specialized Needs (TimeSeries, Search, Vector DB, LLM)
+└── Event Contracts
+    ├── Published Events (Service publishes)
+    └── Subscribed Events (Service consumes)
 ```
 
 ## Inter-Service Event Contracts
 
 Services communicate via well-defined events to maintain loose coupling:
 
-### Conversation Service Events
-```typescript
-// Published by Conversation Service
-interface ConversationStartedEvent {
-  accountId: string;
-  conversationId: string;
-  userId: string;
-  timestamp: string;
-}
+### Event Flow Summary
+```
+Conversation Service Events:
+├── ConversationStarted (accountId, conversationId, userId)
+└── MessageReceived (conversationId, messageId, role)
 
-interface MessageReceivedEvent {
-  accountId: string;
-  conversationId: string;
-  messageId: string;
-  role: 'user' | 'assistant';
-  timestamp: string;
-}
+Agent Service Events:
+├── DSLGenerated (conversationId, dslContent, agentId)
+└── AgentResponse (conversationId, messageId, response)
+
+Workflow Service Events:
+├── WorkflowCreated (workflowId, sourceConversationId)
+└── WorkflowExecutionStarted (workflowId, executionId)
+
+Platform Service Events:
+├── TenantCreated (accountId, accountName, tier)
+└── QuotaExceeded (accountId, resourceType, usage)
 ```
 
-### Agent Service Events  
-```typescript
-// Published by Agent Service
-interface DSLGeneratedEvent {
-  accountId: string;
-  conversationId: string;
-  dslContent: object;
-  agentId: string;
-  timestamp: string;
-}
-
-interface AgentResponseEvent {
-  accountId: string;
-  conversationId: string;
-  messageId: string;
-  response: string;
-  timestamp: string;
-}
-```
-
-### Workflow Service Events
-```typescript
-// Published by Workflow Service
-interface WorkflowCreatedEvent {
-  accountId: string;
-  workflowId: string;
-  sourceConversationId: string; // Logical reference only
-  timestamp: string;
-}
-
-interface WorkflowExecutionStartedEvent {
-  accountId: string;
-  workflowId: string;
-  executionId: string;
-  timestamp: string;
-}
-```
-
-### Platform Service Events
-```typescript
-// Published by Platform Service
-interface TenantCreatedEvent {
-  accountId: string;
-  accountName: string;
-  tier: string;
-  timestamp: string;
-}
-
-interface QuotaExceededEvent {
-  accountId: string;
-  resourceType: string;
-  currentUsage: number;
-  limit: number;
-  timestamp: string;
-}
-```
+**Cross-references**: Services communicate via events, not direct database foreign keys.
+**Event Schema Standard**: All events include accountId, timestamp, and service-specific identifiers.
+**Loose Coupling**: Services can evolve independently as long as event contracts are maintained.
 
 
 
