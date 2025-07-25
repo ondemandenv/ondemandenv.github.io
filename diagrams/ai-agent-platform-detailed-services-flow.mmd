@@ -3,57 +3,57 @@ flowchart TB
     
     subgraph "Conversation Service"
         CONV_API[API Layer]
-        CONV_CQRS{CQRS Router}
+        CONV_AUTHZ[Tenant Authorization Check]
         CONV_QUERY[Query Handler]
         CONV_CMD[Command Handler]
         CONV_DATA[data store]
         
-        CONV_API --> CONV_CQRS
-        CONV_CQRS --> CONV_QUERY
-        CONV_CQRS --> CONV_CMD
+        CONV_API --> CONV_AUTHZ
+        CONV_AUTHZ --> CONV_QUERY
+        CONV_AUTHZ --> CONV_CMD
         CONV_QUERY --> CONV_DATA
         CONV_CMD --> CONV_DATA
     end
     
     subgraph "Workflow Service"
         WF_API[API Layer]
-        WF_CQRS{CQRS Router}
+        WF_AUTHZ[Tenant Authorization Check]
         WF_QUERY[Query Handler]
         WF_CMD[Command Handler]
         WF_DATA[data store]
         
-        WF_API --> WF_CQRS
-        WF_CQRS --> WF_QUERY
-        WF_CQRS --> WF_CMD
+        WF_API --> WF_AUTHZ
+        WF_AUTHZ --> WF_QUERY
+        WF_AUTHZ --> WF_CMD
         WF_QUERY --> WF_DATA
         WF_CMD --> WF_DATA
     end
     
     subgraph "Agent Service"
         AGENT_API[API Layer]
-        AGENT_CQRS{CQRS Router}
+        AGENT_AUTHZ[Tenant Authorization Check]
         AGENT_QUERY[Query Handler]
         AGENT_CMD[Command Handler]
         AGENT_DATA[data store]
         
-        AGENT_API --> AGENT_CQRS
-        AGENT_CQRS --> AGENT_QUERY
-        AGENT_CQRS --> AGENT_CMD
+        AGENT_API --> AGENT_AUTHZ
+        AGENT_AUTHZ --> AGENT_QUERY
+        AGENT_AUTHZ --> AGENT_CMD
         AGENT_QUERY --> AGENT_DATA
         AGENT_CMD --> AGENT_DATA
     end
     
     subgraph "Platform Service"
         PLATFORM_API[API Layer]
-        PLATFORM_CQRS{CQRS Router}
+        PLATFORM_AUTHZ[Runtime Authorization Engine<br/>Tenant Access Control]
         PLATFORM_QUERY[Query Handler]
         PLATFORM_CMD[Command Handler]
-        PLATFORM_MONITOR[Central Control & Monitoring]
+        PLATFORM_MONITOR[Central Control & Monitoring<br/>Collects metrics/logs from all services<br/>Controls runtime behavior & scaling]
         PLATFORM_DATA[data store]
         
-        PLATFORM_API --> PLATFORM_CQRS
-        PLATFORM_CQRS --> PLATFORM_QUERY
-        PLATFORM_CQRS --> PLATFORM_CMD
+        PLATFORM_API --> PLATFORM_AUTHZ
+        PLATFORM_AUTHZ --> PLATFORM_QUERY
+        PLATFORM_AUTHZ --> PLATFORM_CMD
         PLATFORM_QUERY --> PLATFORM_DATA
         PLATFORM_CMD --> PLATFORM_DATA
         PLATFORM_MONITOR --> PLATFORM_DATA
@@ -65,11 +65,6 @@ flowchart TB
     API_GW --> PLATFORM_API
     
     subgraph "Infrastructure Controllers/Operators"
-        subgraph "Event Bus Controller"
-            EB_CTRL[Pulsar Operator]
-            EB_API[Pulsar API<br/>Per-Tenant Topics]
-        end
-        
         subgraph "Database Controller"
             DB_CTRL[PostgreSQL Operator]
             DB_API[Database API<br/>Per-Service Databases]
@@ -91,6 +86,8 @@ flowchart TB
         end
     end
     
+    EVENT_BUS[Event Bus<br/>Topic/Subscription<br/>Data Stream Service]
+    
     subgraph "Infrastructure Access (data stores → Operator APIs)"
         CONV_DATA --> DB_API
         CONV_DATA --> CACHE_API
@@ -108,37 +105,28 @@ flowchart TB
         PLATFORM_DATA --> CACHE_API
     end
     
-    subgraph "Inter-Service Events (Command Handlers ↔ Event Bus)"
-        CONV_CMD --> EB_API
-        WF_CMD --> EB_API
-        AGENT_CMD --> EB_API
-        PLATFORM_CMD --> EB_API
-        
-        EB_API --> CONV_CMD
-        EB_API --> WF_CMD
-        EB_API --> AGENT_CMD
-        EB_API --> PLATFORM_CMD
+    subgraph "Inter-Service Events (All Mutations via Event Bus)"
+        CONV_CMD <--> EVENT_BUS
+        WF_CMD <--> EVENT_BUS
+        AGENT_CMD <--> EVENT_BUS
+        PLATFORM_CMD <--> EVENT_BUS
     end
     
-    subgraph "Central Runtime Monitoring & Control"
-        PLATFORM_MONITOR -.-> CONV_API
-        PLATFORM_MONITOR -.-> WF_API
-        PLATFORM_MONITOR -.-> AGENT_API
-        PLATFORM_MONITOR -.-> API_GW
-        PLATFORM_MONITOR -.-> DB_CTRL
-        PLATFORM_MONITOR -.-> CACHE_CTRL
-        PLATFORM_MONITOR -.-> EB_CTRL
-        PLATFORM_MONITOR -.-> LLM_CTRL
+    subgraph "Cross-Service Tenant Authorization"
+        CONV_AUTHZ -.-> PLATFORM_AUTHZ
+        WF_AUTHZ -.-> PLATFORM_AUTHZ
+        AGENT_AUTHZ -.-> PLATFORM_AUTHZ
     end
+    
     
     style AUTH_IN fill:#e1f5fe
     style API_GW fill:#f3e5f5
-    style CONV_CQRS fill:#e8f5e8
-    style WF_CQRS fill:#e8f5e8
-    style AGENT_CQRS fill:#e8f5e8
-    style PLATFORM_CQRS fill:#e8f5e8
-    style EB_API fill:#fce4ec
+    style EVENT_BUS fill:#fce4ec
     style DB_API fill:#e3f2fd
     style CACHE_API fill:#f3e5f5
     style LLM_API fill:#fff3e0
     style PLATFORM_MONITOR fill:#ffebee
+    style PLATFORM_AUTHZ fill:#f1f8e9
+    style CONV_AUTHZ fill:#f1f8e9
+    style WF_AUTHZ fill:#f1f8e9
+    style AGENT_AUTHZ fill:#f1f8e9
