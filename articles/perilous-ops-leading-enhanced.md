@@ -401,6 +401,37 @@ Instead of forced decomposition, the proper evolution path follows these phases:
 1. **Event-Driven Architecture**: Move from synchronous request/response to event streaming
 2. **Platform as a Service**: Build managed infrastructure that developers can self-serve
 3. **Domain-Driven Design**: Reorganize services around business domains, not technical layers
+
+### The Service Mesh Domain-Driven Design Violation
+
+Service mesh technology fundamentally violates Domain-Driven Design principles by **externalizing critical domain concerns** into ops-controlled infrastructure:
+
+**Bounded Context Destruction:**
+- DDD requires each bounded context to encapsulate its own model, language, and lifecycle
+- Service mesh moves interaction semantics (routing, retries, policies) out of domain code into platform control
+- Domain teams lose ownership and evolution control over their own communication patterns
+- Creates architectural dependency on platform teams for domain-specific decisions
+
+**Ubiquitous Language Fragmentation:** 
+- DDD emphasizes consistent models and language within each context
+- Mesh routing rules and retry logic live outside the codebase, **fragmenting the mental model**
+- Business logic flow becomes impossible to trace without operational dashboards
+- Developers become architecturally illiterate about their own systems
+
+**Version Synchronization Chaos:**
+- Domain models evolve through code-repository versioning with coordinated releases
+- Mesh introduces **parallel versioning axis** (mesh policies) unsynchronized with service releases
+- Creates subtle production bugs where mesh strips fields or routes incorrectly
+- Undermines consistency guarantees that domain teams thought they had
+
+**The Platform Team Bottleneck:**
+- Every communication pattern change requires platform team approval and implementation
+- Domain teams become **supplicants** requesting communication changes from ops
+- Platform teams gain **veto power** over business logic evolution through mesh policy control
+- Development velocity becomes **constrained by operational change management**
+
+This represents **architectural colonialism** - ops teams seizing control of domain concerns under the guise of "simplifying" microservices. The result is domain teams that understand their business logic but can't control how their services communicate, creating exactly the kind of organizational dysfunction that microservices were supposed to eliminate.
+
 4. **Eventual Consistency**: Accept and design for eventual consistency patterns
 5. **True Service Independence**: Ensure services can evolve and deploy independently
 
