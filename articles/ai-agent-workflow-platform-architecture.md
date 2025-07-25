@@ -149,7 +149,7 @@ export interface BusinessServiceConfig {
 ### Detailed Platform Services Flow (Business-First Architecture)
 ```mermaid
 graph TB
-    AUTH_IN[Request with JWT Token] --> API_GW[API Gateway<br/>JWT Validation]
+    AUTH_IN[Authenticated Request] --> API_GW[API Gateway]
     
     subgraph "Conversation Service"
         CONV_API[API Layer]
@@ -432,7 +432,7 @@ CREATE TABLE workflows (
     name VARCHAR(255) NOT NULL,
     version INTEGER NOT NULL,
     dsl_definition JSONB NOT NULL,
-    source_conversation_id UUID, -- External ID reference only (no FK constraint)
+    source_conversation_id UUID, -- Reference to conversation that created it
     status VARCHAR(50) DEFAULT 'draft',
     created_at TIMESTAMP DEFAULT NOW(),
     
@@ -503,40 +503,6 @@ CREATE TABLE llm_usage_logs (
 
 
 ## Service Architecture Details
-
-### Core Platform Services
-
-#### API Gateway (Go/Envoy)
-```yaml
-Business Scope:
-  - Request routing and authentication
-  - Rate limiting and throttling
-  - JWT token validation  
-  - Load balancing across service instances
-
-Internal Architecture:
-  API Layer:
-    - HTTP/gRPC/WebSocket protocol handling
-    - Request routing based on path patterns
-    - JWT token validation and extraction
-    - Rate limiting per tenant
-  
-  Routing Layer:
-    - Service discovery integration
-    - Health-based routing decisions
-    - Circuit breaker patterns
-    - Load balancing algorithms
-  
-  Data Access Layer:
-    - Token validation cache
-    - Rate limiting counters
-    - Routing configuration
-
-Integration:
-  - Validates JWT tokens from Platform Service
-  - Routes authenticated requests to business services
-  - Publishes telemetry and audit events
-```
 
 ### Business Domain Services
 
