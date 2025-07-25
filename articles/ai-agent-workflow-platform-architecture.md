@@ -27,7 +27,7 @@ graph TD
         USER[End Users] --> IDP[Identity Provider<br/>AD, Okta, Auth0, etc.]
         IDP --> USER
         USER --> PLATFORM[AI Agent Workflow Platform<br/>Customer K8s Infrastructure]
-        note1[Users: JWT authentication flow]
+        note1[1. User authenticates with IDP, receives JWT<br/>2. User sends requests with JWT to platform]
     end
     
     subgraph "SDLC Flow"
@@ -56,94 +56,6 @@ graph TD
     style OPS fill:#e8f5e8
     style note1 fill:#f9f9f9
     style note2 fill:#f9f9f9
-```
-
-### Platform Usage Lifecycle
-
-Once deployed, the platform supports the following workflow creation lifecycle:
-
-```mermaid
-graph TB
-    subgraph "Workflow Creation Process"  
-        DESIGN[Workflow Design]
-        AI[AI Agent Interaction]
-        DSL[DSL Generation]
-        VALIDATE[Validation]
-        DEPLOY[Workflow Deployment]
-        MONITOR[Execution Monitoring]
-    end
-    
-    DESIGN --> AI
-    AI --> DSL
-    DSL --> VALIDATE
-    VALIDATE --> DEPLOY
-    DEPLOY --> MONITOR
-    
-    MONITOR -.-> AI
-```
-
-### CDK8s Deployment Configuration
-
-The platform is deployed using CDK8s templates that generate Kubernetes manifests:
-
-```typescript
-// Generated K8s manifests structure  
-export interface PlatformDeployment {
-  // Infrastructure Operators (Manage Infrastructure)
-  operators: InfrastructureOperators;
-  
-  // Application Services (Use Operator APIs)
-  services: ApplicationServices;
-}
-
-// Kubernetes operators that manage infrastructure
-export interface InfrastructureOperators {
-  databaseOperator: PostgreSQLOperator;
-  cacheOperator: RedisOperator;
-  eventBusOperator: PulsarOperator;
-  storageOperator: StorageOperator;
-  llmOperator: LLMOperator;
-  observabilityOperator: ObservabilityOperator;
-}
-
-// Business domain services with internal layered architecture
-export interface ApplicationServices {
-  // Business Domain Services
-  conversationService: BusinessServiceConfig;
-  workflowService: BusinessServiceConfig;
-  agentService: BusinessServiceConfig;
-  platformService: BusinessServiceConfig;
-}
-
-// Each business service contains multiple internal layers
-export interface BusinessServiceConfig {
-  // Internal layers within the business service
-  layers: {
-    apiLayer: ServiceDeployment;        // External interface
-    businessLayer: ServiceDeployment;   // Business logic
-    dataLayer: ServiceDeployment;       // Data access
-  };
-  
-  // Infrastructure needs for the entire business service
-  infrastructureRequests: {
-    database: DatabaseRequest;          // Each service gets its own DB
-    cache: CacheRequest;               // Each service gets its own cache  
-    storage?: StorageRequest;          // Optional file storage
-    eventTopics: EventTopicRequest[];  // Service-specific topics
-    specializedNeeds?: {
-      timeseries?: TimeSeriesRequest;
-      search?: SearchRequest;
-      vectorDB?: VectorDBRequest;
-      llmAccess?: LLMAccessRequest;
-    };
-  };
-  
-  // Inter-service communication contracts
-  eventContracts: {
-    publishes: string[];  // Events this service publishes
-    subscribes: string[]; // Events this service subscribes to
-  };
-}
 ```
 
 ### Detailed Platform Services Flow (Business-First Architecture)
@@ -432,7 +344,7 @@ CREATE TABLE workflows (
     name VARCHAR(255) NOT NULL,
     version INTEGER NOT NULL,
     dsl_definition JSONB NOT NULL,
-    source_conversation_id UUID, -- Reference to conversation that created it
+    source_conversation_id UUID, -- Logical reference only, no FK constraint
     status VARCHAR(50) DEFAULT 'draft',
     created_at TIMESTAMP DEFAULT NOW(),
     
@@ -500,6 +412,181 @@ CREATE TABLE llm_usage_logs (
 );
 ```
 
+**Note**: Cross-service references (like `source_conversation_id` in Workflow Service) are logical references only - services communicate via events, not direct database foreign keys.
+
+## Platform Deployment Configuration
+
+### Platform Usage Lifecycle
+
+The platform supports the following workflow creation lifecycle once deployed:
+
+```mermaid
+graph TB
+    subgraph "Workflow Creation Process"  
+        DESIGN[Workflow Design]
+        AI[AI Agent Interaction]
+        DSL[DSL Generation]
+        VALIDATE[Validation]
+        DEPLOY[Workflow Deployment]
+        MONITOR[Execution Monitoring]
+    end
+    
+    DESIGN --> AI
+    AI --> DSL
+    DSL --> VALIDATE
+    VALIDATE --> DEPLOY
+    DEPLOY --> MONITOR
+    
+    MONITOR -.-> AI
+```
+
+### CDK8s Deployment Configuration
+
+The platform is deployed using CDK8s templates that generate Kubernetes manifests:
+
+```typescript
+// Generated K8s manifests structure  
+export interface PlatformDeployment {
+  // Infrastructure Operators (Manage Infrastructure)
+  operators: InfrastructureOperators;
+  
+  // Application Services (Use Operator APIs)
+  services: ApplicationServices;
+}
+
+// Kubernetes operators that manage infrastructure
+export interface InfrastructureOperators {
+  databaseOperator: PostgreSQLOperator;
+  cacheOperator: RedisOperator;
+  eventBusOperator: PulsarOperator;
+  storageOperator: StorageOperator;
+  llmOperator: LLMOperator;
+  observabilityOperator: ObservabilityOperator;
+}
+
+// Business domain services with internal layered architecture
+export interface ApplicationServices {
+  // Infrastructure Service
+  apiGateway: BusinessServiceConfig;
+  
+  // Business Domain Services  
+  conversationService: BusinessServiceConfig;
+  workflowService: BusinessServiceConfig;
+  agentService: BusinessServiceConfig;
+  platformService: BusinessServiceConfig;
+}
+
+// Each business service contains multiple internal layers
+export interface BusinessServiceConfig {
+  // Internal layers within the business service
+  layers: {
+    apiLayer: ServiceDeployment;        // External interface
+    businessLayer: ServiceDeployment;   // Business logic
+    dataLayer: ServiceDeployment;       // Data access
+  };
+  
+  // Infrastructure needs for the entire business service
+  infrastructureRequests: {
+    database: DatabaseRequest;          // Each service gets its own DB
+    cache: CacheRequest;               // Each service gets its own cache  
+    storage?: StorageRequest;          // Optional file storage
+    eventTopics: EventTopicRequest[];  // Service-specific topics
+    specializedNeeds?: {
+      timeseries?: TimeSeriesRequest;
+      search?: SearchRequest;
+      vectorDB?: VectorDBRequest;
+      llmAccess?: LLMAccessRequest;
+    };
+  };
+  
+  // Inter-service communication contracts
+  eventContracts: {
+    publishes: string[];  // Events this service publishes
+    subscribes: string[]; // Events this service subscribes to
+  };
+}
+```
+
+## Inter-Service Event Contracts
+
+Services communicate via well-defined events to maintain loose coupling:
+
+### Conversation Service Events
+```typescript
+// Published by Conversation Service
+interface ConversationStartedEvent {
+  accountId: string;
+  conversationId: string;
+  userId: string;
+  timestamp: string;
+}
+
+interface MessageReceivedEvent {
+  accountId: string;
+  conversationId: string;
+  messageId: string;
+  role: 'user' | 'assistant';
+  timestamp: string;
+}
+```
+
+### Agent Service Events  
+```typescript
+// Published by Agent Service
+interface DSLGeneratedEvent {
+  accountId: string;
+  conversationId: string;
+  dslContent: object;
+  agentId: string;
+  timestamp: string;
+}
+
+interface AgentResponseEvent {
+  accountId: string;
+  conversationId: string;
+  messageId: string;
+  response: string;
+  timestamp: string;
+}
+```
+
+### Workflow Service Events
+```typescript
+// Published by Workflow Service
+interface WorkflowCreatedEvent {
+  accountId: string;
+  workflowId: string;
+  sourceConversationId: string; // Logical reference only
+  timestamp: string;
+}
+
+interface WorkflowExecutionStartedEvent {
+  accountId: string;
+  workflowId: string;
+  executionId: string;
+  timestamp: string;
+}
+```
+
+### Platform Service Events
+```typescript
+// Published by Platform Service
+interface TenantCreatedEvent {
+  accountId: string;
+  accountName: string;
+  tier: string;
+  timestamp: string;
+}
+
+interface QuotaExceededEvent {
+  accountId: string;
+  resourceType: string;
+  currentUsage: number;
+  limit: number;
+  timestamp: string;
+}
+```
+
 
 
 ## Service Architecture Details
@@ -507,6 +594,38 @@ CREATE TABLE llm_usage_logs (
 ### Business Domain Services
 
 Services are organized by business capability first, with internal layered architecture:
+
+#### API Gateway (Go/Envoy)
+```yaml
+Business Scope:
+  - Request routing to business services
+  - Authentication token validation
+  - Rate limiting and throttling per tenant
+  - Request/response transformation
+
+Internal Architecture:
+  API Layer (gateway-api):
+    - Multi-protocol support (HTTP, gRPC, WebSocket)
+    - Dynamic route configuration
+    - Health check aggregation
+    - Circuit breaker integration
+  
+  Routing Layer (gateway-routing):
+    - Path-based service routing
+    - Load balancing across service instances
+    - Tenant context extraction
+    - Request correlation and tracing
+  
+  Data Access Layer (gateway-data):
+    - Route configuration cache
+    - Service discovery integration
+    - Usage metrics collection
+
+Inter-Service Communication:
+  - Routes requests to all business services
+  - Does not publish domain events (infrastructure concern)
+  - Subscribes to service health events for routing updates
+```
 
 #### Conversation Service (Python/Go)
 ```yaml
@@ -654,56 +773,7 @@ Inter-Service Communication:
   - Subscribes: All service events (for audit/monitoring)
 ```
 
-#### LLM Router & Load Balancer (Go)
-```yaml
-Responsibilities:
-  - Intelligent model routing based on request type
-  - Load balancing across model replicas
-  - Cost optimization (local vs cloud)
-  - Performance monitoring and failover
 
-Features:
-  - Model capability matching
-  - Request queuing and batching
-  - Health checking and circuit breaking
-  - Usage analytics and cost tracking
-```
-
-#### Conversation Manager (Python)
-```yaml
-Responsibilities:
-  - Conversation tree structure management
-  - Context window optimization
-  - Message threading and branching
-  - Conversation search and retrieval
-
-Data Ownership:
-  - Dedicated PostgreSQL for conversation metadata and structure
-  - Private Redis cache for active conversation state
-  - Local file storage for large message content and attachments
-  - Elasticsearch index for conversation search
-
-Scaling:
-  - Independent horizontal scaling
-  - Database sharding by conversation load
-  - Cache partitioning by tenant
-  - Search index scaling
-```
-
-#### Memory Manager (Python/Go)
-```yaml
-Responsibilities:
-  - Long-term conversation memory
-  - User preference learning
-  - Context summarization
-  - Memory expiration policies
-
-Features:
-  - Vector embeddings for semantic search
-  - Hierarchical memory structures
-  - Privacy-aware memory filtering
-  - Cross-conversation context sharing
-```
 
 ### Local LLM Services
 
@@ -793,38 +863,51 @@ Features:
 
 ### Data Services
 
-### Infrastructure Services
+### Infrastructure Operators (K8s Controllers)
 
-#### Event Bus Service (Apache Pulsar)
+#### Event Bus Operator (Pulsar Operator)
 ```yaml
-Responsibilities:
-  - Multi-tenant topic management
-  - Message routing and delivery
-  - Dead letter queue handling
-  - Cross-service event distribution
+Manages:
+  - Pulsar cluster lifecycle (create, update, scale, backup)
+  - Multi-tenant topic provisioning per service
+  - Auto-scaling partitions based on load
+  - Dead letter queue configuration
 
-Features:
-  - Auto-scaling partitions
-  - Multi-tenancy isolation
-  - Geo-replication support
+Provides APIs:
+  - Topic creation/deletion per service
+  - Message publishing/subscription
   - Schema registry integration
+  - Metrics and monitoring endpoints
 ```
 
-
-
-#### LLM Infrastructure Service
+#### Database Operator (PostgreSQL Operator)
 ```yaml
-Responsibilities:
-  - Model serving and load balancing
-  - GPU resource management
-  - Model lifecycle (load/unload)
-  - Request routing optimization
+Manages:
+  - PostgreSQL instance lifecycle per service
+  - Automated backups and point-in-time recovery
+  - Connection pooling and read replicas
+  - Security and access control
 
-Features:
-  - Multi-model serving
-  - GPU sharing and isolation
-  - Auto-scaling based on demand
-  - Cost and performance optimization
+Provides APIs:
+  - Database provisioning per service
+  - Connection string management
+  - Schema migration support
+  - Performance metrics collection
+```
+
+#### LLM Operator (Custom LLM Controller)
+```yaml
+Manages:
+  - GPU resource allocation and scheduling
+  - Model lifecycle (download, load, unload, scale)
+  - Multiple serving engines (Ollama, vLLM, TGI)
+  - Model version management and rollback
+
+Provides APIs:
+  - Inference endpoints per model
+  - Model selection and routing
+  - Usage tracking and cost optimization
+  - Health checking and failover
 ```
 
 
@@ -952,9 +1035,11 @@ Each business service implements CQRS internally to optimize for both read and w
 - **Authentication**: Validates tokens before forwarding requests
 
 **Service-Level CQRS (Within Each Service):**
-- **Internal Routing**: Each service's API layer routes to command or query handlers
-- **Query Handlers**: Direct, optimized read paths to data layer
-- **Command Handlers**: Business logic processing with event emission
+- **Request Classification**: API layer routes based on HTTP method and operation intent
+  - **Queries**: GET requests → Query handlers (read-only operations)
+  - **Commands**: POST/PUT/DELETE requests → Command handlers (state-changing operations)
+- **Query Handlers**: Direct, optimized read paths to data layer with caching
+- **Command Handlers**: Business logic processing with validation and event emission
 - **Data Layer**: Unified access to operator-managed infrastructure
 
 **Query Processing (Within Service):**
