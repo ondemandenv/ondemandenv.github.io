@@ -21,251 +21,66 @@ This document outlines the architecture for an enterprise-grade AI agent workflo
 ## High-Level Architecture
 
 ### System Overview
-```mermaid
-graph TD
-    subgraph "Runtime Flow"
-        USER[End Users] --> IDP[Identity Provider<br/>AD, Okta, Auth0, etc.]
-        IDP --> USER
-        USER --> PLATFORM[AI Agent Workflow Platform<br/>Customer K8s Infrastructure]
-        note1[1. User authenticates with IDP, receives JWT<br/>2. User sends requests with JWT to platform]
-    end
-    
-    subgraph "SDLC Flow"
-        DEVS[Platform Developers] --> GITHUB[GitHub Repository]
-        OPS[Platform Operators] --> CDK8S[CDK8s Templates]
-        GITHUB --> CI_CD[CI/CD Pipeline]
-        CDK8S --> CI_CD
-        CI_CD --> PLATFORM
-        note2[DevOps: Platform deployment flow]
-    end
-    
-    subgraph "External Services"
-        IDP
-        CLOUD_LLM[Cloud LLM Providers<br/>OpenAI, Anthropic, etc.]
-        CLOUD_INFRA[Cloud Infrastructure<br/>GitHub, AWS Secrets, etc.]
-        GITHUB
-    end
-    
-    PLATFORM -.-> CLOUD_LLM
-    PLATFORM -.-> CLOUD_INFRA
-    
-    style USER fill:#e1f5fe
-    style PLATFORM fill:#f3e5f5
-    style IDP fill:#fff3e0
-    style DEVS fill:#e8f5e8
-    style OPS fill:#e8f5e8
-    style note1 fill:#f9f9f9
-    style note2 fill:#f9f9f9
-```
+
+<div id="ai-agent-platform-system-overview-diagram" 
+     class="mermaid-diagram-simple" 
+     data-external-diagram="/diagrams/ai-agent-platform-system-overview.mmd">
+</div>
+
+<div style="text-align: center; margin: 1rem 0;">
+    <a href="/mmd-render.html?mmd=diagrams/ai-agent-platform-system-overview.mmd" 
+       target="_blank" 
+       style="display: inline-flex; align-items: center; gap: 0.5rem; background: #0366d6; color: white; padding: 0.5rem 1rem; border-radius: 4px; text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease;">
+        🔍 View Fullscreen
+    </a>
+</div>
 
 ### Detailed Platform Services Flow (Business-First Architecture)
-```mermaid
-graph TB
-    AUTH_IN[Authenticated Request] --> API_GW[API Gateway]
-    
-    subgraph "Conversation Service"
-        CONV_API[API Layer]
-        CONV_CQRS{CQRS Router}
-        CONV_QUERY[Query Handler]
-        CONV_CMD[Command Handler]
-        CONV_DATA[Data Layer]
-        
-        CONV_API --> CONV_CQRS
-        CONV_CQRS --> CONV_QUERY
-        CONV_CQRS --> CONV_CMD
-        CONV_QUERY --> CONV_DATA
-        CONV_CMD --> CONV_DATA
-    end
-    
-    subgraph "Workflow Service"
-        WF_API[API Layer]
-        WF_CQRS{CQRS Router}
-        WF_QUERY[Query Handler]
-        WF_CMD[Command Handler]
-        WF_DATA[Data Layer]
-        
-        WF_API --> WF_CQRS
-        WF_CQRS --> WF_QUERY
-        WF_CQRS --> WF_CMD
-        WF_QUERY --> WF_DATA
-        WF_CMD --> WF_DATA
-    end
-    
-    subgraph "Agent Service"
-        AGENT_API[API Layer]
-        AGENT_CQRS{CQRS Router}
-        AGENT_QUERY[Query Handler]
-        AGENT_CMD[Command Handler]
-        AGENT_DATA[Data Layer]
-        
-        AGENT_API --> AGENT_CQRS
-        AGENT_CQRS --> AGENT_QUERY
-        AGENT_CQRS --> AGENT_CMD
-        AGENT_QUERY --> AGENT_DATA
-        AGENT_CMD --> AGENT_DATA
-    end
-    
-    subgraph "Platform Service"
-        PLATFORM_API[API Layer]
-        PLATFORM_CQRS{CQRS Router}
-        PLATFORM_QUERY[Query Handler]
-        PLATFORM_CMD[Command Handler]
-        PLATFORM_DATA[Data Layer]
-        
-        PLATFORM_API --> PLATFORM_CQRS
-        PLATFORM_CQRS --> PLATFORM_QUERY
-        PLATFORM_CQRS --> PLATFORM_CMD
-        PLATFORM_QUERY --> PLATFORM_DATA
-        PLATFORM_CMD --> PLATFORM_DATA
-    end
-    
-    API_GW --> CONV_API
-    API_GW --> WF_API
-    API_GW --> AGENT_API
-    API_GW --> PLATFORM_API
-    
-    subgraph "Infrastructure Controllers/Operators"
-        subgraph "Event Bus Controller"
-            EB_CTRL[Pulsar Operator]
-            EB_API[Pulsar API<br/>Per-Tenant Topics]
-        end
-        
-        subgraph "Database Controller"
-            DB_CTRL[PostgreSQL Operator]
-            DB_API[Database API<br/>Per-Service Databases]
-        end
-        
-        subgraph "Cache Controller"
-            CACHE_CTRL[Redis Operator]
-            CACHE_API[Cache API<br/>Per-Service Instances]
-        end
-        
-        subgraph "Storage Controller"
-            STORAGE_CTRL[Storage Operator]
-            STORAGE_API[Volume API<br/>Per-Service PVCs]
-        end
-        
-        subgraph "LLM Controller"
-            LLM_CTRL[LLM Operator]
-            LLM_API[Model API<br/>Shared GPU Pool]
-        end
-    end
-    
-    subgraph "Infrastructure Access (Data Layers → Operator APIs)"
-        CONV_DATA --> DB_API
-        CONV_DATA --> CACHE_API
-        CONV_DATA --> STORAGE_API
-        
-        WF_DATA --> DB_API
-        WF_DATA --> CACHE_API
-        WF_DATA --> STORAGE_API
-        
-        AGENT_DATA --> DB_API
-        AGENT_DATA --> CACHE_API
-        AGENT_DATA --> LLM_API
-        
-        PLATFORM_DATA --> DB_API
-        PLATFORM_DATA --> CACHE_API
-    end
-    
-    subgraph "Inter-Service Events (Command Handlers ↔ Event Bus)"
-        CONV_CMD --> EB_API
-        WF_CMD --> EB_API
-        AGENT_CMD --> EB_API
-        PLATFORM_CMD --> EB_API
-        
-        EB_API --> CONV_CMD
-        EB_API --> WF_CMD
-        EB_API --> AGENT_CMD
-        EB_API --> PLATFORM_CMD
-    end
-    
-    style AUTH_IN fill:#e1f5fe
-    style API_GW fill:#f3e5f5
-    style CONV_CQRS fill:#e8f5e8
-    style WF_CQRS fill:#e8f5e8
-    style AGENT_CQRS fill:#e8f5e8
-    style PLATFORM_CQRS fill:#e8f5e8
-    style EB_API fill:#fce4ec
-    style DB_API fill:#e3f2fd
-    style CACHE_API fill:#f3e5f5
-    style LLM_API fill:#fff3e0
-```
+
+<div id="ai-agent-platform-detailed-services-flow-diagram" 
+     class="mermaid-diagram-simple" 
+     data-external-diagram="/diagrams/ai-agent-platform-detailed-services-flow.mmd">
+</div>
+
+<div style="text-align: center; margin: 1rem 0;">
+    <a href="/mmd-render.html?mmd=diagrams/ai-agent-platform-detailed-services-flow.mmd" 
+       target="_blank" 
+       style="display: inline-flex; align-items: center; gap: 0.5rem; background: #0366d6; color: white; padding: 0.5rem 1rem; border-radius: 4px; text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease;">
+        🔍 View Fullscreen
+    </a>
+</div>
 
 ## Event & Data Flow Architecture
 
 ### Event Flow Patterns
 
-```mermaid
-sequenceDiagram
-    participant U as User
-    participant API as API Gateway
-    participant AL as AI Agent
-    participant EB as Event Bus
-    participant DSL as DSL Compiler
-    participant WE as Workflow Engine
-    participant DB as Database
+<div id="ai-agent-platform-event-flow-diagram" 
+     class="mermaid-diagram-simple" 
+     data-external-diagram="/diagrams/ai-agent-platform-event-flow.mmd">
+</div>
 
-    U->>API: Start conversation
-    API->>AL: Create chat session
-    AL->>EB: ConversationStarted
-    
-    loop Iterative Design
-        U->>AL: Describe workflow needs
-        AL->>EB: MessageReceived
-        AL->>AL: Generate workflow DSL
-        AL->>EB: DSLGenerated
-        EB->>DSL: Validate & compile DSL
-        DSL->>EB: DSLValidated
-        AL->>U: Present workflow preview
-    end
-    
-    U->>AL: Approve workflow
-    AL->>EB: WorkflowApproved
-    EB->>DB: Save workflow definition
-    EB->>WE: RegisterWorkflow
-    
-    Note over U,DB: Workflow is ready for manual trigger
-    
-    U->>API: Trigger workflow
-    API->>WE: ExecuteWorkflow
-    WE->>EB: WorkflowStarted
-    WE->>EB: TaskCompleted (per step)
-    EB->>API: Real-time status updates
-```
+<div style="text-align: center; margin: 1rem 0;">
+    <a href="/mmd-render.html?mmd=diagrams/ai-agent-platform-event-flow.mmd" 
+       target="_blank" 
+       style="display: inline-flex; align-items: center; gap: 0.5rem; background: #0366d6; color: white; padding: 0.5rem 1rem; border-radius: 4px; text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease;">
+        🔍 View Fullscreen
+    </a>
+</div>
 
 ### Multi-Tenant Event Partitioning
 
-```mermaid
-graph LR
-    subgraph "Apache Pulsar Topics"
-        subgraph "Account A (acct-001)"
-            A_CONV[conversations-acct-001]
-            A_WF[workflows-acct-001]  
-            A_EXEC[executions-acct-001]
-            A_SYS[system-acct-001]
-        end
-        
-        subgraph "Account B (acct-002)"
-            B_CONV[conversations-acct-002]
-            B_WF[workflows-acct-002]
-            B_EXEC[executions-acct-002] 
-            B_SYS[system-acct-002]
-        end
-        
-        subgraph "Global Topics"
-            METRICS[metrics-global]
-            AUDIT[audit-global]
-            HEALTH[health-global]
-        end
-    end
-    
-    subgraph "Auto-Scaling Features"
-        AUTO[Auto-partition scaling]
-        BALANCE[Load balancing]
-        FAILOVER[Automatic failover]
-    end
-```
+<div id="ai-agent-platform-multitenant-events-diagram" 
+     class="mermaid-diagram-simple" 
+     data-external-diagram="/diagrams/ai-agent-platform-multitenant-events.mmd">
+</div>
+
+<div style="text-align: center; margin: 1rem 0;">
+    <a href="/mmd-render.html?mmd=diagrams/ai-agent-platform-multitenant-events.mmd" 
+       target="_blank" 
+       style="display: inline-flex; align-items: center; gap: 0.5rem; background: #0366d6; color: white; padding: 0.5rem 1rem; border-radius: 4px; text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease;">
+        🔍 View Fullscreen
+    </a>
+</div>
 
 ## Business Domain Data Models
 
@@ -420,25 +235,18 @@ CREATE TABLE llm_usage_logs (
 
 The platform supports the following workflow creation lifecycle once deployed:
 
-```mermaid
-graph TB
-    subgraph "Workflow Creation Process"  
-        DESIGN[Workflow Design]
-        AI[AI Agent Interaction]
-        DSL[DSL Generation]
-        VALIDATE[Validation]
-        DEPLOY[Workflow Deployment]
-        MONITOR[Execution Monitoring]
-    end
-    
-    DESIGN --> AI
-    AI --> DSL
-    DSL --> VALIDATE
-    VALIDATE --> DEPLOY
-    DEPLOY --> MONITOR
-    
-    MONITOR -.-> AI
-```
+<div id="ai-agent-platform-workflow-lifecycle-diagram" 
+     class="mermaid-diagram-simple" 
+     data-external-diagram="/diagrams/ai-agent-platform-workflow-lifecycle.mmd">
+</div>
+
+<div style="text-align: center; margin: 1rem 0;">
+    <a href="/mmd-render.html?mmd=diagrams/ai-agent-platform-workflow-lifecycle.mmd" 
+       target="_blank" 
+       style="display: inline-flex; align-items: center; gap: 0.5rem; background: #0366d6; color: white; padding: 0.5rem 1rem; border-radius: 4px; text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease;">
+        🔍 View Fullscreen
+    </a>
+</div>
 
 ### CDK8s Deployment Configuration
 
@@ -1152,48 +960,18 @@ ClusterAutoscaler:
 
 **Goal**: Enable parallel development of business services while infrastructure matures
 
-```mermaid
-graph TB
-    subgraph "EKS Cluster"
-        subgraph "Business Services (Same Code)"
-            CONV[Conversation Service]
-            WF[Workflow Service]
-            AGENT[Agent Service]
-            PLATFORM[Platform Service]
-        end
-        
-        subgraph "Infrastructure Abstraction Layer"
-            DB_ADAPTER[Database Adapter]
-            CACHE_ADAPTER[Cache Adapter]
-            EVENT_ADAPTER[Event Adapter]
-            STORAGE_ADAPTER[Storage Adapter]
-        end
-    end
-    
-    subgraph "AWS Managed Services"
-        RDS[(RDS PostgreSQL<br/>Per Service)]
-        ELASTICACHE[(ElastiCache Redis<br/>Per Service)]
-        EVENTBRIDGE[EventBridge<br/>Custom Bus Names]
-        S3[(S3 Buckets<br/>Per Service)]
-        DYNAMODB[(DynamoDB<br/>Per Service)]
-    end
-    
-    CONV --> DB_ADAPTER
-    WF --> CACHE_ADAPTER
-    AGENT --> EVENT_ADAPTER
-    PLATFORM --> STORAGE_ADAPTER
-    
-    DB_ADAPTER --> RDS
-    CACHE_ADAPTER --> ELASTICACHE
-    EVENT_ADAPTER --> EVENTBRIDGE
-    STORAGE_ADAPTER --> S3
-    STORAGE_ADAPTER --> DYNAMODB
-    
-    style CONV fill:#e8f5e8
-    style WF fill:#fff3e0
-    style AGENT fill:#e3f2fd
-    style PLATFORM fill:#f3e5f5
-```
+<div id="ai-agent-platform-phase1-aws-diagram" 
+     class="mermaid-diagram-simple" 
+     data-external-diagram="/diagrams/ai-agent-platform-phase1-aws.mmd">
+</div>
+
+<div style="text-align: center; margin: 1rem 0;">
+    <a href="/mmd-render.html?mmd=diagrams/ai-agent-platform-phase1-aws.mmd" 
+       target="_blank" 
+       style="display: inline-flex; align-items: center; gap: 0.5rem; background: #0366d6; color: white; padding: 0.5rem 1rem; border-radius: 4px; text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease;">
+        🔍 View Fullscreen
+    </a>
+</div>
 
 **Benefits:**
 - **Faster Development**: Business teams work with familiar AWS services
@@ -1206,36 +984,18 @@ graph TB
 
 **Goal**: Migrate to self-contained infrastructure when business services are mature
 
-```mermaid
-graph TB
-    subgraph "Same Business Services (No Code Changes)"
-        CONV[Conversation Service]
-        WF[Workflow Service] 
-        AGENT[Agent Service]
-        PLATFORM[Platform Service]
-    end
-    
-    subgraph "Infrastructure Abstraction (Same Interface)"
-        DB_ADAPTER[Database Adapter]
-        CACHE_ADAPTER[Cache Adapter]
-        EVENT_ADAPTER[Event Adapter]
-        STORAGE_ADAPTER[Storage Adapter]
-    end
-    
-    subgraph "K8s Operators (New Backend)"
-        PG_OP[PostgreSQL Operator]
-        REDIS_OP[Redis Operator]
-        PULSAR_OP[Pulsar Operator]
-        STORAGE_OP[Storage Operator]
-    end
-    
-    CONV --> DB_ADAPTER
-    DB_ADAPTER --> PG_OP
-    
-    note1[Business services unchanged<br/>Only infrastructure backend changes]
-    
-    style note1 fill:#f9f9f9
-```
+<div id="ai-agent-platform-phase2-k8s-diagram" 
+     class="mermaid-diagram-simple" 
+     data-external-diagram="/diagrams/ai-agent-platform-phase2-k8s.mmd">
+</div>
+
+<div style="text-align: center; margin: 1rem 0;">
+    <a href="/mmd-render.html?mmd=diagrams/ai-agent-platform-phase2-k8s.mmd" 
+       target="_blank" 
+       style="display: inline-flex; align-items: center; gap: 0.5rem; background: #0366d6; color: white; padding: 0.5rem 1rem; border-radius: 4px; text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease;">
+        🔍 View Fullscreen
+    </a>
+</div>
 
 ### Infrastructure Abstraction Pattern
 
