@@ -894,6 +894,34 @@ Each application service logically owns its data but accesses it through infrast
 
 ## Security Architecture
 
+### Authentication & Authorization Flow
+
+The platform implements a layered security model that separates authentication from authorization:
+
+#### External Authentication (IDP Integration)
+- **Identity Provider Integration**: OIDC/OAuth2 integration with external IDPs (Auth0, Okta, Azure AD, etc.)
+- **JWT Token Validation**: API Gateway validates JWT tokens from trusted IDPs
+- **User Context Extraction**: Extracts user identity, tenant context, and claims from validated JWTs
+- **No Internal Auth Service**: Leverages external IDPs rather than maintaining internal user credentials
+
+#### API Gateway Security Layer
+- **Token Validation**: Validates JWT signatures, expiration, and issuer claims
+- **Request Routing**: Routes authenticated requests to appropriate business services
+- **Tenant Context Injection**: Adds extracted tenant/user context to service requests
+- **Rate Limiting**: Applies per-tenant rate limiting based on authenticated identity
+
+#### Runtime Authorization Engine (Platform Service)
+- **Tenant Access Control**: Fine-grained authorization for tenant-specific resources
+- **Policy Management**: Centralized policies for document, workflow, and conversation access
+- **Resource-Level Permissions**: Controls access to specific conversations, workflows, agents
+- **Dynamic Policy Evaluation**: Real-time authorization decisions based on tenant context
+
+#### Service-Level Authorization
+- **Tenant Authorization Checks**: Each service validates tenant access via Platform Service authorization engine
+- **Resource Ownership**: Services verify that tenants can only access their own resources
+- **Cross-Service Validation**: Authorization context propagated across service boundaries
+- **Audit Trail**: All authorization decisions logged for compliance and debugging
+
 ### Zero-Trust Security Model
 - **Identity Verification**: OIDC integration with major IDPs
 - **Secret Management**: K8s secrets + cloud KMS integration  
