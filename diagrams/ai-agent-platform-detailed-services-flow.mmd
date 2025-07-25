@@ -6,7 +6,7 @@ flowchart TB
         CONV_CQRS{CQRS Router}
         CONV_QUERY[Query Handler]
         CONV_CMD[Command Handler]
-        CONV_DATA[Data Layer]
+        CONV_DATA[data store]
         
         CONV_API --> CONV_CQRS
         CONV_CQRS --> CONV_QUERY
@@ -20,7 +20,7 @@ flowchart TB
         WF_CQRS{CQRS Router}
         WF_QUERY[Query Handler]
         WF_CMD[Command Handler]
-        WF_DATA[Data Layer]
+        WF_DATA[data store]
         
         WF_API --> WF_CQRS
         WF_CQRS --> WF_QUERY
@@ -34,7 +34,7 @@ flowchart TB
         AGENT_CQRS{CQRS Router}
         AGENT_QUERY[Query Handler]
         AGENT_CMD[Command Handler]
-        AGENT_DATA[Data Layer]
+        AGENT_DATA[data store]
         
         AGENT_API --> AGENT_CQRS
         AGENT_CQRS --> AGENT_QUERY
@@ -48,13 +48,15 @@ flowchart TB
         PLATFORM_CQRS{CQRS Router}
         PLATFORM_QUERY[Query Handler]
         PLATFORM_CMD[Command Handler]
-        PLATFORM_DATA[Data Layer]
+        PLATFORM_MONITOR[Central Control & Monitoring]
+        PLATFORM_DATA[data store]
         
         PLATFORM_API --> PLATFORM_CQRS
         PLATFORM_CQRS --> PLATFORM_QUERY
         PLATFORM_CQRS --> PLATFORM_CMD
         PLATFORM_QUERY --> PLATFORM_DATA
         PLATFORM_CMD --> PLATFORM_DATA
+        PLATFORM_MONITOR --> PLATFORM_DATA
     end
     
     API_GW --> CONV_API
@@ -89,7 +91,7 @@ flowchart TB
         end
     end
     
-    subgraph "Infrastructure Access (Data Layers → Operator APIs)"
+    subgraph "Infrastructure Access (data stores → Operator APIs)"
         CONV_DATA --> DB_API
         CONV_DATA --> CACHE_API
         CONV_DATA --> STORAGE_API
@@ -118,6 +120,17 @@ flowchart TB
         EB_API --> PLATFORM_CMD
     end
     
+    subgraph "Central Runtime Monitoring & Control"
+        PLATFORM_MONITOR -.-> CONV_API
+        PLATFORM_MONITOR -.-> WF_API
+        PLATFORM_MONITOR -.-> AGENT_API
+        PLATFORM_MONITOR -.-> API_GW
+        PLATFORM_MONITOR -.-> DB_CTRL
+        PLATFORM_MONITOR -.-> CACHE_CTRL
+        PLATFORM_MONITOR -.-> EB_CTRL
+        PLATFORM_MONITOR -.-> LLM_CTRL
+    end
+    
     style AUTH_IN fill:#e1f5fe
     style API_GW fill:#f3e5f5
     style CONV_CQRS fill:#e8f5e8
@@ -127,4 +140,5 @@ flowchart TB
     style EB_API fill:#fce4ec
     style DB_API fill:#e3f2fd
     style CACHE_API fill:#f3e5f5
-    style LLM_API fill:#fff3e0 
+    style LLM_API fill:#fff3e0
+    style PLATFORM_MONITOR fill:#ffebee
