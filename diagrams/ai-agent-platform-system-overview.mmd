@@ -1,0 +1,34 @@
+graph TD
+    subgraph "Runtime Flow"
+        USER[End Users] --> IDP[Identity Provider<br/>AD, Okta, Auth0, etc.]
+        IDP --> USER
+        USER --> PLATFORM[AI Agent Workflow Platform<br/>Customer K8s Infrastructure]
+        note1[1. User authenticates with IDP, receives JWT<br/>2. User sends requests with JWT to platform]
+    end
+    
+    subgraph "SDLC Flow"
+        DEVS[Platform Developers] --> GITHUB[GitHub Repository]
+        OPS[Platform Operators] --> CDK8S[CDK8s Templates]
+        GITHUB --> CI_CD[CI/CD Pipeline]
+        CDK8S --> CI_CD
+        CI_CD --> PLATFORM
+        note2[DevOps: Platform deployment flow]
+    end
+    
+    subgraph "External Services"
+        IDP
+        CLOUD_LLM[Cloud LLM Providers<br/>OpenAI, Anthropic, etc.]
+        CLOUD_INFRA[Cloud Infrastructure<br/>GitHub, AWS Secrets, etc.]
+        GITHUB
+    end
+    
+    PLATFORM -.-> CLOUD_LLM
+    PLATFORM -.-> CLOUD_INFRA
+    
+    style USER fill:#e1f5fe
+    style PLATFORM fill:#f3e5f5
+    style IDP fill:#fff3e0
+    style DEVS fill:#e8f5e8
+    style OPS fill:#e8f5e8
+    style note1 fill:#f9f9f9
+    style note2 fill:#f9f9f9 

@@ -1,0 +1,28 @@
+graph TB
+    subgraph "Same Business Services (No Code Changes)"
+        CONV[Conversation Service]
+        WF[Workflow Service] 
+        AGENT[Agent Service]
+        PLATFORM[Platform Service]
+    end
+    
+    subgraph "Infrastructure Abstraction (Same Interface)"
+        DB_ADAPTER[Database Adapter]
+        CACHE_ADAPTER[Cache Adapter]
+        EVENT_ADAPTER[Event Adapter]
+        STORAGE_ADAPTER[Storage Adapter]
+    end
+    
+    subgraph "K8s Operators (New Backend)"
+        PG_OP[PostgreSQL Operator]
+        REDIS_OP[Redis Operator]
+        PULSAR_OP[Pulsar Operator]
+        STORAGE_OP[Storage Operator]
+    end
+    
+    CONV --> DB_ADAPTER
+    DB_ADAPTER --> PG_OP
+    
+    note1[Business services unchanged<br/>Only infrastructure backend changes]
+    
+    style note1 fill:#f9f9f9 

@@ -1,0 +1,28 @@
+graph LR
+    subgraph "Apache Pulsar Topics"
+        subgraph "Account A (acct-001)"
+            A_CONV[conversations-acct-001]
+            A_WF[workflows-acct-001]  
+            A_EXEC[executions-acct-001]
+            A_SYS[system-acct-001]
+        end
+        
+        subgraph "Account B (acct-002)"
+            B_CONV[conversations-acct-002]
+            B_WF[workflows-acct-002]
+            B_EXEC[executions-acct-002] 
+            B_SYS[system-acct-002]
+        end
+        
+        subgraph "Global Topics"
+            METRICS[metrics-global]
+            AUDIT[audit-global]
+            HEALTH[health-global]
+        end
+    end
+    
+    subgraph "Auto-Scaling Features"
+        AUTO[Auto-partition scaling]
+        BALANCE[Load balancing]
+        FAILOVER[Automatic failover]
+    end 

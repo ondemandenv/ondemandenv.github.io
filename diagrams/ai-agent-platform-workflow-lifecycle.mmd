@@ -1,0 +1,17 @@
+graph TB
+    subgraph "Workflow Creation Process"  
+        DESIGN[Workflow Design]
+        AI[AI Agent Interaction]
+        DSL[DSL Generation]
+        VALIDATE[Validation]
+        DEPLOY[Workflow Deployment]
+        MONITOR[Execution Monitoring]
+    end
+    
+    DESIGN --> AI
+    AI --> DSL
+    DSL --> VALIDATE
+    VALIDATE --> DEPLOY
+    DEPLOY --> MONITOR
+    
+    MONITOR -.-> AI 

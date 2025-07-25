@@ -1,0 +1,106 @@
+graph TB
+    subgraph "Customer Infrastructure - Kubernetes Cluster"
+        subgraph "Application Layer"
+            API[API Gateway]
+            AUTH[Auth Service]
+            ROUTER[Multi-Tenant Router]
+        end
+        
+        subgraph "AI Agent Services"
+            AGENT_A[AI Agent - Tenant A]
+            AGENT_B[AI Agent - Tenant B]
+            LLM_ROUTER[LLM Router & Load Balancer]
+        end
+        
+        subgraph "Local LLM Services - GPU Nodes"
+            subgraph "Ollama Cluster"
+                OLLAMA_1[Ollama Pod 1<br/>Llama2:7B]
+                OLLAMA_2[Ollama Pod 2<br/>Mistral:7B]
+                OLLAMA_3[Ollama Pod 3<br/>CodeLlama:13B]
+            end
+            
+            subgraph "vLLM Cluster"
+                VLLM_1[vLLM Pod 1<br/>Llama2:70B<br/>Tensor Parallel]
+                VLLM_2[vLLM Pod 2<br/>Mistral:22B<br/>Quantized 4-bit]
+            end
+            
+            subgraph "Text Generation Inference"
+                TGI_1[TGI Pod 1<br/>Custom Fine-tuned]
+                TGI_2[TGI Pod 2<br/>Code Assistant]
+            end
+        end
+        
+        subgraph "GPU Resource Management"
+            GPU_SCHEDULER[GPU Scheduler]
+            NODE_1[GPU Node 1<br/>4x A100 80GB]
+            NODE_2[GPU Node 2<br/>8x A100 40GB]
+            NODE_3[GPU Node 3<br/>4x H100 80GB]
+        end
+        
+        subgraph "Model Storage & Registry"
+            MODEL_REGISTRY[Model Registry]
+            MODEL_CACHE[(Model Cache<br/>Fast SSD)]
+            CUSTOM_MODELS[(Custom Models<br/>Fine-tuned)]
+        end
+        
+        subgraph "Monitoring & Metrics"
+            GPU_METRICS[GPU Utilization Metrics]
+            MODEL_METRICS[Model Performance Metrics]
+            COST_TRACKING[Cost & Usage Tracking]
+        end
+    end
+    
+    subgraph "External Cloud LLM Providers"
+        OPENAI[OpenAI GPT-4]
+        ANTHROPIC[Anthropic Claude]
+        AWS_BEDROCK[AWS Bedrock]
+        AZURE_OPENAI[Azure OpenAI]
+    end
+    
+    API --> ROUTER
+    ROUTER --> AGENT_A
+    ROUTER --> AGENT_B
+    
+    AGENT_A --> LLM_ROUTER
+    AGENT_B --> LLM_ROUTER
+    
+    LLM_ROUTER --> OLLAMA_1
+    LLM_ROUTER --> OLLAMA_2
+    LLM_ROUTER --> VLLM_1
+    LLM_ROUTER --> TGI_1
+    
+    LLM_ROUTER -.-> OPENAI
+    LLM_ROUTER -.-> ANTHROPIC
+    LLM_ROUTER -.-> AWS_BEDROCK
+    
+    GPU_SCHEDULER --> NODE_1
+    GPU_SCHEDULER --> NODE_2
+    GPU_SCHEDULER --> NODE_3
+    
+    OLLAMA_1 --> NODE_1
+    OLLAMA_2 --> NODE_1
+    VLLM_1 --> NODE_2
+    VLLM_2 --> NODE_2
+    TGI_1 --> NODE_3
+    
+    MODEL_REGISTRY --> MODEL_CACHE
+    MODEL_CACHE --> OLLAMA_1
+    MODEL_CACHE --> VLLM_1
+    MODEL_CACHE --> TGI_1
+    
+    CUSTOM_MODELS --> TGI_1
+    CUSTOM_MODELS --> TGI_2
+    
+    NODE_1 --> GPU_METRICS
+    NODE_2 --> GPU_METRICS
+    NODE_3 --> MODEL_METRICS
+    
+    style API fill:#e1f5fe
+    style LLM_ROUTER fill:#f3e5f5
+    style OLLAMA_1 fill:#e8f5e8
+    style VLLM_1 fill:#fff3e0
+    style TGI_1 fill:#fce4ec
+    style NODE_1 fill:#f1f8e9
+    style NODE_2 fill:#f1f8e9
+    style NODE_3 fill:#f1f8e9
+    style MODEL_CACHE fill:#e0f2f1 

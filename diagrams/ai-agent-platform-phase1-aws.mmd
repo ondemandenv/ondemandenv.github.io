@@ -1,0 +1,40 @@
+graph TB
+    subgraph "EKS Cluster"
+        subgraph "Business Services (Same Code)"
+            CONV[Conversation Service]
+            WF[Workflow Service]
+            AGENT[Agent Service]
+            PLATFORM[Platform Service]
+        end
+        
+        subgraph "Infrastructure Abstraction Layer"
+            DB_ADAPTER[Database Adapter]
+            CACHE_ADAPTER[Cache Adapter]
+            EVENT_ADAPTER[Event Adapter]
+            STORAGE_ADAPTER[Storage Adapter]
+        end
+    end
+    
+    subgraph "AWS Managed Services"
+        RDS[(RDS PostgreSQL<br/>Per Service)]
+        ELASTICACHE[(ElastiCache Redis<br/>Per Service)]
+        EVENTBRIDGE[EventBridge<br/>Custom Bus Names]
+        S3[(S3 Buckets<br/>Per Service)]
+        DYNAMODB[(DynamoDB<br/>Per Service)]
+    end
+    
+    CONV --> DB_ADAPTER
+    WF --> CACHE_ADAPTER
+    AGENT --> EVENT_ADAPTER
+    PLATFORM --> STORAGE_ADAPTER
+    
+    DB_ADAPTER --> RDS
+    CACHE_ADAPTER --> ELASTICACHE
+    EVENT_ADAPTER --> EVENTBRIDGE
+    STORAGE_ADAPTER --> S3
+    STORAGE_ADAPTER --> DYNAMODB
+    
+    style CONV fill:#e8f5e8
+    style WF fill:#fff3e0
+    style AGENT fill:#e3f2fd
+    style PLATFORM fill:#f3e5f5 

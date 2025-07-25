@@ -1,0 +1,35 @@
+sequenceDiagram
+    participant U as User
+    participant API as API Gateway
+    participant AL as AI Agent
+    participant EB as Event Bus
+    participant DSL as DSL Compiler
+    participant WE as Workflow Engine
+    participant DB as Database
+
+    U->>API: Start conversation
+    API->>AL: Create chat session
+    AL->>EB: ConversationStarted
+    
+    loop Iterative Design
+        U->>AL: Describe workflow needs
+        AL->>EB: MessageReceived
+        AL->>AL: Generate workflow DSL
+        AL->>EB: DSLGenerated
+        EB->>DSL: Validate & compile DSL
+        DSL->>EB: DSLValidated
+        AL->>U: Present workflow preview
+    end
+    
+    U->>AL: Approve workflow
+    AL->>EB: WorkflowApproved
+    EB->>DB: Save workflow definition
+    EB->>WE: RegisterWorkflow
+    
+    Note over U,DB: Workflow is ready for manual trigger
+    
+    U->>API: Trigger workflow
+    API->>WE: ExecuteWorkflow
+    WE->>EB: WorkflowStarted
+    WE->>EB: TaskCompleted (per step)
+    EB->>API: Real-time status updates 

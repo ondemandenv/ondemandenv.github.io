@@ -1,0 +1,117 @@
+graph TB
+    subgraph "Multi-Tenant Request Flow"
+        USER[User Request] --> LB[Load Balancer]
+        LB --> API[API Gateway]
+        API --> AUTH[Auth Service]
+        AUTH --> TENANT[Tenant Router]
+        
+        TENANT --> AI_A[AI Agent - Tenant A]
+        TENANT --> AI_B[AI Agent - Tenant B]
+        TENANT --> AI_C[AI Agent - Tenant N]
+    end
+    
+    subgraph "Event Bus - Apache Pulsar"
+        subgraph "Tenant A Topics"
+            TA_CONV[conversations-tenant-a]
+            TA_WF[workflows-tenant-a]
+            TA_EXEC[executions-tenant-a]
+        end
+        
+        subgraph "Tenant B Topics"
+            TB_CONV[conversations-tenant-b]
+            TB_WF[workflows-tenant-b]
+            TB_EXEC[executions-tenant-b]
+        end
+        
+        subgraph "Global Topics"
+            METRICS[metrics-global]
+            AUDIT[audit-global]
+            HEALTH[health-global]
+        end
+    end
+    
+    subgraph "Data Layer - Multi-Tenant Isolation"
+        subgraph "PostgreSQL Partitions"
+            PART_A[(Partition A<br/>Hash: tenant-a)]
+            PART_B[(Partition B<br/>Hash: tenant-b)]
+            PART_N[(Partition N<br/>Hash: tenant-n)]
+        end
+        
+        subgraph "Object Store"
+            OBJ_A[Tenant A/<br/>conversations/]
+            OBJ_B[Tenant B/<br/>conversations/]
+            OBJ_N[Tenant N/<br/>conversations/]
+        end
+        
+        subgraph "Redis Cluster"
+            CACHE_A[Session Cache A]
+            CACHE_B[Session Cache B]
+            CACHE_N[Session Cache N]
+        end
+    end
+    
+    subgraph "Platform Services Layer"
+        subgraph "Core Services"
+            API_GW[API Gateway]
+            AUTH_SVC[Auth Service]
+            TENANT_RTR[Tenant Router]
+            SECRET_MGR[Secret Manager]
+        end
+        
+        subgraph "AI Services"
+            AI_AGENT[AI Agent Service]
+            LLM_RTR[LLM Router]
+            CONV_MGR[Conversation Manager]
+            MEMORY_MGR[Memory Manager]
+        end
+        
+        subgraph "Workflow Services"
+            DSL_COMP[DSL Compiler]
+            WF_ENGINE[Workflow Engine]
+            WF_SCHED[Workflow Scheduler]
+        end
+        
+        subgraph "Data Services"
+            DATA_ACCESS[Data Access Layer]
+            CACHE_MGR[Cache Manager]
+            FILE_MGR[File Manager]
+        end
+    end
+    
+    USER --> API_GW
+    API_GW --> AUTH_SVC
+    AUTH_SVC --> TENANT_RTR
+    
+    TENANT_RTR --> AI_AGENT
+    AI_AGENT --> LLM_RTR
+    
+    AI_A --> TA_CONV
+    AI_B --> TB_CONV
+    AI_C --> TB_EXEC
+    
+    TA_CONV --> DSL_COMP
+    TB_WF --> WF_ENGINE
+    TA_EXEC --> CONV_MGR
+    TB_EXEC --> MEMORY_MGR
+    
+    DSL_COMP --> DATA_ACCESS
+    WF_ENGINE --> DATA_ACCESS
+    CONV_MGR --> FILE_MGR
+    MEMORY_MGR --> CACHE_MGR
+    
+    DATA_ACCESS --> PART_A
+    DATA_ACCESS --> PART_B
+    FILE_MGR --> OBJ_A
+    FILE_MGR --> OBJ_B
+    CACHE_MGR --> CACHE_A
+    CACHE_MGR --> CACHE_B
+    
+    SECRET_MGR --> K8S_SEC[K8s Secrets]
+    SECRET_MGR --> CLOUD_SEC[Cloud Secrets]
+    
+    style USER fill:#e1f5fe
+    style TENANT fill:#f3e5f5
+    style TA_CONV fill:#e8f5e8
+    style TB_CONV fill:#fff3e0
+    style PART_A fill:#e8f5e8
+    style PART_B fill:#fff3e0 
