@@ -77,6 +77,49 @@ These questions can't be answered inside a container. They require **full-stack 
 
 **The result**: Developers who can write sophisticated business logic but have no idea how their software actually deploys, scales, or fails. They become **architecturally illiterate** by organizational design.
 
+### The Service Mesh Power Grab: Ops-Controlled Communication
+
+The introduction of service mesh technologies (Istio, Linkerd) represents the **ultimate architectural coup** - ops teams seizing control not just of deployment, but of **service-to-service communication itself**.
+
+**The service mesh trap**: While marketed as "taking complexity out of applications," service mesh actually **removes domain expertise from domain teams** by externalizing critical communication concerns into ops-controlled infrastructure.
+
+#### How Service Mesh Deepens Developer Disempowerment
+
+**1. Stolen Domain Knowledge**
+- Business teams understand their service's retry requirements, timeouts, and failure modes
+- Service mesh moves these **domain-specific decisions** into ops-controlled YAML
+- Developers lose control over communication patterns they understand best
+- Domain expertise gets buried in platform configuration
+
+**2. Fragmented Mental Models** 
+- Developers can no longer trace business logic flow in their codebase
+- Communication semantics live in mesh dashboards and CLI commands
+- **"Where's my retry logic?"** → *"Check the mesh policy"*
+- **"Why is this failing?"** → *"Ask ops to check the mesh config"*
+
+**3. Version Chaos**
+- Business logic versions in code repositories
+- Communication policies version in mesh configuration
+- These **parallel versioning axes never sync**, creating subtle production bugs
+- Developers deploy code that works, mesh policies that break it
+
+**4. The Ultimate Dependency**
+- Every service call now depends on ops-managed mesh infrastructure
+- Mesh upgrades, outages, or misconfigurations affect **all domains simultaneously**
+- Replaces microservice independence with **operational monoculture**
+
+**The cruel irony**: Service mesh promises to "simplify" services while making domain teams **more dependent** on ops teams than ever before. It's architectural colonialism disguised as developer ergonomics.
+
+#### Domain-Driven Design vs. Service Mesh
+
+Service mesh fundamentally violates Domain-Driven Design principles:
+- **Bounded contexts** should own their communication semantics
+- **Ubiquitous language** gets fragmented across code and mesh config  
+- **Domain autonomy** gets replaced with platform dependency
+- **Decentralized governance** becomes centralized mesh control
+
+**The pattern**: Ops teams introduce "complexity-reducing" infrastructure that actually **increases their power** while reducing developer agency. Service mesh is the perfect example - it doesn't reduce complexity, it **transfers control**.
+
 ## The Architectural Apartheid: Two Separate Realities
 
 This creates a dangerous **cognitive apartheid** where developers and ops teams live in completely separate realities:
