@@ -255,21 +255,21 @@ The platform is deployed using CDK8s templates that generate Kubernetes manifest
 ```typescript
 // Generated K8s manifests structure  
 export interface PlatformDeployment {
-  // Infrastructure Operators (Manage Infrastructure)
-  operators: InfrastructureOperators;
+  // Infrastructure Controllers (Manage Infrastructure)
+  controllers: InfrastructureControllers;
   
-  // Application Services (Use Operator APIs)
+  // Application Services (Use Controller CRDs)
   services: ApplicationServices;
 }
 
-// Kubernetes operators that manage infrastructure
-export interface InfrastructureOperators {
-  databaseOperator: PostgreSQLOperator;
-  cacheOperator: RedisOperator;
-  eventBusOperator: PulsarOperator;
-  storageOperator: StorageOperator;
-  llmOperator: LLMOperator;
-  observabilityOperator: ObservabilityOperator;
+// Kubernetes controllers that manage infrastructure
+export interface InfrastructureControllers {
+  databaseController: PostgreSQLController;
+  cacheController: RedisController;
+  eventBusController: EventBusController;
+  storageController: StorageController;
+  llmController: LLMController;
+  observabilityController: ObservabilityController;
 }
 
 // Business domain services with internal layered architecture
@@ -290,7 +290,7 @@ export interface BusinessServiceConfig {
   layers: {
     apiLayer: ServiceDeployment;        // External interface
     businessLayer: ServiceDeployment;   // Business logic
-    dataLayer: ServiceDeployment;       // Data access
+    database: ServiceDeployment;        // Database access
   };
   
   // Infrastructure needs for the entire business service
@@ -671,9 +671,9 @@ Features:
 
 ### Data Services
 
-### Infrastructure Operators (K8s Controllers)
+### Infrastructure Controllers
 
-#### Event Bus Operator (Pulsar Operator)
+#### Event Bus Controller
 ```yaml
 Manages:
   - Pulsar cluster lifecycle (create, update, scale, backup)
@@ -688,7 +688,7 @@ Provides APIs:
   - Metrics and monitoring endpoints
 ```
 
-#### Database Operator (PostgreSQL Operator)
+#### Database Controller
 ```yaml
 Manages:
   - PostgreSQL instance lifecycle per service
@@ -703,7 +703,7 @@ Provides APIs:
   - Performance metrics collection
 ```
 
-#### LLM Operator (Custom LLM Controller)
+#### LLM Controller
 ```yaml
 Manages:
   - GPU resource allocation and scheduling
@@ -848,7 +848,7 @@ Each business service implements CQRS internally to optimize for both read and w
   - **Commands**: POST/PUT/DELETE requests → Command handlers (state-changing operations)
 - **Query Handlers**: Direct, optimized read paths to data layer with caching
 - **Command Handlers**: Business logic processing with validation and event emission
-- **Data Layer**: Unified access to operator-managed infrastructure
+- **Database Access**: Unified access to controller-managed infrastructure
 
 **Query Processing (Within Service):**
 - **Fast Response**: Optimized read paths with caching
@@ -869,21 +869,21 @@ Each business service implements CQRS internally to optimize for both read and w
 
 ### Kubernetes-Native Service Data Ownership
 
-Each application service logically owns its data but accesses it through infrastructure APIs managed by Kubernetes operators:
+Each application service logically owns its data but accesses it through infrastructure CRDs managed by Kubernetes controllers:
 
 **Service Data Ownership via Infrastructure APIs:**
-- **Dedicated Database**: Service accesses its own PostgreSQL database via Database Operator API
-- **Private Cache**: Service accesses its own Redis instance via Cache Operator API
-- **Event Topics**: Service publishes/subscribes to its own Pulsar topics via Event Bus API
-- **File Storage**: Service accesses its own PVC volumes via Storage Operator API
+- **Dedicated Database**: Service accesses its own PostgreSQL database via Database Controller CRDs
+- **Private Cache**: Service accesses its own Redis instance via Cache Controller CRDs
+- **Event Topics**: Service publishes/subscribes to its own topics via Event Bus Controller CRDs
+- **File Storage**: Service accesses its own PVC volumes via Storage Controller CRDs
 - **Schema Evolution**: Services evolve their data schemas through operator-managed migrations
 
-**Infrastructure Controllers (K8s Operators):**
-- **Database Operator**: Manages PostgreSQL instances, backups, scaling, and access APIs
-- **Cache Operator**: Manages Redis instances, clustering, and access APIs
-- **Event Bus Operator**: Manages Pulsar clusters, topics, and messaging APIs
-- **Storage Operator**: Manages persistent volumes, snapshots, and access APIs
-- **LLM Operator**: Manages model serving, GPU allocation, and inference APIs
+**Infrastructure Controllers:**
+- **Database Controller**: Manages PostgreSQL instances, backups, scaling, and access CRDs
+- **Cache Controller**: Manages Redis instances, clustering, and access CRDs
+- **Event Bus Controller**: Manages event bus clusters, topics, and messaging CRDs
+- **Storage Controller**: Manages persistent volumes, snapshots, and access CRDs
+- **LLM Controller**: Manages model serving, GPU allocation, and inference CRDs
 
 **Kubernetes-Native SDLC Benefits:**
 - **Operator-Managed Infrastructure**: Database/cache scaling and maintenance handled by operators
@@ -938,21 +938,21 @@ ClusterAutoscaler:
 
 | Layer | Technology Choices | Rationale |
 |-------|-------------------|-----------|
-| **Infrastructure Operators** | | |
-| **Database Operator** | PostgreSQL Operator | Automated database provisioning, scaling, backups |
-| **Cache Operator** | Redis Operator | Automated cache clustering, failover, scaling |
-| **Event Bus Operator** | Pulsar Operator | Multi-tenant topics, auto-scaling, geo-replication |
-| **Storage Operator** | K8s CSI + Storage Operators | Automated PVC provisioning, snapshots, lifecycle |
-| **LLM Operator** | Custom LLM Operator | GPU scheduling, model lifecycle, inference APIs |
+| **Infrastructure Controllers** | | |
+| **Database Controller** | PostgreSQL Controller | Automated database provisioning, scaling, backups |
+| **Cache Controller** | Redis Controller | Automated cache clustering, failover, scaling |
+| **Event Bus Controller** | Event Bus Controller | Multi-tenant topics, auto-scaling, geo-replication |
+| **Storage Controller** | K8s CSI + Storage Controller | Automated PVC provisioning, snapshots, lifecycle |
+| **LLM Controller** | Custom LLM Controller | GPU scheduling, model lifecycle, inference CRDs |
 | **Application Services** | | |
-| **Service Runtime** | Container workloads (Pods) | Stateless, scalable, operator-managed infrastructure access |
-| **Service Data Access** | Operator-provided APIs | Clean abstraction, automated scaling, isolation |
-| **Service Communication** | Direct HTTP/gRPC + Event APIs | Simple, traceable, avoiding distributed monolith |
+| **Service Runtime** | Container workloads (Pods) | Stateless, scalable, controller-managed infrastructure access |
+| **Service Data Access** | Controller-provided CRDs | Clean abstraction, automated scaling, isolation |
+| **Service Communication** | Direct HTTP/gRPC + Event CRDs | Simple, traceable, avoiding distributed monolith |
 | **Platform Infrastructure** | | |
-| **Container Orchestration** | Kubernetes + Custom Operators | Cloud-agnostic, declarative, automated operations |
+| **Container Orchestration** | Kubernetes + Custom Controllers | Cloud-agnostic, declarative, automated operations |
 | **Cloud LLM Integration** | OpenAI, Anthropic, + Others | Vendor flexibility, cost optimization |
 | **GPU Management** | NVIDIA GPU Operator + Custom Scheduling | Resource pooling, multi-tenancy, automatic allocation |
-| **Infrastructure as Code** | CDK8s + Operator Manifests | Type-safe, GitOps-ready, operator-driven deployments |
+| **Infrastructure as Code** | CDK8s + Controller Manifests | Type-safe, GitOps-ready, controller-driven deployments |
 
 ## Phased Implementation Strategy
 

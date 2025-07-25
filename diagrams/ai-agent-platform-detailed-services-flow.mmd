@@ -6,13 +6,16 @@ flowchart TB
         CONV_AUTHZ[Tenant Authorization Check]
         CONV_QUERY[Query Handler]
         CONV_CMD[Command Handler]
-        CONV_DATA[data store]
+        CONV_DATA[Database]
+        CONV_CACHE[Cache]
         
         CONV_API --> CONV_AUTHZ
         CONV_AUTHZ --> CONV_QUERY
         CONV_AUTHZ --> CONV_CMD
         CONV_QUERY --> CONV_DATA
         CONV_CMD --> CONV_DATA
+        CONV_QUERY --> CONV_CACHE
+        CONV_CMD --> CONV_CACHE
     end
     
     subgraph "Workflow Service"
@@ -20,13 +23,16 @@ flowchart TB
         WF_AUTHZ[Tenant Authorization Check]
         WF_QUERY[Query Handler]
         WF_CMD[Command Handler]
-        WF_DATA[data store]
+        WF_DATA[Database]
+        WF_CACHE[Cache]
         
         WF_API --> WF_AUTHZ
         WF_AUTHZ --> WF_QUERY
         WF_AUTHZ --> WF_CMD
         WF_QUERY --> WF_DATA
         WF_CMD --> WF_DATA
+        WF_QUERY --> WF_CACHE
+        WF_CMD --> WF_CACHE
     end
     
     subgraph "Agent Service"
@@ -34,13 +40,16 @@ flowchart TB
         AGENT_AUTHZ[Tenant Authorization Check]
         AGENT_QUERY[Query Handler]
         AGENT_CMD[Command Handler]
-        AGENT_DATA[data store]
+        AGENT_DATA[Database]
+        AGENT_CACHE[Cache]
         
         AGENT_API --> AGENT_AUTHZ
         AGENT_AUTHZ --> AGENT_QUERY
         AGENT_AUTHZ --> AGENT_CMD
         AGENT_QUERY --> AGENT_DATA
         AGENT_CMD --> AGENT_DATA
+        AGENT_QUERY --> AGENT_CACHE
+        AGENT_CMD --> AGENT_CACHE
     end
     
     subgraph "Platform Service"
@@ -49,7 +58,8 @@ flowchart TB
         PLATFORM_QUERY[Query Handler]
         PLATFORM_CMD[Command Handler]
         PLATFORM_MONITOR[Central Control & Monitoring<br/>Collects metrics/logs from all services<br/>Controls runtime behavior & scaling]
-        PLATFORM_DATA[data store]
+        PLATFORM_DATA[Database]
+        PLATFORM_CACHE[Cache]
         
         PLATFORM_API --> PLATFORM_AUTHZ
         PLATFORM_AUTHZ --> PLATFORM_QUERY
@@ -57,6 +67,8 @@ flowchart TB
         PLATFORM_QUERY --> PLATFORM_DATA
         PLATFORM_CMD --> PLATFORM_DATA
         PLATFORM_MONITOR --> PLATFORM_DATA
+        PLATFORM_QUERY --> PLATFORM_CACHE
+        PLATFORM_CMD --> PLATFORM_CACHE
     end
     
     API_GW --> CONV_API
@@ -64,52 +76,62 @@ flowchart TB
     API_GW --> AGENT_API
     API_GW --> PLATFORM_API
     
-    subgraph "Infrastructure Controllers/Operators"
-        subgraph "Database Controller"
-            DB_CTRL[PostgreSQL Operator]
-            DB_API[Database API<br/>Per-Service Databases]
+    subgraph "Infrastructure Controllers"
+        subgraph "Application-Level Controllers"
+            subgraph "Database Controller"
+                DB_CTRL[PostgreSQL Controller]
+                DB_CRD[Database CRDs]
+            end
+            
+            subgraph "Cache Controller"
+                CACHE_CTRL[Redis Controller]
+                CACHE_CRD[Cache CRDs]
+            end
+            
+            subgraph "LLM Controller"
+                LLM_CTRL[LLM Controller]
+                LLM_CRD[Model CRDs<br/>Shared GPU Pool]
+            end
+            
+            subgraph "Event Bus Controller"
+                EVENT_BUS_CTRL[Event Bus Controller]
+                EVENT_BUS_CRD[Event Bus CRDs<br/>Topic/Subscription]
+            end
         end
         
-        subgraph "Cache Controller"
-            CACHE_CTRL[Redis Operator]
-            CACHE_API[Cache API<br/>Per-Service Instances]
+        subgraph "Foundation Controllers"
+            subgraph "Storage Controller"
+                STORAGE_CTRL[Storage Controller]
+                STORAGE_CRD[Volume CRDs]
+            end
         end
         
-        subgraph "Storage Controller"
-            STORAGE_CTRL[Storage Operator]
-            STORAGE_API[Volume API<br/>Per-Service PVCs]
-        end
-        
-        subgraph "LLM Controller"
-            LLM_CTRL[LLM Operator]
-            LLM_API[Model API<br/>Shared GPU Pool]
-        end
+        DB_CTRL -.-> STORAGE_CRD
+        CACHE_CTRL -.-> STORAGE_CRD
+        LLM_CTRL -.-> STORAGE_CRD
+        EVENT_BUS_CTRL -.-> STORAGE_CRD
     end
     
-    EVENT_BUS[Event Bus<br/>Topic/Subscription<br/>Data Stream Service]
-    
-    subgraph "Infrastructure Access (data stores → Operator APIs)"
-        CONV_DATA --> DB_API
-        CONV_DATA --> CACHE_API
-        CONV_DATA --> STORAGE_API
+    subgraph "Infrastructure Provisioning (Service Resources via CRDs)"
+        CONV_DATA -.-> DB_CRD
+        CONV_CACHE -.-> CACHE_CRD
         
-        WF_DATA --> DB_API
-        WF_DATA --> CACHE_API
-        WF_DATA --> STORAGE_API
+        WF_DATA -.-> DB_CRD
+        WF_CACHE -.-> CACHE_CRD
         
-        AGENT_DATA --> DB_API
-        AGENT_DATA --> CACHE_API
-        AGENT_DATA --> LLM_API
+        AGENT_DATA -.-> DB_CRD
+        AGENT_CACHE -.-> CACHE_CRD
+        AGENT_DATA -.-> LLM_CRD
         
-        PLATFORM_DATA --> DB_API
-        PLATFORM_DATA --> CACHE_API
+        PLATFORM_DATA -.-> DB_CRD
+        PLATFORM_CACHE -.-> CACHE_CRD
     end
     
     subgraph "Inter-Service Events (All Mutations via Event Bus)"
-        CONV_CMD <--> EVENT_BUS
-        WF_CMD <--> EVENT_BUS
-        AGENT_CMD <--> EVENT_BUS
-        PLATFORM_CMD <--> EVENT_BUS
+        CONV_CMD <--> EVENT_BUS_CRD
+        WF_CMD <--> EVENT_BUS_CRD
+        AGENT_CMD <--> EVENT_BUS_CRD
+        PLATFORM_CMD <--> EVENT_BUS_CRD
     end
     
     subgraph "Cross-Service Tenant Authorization"
@@ -121,10 +143,10 @@ flowchart TB
     
     style AUTH_IN fill:#e1f5fe
     style API_GW fill:#f3e5f5
-    style EVENT_BUS fill:#fce4ec
-    style DB_API fill:#e3f2fd
-    style CACHE_API fill:#f3e5f5
-    style LLM_API fill:#fff3e0
+    style EVENT_BUS_CRD fill:#fce4ec
+    style DB_CRD fill:#e3f2fd
+    style CACHE_CRD fill:#f3e5f5
+    style LLM_CRD fill:#fff3e0
     style PLATFORM_MONITOR fill:#ffebee
     style PLATFORM_AUTHZ fill:#f1f8e9
     style CONV_AUTHZ fill:#f1f8e9
