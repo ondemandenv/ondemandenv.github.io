@@ -724,23 +724,50 @@ GPU Scheduling:
 
 ### Why No Service Mesh
 
-The platform deliberately avoids service mesh (Istio, Linkerd) to prevent distributed monolith anti-patterns:
+The platform deliberately avoids service mesh (Istio, Linkerd) to preserve Domain-Driven Design principles and prevent distributed monolith anti-patterns:
 
-**Problems with Service Mesh:**
+#### Domain-Driven Design Conflicts
+
+Service mesh fundamentally conflicts with Domain-Driven Design by externalizing critical service communication concerns:
+
+**1. Erosion of Bounded-Context Autonomy**
+- DDD requires each bounded context to encapsulate its own model, language, and lifecycle
+- Service mesh moves interaction semantics (routing, retries, policies) out of domain code into platform control
+- Domain teams lose ownership and evolution control over their own communication patterns
+- Creates dependency on platform teams for domain-specific communication needs
+
+**2. Loss of Internal Coherence**
+- DDD emphasizes ubiquitous language and consistent models within each context
+- Mesh routing rules and retry logic live outside codebase, fragmenting the mental model
+- Developers must check YAML dashboards or CLI commands to understand inter-service contracts
+- Business logic flow becomes harder to trace and reason about
+
+**3. Versioning and Consistency Breakdowns**
+- Domain models evolve through code-repo versioning with coordinated releases
+- Mesh introduces parallel versioning axis (mesh policies) often unsynchronized with service releases
+- Creates subtle mismatches where mesh strips fields or routes incorrectly
+- Undermines consistency guarantees between services
+
+**4. Centralized Dependency and Operational Coupling**
+- DDD advocates decentralized governance: teams choose deployment cadence, databases, libraries
+- Service mesh creates single chokepoint that all domains must traverse
+- Mesh upgrades, control-plane outages, misconfigurations ripple through all domains
+- Replaces loose coupling with operational monoculture
+
+#### Technical Problems with Service Mesh
 - **Hidden Complexity**: Network topology becomes opaque and hard to debug
-- **Tight Coupling**: Services become dependent on mesh infrastructure
 - **Performance Overhead**: Additional network hops and proxy layers
 - **Operational Burden**: Complex configuration and troubleshooting
 - **Distributed Monolith**: Creates illusion of separation while increasing coupling
 
-**Our Approach Instead:**
-- **Direct HTTP/gRPC**: Simple, traceable service-to-service communication
-- **Event Bus Decoupling**: Async communication via Apache Pulsar for loose coupling
-- **Clear Service Boundaries**: Well-defined APIs with explicit contracts
-- **Circuit Breakers**: Application-level resilience patterns
-- **Observability**: Distributed tracing without mesh complexity
+#### Our Domain-Centric Approach Instead
+- **Direct HTTP/gRPC**: Simple, traceable service-to-service communication owned by domains
+- **Event Bus Decoupling**: Async communication preserving service autonomy
+- **Domain-Owned Contracts**: Well-defined APIs maintained within each bounded context
+- **Application-Level Resilience**: Circuit breakers and retry logic as domain business rules
+- **Service-Native Observability**: Distributed tracing without mesh complexity
 
-This results in a system that's easier to reason about, debug, and scale independently.
+This approach maintains domain autonomy while enabling the platform-level benefits (observability, resilience, security) through controller-managed infrastructure rather than communication interception.
 
 ### CQRS (Command Query Responsibility Segregation)
 
