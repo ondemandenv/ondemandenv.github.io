@@ -186,6 +186,58 @@ Resolution Time: 5 minutes once access is provided, 3 weeks of patronizing gatek
 
 **Breaking the cycle**: **Real engineering leadership** works to **eliminate information asymmetry**, **document all changes**, and **enable direct access** so that problems can be **solved by whoever has the best domain knowledge**, regardless of organizational hierarchy.
 
+### The Service Mesh Cage: The Ultimate Developer Control Mechanism
+
+Perhaps no technology exemplifies the **hogging of the SDLC** more completely than service mesh implementations. What appears to be **platform capability** is actually the **ultimate caging mechanism** - developers are **trapped inside containers** while **ops controls everything** that happens **between** them.
+
+**The service mesh reality check**: **"Do developers have access to the service mesh control panels?"**
+
+If the answer is **NO**, developers are **systematically caged**.
+
+**What gets externalized from developer control**:
+- **Routing rules** - How traffic flows between their services
+- **Security policies** - Authentication and authorization between services  
+- **Observability** - Monitoring and tracing of service interactions
+- **Retry logic** - How failures are handled and recovered
+- **Rate limiting** - Traffic control and capacity management
+- **Circuit breakers** - Failure isolation and recovery patterns
+
+**The cage mechanism**: Developers can **only see inside their container** but **cannot see or control** how their services **interact with the outside world**.
+
+**Observable caging patterns**:
+```
+Developer: "Why is our service getting 503 errors from the payment service?"
+Ops Team: "That's a mesh configuration issue. We'll look into it."
+Developer: "Can I see the routing rules to understand the problem?"
+Ops Team: "You don't need access to that. Focus on your application code."
+
+[Result: Developer spends days debugging application logic for an infrastructure routing problem they cannot see]
+```
+
+**The systematic powerlessness**:
+- **Cannot debug** service-to-service communication issues
+- **Cannot understand** performance bottlenecks in inter-service calls
+- **Cannot implement** domain-specific retry or circuit breaker logic
+- **Cannot see** the complete flow of their business operations
+- **Cannot control** the security policies affecting their services
+- **Cannot optimize** the communication patterns they designed
+
+**The domain knowledge destruction**: When **communication semantics** get **externalized** from the **domain code**:
+- **Business logic** becomes **fragmented** across **application code** and **mesh policies**
+- **Domain experts** cannot **see the complete system** they're responsible for
+- **Debugging** requires **coordination** with people who **don't understand the business domain**
+- **Evolution** of domain interactions requires **permission** from **infrastructure teams**
+
+**The ultimate irony**: Service mesh is **marketed** as **enabling microservices autonomy** but **actually creates** the **tightest possible coupling** - every service **depends** on a **centralized control plane** managed by people who **don't understand** the **domain interactions** they're controlling.
+
+**The competence test**: In organizations with **real engineering leadership**:
+- **Developers have full visibility** into service mesh configurations affecting their services
+- **Domain teams own** the **routing, security, and observability** policies for their **business capabilities**
+- **Platform teams provide tools** rather than **gatekeeping access**
+- **Service interactions** remain **visible and controllable** by the **people who understand the business logic**
+
+**The diagnostic question**: If your developers **cannot see or control** how their services **communicate with each other**, they're not **empowered engineers** - they're **caged code writers** whose **real system architecture** is **hidden from them** and **controlled by others**.
+
 ### Anti-Pattern Language Aversion (Cannot Use Programming Concepts)
 ```
 Real Engineer: "We can use composition here - the UserService can extend BaseService and delegate authentication to the AuthProvider."
