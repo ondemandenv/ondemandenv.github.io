@@ -504,7 +504,7 @@ Shallow Leader: "I think you should talk to your team lead about this."
 
 **Real-World Example**: At a major cloud provider, a director joined an *"enablement"* meeting and spoke vaguely about *"resilience and security posture."* Mid-level ops folks clapped and posted quotes in Slack like gospel. In parallel, engineering teams were told: *"Move to the new deployment pipeline now. We know it's broken. Just do it. Leadership has committed."* Engineers who resisted or questioned got escalated to HR for being *"uncooperative."* This demonstrates performative loyalty upward combined with aggressive pressure downward—political theater, not engineering.
 
-![Shallow Leader Focus: The Power Game](/assets/shallow-leader-focus-at-power-game.png)
+![Shallow Leader Focus: The Power Game](/assets/ops-theater.png)
 *When technical leadership becomes political theater: focus shifts from solving engineering problems to maintaining organizational authority*
 
 This isn't about technical incompetence - it's about **power preservation**:
