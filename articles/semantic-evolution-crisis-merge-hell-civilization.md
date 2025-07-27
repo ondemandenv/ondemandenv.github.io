@@ -73,6 +73,8 @@ The distributed nature of Git reflects the understanding that **no central autho
 ### **Merge as Semantic Integration**
 True Git merging was never meant to be mechanical conflict resolution. It was designed as **semantic integration**—the conscious decision to combine two different evolutionary paths because they represent complementary rather than competing interpretations of reality.
 
+**Interestingly, earlier version control systems understood this better linguistically.** Perforce and Subversion called this process **"integration"** rather than "merging"—a term that better captures the intentional, thoughtful nature of combining different branches of development. The word "integration" implies conscious synthesis, while "merge" has devolved into mechanical conflict resolution.
+
 ### **The Industry's Perversion of Git's Vision**
 The modern "merge hell" crisis represents a complete perversion of Git's original philosophy:
 
