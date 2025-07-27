@@ -379,6 +379,8 @@ Without true engineering skills—especially the ability to **abstract, model, a
 
 But the **container generation** doesn't model—they **accumulate**. They pile one tool on top of another, chasing trends without purpose: containers on VMs on service meshes on YAML hell, secret managers no one is ready for, CI/CD "platforms" that stall teams for months[3]. The result is a **superficial, fragmented, over-tooled system** that bloats with accidental complexity.
 
+**The Integrity Penalty**: This dysfunction creates a **systematic disadvantage for real engineers**. **Competent engineers won't cargo cult** because they understand that **meaningful adoption requires deep exercise and understanding**. While **ops teams instantly "adopt" tools** they don't comprehend, **real engineers need time** to properly evaluate constraints, trade-offs, and integration patterns. Organizations reward **fast, shallow adoption** over **careful, deep understanding**, creating a **perverse career advantage** for architectural incompetence.
+
 #### The Unteachable Gap
 
 Abstract thinking—the kind behind **Domain-Driven Design (DDD)**, architecture, and system modeling—isn't something you learn in a weekend workshop. It takes **years of failure**, **hard-earned lessons**, and a **habit of thinking in terms of boundaries, constraints, and trade-offs**[3]. You develop an **instinct**—how to carve systems, where to place state, when to isolate, when to compose.
@@ -503,6 +505,11 @@ The pattern is not accidental — it represents the **systematic transfer of arc
 ### Breaking the Railroading Pattern
 
 The problems outlined in this analysis are precisely what **ONDEMANDENV** was designed to solve. Rather than adding another layer of operational tooling, ONDEMANDENV **restores architectural authority to development teams** through explicit contracts and systematic simplification.
+
+#### On-Demand Environments: Restoring Engineering Integrity
+**The fundamental requirement**: **Real engineers must exercise systems meaningfully** to develop genuine understanding. This requires **full context, isolated experimentation** where both **success and failure** provide learning opportunities. **Shared environments prevent this essential exercise**—merge conflicts, resource contention, and coordination overhead block the **deep iteration cycles** that build real competence.
+
+ONDEMANDENV's **on-demand environment capability** solves this by providing **dedicated, isolated contexts** where engineers can **meaningfully exercise** complex systems without interference. This **restores the conditions** that separate **real engineering** from **cargo cult pattern matching**.
 
 #### Explicit Contracts Over Tool Configuration
 Instead of managing complexity through YAML configurations and operational procedures, ONDEMANDENV makes **service dependencies explicit through TypeScript contracts**. This eliminates the ambiguity that forces teams into defensive programming and operational workarounds.
