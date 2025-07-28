@@ -43,6 +43,21 @@ When we abandon the discipline of semantic decomposition, systems naturally drif
 
 **Entropy doesn't care about your deadlines. It will win unless actively opposed by architectural discipline.**
 
+### **The Chaos Engineering Deception: Creating Entropy, Then Bandaging the Wounds**
+
+The industry's embrace of "chaos engineering" represents the most perverse inversion of engineering principles imaginable. **First, teams abandon semantic boundaries and create systems prone to entropy.** Then they deliberately inject chaos to "test resilience" and spend enormous effort bandaging the resulting wounds.
+
+**This is like an architect removing all load-bearing walls, then celebrating their skill at propping up the collapsing building.**
+
+In the merge hell context, chaos engineering is the perfect metaphor for our cultural collapse:
+- **Step 1:** Create arbitrary service boundaries (entropy-prone architecture)
+- **Step 2:** Force teams into shared environments (entropy acceleration) 
+- **Step 3:** Inject artificial failures everywhere (chaos injection)
+- **Step 4:** Build elaborate monitoring and recovery systems (bandaging)
+- **Step 5:** Call this "engineering discipline"
+
+**Real engineering would have prevented the entropy in the first place through proper semantic boundaries.** Chaos engineering is just expensive theater to hide architectural incompetence.
+
 ## **The Microservices Delusion: Physical Fragmentation vs. Semantic Decomposition**
 
 The industry's obsession with microservices represents perhaps the most catastrophic misunderstanding of system architecture in computing history. Teams have confused **physical distribution** with **semantic decomposition**, creating vast networks of services that share no meaningful boundaries—what we previously identified as "Death Star Architecture."
