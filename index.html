@@ -1,11 +1,11 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ONDEMANDENV.dev - The Anti-Stagnation Platform: Breaking the Innovation Paralysis Cycle</title>
-    <meta name="description" content="Break free from ecosystem stagnation and innovation paralysis. ONDEMANDENV restores development velocity by eliminating integration complexity, enabling collective learning, and transforming architectural governance from reactive firefighting to proactive enablement.">
-    <meta name="keywords" content="ondemandenv, anti-stagnation platform, innovation velocity, ecosystem stagnation, collective learning, integration complexity, development paralysis, architectural enablement">
+    <title>ONDEMANDENV.dev - Finally, Proper Environments for Evaluating What Should Actually Merge</title>
+    <meta name="description" content="Stop forcing merge decisions without proper evaluation. ONDEMANDENV gives you the infrastructure to actually test conflicting approaches and make evidence-based choices instead of political ones.">
+    <meta name="keywords" content="merge conflicts, branch evaluation, merge hell solution, proper testing environments, architectural decisions, branch conflicts">
     <link rel="stylesheet" href="styles.css">
     
     <!-- Google tag (gtag.js) -->
@@ -18,116 +18,270 @@
     </script>
     
     <style>
-        /* Enhanced styling for prevention-focused presentation */
-        .hero-enhanced {
-            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+        /* East Asian Philosophical Elegance - Noble and Plain */
+        .hero-pain {
+            background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+            color: #f7fafc;
+            padding: 5rem 2rem;
+            text-align: center;
+            position: relative;
+        }
+        
+        .hero-pain::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="subtle-grid" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23subtle-grid)"/></svg>') repeat;
+            opacity: 0.3;
+        }
+        
+        .pain-points {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+            max-width: 1000px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .pain-point {
+            background: rgba(255,255,255,0.08);
+            padding: 2rem;
+            border-radius: 6px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .pain-point:hover {
+            background: rgba(255,255,255,0.12);
+            border-color: rgba(255,255,255,0.2);
+        }
+        
+        .revelation-section {
+            background: #fafafa;
+            padding: 5rem 2rem;
+            position: relative;
+        }
+        
+        .revelation-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #cbd5e0, transparent);
+        }
+        
+        .before-after {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 3rem 0;
+            max-width: 1000px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .before-side {
+            background: #fef7f7;
+            padding: 2.5rem;
+            border-radius: 6px;
+            border-left: 3px solid #e53e3e;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        
+        .after-side {
+            background: #f7fef7;
+            padding: 2.5rem;
+            border-radius: 6px;
+            border-left: 3px solid #38a169;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        
+        .intelligence-reveal {
+            background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+            color: #f7fafc;
+            padding: 5rem 2rem;
+            text-align: center;
+            position: relative;
+        }
+        
+        .intelligence-reveal::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+        }
+        
+        .conflict-types {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .conflict-type {
+            background: rgba(255,255,255,0.08);
+            padding: 2.5rem;
+            border-radius: 6px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .conflict-type:hover {
+            background: rgba(255,255,255,0.12);
+            transform: translateY(-2px);
+        }
+        
+        .solution-progression {
+            background: #f8fafc;
+            padding: 5rem 2rem;
+            position: relative;
+        }
+        
+        .progression-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+            max-width: 1000px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .progression-step {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 6px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            text-align: center;
+            position: relative;
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+        
+        .progression-step:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+            transform: translateY(-2px);
+        }
+        
+        .step-number {
+            background: #4a5568;
             color: white;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem auto;
+            font-weight: 500;
+            font-size: 1.1rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .advanced-track {
+            background: #2d3748;
+            color: #f7fafc;
             padding: 4rem 2rem;
             text-align: center;
-            border-radius: 10px;
-            margin-bottom: 3rem;
+            border-top: 2px solid #718096;
+            position: relative;
         }
-        .prevention-highlights {
+        
+        .advanced-track::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 2px;
+            background: #718096;
+        }
+        
+        .cta-realistic {
+            background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+            color: #f7fafc;
+            padding: 5rem 2rem;
+            text-align: center;
+            position: relative;
+        }
+        
+        .cta-realistic::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="1" fill="rgba(255,255,255,0.03)"/><circle cx="25" cy="25" r="0.5" fill="rgba(255,255,255,0.02)"/><circle cx="75" cy="75" r="0.5" fill="rgba(255,255,255,0.02)"/></svg>') repeat;
+            opacity: 0.5;
+        }
+        
+        .cta-buttons-bridge {
             display: flex;
             flex-wrap: wrap;
             gap: 1rem;
             justify-content: center;
             margin: 2rem 0;
         }
-        .highlight {
-            background: rgba(255,255,255,0.2);
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
-        .paradigm-shift {
-            background: #f8f9fa;
-            padding: 3rem 2rem;
+        
+        .btn-bridge {
+            padding: 1rem 2rem;
             border-radius: 8px;
-            margin: 3rem 0;
-            border-left: 4px solid #e74c3c;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
         }
-        .comparison-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-            margin: 2rem 0;
+        
+        .btn-primary-bridge {
+            background: #f7fafc;
+            color: #2d3748;
+            border: 1px solid #e2e8f0;
         }
-        .trap-side {
-            background: #ffe6e6;
-            padding: 2rem;
-            border-radius: 8px;
-            border-left: 4px solid #e74c3c;
+        
+        .btn-primary-bridge:hover {
+            background: #edf2f7;
+            color: #1a202c;
         }
-        .prevention-side {
-            background: #e8f5e8;
-            padding: 2rem;
-            border-radius: 8px;
-            border-left: 4px solid #27ae60;
+        
+        .btn-secondary-bridge {
+            background: rgba(255,255,255,0.1);
+            color: #f7fafc;
+            border: 1px solid rgba(255,255,255,0.2);
         }
-        .trap-side h3 {
-            color: #c0392b;
-            margin-bottom: 1rem;
+        
+        .btn-secondary-bridge:hover {
+            background: rgba(255,255,255,0.15);
+            border-color: rgba(255,255,255,0.3);
         }
-        .prevention-side h3 {
-            color: #27ae60;
-            margin-bottom: 1rem;
-        }
-        .trap-side ul li {
-            color: #721c24;
-            margin-bottom: 0.5rem;
-        }
-        .prevention-side ul li {
-            color: #155724;
-            margin-bottom: 0.5rem;
-        }
-        .forcing-function {
-            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
-            color: white;
-            padding: 3rem 2rem;
-            border-radius: 8px;
-            text-align: center;
-            margin: 3rem 0;
-        }
-        .prevention-demo {
-            background: #fff3cd;
-            padding: 2rem;
-            border-radius: 8px;
-            margin: 2rem 0;
-            border-left: 4px solid #ffc107;
-        }
-        .prevention-features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin: 3rem 0;
-        }
-        .prevention-feature {
-            background: white;
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            border-top: 4px solid #6c5ce7;
-            transition: transform 0.2s ease;
-        }
-        .prevention-feature:hover {
+        
+        .btn-bridge:hover {
             transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         }
-        .prevention-feature h3 {
-            color: #2d3436;
-            margin-bottom: 1rem;
-        }
-        .structural-impossibility {
-            background: #e8f4f8;
-            padding: 2rem;
-            border-radius: 8px;
-            margin: 2rem 0;
-            border-left: 4px solid #00b894;
-        }
-
+        
         @media (max-width: 768px) {
-            .comparison-grid {
+            .before-after {
+                grid-template-columns: 1fr;
+            }
+            .pain-points, .conflict-types, .progression-steps {
                 grid-template-columns: 1fr;
             }
         }
@@ -160,479 +314,239 @@
 </header>
 
 <main>
-    <section class="hero-enhanced">
-        <h1>Application-Centric Infrastructure:<br>Solving Distributed Systems Complexity</h1>
-        <p style="font-size: 1.3rem; margin-bottom: 2rem;">ONDEMANDENV addresses distributed systems complexity by <strong>eliminating integration ambiguity</strong>, <strong>enabling collective learning</strong>, and <strong>restoring development velocity</strong>. Transform teams from reactive firefighting to proactive innovation through explicit contracts and application-centric architecture.</p>
-        
-        <div class="prevention-highlights">
-            <span class="highlight">🚀 Innovation Velocity</span>
-            <span class="highlight">🔄 Collective Learning</span>
-            <span class="highlight">⚡ Integration Simplicity</span>
-            <span class="highlight">🎯 Ecosystem Acceleration</span>
+    <section class="hero-pain">
+        <div style="position: relative; z-index: 1;">
+            <h1 style="font-weight: 300; font-size: 2.8rem; margin-bottom: 2rem; line-height: 1.2;">The Art of Distributed Systems Evaluation</h1>
+            <p style="font-size: 1.3rem; margin: 2rem 0; line-height: 1.6; opacity: 0.9; font-weight: 300;">
+                When architectural paths diverge across multiple services, most teams are forced to choose without testing the complete distributed system. 
+                <strong>True wisdom lies not in avoiding integration complexity, but in creating the means to evaluate distributed approaches properly.</strong>
+            </p>
         </div>
         
-        <div class="cta-buttons">
-            <a href="documentation.html" class="btn btn-primary btn-enhanced">Restore Team Velocity</a>
-            <a href="https://web.auth.ondemandenv.link/?region=us-west-1" class="btn btn-prevention btn-enhanced" target="_blank">🚀 See Innovation in Action</a>
-                                <a href="articles/fragmentation-trap" class="btn btn-secondary btn-enhanced">Diagnose Stagnation</a>
-        </div>
-    </section>
-
-    <section class="paradigm-shift">
-        <h2>🔄 The Application-Centric Paradigm: From Microservices Chaos to Coordinated Systems</h2>
-        <p>Most organizations struggle with distributed systems complexity where <strong>innovation energy gets misdirected into integration coordination</strong> rather than business logic. ONDEMANDENV breaks this cycle by systematically <strong>eliminating integration ambiguity</strong> through explicit contracts and <strong>enabling collective learning</strong> across development teams.</p>
-        
-        <div class="comparison-grid">
-            <div class="trap-side">
-                <h3>❌ Distributed Systems Chaos</h3>
-                <ul>
-                    <li><strong>Integration Coordination Overhead</strong><br>Majority of dev time spent on service coordination, not business logic</li>
-                    <li><strong>Knowledge Fragmentation</strong><br>Teams solving similar distributed systems problems independently</li>
-                    <li><strong>Infrastructure Duplication</strong><br>Redundant microservices infrastructure and defensive programming patterns</li>
-                    <li><strong>Coordination Bottlenecks</strong><br>Complex service dependencies prevent teams from building on each other's work</li>
-                    <li><strong>Change Aversion</strong><br>Fear of breaking service contracts creates risk-averse architecture evolution</li>
-                </ul>
+        <div class="pain-points">
+            <div class="pain-point">
+                <h3 style="font-weight: 400; margin-bottom: 1rem;">⚖️ The Weight of Uninformed Choice</h3>
+                <p style="line-height: 1.6;">When distributed systems infrastructure cannot support proper evaluation, cross-service architectural decisions become matters of opinion rather than evidence</p>
             </div>
             
-            <div class="prevention-side">
-                <h3>✅ Application-Centric Solutions</h3>
-                <ul>
-                    <li><strong>Business Logic Focus</strong><br>Platform handles service coordination; teams focus on domain problems</li>
-                    <li><strong>Explicit Contract Governance</strong><br>ContractsLib enables knowledge sharing and safe architectural evolution</li>
-                    <li><strong>Infrastructure Consolidation</strong><br>Shared platform services eliminate redundant microservices patterns</li>
-                    <li><strong>Coordinated Improvement</strong><br>ContractsLib creates feedback loops for distributed systems best practices</li>
-                    <li><strong>Safe Experimentation</strong><br>Isolated envers enable fearless distributed systems testing and iteration</li>
-                </ul>
+            <div class="pain-point">
+                <h3 style="font-weight: 400; margin-bottom: 1rem;">🔄 The Recurring Integration Pattern</h3>
+                <p style="line-height: 1.6;">Like water finding the same crack, integration conflicts return because the underlying distributed systems question remains unanswered across service boundaries</p>
+            </div>
+            
+            <div class="pain-point">
+                <h3 style="font-weight: 400; margin-bottom: 1rem;">🗣️ Words Without Distributed Context</h3>
+                <p style="line-height: 1.6;">Teams debate the merits of service integration approaches they cannot properly test in complete distributed environments—sound and fury, signifying nothing</p>
+            </div>
+            
+            <div class="pain-point">
+                <h3 style="font-weight: 400; margin-bottom: 1rem;">🏃‍♂️ The Racing Mind Across Services</h3>
+                <p style="line-height: 1.6;">"I must deploy my service changes first, leaving other teams to adapt their integrations!" When urgency drives distributed decisions, system coherence suffers like a river diverted without considering downstream effects</p>
+            </div>
+        </div>
+        
+        <div style="margin-top: 4rem; padding: 2.5rem; background: rgba(255,255,255,0.08); border-radius: 6px; max-width: 700px; margin-left: auto; margin-right: auto; border: 1px solid rgba(255,255,255,0.1);">
+            <h3 style="font-weight: 300; margin-bottom: 1.5rem; font-size: 1.3rem;">The Root Lies Deeper</h3>
+            <p style="font-size: 1.1rem; line-height: 1.7; margin-bottom: 1.5rem;">
+                <strong>When the tools for proper evaluation are absent, wisdom is replaced by expedience.</strong> 
+                Teams resort to racing rather than reasoning, creating a culture where speed matters more than understanding.
+            </p>
+            <p style="font-size: 1rem; line-height: 1.6; font-style: italic; opacity: 0.9;">
+                "The master archer draws the bow slowly, aims carefully, and releases with confidence. 
+                The novice shoots quickly and wonders why the target remains untouched."
+            </p>
+        </div>
+    </section>
+
+    <section class="revelation-section">
+        <div style="max-width: 1200px; margin: 0 auto;">
+            <h2 style="text-align: center; font-size: 2.5rem; margin-bottom: 2rem; color: #1f2937;">What If Conflicts Are Actually Information?</h2>
+            <p style="text-align: center; font-size: 1.2rem; color: #4b5563; margin-bottom: 3rem; max-width: 800px; margin-left: auto; margin-right: auto;">
+                Every Git guide treats merge conflicts as technical problems to solve quickly. 
+                <strong>But what if conflicts are actually your system trying to tell you something important about architecture?</strong>
+            </p>
+            
+            <div class="before-after">
+                <div class="before-side">
+                    <h3 style="color: #dc2626; margin-bottom: 1rem;">❌ Traditional Approach</h3>
+                    <ul style="color: #7f1d1d;">
+                        <li>"Merge more frequently!"</li>
+                        <li>"Race to merge first!"</li>
+                        <li>"Get better at conflict resolution!"</li>
+                        <li>"Just pick one and move on!"</li>
+                        <li>"First come, first served!"</li>
+                    </ul>
+                    <p style="margin-top: 1rem; font-style: italic; color: #7f1d1d;">
+                        <strong>Result:</strong> Racing culture creates technical debt, resentment, and recurring conflicts. Speed without understanding leads to more work, not less.
+                    </p>
+                </div>
+                
+                <div class="after-side">
+                    <h3 style="color: #059669; margin-bottom: 1rem;">✅ ONDEMANDENV Approach</h3>
+                    <ul style="color: #064e3b;">
+                        <li>"What is this conflict trying to tell us?"</li>
+                        <li>"Let's test both approaches properly"</li>
+                        <li>"Which one actually performs better?"</li>
+                        <li>"What do the metrics say?"</li>
+                    </ul>
+                    <p style="margin-top: 1rem; font-style: italic; color: #064e3b;">
+                        <strong>Result:</strong> Evidence-based architectural decisions that stick because they're actually better.
+                    </p>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 3rem; padding: 2rem; background: #dbeafe; border-radius: 8px;">
+                <h3 style="color: #1d4ed8; margin-bottom: 1rem;">The Missing Question</h3>
+                <p style="color: #1e3a8a; font-size: 1.2rem; font-weight: 500;">
+                    "Why can't we properly evaluate what should be merged in the first place?"
+                </p>
             </div>
         </div>
     </section>
 
-    <section class="forcing-function">
-        <h2>🔧 The contractsLib: Your Distributed Systems Coordinator</h2>
-        <p style="font-size: 1.2rem; margin-bottom: 2rem;">The <code>contractsLib</code> isn't just configuration—it's the <strong>coordination engine</strong> that systematically eliminates microservices integration complexity. It redirects development energy from service coordination to business logic while enabling <strong>collective learning</strong> across distributed teams.</p>
-        
-        <div style="background: rgba(255,255,255,0.1); padding: 2rem; border-radius: 8px; margin: 2rem 0;">
-            <h3>How It Solves Coordination Complexity:</h3>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 1.5rem 0;">
-                <div style="background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 5px;">
-                    <strong>1. Innovation Energy Redirection</strong><br>
-                    Teams focus on business logic, not defensive programming
-                </div>
-                <div style="background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 5px;">
-                    <strong>2. Knowledge Multiplication</strong><br>
-                    Architectural decisions become organizational assets
-                </div>
-                <div style="background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 5px;">
-                    <strong>3. Network Effects Restoration</strong><br>
-                    Platform improvements benefit all teams automatically
-                </div>
-                <div style="background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 5px;">
-                    <strong>4. Collective Intelligence</strong><br>
-                    Best practices propagate through contract evolution
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="prevention-demo">
-        <h2>⚡ Anti-Stagnation in Action: What Becomes Impossible</h2>
-        <p>When you adopt ONDEMANDENV's anti-stagnation approach, entire categories of innovation-killing patterns simply cannot occur:</p>
-        
-        <div style="background: #2d3748; color: #e2e8f0; padding: 1.5rem; border-radius: 5px; margin: 1.5rem 0; font-family: monospace; overflow-x: auto;">
-# These stagnation patterns are ELIMINATED systematically:<br>
-# ❌ Cannot waste: 80% of dev time on integration complexity<br>
-# ❌ Cannot create: Knowledge silos preventing collective learning<br>
-# ❌ Cannot build: Redundant infrastructure solutions across teams<br>
-# ❌ Cannot deploy: Without explicit architectural contracts<br><br>
-
-# Instead, the anti-stagnation engine ensures:<br>
-# ✅ Innovation energy redirected to business value<br>
-# ✅ Knowledge multiplies across teams through contracts<br>
-# ✅ Platform services eliminate redundant work<br>
-# ✅ Collective intelligence accelerates ecosystem evolution<br>
-        </div>
-    </section>
-
-    <section class="prevention-features">
-        <div class="prevention-feature">
-            <h3>🚀 Redirect Innovation Energy</h3>
-            <p>Teams spend 80% less time on integration complexity and focus that energy on business value creation. The platform handles defensive programming so teams can pursue genuine innovation.</p>
-            <div class="tech-stack">Anti-Stagnation Mechanism: ContractsLib removes integration complexity, platform services eliminate defensive coding</div>
-        </div>
-        
-        <div class="prevention-feature">
-            <h3>🔄 Enable Collective Learning</h3>
-            <p>Architectural knowledge becomes organizational assets. Contract evolution through PRs creates shared understanding and prevents teams from solving the same problems independently.</p>
-            <div class="tech-stack">Anti-Stagnation Mechanism: Explicit contracts, version-controlled architecture, cross-team knowledge sharing</div>
-        </div>
-        
-        <div class="prevention-feature">
-            <h3>⚡ Restore Network Effects</h3>
-            <p>Platform improvements benefit all teams automatically. Security model improvements, infrastructure optimizations, and architectural patterns propagate instantly across the ecosystem.</p>
-            <div class="tech-stack">Anti-Stagnation Mechanism: Shared platform services, contract-driven best practices, ecosystem-wide improvements</div>
-        </div>
-        
-        <div class="prevention-feature">
-            <h3>🎯 Consolidate Resources</h3>
-            <p>Eliminate redundant infrastructure solutions across teams. Platform team solves complex problems once; all teams benefit from shared solutions without duplicating effort.</p>
-            <div class="tech-stack">Anti-Stagnation Mechanism: Platform service abstraction, resource consolidation, shared infrastructure patterns</div>
-        </div>
-        
-        <div class="prevention-feature">
-            <h3>🔄 Accelerate Evolution</h3>
-            <p>Architecture evolves through collective intelligence rather than individual heroics. Contract changes become collaborative improvement processes that enhance the entire ecosystem.</p>
-            <div class="tech-stack">Anti-Stagnation Mechanism: Continuous architectural evolution, collective decision making, ecosystem velocity acceleration</div>
-        </div>
-        
-        <div class="prevention-feature">
-            <h3>⬇️ Democratize Innovation</h3>
-            <p>Remove architectural gatekeepers through safe experimentation environments. Junior developers can explore complex patterns and drive innovation without approval gates or fear of breaking dependencies.</p>
-            <div class="tech-stack">Anti-Stagnation Mechanism: Isolated experimentation, self-service innovation, democratized architectural exploration</div>
-        </div>
-    </section>
-
-    <section class="structural-impossibility">
-        <h2>🏗️ The Result: Systematic Elimination of Stagnation Patterns</h2>
-        <p>By implementing anti-stagnation mechanisms systematically, ONDEMANDENV creates an ecosystem where innovation-killing patterns become <strong>structurally impossible</strong>:</p>
-        
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin: 2rem 0;">
-            <div style="background: white; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #00b894;">
-                <h4>Innovation Energy Waste</h4>
-                <p>Cannot misdirect 80% of dev time into integration complexity</p>
-            </div>
-            <div style="background: white; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #00b894;">
-                <h4>Knowledge Silos</h4>
-                <p>Cannot solve architectural problems in isolation</p>
-            </div>
-            <div style="background: white; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #00b894;">
-                <h4>Resource Dissipation</h4>
-                <p>Cannot create redundant infrastructure solutions</p>
-            </div>
-            <div style="background: white; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #00b894;">
-                <h4>Network Effects Breakdown</h4>
-                <p>Cannot prevent collective learning and improvement</p>
-            </div>
-        </div>
-        <p style="margin-top: 2rem; font-style: italic; text-align: center;">
-            <strong>Architectural prevention becomes a natural consequence of systematic anti-stagnation design.</strong>
+    <section class="intelligence-reveal">
+        <h2 style="font-size: 2.5rem; margin-bottom: 2rem;">Three Types of "Conflicts" That Aren't Really Conflicts</h2>
+        <p style="font-size: 1.2rem; margin-bottom: 3rem; max-width: 800px; margin-left: auto; margin-right: auto;">
+            When you can actually evaluate competing approaches, you realize most "merge conflicts" fall into three distinct categories—
+            each requiring completely different responses.
         </p>
+        
+        <div class="conflict-types">
+            <div class="conflict-type">
+                <h3 style="margin-bottom: 1rem; font-weight: 400;">⚖️ The Contest of Distributed Merit</h3>
+                <p style="margin-bottom: 1rem; line-height: 1.6;"><strong>Two worthy paths toward the same distributed goal.</strong> Like different approaches to service mesh, event sourcing vs CRUD, or synchronous vs asynchronous integration patterns.</p>
+                <div style="background: rgba(255,255,255,0.08); padding: 1.2rem; border-radius: 4px; font-size: 0.95rem; border: 1px solid rgba(255,255,255,0.1);">
+                    <strong style="opacity: 0.8;">The Way:</strong> Let each distributed approach be tested fully across all services. Merit reveals itself through complete system evidence, not isolated service argument.
+                </div>
+            </div>
+            
+            <div class="conflict-type">
+                <h3 style="margin-bottom: 1rem; font-weight: 400;">🌱 The Natural Distributed Growth</h3>
+                <p style="margin-bottom: 1rem; line-height: 1.6;"><strong>Like bamboo reaching across service boundaries.</strong> New distributed features extending existing integration patterns—REST evolving toward GraphQL, database per service discovering event streaming needs.</p>
+                <div style="background: rgba(255,255,255,0.08); padding: 1.2rem; border-radius: 4px; font-size: 0.95rem; border: 1px solid rgba(255,255,255,0.1);">
+                    <strong style="opacity: 0.8;">The Way:</strong> Allow both integration expressions. What appears as distributed conflict often reveals complementary necessity across different service contexts.
+                </div>
+            </div>
+            
+            <div class="conflict-type">
+                <h3 style="margin-bottom: 1rem; font-weight: 400;">🦋 The Great Distributed Transformation</h3>
+                <p style="margin-bottom: 1rem; line-height: 1.6;"><strong>When the distributed butterfly emerges from monolithic chrysalis.</strong> The system seeks fundamental change—microservices discovering they need different data consistency models, or realizing service boundaries were drawn incorrectly.</p>
+                <div style="background: rgba(255,255,255,0.08); padding: 1.2rem; border-radius: 4px; font-size: 0.95rem; border: 1px solid rgba(255,255,255,0.1);">
+                    <strong style="opacity: 0.8;">The Way:</strong> Do not force integration where distributed nature seeks separation. Honor the transformation across service boundaries.
+                </div>
+            </div>
+        </div>
+        
+        <div style="margin-top: 4rem; padding: 2.5rem; background: rgba(255,255,255,0.08); border-radius: 6px; max-width: 800px; margin-left: auto; margin-right: auto; border: 1px solid rgba(255,255,255,0.1);">
+            <h3 style="margin-bottom: 1.5rem; font-weight: 300; font-size: 1.3rem;">The Essential Understanding</h3>
+            <p style="font-size: 1.1rem; line-height: 1.7; margin-bottom: 1.5rem;">
+                <strong>None of these require "better conflict resolution" or "faster integration."</strong> They require proper distributed evaluation environments 
+                where you can actually test different cross-service approaches without the pressure of racing against other teams' deployments.
+            </p>
+            <p style="font-size: 1rem; line-height: 1.6; font-style: italic; opacity: 0.9;">
+                "The master gardener does not force the oak to grow like bamboo, nor rush the seasons. 
+                Instead, they create the conditions where each distributed pattern can reveal its true nature across all service boundaries."
+            </p>
+        </div>
     </section>
 
-    <section id="core-innovations">
-        <h2>🎯 Core Innovation Stack</h2>
-        <p>ONDEMANDENV transforms distributed systems through four breakthrough concepts that work together to eliminate complexity and unlock agility:</p>
-        
-        <div class="innovation-grid">
-            <div class="innovation-card">
-                <h3>🏗️ Application-Centric Infrastructure</h3>
-                <p>Each service owns its complete <strong>Bounded Context</strong> - AWS resources, Kubernetes manifests, security policies, and dependencies - managed as a single, atomic unit.</p>
-                <div class="tech-stack">AWS CDK + TypeScript + cdk8s</div>
+    <section class="solution-progression">
+        <div style="max-width: 1200px; margin: 0 auto;">
+            <h2 style="text-align: center; font-size: 2.3rem; margin-bottom: 2rem; color: #2d3748; font-weight: 300;">The Four Pillars of Distributed Systems Evaluation</h2>
+            
+            <div class="progression-steps">
+                <div class="progression-step">
+                    <div class="step-number">一</div>
+                    <h3 style="margin-bottom: 1rem; color: #2d3748; font-weight: 400;">Create Complete Distributed Testing Grounds</h3>
+                    <p style="line-height: 1.6;">Like preparing separate ecosystems for different species, each distributed approach receives its complete multi-service environment to flourish or fail naturally—with all integration points intact.</p>
+                </div>
+                
+                <div class="progression-step">
+                    <div class="step-number">二</div>
+                    <h3 style="margin-bottom: 1rem; color: #2d3748; font-weight: 400;">Apply True Distributed Conditions</h3>
+                    <p style="line-height: 1.6;">As the blacksmith tests metal with real fire, we subject each distributed approach to genuine cross-service workloads, network partitions, and integration failures that reveal true distributed character.</p>
+                </div>
+                
+                <div class="progression-step">
+                    <div class="step-number">三</div>
+                    <h3 style="margin-bottom: 1rem; color: #2d3748; font-weight: 400;">Listen to Distributed Reality</h3>
+                    <p style="line-height: 1.6;">The wise architect governs by observing how services naturally interact, not by imposing theoretical patterns. Let distributed system behavior be the teacher of integration truth.</p>
+                </div>
+                
+                <div class="progression-step">
+                    <div class="step-number">四</div>
+                    <h3 style="margin-bottom: 1rem; color: #2d3748; font-weight: 400;">Preserve the Distributed Wisdom</h3>
+                    <p style="line-height: 1.6;">Like ancient texts that record both successful and failed distributed strategies, each cross-service experiment becomes part of the organizational memory—preventing future teams from repeating costly integration mistakes.</p>
+                </div>
             </div>
-
-            <div class="innovation-card">
-                <h3>📋 Contracts-Driven Architecture</h3>
-                <p>Teams define service boundaries through explicit TypeScript contracts. Think of <strong>ContractsLib</strong> as the "Congress" where architectural decisions are negotiated and enforced.</p>
-                <div class="tech-stack">TypeScript Contracts + GitHub PR Reviews</div>
-            </div>
-
-            <div class="innovation-card">
-                <h3>⚡ On-Demand Environment Cloning</h3>
-                <p>Instant creation of complete, isolated environments for any Git branch. Test complex features without shared environment conflicts or resource dependencies.</p>
-                <div class="tech-stack">Git Commit Commands + Platform Automation</div>
-            </div>
-
-            <div class="innovation-card">
-                <h3>🌐 Platform Services Abstraction</h3>
-                <p>Seamless deployment and service discovery across AWS accounts through platform-managed IAM and networking, enabling true organizational scalability.</p>
-                <div class="tech-stack">Multi-Account IAM + Cross-Account VPC</div>
+            
+            <div style="text-align: center; margin-top: 3rem; padding: 2rem; background: #f0f9ff; border-radius: 8px; border-left: 4px solid #3b82f6;">
+                <h3 style="color: #1e40af; margin-bottom: 1rem;">The Natural Next Step</h3>
+                <p style="color: #1e3a8a; font-size: 1.1rem;">
+                    Once you can evaluate competing approaches properly, you start noticing something interesting: 
+                    <strong>sometimes the "best" solution is to let multiple approaches coexist.</strong> 
+                    Different parts of your system might benefit from different solutions.
+                </p>
             </div>
         </div>
     </section>
 
-    <section id="manifesto" style="background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%); color: white; padding: 3rem 2rem; border-radius: 10px; margin: 3rem 0;">
-        <h2>🎯 The Provocative SRE Manifesto</h2>
-        <p style="font-size: 1.2rem; margin-bottom: 2rem; text-align: center;">ONDEMANDENV embodies a revolutionary approach to Site Reliability Engineering - moving beyond reactive firefighting to proactive innovation.</p>
+    <section class="advanced-track">
+        <h2 style="font-size: 2rem; margin-bottom: 2rem;">🧬 Ready to Go Deeper?</h2>
+        <p style="font-size: 1.1rem; margin-bottom: 2rem; max-width: 800px; margin-left: auto; margin-right: auto;">
+            What we've described so far is just the beginning. When you have proper evaluation infrastructure, 
+            you start seeing patterns that most teams never notice: <strong>software systems want to evolve naturally, 
+            like biological organisms.</strong>
+        </p>
         
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin: 2rem 0;">
-            <div style="background: rgba(255,255,255,0.1); padding: 2rem; border-radius: 8px;">
-                <h4>🔍 White Box Visibility</h4>
-                <p>We reject black-box systems. Full SDLC visibility through codified contracts, environment versioning, and real-time visualization makes dependencies explicit and traceable.</p>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 2rem 0; max-width: 800px; margin-left: auto; margin-right: auto;">
+            <div style="background: rgba(124, 58, 237, 0.2); padding: 1rem; border-radius: 6px; text-align: center;">
+                <strong>🔬 The MERGE HELL SCANDAL SERIES</strong><br>
+                <small>Our investigation into what conflicts really are</small>
             </div>
-            <div style="background: rgba(255,255,255,0.1); padding: 2rem; border-radius: 8px;">
-                <h4>🏗️ Application-Centric Architecture</h4>
-                <p>Applications aren't just containers - they're living systems with business context. Our environments model business value, not just infrastructure primitives.</p>
+            <div style="background: rgba(124, 58, 237, 0.2); padding: 1rem; border-radius: 6px; text-align: center;">
+                <strong>🌱 Semantic Evolution</strong><br>
+                <small>How systems evolve through branch diversity</small>
             </div>
-            <div style="background: rgba(255,255,255,0.1); padding: 2rem; border-radius: 8px;">
-                <h4>⚡ Proactive Innovation</h4>
-                <p>SRE isn't just "keeping lights green" - it's empowering engineers to innovate, experiment, and fail fast. Reliability enables value, not vice versa.</p>
-            </div>
-        </div>
-        
-        <div style="text-align: center; margin-top: 2rem;">
-            <blockquote style="font-style: italic; font-size: 1.1rem; margin: 1.5rem 0; background: rgba(255,255,255,0.1); padding: 1.5rem; border-radius: 8px;">
-                "We are not passive stewards of uptime. We are active enablers of progress."
-            </blockquote>
-                                <a href="articles/provocative-sre-manifesto" class="btn btn-primary btn-enhanced">📖 Read the Full Manifesto</a>
-        </div>
-    </section>
-
-    <section class="demo-console">
-        <h2>🎪 Experience the Platform Live</h2>
-        <p>Explore the actual ONDEMANDENV console managing our coffee shop microservices architecture in real-time:</p>
-        
-        <div class="demo-features">
-            <div class="demo-feature">
-                <strong>🔍 Live Architecture View</strong>
-                <p>Dependency graphs and service relationships</p>
-            </div>
-            <div class="demo-feature">
-                <strong>📊 Environment Management</strong>
-                <p>Envers across dev/staging/production</p>
-            </div>
-            <div class="demo-feature">
-                <strong>📋 Contract Visualization</strong>
-                <p>Interactive service boundary exploration</p>
-            </div>
-            <div class="demo-feature">
-                <strong>⚡ Deployment Status</strong>
-                <p>Real-time environment provisioning</p>
+            <div style="background: rgba(124, 58, 237, 0.2); padding: 1rem; border-radius: 6px; text-align: center;">
+                <strong>🦋 Natural Speciation</strong><br>
+                <small>When branches become new services</small>
             </div>
         </div>
         
         <div style="margin-top: 2rem;">
-            <a href="https://web.auth.ondemandenv.link/?region=us-west-1" class="btn btn-primary btn-enhanced" target="_blank">🔗 Launch Interactive Console</a>
+            <a href="articles.html" style="color: #a78bfa; text-decoration: underline; font-weight: 600; font-size: 1.1rem;">
+                Explore the Full Philosophy →
+            </a>
         </div>
     </section>
 
-    <section class="success-metrics">
-        <h2>📈 Distributed Systems Coordination Impact: Measured Improvements</h2>
-        <p>Organizations implementing ONDEMANDENV coordination patterns report significant distributed systems management improvements:</p>
-        
-        <div class="metrics-grid">
-            <div class="metric">
-                <span class="metric-number">80%</span>
-                <span class="metric-label">Innovation Energy Redirected</span>
-                <div style="font-size: 0.9rem; color: #666; margin-top: 0.5rem;">From integration complexity to business value</div>
-            </div>
-            <div class="metric">
-                <span class="metric-number">10x</span>
-                <span class="metric-label">Knowledge Transfer Velocity</span>
-                <div style="font-size: 0.9rem; color: #666; margin-top: 0.5rem;">Architectural decisions become organizational assets</div>
-            </div>
-            <div class="metric">
-                <span class="metric-number">95%</span>
-                <span class="metric-label">Resource Consolidation</span>
-                <div style="font-size: 0.9rem; color: #666; margin-top: 0.5rem;">Eliminate redundant infrastructure solutions</div>
-            </div>
-            <div class="metric">
-                <span class="metric-number">∞</span>
-                <span class="metric-label">Network Effects Multiplication</span>
-                <div style="font-size: 0.9rem; color: #666; margin-top: 0.5rem;">Platform improvements benefit all teams instantly</div>
-            </div>
+    <section class="cta-realistic">
+        <div style="position: relative; z-index: 1;">
+            <h2 style="font-size: 2.3rem; margin-bottom: 2rem; font-weight: 300;">The Way of Thoughtful Distributed Choice</h2>
+            <p style="font-size: 1.2rem; margin-bottom: 2rem; max-width: 800px; margin-left: auto; margin-right: auto; line-height: 1.6; opacity: 0.9;">
+                Obtain the means to test each distributed approach across complete service ecosystems before choosing. 
+                <strong>When cross-service evaluation becomes possible, distributed wisdom naturally follows.</strong>
+            </p>
         </div>
         
-        <blockquote style="font-style: italic; text-align: center; margin: 2rem 0; padding: 1rem; background: white; border-left: 4px solid #2e7d32; border-radius: 5px;">
-            "ONDEMANDENV solved our microservices coordination complexity. Teams stopped spending most of their time on service integration and could focus on business logic again. Our platform team transitioned from firefighting to proactive distributed systems management."
-            <cite style="display: block; margin-top: 1rem; font-weight: bold;">— VP Engineering, Fortune 500 Financial Institution</cite>
-        </blockquote>
-    </section>
-
-    <section class="ai-section">
-        <h2>🤖 AI-Assisted Development with Domain-Driven Architecture</h2>
-        <p>ONDEMANDENV creates the perfect foundation for AI-assisted development by providing <strong>clear architectural boundaries</strong> and <strong>explicit contracts</strong> that guide AI code generation toward maintainable, well-structured solutions.</p>
-        
-        <h4>How ONDEMANDENV Guides AI Code Generation</h4>
-        <ul style="margin: 1rem 0;">
-            <li><strong>Bounded Context Clarity:</strong> Each Enver represents a clear bounded context with defined responsibilities, preventing AI from generating code that violates domain boundaries</li>
-            <li><strong>Contract-Driven Development:</strong> Explicit Products and Consumers provide AI with precise interface specifications, eliminating ambiguous integrations</li>
-            <li><strong>Architectural Constraints:</strong> The platform's Application-Centric approach naturally constrains AI suggestions within proper architectural patterns</li>
-        </ul>
-
-        <h4>AI + DDD Workflow with ONDEMANDENV</h4>
-        <div class="workflow-steps">
-            <div class="workflow-step">
-                <strong>1. Define Context</strong>
-                <p>Establish bounded contexts and contracts in ContractsLib</p>
-            </div>
-            <div class="workflow-step">
-                <strong>2. AI Generation</strong>
-                <p>AI generates code within defined boundaries, referencing explicit contracts</p>
-            </div>
-            <div class="workflow-step">
-                <strong>3. Isolated Testing</strong>
-                <p>Use cloning to create ephemeral environments for validation</p>
-            </div>
-            <div class="workflow-step">
-                <strong>4. Contract Evolution</strong>
-                <p>Update ContractsLib through governance when AI suggests improvements</p>
-            </div>
+        <div class="cta-buttons-bridge">
+            <a href="documentation.html" class="btn-bridge btn-primary-bridge">🔧 See How It Works</a>
+            <a href="https://web.auth.ondemandenv.link/?region=us-west-1" class="btn-bridge btn-secondary-bridge" target="_blank">🚀 Try the Platform</a>
+            <a href="articles/merge-hell-myth-x-ops-contamination" class="btn-bridge btn-secondary-bridge">📖 Read the Investigation</a>
+            <a href="mailto:contacts@ondemandenv.dev" class="btn-bridge btn-secondary-bridge">💬 Discuss Your Conflicts</a>
         </div>
         
-        <p><strong>Result:</strong> AI produces maintainable, extensible code that aligns with Domain-Driven Design principles, preventing "accidental complexity" and ensuring architectural coherence.</p>
-    </section>
-
-    <section class="ecosystem-preview">
-        <h2>🚀 Repository Ecosystem Preview</h2>
-        <p>Explore our comprehensive platform implementation across foundation services, demos, and real applications:</p>
-        
-        <h4>🏛️ Platform Foundation</h4>
-        <div class="repo-grid">
-            <div class="repo-card">
-                <strong><a href="https://github.com/ondemandenv/odmd-contracts-sandbox">📋 contracts-sandbox</a></strong>
-                <p>Reference implementation managing coffee shop microservices with explicit service boundaries</p>
-            </div>
-            <div class="repo-card">
-                <strong><a href="https://github.com/ondemandenv/odmd-contracts-base">🔧 contracts-base</a></strong>
-                <p>Core platform interfaces and validation framework for building ContractsLib implementations</p>
-            </div>
-        </div>
-        
-        <h4>🌐 Platform Services</h4>
-        <div class="repo-grid">
-            <div class="repo-card">
-                <strong><a href="https://github.com/ondemandenv/networking">🌐 networking</a></strong>
-                <p>Cross-account VPC management and Transit Gateway connectivity</p>
-            </div>
-            <div class="repo-card">
-                <strong><a href="https://github.com/ondemandenv/odmd-eks">☸️ odmd-eks</a></strong>
-                <p>Production-ready EKS clusters with IRSA security and cross-account deployment</p>
-            </div>
-        </div>
-        
-        <h4>☕ Coffee Shop Demo: Event-Driven Microservices</h4>
-        <div class="repo-grid">
-            <div class="repo-card">
-                <strong><a href="https://github.com/ondemandenv/coffee-shop--foundation">🏛️ foundation</a></strong>
-                <p>EventBridge + DynamoDB shared infrastructure</p>
-            </div>
-            <div class="repo-card">
-                <strong><a href="https://github.com/ondemandenv/coffee-shop--order-manager">📋 order-manager</a></strong>
-                <p>API Gateway + Lambda order orchestration</p>
-            </div>
-            <div class="repo-card">
-                <strong><a href="https://github.com/ondemandenv/coffee-shop--order-processor">⚙️ order-processor</a></strong>
-                <p>Payment processing and fulfillment workflows</p>
-            </div>
-        </div>
-        
-        <div style="text-align: center; margin-top: 2rem;">
-            <a href="https://github.com/ondemandenv" class="btn btn-secondary btn-enhanced" target="_blank">🔗 Explore All Repositories</a>
+        <div style="margin-top: 3rem; padding: 2rem; background: rgba(255,255,255,0.1); border-radius: 8px; max-width: 600px; margin-left: auto; margin-right: auto;">
+            <h3 style="margin-bottom: 1rem;">The Bottom Line</h3>
+            <p style="font-style: italic; font-size: 1.1rem; line-height: 1.7; opacity: 0.9;">
+                "When the carpenter lacks proper tools, they blame the wood for being difficult to shape. 
+                When distributed teams lack cross-service evaluation environments, they blame integration conflicts for being hard to resolve. 
+                <strong>Provide the right distributed conditions, and what seemed impossible becomes natural.</strong>"
+            </p>
         </div>
     </section>
-
-    <section>
-        <h2>🔧 How ONDEMANDENV Solves Traditional Challenges</h2>
-        
-        <div style="overflow-x: auto; margin: 2rem 0;">
-            <table style="width: 100%; border-collapse: collapse; margin: 1rem 0;">
-                <thead>
-                    <tr>
-                        <th style="background: #ffebee; color: #c62828; padding: 1rem; text-align: left; border-bottom: 1px solid #e1e5e9;">Traditional Challenges</th>
-                        <th style="background: #e8f5e8; color: #2e7d32; padding: 1rem; text-align: left; border-bottom: 1px solid #e1e5e9;">ONDEMANDENV Solutions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td style="padding: 1rem; border-bottom: 1px solid #e1e5e9;">
-                            <strong>🔀 Tool Sprawl</strong><br>
-                            CloudFormation + Kubernetes + Terraform + Helm ...
-                        </td>
-                        <td style="padding: 1rem; border-bottom: 1px solid #e1e5e9;">
-                            <strong>🔧 Unified CDK</strong><br>
-                            Single TypeScript codebase for everything
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 1rem; border-bottom: 1px solid #e1e5e9;">
-                            <strong>🤝 Shared Bottlenecks</strong><br>
-                            dev/qa/prod environment conflicts
-                        </td>
-                        <td style="padding: 1rem; border-bottom: 1px solid #e1e5e9;">
-                            <strong>⚡ Isolated Environments</strong><br>
-                            Complete stacks per branch
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 1rem; border-bottom: 1px solid #e1e5e9;">
-                            <strong>📜 YAML Hell</strong><br>
-                            Manual configuration drift and version mismatches
-                        </td>
-                        <td style="padding: 1rem; border-bottom: 1px solid #e1e5e9;">
-                            <strong>💻 Code-Driven</strong><br>
-                            Type-safe with IDE support and validation
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 1rem; border-bottom: 1px solid #e1e5e9;">
-                            <strong>🤔 Hidden Coupling</strong><br>
-                            Implicit dependencies breaking deployments
-                        </td>
-                        <td style="padding: 1rem; border-bottom: 1px solid #e1e5e9;">
-                            <strong>📋 Explicit Contracts</strong><br>
-                            Every dependency declared and tracked
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </section>
-
-    <section id="next-steps">
-        <h2>🚀 Ready to Transform Your Architecture?</h2>
-        <p style="text-align: center; font-size: 1.1rem; margin-bottom: 3rem;">ONDEMANDENV isn't just another deployment tool - it's a fundamental rethinking of how distributed systems should be built, deployed, and operated.</p>
-        
-        <div class="next-steps-enhanced">
-            <div class="next-step-card">
-                <h3>📖 Learn the Concepts</h3>
-                <p>Understand Envers, ContractsLib, Cloning, and the Application-Centric approach that makes ONDEMANDENV revolutionary.</p>
-                <a href="concepts.html" class="btn btn-primary btn-enhanced">Explore Concepts</a>
-            </div>
-            
-            <div class="next-step-card">
-                <h3>🎯 See Real Patterns</h3>
-                <p>Explore how ONDEMANDENV solves common challenges like shared infrastructure, cross-account deployments, and dependency management.</p>
-                <a href="patterns.html" class="btn btn-primary btn-enhanced">View Use Cases</a>
-            </div>
-            
-            <div class="next-step-card">
-                <h3>🛠️ Start Building</h3>
-                <p>Follow the comprehensive setup guide, explore code examples, and start managing your environments with ONDEMANDENV.</p>
-                <a href="documentation.html" class="btn btn-primary btn-enhanced">Get Started</a>
-            </div>
-        </div>
-    </section>
-
-    <section id="opportunities" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 3rem 2rem; border-radius: 10px; margin: 3rem 0; text-align: center;">
-        <h2>🤝 Join Our Journey</h2>
-        <p style="font-size: 1.1rem; margin-bottom: 2rem;">ONDEMANDENV is actively seeking investors, strategic partners, and engineering talent to help revolutionize how distributed systems are managed. We believe in collaborative innovation and are open to discussing various partnership models.</p>
-        
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin: 2rem 0;">
-            <div style="background: rgba(255,255,255,0.1); padding: 1.5rem; border-radius: 8px;">
-                <h4>💼 Investment & Partnership</h4>
-                <p>Join us in transforming distributed systems architecture. We're seeking strategic partners and investors who share our vision.</p>
-            </div>
-            <div style="background: rgba(255,255,255,0.1); padding: 1.5rem; border-radius: 8px;">
-                <h4>💻 Engineering Opportunities</h4>
-                <p>The expertise behind ONDEMANDENV is available for consulting, contract, and freelance SDE roles in distributed systems and cloud architecture.</p>
-            </div>
-        </div>
-        
-        <div class="cta-buttons" style="margin-top: 2rem;">
-            <a href="mailto:contacts@ondemandenv.dev?subject=Investment/Partnership Inquiry" class="btn btn-primary btn-enhanced">Contact for Investment/Partnership</a>
-            <a href="mailto:contacts@ondemandenv.dev?subject=SDE Contract/Freelance Inquiry" class="btn btn-secondary btn-enhanced">Contact for SDE Roles</a>
-        </div>
-    </section>
-
 </main>
-
-<footer style="text-align: center; padding: 2rem; border-top: 2px solid #e1e5e9; margin-top: 3rem;">
-    <p>&copy; 2025 ONDEMANDENV.dev. All rights reserved.</p>
-    <div style="margin-top: 1rem;">
-        <a href="https://github.com/ondemandenv" style="margin: 0 1rem; color: #4ecdc4; text-decoration: none;">GitHub Organization</a>
-        <a href="mailto:contacts@ondemandenv.dev" style="margin: 0 1rem; color: #4ecdc4; text-decoration: none;">Contact Us</a>
-        <a href="documentation.html" style="margin: 0 1rem; color: #4ecdc4; text-decoration: none;">Documentation</a>
-    </div>
-</footer>
 
 <script>
 // Mobile menu toggle functionality
