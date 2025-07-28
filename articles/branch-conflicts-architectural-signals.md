@@ -13,14 +13,15 @@ keywords: ["branch conflicts", "architectural signals", "system boundaries", "ev
 
 ---
 
-## 🧠 **MERGE HELL SCANDAL SERIES** - Article 2 of 4
+## 🧠 **MERGE HELL SCANDAL SERIES** - Article 2 of 5
 
 *Having exposed the ops incompetence behind "merge hell," we now reveal what conflicts really are: architectural intelligence. Continue the investigation:*
 
 **→ Previous:** [**The Foundation**] [The Ops Incompetence Crisis](https://ondemandenv.dev/articles/merge-hell-myth-x-ops-contamination/)  
 **→ Current:** [**The Intelligence**] Branch Conflicts as Architectural Signals  
 **→ Next:** [**The Cascade**] [The PR Queue Scam Makes It Worse](https://ondemandenv.dev/articles/pr-queue-scam-makes-merge-hell-worse/)  
-**→ Finale:** [**The Solution**] [Branch Diversity and Innovation](https://ondemandenv.dev/articles/business-logic-branch-conflicts-political-warfare/)
+**→ Then:** [**The Solution**] [Branch Diversity and Innovation](https://ondemandenv.dev/articles/business-logic-branch-conflicts-political-warfare/)  
+**→ Finale:** [**The Philosophy**] [The Semantic Evolution Crisis](https://ondemandenv.dev/articles/semantic-evolution-crisis-merge-hell-cultural/)
 
 ---
 
