@@ -2,12 +2,91 @@
 layout: default
 ---
 
-<article>
+<!-- Article structured data (JSON-LD) for search engines and AI -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "{{ page.title | escape }}",
+  "description": "{{ page.excerpt | strip_html | truncatewords: 30 | escape }}",
+  "url": "{{ site.url }}{{ page.url }}",
+  "author": {
+    "@type": "Person",
+    "name": "{% if page.author %}{{ page.author }}{% else %}ONDEMANDENV{% endif %}",
+    "url": "{{ site.url }}"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "ONDEMANDENV",
+    "url": "{{ site.url }}",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "{{ site.url }}/favicon.ico"
+    }
+  },
+  "datePublished": "{% if page.date %}{{ page.date | date_to_xmlschema }}{% else %}{{ site.time | date_to_xmlschema }}{% endif %}",
+  "dateModified": "{% if page.last_modified_at %}{{ page.last_modified_at | date_to_xmlschema }}{% else %}{{ site.time | date_to_xmlschema }}{% endif %}",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "{{ site.url }}{{ page.url }}"
+  },
+  "articleSection": "Software Engineering",
+  "keywords": "{% if page.tags %}{{ page.tags | join: ', ' }}{% endif %}",
+  "about": {
+    "@type": "Thing",
+    "name": "Distributed Systems Architecture"
+  },
+  "genre": "Technical Article",
+  "inLanguage": "en-US"
+}
+</script>
+
+<!-- Enhanced meta tags for SEO and AI indexing -->
+<meta name="description" content="{{ page.excerpt | strip_html | truncatewords: 30 | escape }}">
+<meta name="keywords" content="{% if page.tags %}{{ page.tags | join: ', ' }}, {% endif %}distributed systems, software architecture, cloud computing, microservices, DevOps">
+<meta name="author" content="{% if page.author %}{{ page.author }}{% else %}ONDEMANDENV{% endif %}">
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+<meta name="googlebot" content="index, follow">
+
+<!-- Open Graph meta tags for social sharing -->
+<meta property="og:title" content="{{ page.title | escape }}">
+<meta property="og:description" content="{{ page.excerpt | strip_html | truncatewords: 30 | escape }}">
+<meta property="og:url" content="{{ site.url }}{{ page.url }}">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="{{ site.title }}">
+<meta property="og:locale" content="en_US">
+<meta property="article:author" content="{% if page.author %}{{ page.author }}{% else %}ONDEMANDENV{% endif %}">
+<meta property="article:published_time" content="{% if page.date %}{{ page.date | date_to_xmlschema }}{% else %}{{ site.time | date_to_xmlschema }}{% endif %}">
+<meta property="article:section" content="Software Engineering">
+{% if page.tags %}
+{% for tag in page.tags %}
+<meta property="article:tag" content="{{ tag }}">
+{% endfor %}
+{% endif %}
+
+<!-- Twitter Card meta tags -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ page.title | escape }}">
+<meta name="twitter:description" content="{{ page.excerpt | strip_html | truncatewords: 30 | escape }}">
+<meta name="twitter:url" content="{{ site.url }}{{ page.url }}">
+
+<!-- Canonical URL -->
+<link rel="canonical" href="{{ site.url }}{{ page.url }}">
+
+<article itemscope itemtype="https://schema.org/TechArticle">
+    <meta itemprop="headline" content="{{ page.title | escape }}">
+    <meta itemprop="description" content="{{ page.excerpt | strip_html | truncatewords: 30 | escape }}">
+    <meta itemprop="url" content="{{ site.url }}{{ page.url }}">
+    <meta itemprop="datePublished" content="{% if page.date %}{{ page.date | date_to_xmlschema }}{% else %}{{ site.time | date_to_xmlschema }}{% endif %}">
+    <meta itemprop="author" content="{% if page.author %}{{ page.author }}{% else %}ONDEMANDENV{% endif %}">
+    
     {% if page.title %}
-    <h1>{{ page.title }}</h1>
+    <h1 itemprop="headline">{{ page.title }}</h1>
     {% endif %}
 
-    {{ content }}
+    <div itemprop="articleBody">
+        {{ content }}
+    </div>
 </article>
 
 <!-- Source History Floating Button -->

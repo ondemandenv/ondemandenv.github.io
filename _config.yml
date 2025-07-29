@@ -1,7 +1,7 @@
 # Site settings
 title: ONDEMANDENV.dev
 description: On-Demand Environments and Service Contract Management in Distributed Systems
-url: "https://ondemandenv.github.io"
+url: "https://ondemandenv.dev"
 baseurl: ""
 
 # Build settings
