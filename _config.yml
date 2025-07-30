@@ -10,6 +10,7 @@ highlighter: rouge
 plugins:
   - jekyll-feed
   - jekyll-sitemap
+  - jekyll-seo-tag
 
 # GitHub Pages compatible settings
 safe: true
@@ -48,4 +49,20 @@ exclude:
   - Gemfile.lock
   - vendor
   - .git
-  - .gitignore 
+  - .gitignore
+  - tmp/
+
+# SEO and feed settings
+author: ONDEMANDENV
+twitter:
+  username: ondemandenv
+social:
+  name: ONDEMANDENV
+  links:
+    - https://github.com/ondemandenv
+
+# Sitemap settings
+sitemap:
+  priority: 1.0
+  changefreq: 'monthly'
+  lastmod: 2025-01-29 

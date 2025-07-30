@@ -1,2 +1,38 @@
 User-agent: *
-Allow: / 
+Allow: /
+
+# Sitemaps
+Sitemap: https://ondemandenv.dev/sitemap.xml
+
+# Allow search engine crawling
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+# AI Training crawlers
+User-agent: GPTBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+# Block unwanted crawlers
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: AhrefsBot
+Disallow: /
+
+# Crawl delay for good behavior
+Crawl-delay: 1 
