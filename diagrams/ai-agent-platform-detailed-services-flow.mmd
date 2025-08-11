@@ -140,6 +140,17 @@ flowchart TB
         AGENT_AUTHZ -.-> PLATFORM_AUTHZ
     end
     
+    %% Legend
+    subgraph "Legend"
+        LEG_SYNC[Solid arrow -->\nSynchronous request/processing]
+        LEG_ASYNC[Double-headed <-->\nAsynchronous events via Event Bus]
+        LEG_DASHED[Dashed -.->\nInfrastructure/contract or logical dependency]
+        
+        %% Example connectors for legend only
+        LEG_SYNC --> LEG_ASYNC
+        LEG_ASYNC <--> LEG_DASHED
+        LEG_SYNC -.-> LEG_DASHED
+    end
     
     style AUTH_IN fill:#e1f5fe
     style API_GW fill:#f3e5f5

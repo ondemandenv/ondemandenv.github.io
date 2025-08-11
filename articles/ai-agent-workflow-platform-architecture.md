@@ -153,7 +153,7 @@ This external integration layer is critical for the platform's value proposition
 
 ## Business Domain Data Models
 
-Each business service owns its data schema, managed by dedicated database operators:
+Each business service owns its data schema, managed by dedicated database operators. Tenant data is stored in a shared, multi-tenant schema per service with strict logical isolation using a required `tenant_id` key and partitioning/row-level security where supported. The platform does not provision one database per tenant by default; instead, it provisions one database per service (multi-tenant) to preserve service autonomy while enabling efficient scaling and governance.
 
 ### Platform Service Data Schema
 ```
@@ -249,7 +249,7 @@ The platform supports the following workflow creation lifecycle once deployed:
 The platform is deployed using CDK8s templates that generate Kubernetes manifests:
 
 ```
-Platform Deployment Structure:
+Platform Deployment Structure (Phases 2–4 on Kubernetes):
 ├── Infrastructure Controllers
 │   ├── Database Controller (PostgreSQL management)
 │   ├── Cache Controller (Redis management)
@@ -273,7 +273,7 @@ Each Business Service Contains:
 │   ├── Business Layer (Domain logic)
 │   └── Database Layer (Data access)
 ├── Infrastructure Requests
-│   ├── Database (Dedicated per service)
+│   ├── Database (Dedicated per service, multi-tenant schema with `tenant_id` partitioning/RLS)
 │   ├── Cache (Dedicated per service)
 │   ├── Storage (Optional file storage)
 │   ├── Event Topics (Service-specific)
@@ -522,6 +522,8 @@ Security:
   - Resource isolation per tenant
 ```
 
+> Note on LLM providers: Local LLM serving applies to self-hosted inference entirely within the customer boundary. Cloud LLM providers (e.g., OpenAI, Anthropic) are optional, disabled by default, and can be enabled per tenant via policy. When enabled, outbound inference requests obey data handling policies and redaction rules.
+
 ### Workflow Services
 
 #### DSL Compiler Service (Rust/Go)
@@ -586,6 +588,42 @@ Features:
 
 ### Data Services
 
+#### Object Storage
+```yaml
+Purpose:
+  - Durable storage for large artifacts: conversation attachments, workflow logs, model assets
+Capabilities:
+  - Versioned buckets/namespaces per service
+  - Server-side encryption, lifecycle, and retention policies
+  - Pre-signed URL support for controlled client access
+Operational Model:
+  - Managed via Storage Controller CRDs with per-service PVC/PV or S3-compatible APIs
+```
+
+#### Search / Indexing
+```yaml
+Purpose:
+  - Full-text search and relevance over conversations, documents, and DSLs
+Capabilities:
+  - Ingest pipelines, analyzers per language, synonyms
+  - Per-tenant indexes or index partitioning by tenant_id
+  - Near-real-time indexing with backpressure controls
+Operational Model:
+  - Elasticsearch/OpenSearch clusters provisioned via controller, access per service
+```
+
+#### Vector DB
+```yaml
+Purpose:
+  - Embedding storage for semantic retrieval and agent memory
+Capabilities:
+  - HNSW/IVF indexes, metadata filters with tenant_id scoping
+  - Batch upserts and range deletes per tenant
+  - TTL for ephemeral vectors (session-scoped)
+Operational Model:
+  - Managed as a dedicated service (e.g., PgVector, Qdrant, Milvus) with per-service logical separation
+```
+
 ### Infrastructure Controllers
 
 #### Event Bus Controller
@@ -635,6 +673,7 @@ Provides APIs:
 
 
 
+```ts
 // Local LLM deployment configuration
 export interface LocalLLMCluster {
   ollama: {
