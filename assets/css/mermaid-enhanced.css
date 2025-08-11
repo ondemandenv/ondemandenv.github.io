@@ -37,21 +37,7 @@
   overflow: auto;
 }
 
-.mermaid-diagram-simple svg {
-  /* Allow wide diagrams to render fully without clipping, but fit container initially via JS */
-  max-width: none !important;
-  max-height: none !important;
-  width: 100%;
-  height: auto;
-  display: block;
-  margin: 0 auto;
-  background: #ffffff !important; /* Force white background for SVG */
-}
-
-/* Ensure container doesn’t clip overflowing SVG; interactive pan/zoom handles viewport */
-.mermaid-diagram-simple {
-  overflow: hidden;
-}
+/* no special overrides for simple class after rollback */
 
 /* Ensure all mermaid diagrams have white backgrounds */
 .mermaid {

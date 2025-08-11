@@ -152,25 +152,10 @@
                 
                 // Use mermaid.render to convert the diagram content to SVG
                 const { svg } = await mermaid.render(diagramId, diagramContent);
-
-                // Ensure container has the expected class/id for enhancement
-                container.classList.add('mermaid');
-                if (!container.id) {
-                    container.id = diagramId;
-                }
-
-                // Insert the rendered SVG into the container
+                
+                // Insert the rendered SVG into the container (no extra classes/ids)
                 container.innerHTML = svg;
                 console.log('External diagram loaded successfully:', diagramPath);
-
-                // Enhance with pan/zoom if available and fit to container
-                if (window.MermaidEnhanced && typeof window.MermaidEnhanced.enhanceDiagram === 'function') {
-                    try {
-                        window.MermaidEnhanced.enhanceDiagram(container, Date.now());
-                    } catch (e) {
-                        console.warn('Enhancement failed:', e);
-                    }
-                }
                 
             } catch (error) {
                 console.error('Failed to load external diagram:', diagramPath, error);

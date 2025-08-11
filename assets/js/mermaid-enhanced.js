@@ -19,7 +19,7 @@ class MermaidEnhanced {
 
     enhanceAllDiagrams() {
         // Find all mermaid diagrams and enhance them
-        const diagrams = document.querySelectorAll('.mermaid, .mermaid-diagram-simple');
+        const diagrams = document.querySelectorAll('.mermaid');
         diagrams.forEach((diagram, index) => {
             this.enhanceDiagram(diagram, index);
         });
