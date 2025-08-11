@@ -12,6 +12,19 @@ layout: null
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-HLWV6BZQE1"></script>
     <script>
+        // Simple viewport sizer to guarantee full-page container on load/resize/fullscreen
+        function __sizeViewport() {
+          const v = document.getElementById('viewer');
+          const s = document.getElementById('stage');
+          const w = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+          const h = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+          if (v) { v.style.width = w + 'px'; v.style.height = h + 'px'; }
+          if (s) { s.style.width = '100%'; s.style.height = '100%'; }
+        }
+        document.addEventListener('DOMContentLoaded', __sizeViewport);
+        window.addEventListener('load', __sizeViewport);
+        window.addEventListener('resize', __sizeViewport);
+        document.addEventListener('fullscreenchange', __sizeViewport);
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
@@ -353,25 +366,17 @@ layout: null
             }
 
             toggleFullscreen() {
-                const viewer = document.querySelector('.diagram-viewer');
+                const viewer = this.viewer || document.getElementById('viewer');
                 
                 if (!document.fullscreenElement) {
                     viewer.requestFullscreen().then(() => {
-                        document.getElementById('fullscreen').innerHTML = '⛶ Exit';
-                        if (this.panZoom) {
-                            this.panZoom.resize();
-                            this.panZoom.fit();
-                            this.panZoom.center();
-                        }
+                        __sizeViewport();
+                        if (this.panZoom) { this.panZoom.resize(); this.panZoom.fit(); this.panZoom.center(); }
                     });
                 } else {
                     document.exitFullscreen().then(() => {
-                        document.getElementById('fullscreen').innerHTML = '⛶';
-                        if (this.panZoom) {
-                            this.panZoom.resize();
-                            this.panZoom.fit();
-                            this.panZoom.center();
-                        }
+                        __sizeViewport();
+                        if (this.panZoom) { this.panZoom.resize(); this.panZoom.fit(); this.panZoom.center(); }
                     });
                 }
             }
