@@ -23,7 +23,7 @@ layout: null
     <script src="https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js"></script>
     
     <style>
-      html, body { height: 100%; margin: 0; background: #111; width: 100%; overflow: hidden; }
+      html, body { height: 100%; margin: 0; background: #111; width: 100%; overflow: hidden; overscroll-behavior: none; }
       :root { --ui: rgba(0,0,0,0.65); --ui-border: #333; --accent: #3b82f6; --text: #eee; }
       .viewer { position: fixed; inset: 0; width: 100vw; height: 100vh; height: 100svh; height: 100dvh; background: #fff; }
       .toolbar, .right-controls { position: fixed; top: 12px; display: flex; gap: 8px; z-index: 1000; }
@@ -31,9 +31,9 @@ layout: null
       .right-controls { right: 12px; }
       .btn { background: var(--ui); color: var(--text); border: 1px solid var(--ui-border); padding: 8px 12px; border-radius: 8px; cursor: pointer; font: 500 13px system-ui, -apple-system, Segoe UI, Roboto, sans-serif; }
       .btn:hover { background: #000; color: #fff; border-color: #222; }
-      #stage { position: absolute; inset: 0; width: 100%; height: 100%; overflow: hidden; background: #fff; }
-      #diagram { width: 100%; height: 100%; }
-      #diagram svg { width: 100%; height: 100%; max-width: none; max-height: none; display: block; }
+      #stage { position: absolute; inset: 0; width: 100%; height: 100%; overflow: hidden; background: #fff; touch-action: none; }
+      #diagram { width: 100%; height: 100%; touch-action: none; }
+      #diagram svg { width: auto; height: auto; max-width: none; max-height: none; display: block; touch-action: none; }
       .info { position: fixed; bottom: 12px; left: 12px; background: var(--ui); color: #fff; border: 1px solid var(--ui-border); padding: 8px 12px; border-radius: 8px; font: 12px system-ui; z-index: 1000; }
       .overlay { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; background: rgba(0,0,0,.6); color: #fff; z-index: 1500; font: 16px system-ui; }
       .overlay.show { display: flex; }
@@ -361,12 +361,11 @@ layout: null
             }
 
             toggleFullscreen() {
-                const viewer = document.querySelector('.diagram-viewer');
-                
+                const viewer = document.getElementById('viewer');
                 if (!document.fullscreenElement) {
                     viewer.requestFullscreen().then(() => {
-                        document.getElementById('fullscreen').innerHTML = '⛶ Exit';
                         if (this.panZoom) {
+                            this.resizeStage();
                             this.panZoom.resize();
                             this.panZoom.fit();
                             this.panZoom.center();
@@ -374,8 +373,8 @@ layout: null
                     });
                 } else {
                     document.exitFullscreen().then(() => {
-                        document.getElementById('fullscreen').innerHTML = '⛶';
                         if (this.panZoom) {
+                            this.resizeStage();
                             this.panZoom.resize();
                             this.panZoom.fit();
                             this.panZoom.center();
