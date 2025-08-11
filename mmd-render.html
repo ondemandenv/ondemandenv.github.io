@@ -23,17 +23,17 @@ layout: null
     <script src="https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js"></script>
     
     <style>
-      html, body { height: 100%; margin: 0; background: #111; width: 100%; overflow: hidden; overscroll-behavior: none; }
+      html, body { height: 100%; margin: 0; background: #111; width: 100%; overflow: hidden; }
       :root { --ui: rgba(0,0,0,0.65); --ui-border: #333; --accent: #3b82f6; --text: #eee; }
-      .viewer { position: fixed; inset: 0; width: 100vw; height: 100vh; height: 100svh; height: 100dvh; background: #fff; }
+      .viewer { position: fixed; inset: 0; width: 100vw; height: 100dvh; background: #fff; }
       .toolbar, .right-controls { position: fixed; top: 12px; display: flex; gap: 8px; z-index: 1000; }
       .toolbar { left: 12px; }
       .right-controls { right: 12px; }
       .btn { background: var(--ui); color: var(--text); border: 1px solid var(--ui-border); padding: 8px 12px; border-radius: 8px; cursor: pointer; font: 500 13px system-ui, -apple-system, Segoe UI, Roboto, sans-serif; }
       .btn:hover { background: #000; color: #fff; border-color: #222; }
-      #stage { position: absolute; inset: 0; width: 100%; height: 100%; overflow: hidden; background: #fff; touch-action: none; }
-      #diagram { width: 100%; height: 100%; touch-action: none; }
-      #diagram svg { width: auto; height: auto; max-width: none; max-height: none; display: block; touch-action: none; }
+      #stage { position: absolute; inset: 0; width: 100%; height: 100%; overflow: hidden; background: #fff; }
+      #diagram { width: 100%; height: 100%; }
+      #diagram svg { width: 100%; height: 100%; max-width: none; max-height: none; display: block; }
       .info { position: fixed; bottom: 12px; left: 12px; background: var(--ui); color: #fff; border: 1px solid var(--ui-border); padding: 8px 12px; border-radius: 8px; font: 12px system-ui; z-index: 1000; }
       .overlay { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; background: rgba(0,0,0,.6); color: #fff; z-index: 1500; font: 16px system-ui; }
       .overlay.show { display: flex; }
@@ -118,7 +118,6 @@ layout: null
                     <div id="stage"><div id="diagram"></div></div>
                     <div class="info" id="diagram-info">Loading...</div>
                     <div class="overlay" id="fsOverlay"><div>Click to enter fullscreen</div></div>
-                    <div class="debug-panel" id="debugPanel" style="display:none"></div>
                   </div>`;
             }
 
@@ -130,10 +129,9 @@ layout: null
                 const params = new URLSearchParams(location.search);
                 this.backHref = params.get('back') || 'articles.html';
                 this.autoFS = params.get('autofullscreen') === '1' || !params.has('autofullscreen');
-                this.debug = params.get('debug') === '1' || params.get('debug') === 'true';
 
                 document.getElementById('btnBack').onclick = ()=> { window.location.href = this.backHref; };
-                document.getElementById('btnFit').onclick = ()=> { if (this.panZoom){ this.resizeStage(); this.panZoom.resize(); this.panZoom.fit(); this.panZoom.center(); this.updateDiagramInfo(); this.showDebug && this.showDebug('after Fit'); } };
+                document.getElementById('btnFit').onclick = ()=> { if (this.panZoom){ this.panZoom.resize(); this.panZoom.fit(); this.panZoom.center(); this.updateInfo(); } };
                 document.getElementById('btnCenter').onclick = ()=> { if (this.panZoom){ this.panZoom.center(); this.updateInfo(); } };
                 document.getElementById('btnActual').onclick = ()=> { if (this.panZoom){ this.panZoom.zoom(1.0); this.panZoom.center(); this.updateInfo(); } };
                 document.getElementById('btnZoomIn').onclick = ()=> { if (this.panZoom){ this.panZoom.zoomIn(); this.updateInfo(); } };
@@ -145,7 +143,7 @@ layout: null
                 };
                 document.getElementById('btnDownload').onclick = ()=> { const svgEl = this.container.querySelector('svg'); if (!svgEl) return; const blob = new Blob([svgEl.outerHTML], {type:'image/svg+xml;charset=utf-8'}); const url = URL.createObjectURL(blob); const a = document.createElement('a'); const safe = (this.currentMmdFile||'diagram.mmd').split('/').pop().replace(/\.mmd$/,'') + '.svg'; a.href = url; a.download = safe; a.click(); setTimeout(()=>URL.revokeObjectURL(url), 2000); };
 
-                this.overlay.addEventListener('click', async ()=>{ this.overlay.classList.remove('show'); try { await this.viewer.requestFullscreen(); if (this.panZoom){ this.resizeStage(); this.panZoom.resize(); this.panZoom.fit(); this.panZoom.center(); this.showDebug && this.showDebug('after overlay fullscreen'); } } catch {} });
+                this.overlay.addEventListener('click', async ()=>{ this.overlay.classList.remove('show'); try { await this.viewer.requestFullscreen(); if (this.panZoom){ this.panZoom.resize(); this.panZoom.fit(); this.panZoom.center(); } } catch {} });
 
                 // Keyboard shortcuts
                 document.addEventListener('keydown', (e)=>{
@@ -154,15 +152,13 @@ layout: null
                   this.updateInfo();
                 });
 
-                window.addEventListener('resize', ()=> { this.resizeStage(); if (this.panZoom){ this.panZoom.resize(); this.panZoom.fit(); this.panZoom.center(); } this.showDebug && this.showDebug('after window resize'); });
-                document.addEventListener('fullscreenchange', ()=> { this.resizeStage(); if (this.panZoom){ this.panZoom.resize(); this.panZoom.fit(); this.panZoom.center(); } this.showDebug && this.showDebug('after fullscreenchange'); });
+                window.addEventListener('resize', ()=> { if (this.panZoom){ this.panZoom.resize(); this.panZoom.fit(); this.panZoom.center(); } });
             }
 
             loadStandaloneParams() {
                 const params = new URLSearchParams(location.search);
                 const theme = params.get('theme') || 'default';
                 mermaid.initialize({ startOnLoad:false, theme, flowchart:{useMaxWidth:true, htmlLabels:true}, sequence:{useMaxWidth:true}, gantt:{useMaxWidth:true} });
-                this.resizeStage();
                 this.loadDiagramFromUrl();
             }
 
@@ -305,23 +301,13 @@ layout: null
 
                 // Initial fit/center after sizing
                 try {
-                    this.resizeStage();
                     this.panZoom.resize();
+                    // Fit strategy: choose the smaller scale between width/height to maximize viewport usage
                     this.panZoom.fit();
                     this.panZoom.center();
                     // Nudge to ensure full viewport after browser chrome settles
-                    setTimeout(()=>{ try { this.resizeStage(); this.panZoom.resize(); this.panZoom.fit(); this.panZoom.center(); } catch{} }, 120);
+                    setTimeout(()=>{ try { this.panZoom.resize(); this.panZoom.fit(); this.panZoom.center(); } catch{} }, 50);
                 } catch {}
-            }
-
-            resizeStage() {
-                const viewer = document.getElementById('viewer');
-                const stage = document.getElementById('stage');
-                if (viewer && stage) {
-                    const rect = viewer.getBoundingClientRect();
-                    stage.style.width = rect.width + 'px';
-                    stage.style.height = rect.height + 'px';
-                }
             }
 
             enableControls() {
@@ -364,11 +350,12 @@ layout: null
             }
 
             toggleFullscreen() {
-                const viewer = document.getElementById('viewer');
+                const viewer = document.querySelector('.diagram-viewer');
+                
                 if (!document.fullscreenElement) {
                     viewer.requestFullscreen().then(() => {
+                        document.getElementById('fullscreen').innerHTML = '⛶ Exit';
                         if (this.panZoom) {
-                            this.resizeStage();
                             this.panZoom.resize();
                             this.panZoom.fit();
                             this.panZoom.center();
@@ -376,8 +363,8 @@ layout: null
                     });
                 } else {
                     document.exitFullscreen().then(() => {
+                        document.getElementById('fullscreen').innerHTML = '⛶';
                         if (this.panZoom) {
-                            this.resizeStage();
                             this.panZoom.resize();
                             this.panZoom.fit();
                             this.panZoom.center();
