@@ -5,9 +5,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mermaid Diagram Viewer - ONDEMANDENV.dev</title>
-    <meta name="description" content="Interactive Mermaid diagram viewer with zoom and pan functionality">
-    <link rel="stylesheet" href="styles.css">
+    <title>Mermaid Diagram Viewer</title>
+    <meta name="description" content="Standalone Mermaid diagram viewer with fullscreen and pan/zoom controls">
     
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-HLWV6BZQE1"></script>
@@ -18,267 +17,46 @@
       gtag('config', 'G-HLWV6BZQE1');
     </script>
     
-    <!-- Mermaid.js CDN (align with site version; keep explicit) -->
+    <!-- Standalone libraries: do not depend on site CSS/JS -->
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.0/dist/mermaid.min.js"></script>
-    
-    <!-- Pan and Zoom Library -->
     <script src="https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js"></script>
     
     <style>
-        /* Diagram viewer specific styles */
-        .diagram-viewer {
-            position: relative;
-            width: 100%;
-            height: calc(100vh - 8rem);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            background: white;
-            overflow: hidden;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        
-        .diagram-container {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            background: white;
-        }
-        
-        .diagram-content {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-        }
-        
-        #mermaid-diagram svg {
-            max-width: none !important;
-            max-height: none !important;
-            width: auto !important;
-            height: auto !important;
-        }
-        
-        .controls {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            display: flex;
-            gap: 8px;
-            z-index: 100;
-            background: rgba(255, 255, 255, 0.95);
-            padding: 8px;
-            border-radius: 6px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-        }
-        
-        .control-btn {
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-        
-        .control-btn:hover {
-            background: #0256c7;
-            transform: translateY(-1px);
-        }
-        
-        .control-btn:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-            transform: none;
-        }
-        
-        .diagram-info {
-            position: absolute;
-            bottom: 10px;
-            left: 10px;
-            background: rgba(255, 255, 255, 0.95);
-            padding: 8px 12px;
-            border-radius: 6px;
-            font-size: 12px;
-            color: #666;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-        }
-        
-        .loading {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            height: 100%;
-            color: #666;
-        }
-        
-        .loading::after {
-            content: '';
-            display: block;
-            width: 40px;
-            height: 40px;
-            border: 3px solid #e1e5e9;
-            border-top: 3px solid var(--primary-color);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-top: 1rem;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        .error {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            height: 100%;
-            color: #dc3545;
-            text-align: center;
-            padding: 2rem;
-        }
-        
-        .error h3 {
-            margin-bottom: 1rem;
-            color: #dc3545;
-        }
-        
-        .error-detail {
-            font-family: monospace;
-            background: #f8f9fa;
-            padding: 1rem;
-            border-radius: 4px;
-            margin-top: 1rem;
-            font-size: 12px;
-            color: #666;
-            max-width: 600px;
-            word-break: break-all;
-        }
-        
-        .toolbar {
-            background: var(--secondary-color);
-            color: white;
-            padding: 1rem 2rem;
-            display: grid;
-            grid-template-columns: 1fr auto 1fr;
-            align-items: center;
-            gap: 1rem;
-        }
-        
-        .toolbar-left {
-            justify-self: start;
-        }
-        
-        .toolbar-center {
-            justify-self: center;
-        }
-        
-        .toolbar-actions {
-            justify-self: end;
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-        }
-        
-        .file-info {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-            font-family: monospace;
-            font-size: 0.9rem;
-        }
-        
-        .btn-toolbar {
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            transition: all 0.2s ease;
-        }
-        
-        .btn-toolbar:hover {
-            background: #0256c7;
-            transform: translateY(-1px);
-        }
-        
-        @media (max-width: 768px) {
-            .toolbar {
-                padding: 1rem;
-            }
-            
-            .toolbar h1 {
-                font-size: 1.2rem;
-            }
-            
-            .controls {
-                top: 5px;
-                right: 5px;
-                padding: 6px;
-            }
-            
-            .control-btn {
-                padding: 6px 8px;
-                font-size: 12px;
-            }
-            
-            .diagram-info {
-                bottom: 5px;
-                left: 5px;
-                padding: 6px 8px;
-                font-size: 11px;
-            }
-        }
+      html, body { height: 100%; margin: 0; background: #111; }
+      :root { --ui: rgba(0,0,0,0.65); --ui-border: #333; --accent: #3b82f6; --text: #eee; }
+      .viewer { position: fixed; inset: 0; background: #fff; }
+      .toolbar, .right-controls { position: fixed; top: 12px; display: flex; gap: 8px; z-index: 1000; }
+      .toolbar { left: 12px; }
+      .right-controls { right: 12px; }
+      .btn { background: var(--ui); color: var(--text); border: 1px solid var(--ui-border); padding: 8px 12px; border-radius: 8px; cursor: pointer; font: 500 13px system-ui, -apple-system, Segoe UI, Roboto, sans-serif; }
+      .btn:hover { background: #000; color: #fff; border-color: #222; }
+      #stage { position: absolute; inset: 0; overflow: hidden; background: #fff; }
+      #diagram { width: 100%; height: 100%; }
+      #diagram svg { width: auto; height: auto; max-width: none; max-height: none; display: block; }
+      .info { position: fixed; bottom: 12px; left: 12px; background: var(--ui); color: #fff; border: 1px solid var(--ui-border); padding: 8px 12px; border-radius: 8px; font: 12px system-ui; z-index: 1000; }
+      .overlay { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; background: rgba(0,0,0,.6); color: #fff; z-index: 1500; font: 16px system-ui; }
+      .overlay.show { display: flex; }
     </style>
 </head>
 <body>
-    <div class="toolbar">
-        <div class="toolbar-left">
-            <a href="articles.html" class="btn-toolbar">← Back to All Articles</a>
-        </div>
-        <div class="toolbar-center">
-            <div class="file-info" id="file-info">No file loaded</div>
-        </div>
-        <div class="toolbar-actions">
-            <a href="https://github.com/ondemandenv/ondemandenv.github.io" class="btn-toolbar" target="_blank">📁 Source</a>
-        </div>
+    <div class="viewer" id="viewer">
+      <div class="toolbar">
+        <button class="btn" id="btnBack">← Back</button>
+        <button class="btn" id="btnFit">Fit</button>
+        <button class="btn" id="btnCenter">Center</button>
+        <button class="btn" id="btnActual">1:1</button>
+      </div>
+      <div class="right-controls">
+        <button class="btn" id="btnZoomIn">＋</button>
+        <button class="btn" id="btnZoomOut">－</button>
+        <button class="btn" id="btnReset">Reset</button>
+        <button class="btn" id="btnFullscreen">⛶</button>
+        <button class="btn" id="btnDownload">⬇︎ SVG</button>
+      </div>
+      <div id="stage"><div id="diagram"></div></div>
+      <div class="info" id="diagram-info">Loading...</div>
+      <div class="overlay" id="fsOverlay"><div>Click to enter fullscreen</div></div>
     </div>
-
-    <main style="margin-top: 0; padding: 2rem;">
-        <div class="diagram-viewer">
-            <div class="controls">
-                <button class="control-btn" id="zoom-in" title="Zoom In">🔍+</button>
-                <button class="control-btn" id="zoom-out" title="Zoom Out">🔍-</button>
-                <button class="control-btn" id="zoom-reset" title="Reset Zoom">🎯</button>
-                <button class="control-btn" id="center" title="Center Diagram">📍</button>
-                <button class="control-btn" id="fullscreen" title="Toggle Fullscreen">⛶</button>
-            </div>
-            
-            <div class="diagram-container">
-                <div class="diagram-content" id="diagram-content">
-                    <div class="loading">Loading diagram...</div>
-                </div>
-            </div>
-            
-            <div class="diagram-info" id="diagram-info">
-                Use mouse wheel or controls to zoom • Drag to pan
-            </div>
-        </div>
-    </main>
 
     <script>
         // Initialize Mermaid
@@ -312,7 +90,74 @@
             }
 
             init() {
-                this.setupEventListeners();
+                // Replace shared-page UI with standalone viewer controls
+                this.bootstrapStandaloneUI();
+                this.setupStandaloneEvents();
+                this.loadStandaloneParams();
+            }
+
+            bootstrapStandaloneUI() {
+                // Build a minimal standalone UI layout
+                const body = document.body;
+                body.innerHTML = `
+                  <div class="viewer" id="viewer">
+                    <div class="toolbar">
+                      <button class="btn" id="btnBack">← Back</button>
+                      <button class="btn" id="btnFit">Fit</button>
+                      <button class="btn" id="btnCenter">Center</button>
+                      <button class="btn" id="btnActual">1:1</button>
+                    </div>
+                    <div class="right-controls">
+                      <button class="btn" id="btnZoomIn">＋</button>
+                      <button class="btn" id="btnZoomOut">－</button>
+                      <button class="btn" id="btnReset">Reset</button>
+                      <button class="btn" id="btnFullscreen">⛶</button>
+                      <button class="btn" id="btnDownload">⬇︎ SVG</button>
+                    </div>
+                    <div id="stage"><div id="diagram"></div></div>
+                    <div class="info" id="diagram-info">Loading...</div>
+                    <div class="overlay" id="fsOverlay"><div>Click to enter fullscreen</div></div>
+                  </div>`;
+            }
+
+            setupStandaloneEvents() {
+                this.viewer = document.getElementById('viewer');
+                this.container = document.getElementById('diagram');
+                this.info = document.getElementById('diagram-info');
+                this.overlay = document.getElementById('fsOverlay');
+                const params = new URLSearchParams(location.search);
+                this.backHref = params.get('back') || 'articles.html';
+                this.autoFS = params.get('autofullscreen') === '1' || !params.has('autofullscreen');
+
+                document.getElementById('btnBack').onclick = ()=> { window.location.href = this.backHref; };
+                document.getElementById('btnFit').onclick = ()=> { if (this.panZoom){ this.panZoom.fit(); this.panZoom.center(); this.updateInfo(); } };
+                document.getElementById('btnCenter').onclick = ()=> { if (this.panZoom){ this.panZoom.center(); this.updateInfo(); } };
+                document.getElementById('btnActual').onclick = ()=> { if (this.panZoom){ this.panZoom.zoom(1.0); this.panZoom.center(); this.updateInfo(); } };
+                document.getElementById('btnZoomIn').onclick = ()=> { if (this.panZoom){ this.panZoom.zoomIn(); this.updateInfo(); } };
+                document.getElementById('btnZoomOut').onclick = ()=> { if (this.panZoom){ this.panZoom.zoomOut(); this.updateInfo(); } };
+                document.getElementById('btnReset').onclick = ()=> { if (this.panZoom){ this.panZoom.resetZoom(); this.panZoom.resetPan(); this.updateInfo(); } };
+                document.getElementById('btnFullscreen').onclick = async ()=> {
+                  if (!document.fullscreenElement) { try { await this.viewer.requestFullscreen(); } catch {} } else { try { await document.exitFullscreen(); } catch {} }
+                  if (this.panZoom){ this.panZoom.resize(); this.panZoom.fit(); this.panZoom.center(); this.updateInfo(); }
+                };
+                document.getElementById('btnDownload').onclick = ()=> { const svgEl = this.container.querySelector('svg'); if (!svgEl) return; const blob = new Blob([svgEl.outerHTML], {type:'image/svg+xml;charset=utf-8'}); const url = URL.createObjectURL(blob); const a = document.createElement('a'); const safe = (this.currentMmdFile||'diagram.mmd').split('/').pop().replace(/\.mmd$/,'') + '.svg'; a.href = url; a.download = safe; a.click(); setTimeout(()=>URL.revokeObjectURL(url), 2000); };
+
+                this.overlay.addEventListener('click', async ()=>{ this.overlay.classList.remove('show'); try { await this.viewer.requestFullscreen(); if (this.panZoom){ this.panZoom.resize(); this.panZoom.fit(); this.panZoom.center(); } } catch {} });
+
+                // Keyboard shortcuts
+                document.addEventListener('keydown', (e)=>{
+                  if (e.target && ['INPUT','TEXTAREA'].includes(e.target.tagName)) return;
+                  switch(e.key){ case '+': case '=': e.preventDefault(); if (this.panZoom) this.panZoom.zoomIn(); break; case '-': case '_': e.preventDefault(); if (this.panZoom) this.panZoom.zoomOut(); break; case '0': e.preventDefault(); if (this.panZoom){ this.panZoom.resetZoom(); this.panZoom.center(); } break; case 'f': e.preventDefault(); document.getElementById('btnFullscreen').click(); break; }
+                  this.updateInfo();
+                });
+
+                window.addEventListener('resize', ()=> { if (this.panZoom){ this.panZoom.resize(); } });
+            }
+
+            loadStandaloneParams() {
+                const params = new URLSearchParams(location.search);
+                const theme = params.get('theme') || 'default';
+                mermaid.initialize({ startOnLoad:false, theme, flowchart:{useMaxWidth:true, htmlLabels:true}, sequence:{useMaxWidth:true}, gantt:{useMaxWidth:true} });
                 this.loadDiagramFromUrl();
             }
 
@@ -376,7 +221,6 @@
                 }
 
                 this.currentMmdFile = mmdFile;
-                document.getElementById('file-info').textContent = mmdFile;
                 document.title = `${mmdFile} - Mermaid Diagram Viewer`;
 
                 try {
@@ -401,11 +245,11 @@
             }
 
             async renderMermaid(mmdContent) {
-                const container = document.getElementById('diagram-content');
+                const container = this.container;
                 
                 try {
                     // Clear existing content
-                    container.innerHTML = '<div class="loading">Rendering diagram...</div>';
+                    container.innerHTML = '';
 
                     // Create a unique ID for this diagram
                     const diagramId = 'mermaid-diagram-' + Date.now();
@@ -414,7 +258,7 @@
                     const { svg } = await mermaid.render(diagramId, mmdContent);
                     
                     // Create diagram container
-                    container.innerHTML = `<div id="mermaid-diagram" style="width:100%;height:100%;overflow:hidden;">${svg}</div>`;
+                    container.innerHTML = `${svg}`;
 
                     // Initialize pan and zoom
                     this.initializePanZoom();
@@ -428,7 +272,7 @@
             }
 
             initializePanZoom() {
-                const svgElement = document.querySelector('#mermaid-diagram svg');
+                const svgElement = this.container.querySelector('svg');
                 if (!svgElement) return;
 
                 // Destroy existing pan-zoom instance
@@ -452,7 +296,7 @@
                 });
 
                 // Enable controls
-                this.enableControls();
+                // Controls are always enabled in standalone viewer
 
                 // Initial fit/center after sizing
                 try {
@@ -463,7 +307,7 @@
             }
 
             enableControls() {
-                const controls = document.querySelectorAll('.control-btn');
+                const controls = [];
                 controls.forEach(btn => btn.disabled = false);
             }
 

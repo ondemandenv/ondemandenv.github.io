@@ -230,8 +230,11 @@ class MermaidEnhanced {
         const mermaidDiagram = modalContent.querySelector('.mermaid');
 
         // Move diagram back to its original container
-        if (mermaidDiagram && this.originalParent) {
-            this.originalParent.appendChild(mermaidDiagram);
+        if (mermaidDiagram) {
+            const originalParent = this.originalParents.get(diagramId);
+            if (originalParent) {
+                originalParent.appendChild(mermaidDiagram);
+            }
         }
 
         overlay.remove();
