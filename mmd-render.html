@@ -46,7 +46,7 @@ layout: null
       .btn:hover { background: #000; color: #fff; border-color: #222; }
       #stage { position: absolute; inset: 0; width: 100%; height: 100%; overflow: hidden; background: #fff; }
       #diagram { width: 100%; height: 100%; }
-      #diagram svg { width: 100%; height: 100%; max-width: none; max-height: none; display: block; }
+      #diagram svg { width: 100% !important; height: 100% !important; max-width: none !important; max-height: none !important; display: block; }
       .info { position: fixed; bottom: 12px; left: 12px; background: var(--ui); color: #fff; border: 1px solid var(--ui-border); padding: 8px 12px; border-radius: 8px; font: 12px system-ui; z-index: 1000; }
       .overlay { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; background: rgba(0,0,0,.6); color: #fff; z-index: 1500; font: 16px system-ui; }
       .overlay.show { display: flex; }
@@ -276,6 +276,22 @@ layout: null
                     
                     // Create diagram container
                     container.innerHTML = `${svg}`;
+                    // Force SVG to fill container and remove inline caps added by Mermaid
+                    const svgEl = container.querySelector('svg');
+                    if (svgEl) {
+                        try {
+                            // Remove Mermaid inline caps like max-width that constrain fullscreen
+                            svgEl.removeAttribute('style');
+                            svgEl.style.maxWidth = 'none';
+                            svgEl.style.maxHeight = 'none';
+                            svgEl.style.width = '100%';
+                            svgEl.style.height = '100%';
+                            svgEl.style.overflow = 'visible';
+                            svgEl.removeAttribute('width');
+                            svgEl.removeAttribute('height');
+                            svgEl.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+                        } catch {}
+                    }
 
                     // Initialize pan and zoom
                     this.initializePanZoom();
