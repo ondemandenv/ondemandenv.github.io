@@ -25,7 +25,7 @@ layout: null
     <style>
       html, body { height: 100%; margin: 0; background: #111; width: 100%; overflow: hidden; }
       :root { --ui: rgba(0,0,0,0.65); --ui-border: #333; --accent: #3b82f6; --text: #eee; }
-      .viewer { position: fixed; inset: 0; width: 100vw; height: 100dvh; background: #fff; }
+      .viewer { position: fixed; inset: 0; width: 100vw; height: 100vh; height: 100svh; height: 100dvh; background: #fff; }
       .toolbar, .right-controls { position: fixed; top: 12px; display: flex; gap: 8px; z-index: 1000; }
       .toolbar { left: 12px; }
       .right-controls { right: 12px; }
@@ -152,13 +152,14 @@ layout: null
                   this.updateInfo();
                 });
 
-                window.addEventListener('resize', ()=> { if (this.panZoom){ this.panZoom.resize(); this.panZoom.fit(); this.panZoom.center(); } });
+                window.addEventListener('resize', ()=> { this.resizeStage(); if (this.panZoom){ this.panZoom.resize(); this.panZoom.fit(); this.panZoom.center(); } });
             }
 
             loadStandaloneParams() {
                 const params = new URLSearchParams(location.search);
                 const theme = params.get('theme') || 'default';
                 mermaid.initialize({ startOnLoad:false, theme, flowchart:{useMaxWidth:true, htmlLabels:true}, sequence:{useMaxWidth:true}, gantt:{useMaxWidth:true} });
+                this.resizeStage();
                 this.loadDiagramFromUrl();
             }
 
@@ -301,13 +302,23 @@ layout: null
 
                 // Initial fit/center after sizing
                 try {
+                    this.resizeStage();
                     this.panZoom.resize();
-                    // Fit strategy: choose the smaller scale between width/height to maximize viewport usage
                     this.panZoom.fit();
                     this.panZoom.center();
                     // Nudge to ensure full viewport after browser chrome settles
-                    setTimeout(()=>{ try { this.panZoom.resize(); this.panZoom.fit(); this.panZoom.center(); } catch{} }, 50);
+                    setTimeout(()=>{ try { this.resizeStage(); this.panZoom.resize(); this.panZoom.fit(); this.panZoom.center(); } catch{} }, 60);
                 } catch {}
+            }
+
+            resizeStage() {
+                const viewer = document.getElementById('viewer');
+                const stage = document.getElementById('stage');
+                if (viewer && stage) {
+                    const rect = viewer.getBoundingClientRect();
+                    stage.style.width = rect.width + 'px';
+                    stage.style.height = rect.height + 'px';
+                }
             }
 
             enableControls() {
