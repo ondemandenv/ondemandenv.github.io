@@ -130,8 +130,11 @@ layout: null
                 this.backHref = params.get('back') || 'articles.html';
                 this.autoFS = params.get('autofullscreen') === '1' || !params.has('autofullscreen');
 
+                // Ensure viewport is maximized on load
+                this.ensureFullViewport?.();
+
                 document.getElementById('btnBack').onclick = ()=> { window.location.href = this.backHref; };
-                document.getElementById('btnFit').onclick = ()=> { if (this.panZoom){ this.panZoom.resize(); this.panZoom.fit(); this.panZoom.center(); this.updateInfo(); } };
+                document.getElementById('btnFit').onclick = ()=> { if (this.panZoom){ this.ensureFullViewport?.(); this.panZoom.resize(); this.panZoom.fit(); this.panZoom.center(); this.updateInfo(); } };
                 document.getElementById('btnCenter').onclick = ()=> { if (this.panZoom){ this.panZoom.center(); this.updateInfo(); } };
                 document.getElementById('btnActual').onclick = ()=> { if (this.panZoom){ this.panZoom.zoom(1.0); this.panZoom.center(); this.updateInfo(); } };
                 document.getElementById('btnZoomIn').onclick = ()=> { if (this.panZoom){ this.panZoom.zoomIn(); this.updateInfo(); } };
@@ -139,11 +142,11 @@ layout: null
                 document.getElementById('btnReset').onclick = ()=> { if (this.panZoom){ this.panZoom.resetZoom(); this.panZoom.resetPan(); this.updateInfo(); } };
                 document.getElementById('btnFullscreen').onclick = async ()=> {
                   if (!document.fullscreenElement) { try { await this.viewer.requestFullscreen(); } catch {} } else { try { await document.exitFullscreen(); } catch {} }
-                  if (this.panZoom){ this.panZoom.resize(); this.panZoom.fit(); this.panZoom.center(); this.updateInfo(); }
+                  if (this.panZoom){ this.ensureFullViewport?.(); this.panZoom.resize(); this.panZoom.fit(); this.panZoom.center(); this.updateInfo(); }
                 };
                 document.getElementById('btnDownload').onclick = ()=> { const svgEl = this.container.querySelector('svg'); if (!svgEl) return; const blob = new Blob([svgEl.outerHTML], {type:'image/svg+xml;charset=utf-8'}); const url = URL.createObjectURL(blob); const a = document.createElement('a'); const safe = (this.currentMmdFile||'diagram.mmd').split('/').pop().replace(/\.mmd$/,'') + '.svg'; a.href = url; a.download = safe; a.click(); setTimeout(()=>URL.revokeObjectURL(url), 2000); };
 
-                this.overlay.addEventListener('click', async ()=>{ this.overlay.classList.remove('show'); try { await this.viewer.requestFullscreen(); if (this.panZoom){ this.panZoom.resize(); this.panZoom.fit(); this.panZoom.center(); } } catch {} });
+                this.overlay.addEventListener('click', async ()=>{ this.overlay.classList.remove('show'); try { await this.viewer.requestFullscreen(); if (this.panZoom){ this.ensureFullViewport?.(); this.panZoom.resize(); this.panZoom.fit(); this.panZoom.center(); } } catch {} });
 
                 // Keyboard shortcuts
                 document.addEventListener('keydown', (e)=>{
@@ -152,7 +155,7 @@ layout: null
                   this.updateInfo();
                 });
 
-                window.addEventListener('resize', ()=> { if (this.panZoom){ this.panZoom.resize(); this.panZoom.fit(); this.panZoom.center(); } });
+                window.addEventListener('resize', ()=> { this.ensureFullViewport?.(); if (this.panZoom){ this.panZoom.resize(); this.panZoom.fit(); this.panZoom.center(); } });
             }
 
             loadStandaloneParams() {
