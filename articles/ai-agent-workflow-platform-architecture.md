@@ -1,3 +1,8 @@
+---
+layout: article
+title: AI Agent Workflow Platform: Enterprise Architecture Design
+---
+
 # AI Agent Workflow Platform: Enterprise Architecture Design
 
 *A distributed, multi-tenant platform for AI-driven workflow automation with conversational DSL generation*

@@ -8,6 +8,7 @@ class MermaidEnhanced {
         this.panZoomInstances = new Map();
         this.currentFullscreenDiagram = null;
         this.initialized = false;
+        this.originalParents = new Map();
     }
 
     async init() {
@@ -18,7 +19,7 @@ class MermaidEnhanced {
 
     enhanceAllDiagrams() {
         // Find all mermaid diagrams and enhance them
-        const diagrams = document.querySelectorAll('.mermaid');
+        const diagrams = document.querySelectorAll('.mermaid, .mermaid-diagram-simple');
         diagrams.forEach((diagram, index) => {
             this.enhanceDiagram(diagram, index);
         });
@@ -105,25 +106,45 @@ class MermaidEnhanced {
 
     initializePanZoom(diagramId) {
         const diagram = document.getElementById(diagramId);
-        const svg = diagram?.querySelector('svg');
-        
-        if (!svg || this.panZoomInstances.has(diagramId)) {
+        if (!diagram) return;
+        const svg = diagram.querySelector('svg');
+        if (!svg) return;
+
+        // Avoid duplicate instances
+        const existing = this.panZoomInstances.get(diagramId);
+        if (existing) {
+            try {
+                existing.resize();
+                existing.fit();
+                existing.center();
+            } catch {}
             return;
         }
 
         try {
+            // Ensure the SVG can overflow its container without clipping
+            svg.style.maxWidth = 'none';
+            svg.style.maxHeight = 'none';
+            svg.style.width = '100%';
+            svg.style.height = 'auto';
+
             // Initialize svg-pan-zoom
             const panZoomInstance = svgPanZoom(svg, {
                 zoomEnabled: true,
                 controlIconsEnabled: false,
                 fit: true,
                 center: true,
-                minZoom: 0.1,
-                maxZoom: 10,
-                zoomScaleSensitivity: 0.1,
-                dblClickZoomEnabled: false,
+                minZoom: 0.05,
+                maxZoom: 20,
+                zoomScaleSensitivity: 0.2,
+                dblClickZoomEnabled: true,
                 mouseWheelZoomEnabled: true
             });
+
+            // Initial fit and center to avoid cutoff
+            panZoomInstance.resize();
+            panZoomInstance.fit();
+            panZoomInstance.center();
 
             this.panZoomInstances.set(diagramId, panZoomInstance);
         } catch (error) {
@@ -167,7 +188,7 @@ class MermaidEnhanced {
         modalDiagramContainer.className = 'diagram-modal-content';
 
         // Move diagram to modal
-        this.originalParent = mermaidDiagram.parentNode;
+        this.originalParents.set(diagramId, mermaidDiagram.parentNode);
         modalDiagramContainer.appendChild(mermaidDiagram);
         
         // Assemble modal
@@ -223,7 +244,8 @@ class MermaidEnhanced {
         }
         
         this.currentFullscreenDiagram = null;
-        this.originalParent = null;
+        // Restore to original parent tracked by id
+        this.originalParents.delete(diagramId);
 
         // Refresh pan-zoom instance
         const panZoomInstance = this.panZoomInstances.get(diagramId);
