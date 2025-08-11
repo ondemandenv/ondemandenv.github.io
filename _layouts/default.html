@@ -126,6 +126,11 @@
                 svgEl.setAttribute('preserveAspectRatio', 'xMinYMin meet');
             } catch (e) {}
         }
+
+        // Ensure we wait for layout to settle before signaling readiness (helps screenshots)
+        function afterNextPaint(callback) {
+            requestAnimationFrame(() => requestAnimationFrame(callback));
+        }
         
         async function loadExternalDiagrams(diagrams) {
             for (const diagram of diagrams) {
@@ -174,7 +179,15 @@
                 console.log('External diagram loaded successfully:', diagramPath);
 
                 // Normalize sizing so the full graph fits within the container
-                normalizeSvg(container.querySelector('svg'));
+                const svgEl = container.querySelector('svg');
+                normalizeSvg(svgEl);
+
+                // Mark ready after paint to avoid early screenshots before fit
+                afterNextPaint(() => {
+                    normalizeSvg(svgEl);
+                    container.setAttribute('data-diagram-ready', 'true');
+                    document.dispatchEvent(new CustomEvent('mermaid:diagramReady', { detail: { containerId: container.id || null } }));
+                });
                 
             } catch (error) {
                 console.error('Failed to load external diagram:', diagramPath, error);
