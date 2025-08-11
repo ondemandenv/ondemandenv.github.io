@@ -110,6 +110,22 @@
             // Handle inline mermaid diagrams
             handleInlineDiagrams();
         }
+
+        function normalizeSvg(svgEl) {
+            if (!svgEl) return;
+            try {
+                // Remove Mermaid inline constraints and scale to container
+                svgEl.removeAttribute('width');
+                svgEl.removeAttribute('height');
+                // Some Mermaid versions inject inline style with max-width; neutralize it
+                svgEl.style.maxWidth = '100%';
+                svgEl.style.width = '100%';
+                svgEl.style.height = 'auto';
+                svgEl.style.display = 'block';
+                // Ensure entire viewBox is visible (handles negative origins)
+                svgEl.setAttribute('preserveAspectRatio', 'xMinYMin meet');
+            } catch (e) {}
+        }
         
         async function loadExternalDiagrams(diagrams) {
             for (const diagram of diagrams) {
@@ -156,6 +172,9 @@
                 // Insert the rendered SVG into the container (no extra classes/ids)
                 container.innerHTML = svg;
                 console.log('External diagram loaded successfully:', diagramPath);
+
+                // Normalize sizing so the full graph fits within the container
+                normalizeSvg(container.querySelector('svg'));
                 
             } catch (error) {
                 console.error('Failed to load external diagram:', diagramPath, error);
@@ -209,6 +228,8 @@
             if (foundMermaid) {
                 console.log('Processing', directMermaidBlocks.length, 'inline mermaid diagrams');
                 mermaid.run().then(() => {
+                    // After Mermaid renders, normalize each inline diagram's SVG for full visibility
+                    document.querySelectorAll('.mermaid svg').forEach(svg => normalizeSvg(svg));
                     // Initialize enhanced functionality after mermaid renders
                     if (window.MermaidEnhanced) {
                         window.MermaidEnhanced.enhanceAllDiagrams();
