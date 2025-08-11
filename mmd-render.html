@@ -1,5 +1,4 @@
----
----
+<!DOCTYPE html>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -32,7 +31,7 @@
       .btn:hover { background: #000; color: #fff; border-color: #222; }
       #stage { position: absolute; inset: 0; overflow: hidden; background: #fff; }
       #diagram { width: 100%; height: 100%; }
-      #diagram svg { width: auto; height: auto; max-width: none; max-height: none; display: block; }
+      #diagram svg { width: 100%; height: 100%; max-width: none; max-height: none; display: block; }
       .info { position: fixed; bottom: 12px; left: 12px; background: var(--ui); color: #fff; border: 1px solid var(--ui-border); padding: 8px 12px; border-radius: 8px; font: 12px system-ui; z-index: 1000; }
       .overlay { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; background: rgba(0,0,0,.6); color: #fff; z-index: 1500; font: 16px system-ui; }
       .overlay.show { display: flex; }
@@ -130,7 +129,7 @@
                 this.autoFS = params.get('autofullscreen') === '1' || !params.has('autofullscreen');
 
                 document.getElementById('btnBack').onclick = ()=> { window.location.href = this.backHref; };
-                document.getElementById('btnFit').onclick = ()=> { if (this.panZoom){ this.panZoom.fit(); this.panZoom.center(); this.updateInfo(); } };
+                document.getElementById('btnFit').onclick = ()=> { if (this.panZoom){ this.panZoom.resize(); this.panZoom.fit(); this.panZoom.center(); this.updateInfo(); } };
                 document.getElementById('btnCenter').onclick = ()=> { if (this.panZoom){ this.panZoom.center(); this.updateInfo(); } };
                 document.getElementById('btnActual').onclick = ()=> { if (this.panZoom){ this.panZoom.zoom(1.0); this.panZoom.center(); this.updateInfo(); } };
                 document.getElementById('btnZoomIn').onclick = ()=> { if (this.panZoom){ this.panZoom.zoomIn(); this.updateInfo(); } };
@@ -151,7 +150,7 @@
                   this.updateInfo();
                 });
 
-                window.addEventListener('resize', ()=> { if (this.panZoom){ this.panZoom.resize(); } });
+                window.addEventListener('resize', ()=> { if (this.panZoom){ this.panZoom.resize(); this.panZoom.fit(); this.panZoom.center(); } });
             }
 
             loadStandaloneParams() {
@@ -301,8 +300,11 @@
                 // Initial fit/center after sizing
                 try {
                     this.panZoom.resize();
+                    // Fit strategy: choose the smaller scale between width/height to maximize viewport usage
                     this.panZoom.fit();
                     this.panZoom.center();
+                    // Nudge to ensure full viewport after browser chrome settles
+                    setTimeout(()=>{ try { this.panZoom.resize(); this.panZoom.fit(); this.panZoom.center(); } catch{} }, 50);
                 } catch {}
             }
 
