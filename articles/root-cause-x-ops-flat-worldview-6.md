@@ -61,6 +61,35 @@ What “good” looks like:
 - Measured rollback MTTR meeting domain SLOs.
 - No reliance on “retry until green”; failures result in compensations or a clean abort.
 
+### Example: Simple DAG Executor for Plan-Time Simulation
+
+To rehearse DAG execution, use this TypeScript skeleton—test order, timeouts, and compensations before real deployment:
+
+```ts
+// Example: simple domain DAG step shape for plan-time simulation
+export type DagEdge = {
+  from: string;
+  to: string;
+  timeoutMs: number;
+  retryBudget: number;
+  compensation?: () => Promise<void>;
+};
+
+export async function executeDag(nodes: Record<string, () => Promise<void>>, edges: DagEdge[]) {
+  const pending = new Set(Object.keys(nodes));
+  while (pending.size > 0) {
+    const ready = Array.from(pending).filter((n) => edges.every((e) => e.to !== n || !pending.has(e.from)));
+    if (ready.length === 0) throw new Error('Cyclic or unsatisfied dependencies');
+    for (const n of ready) {
+      await nodes[n]();
+      pending.delete(n);
+    }
+  }
+}
+```
+
+This simulates plan-time order; add timeouts/retries to mimic failures and test compensations.
+
 ***
 
 ## 3) Parallel experiments: treat branches as product lines, not queues
@@ -106,6 +135,36 @@ Automations:
 Metrics and incentives:
 - Track rollback MTTR, parallel version counts, cross-domain edge density, schema compatibility coverage, error budget consumption.
 - Reward teams for reversible design, low blast radius, and successful deprecations—not for “heroic firefighting.”
+
+## 8. Embedding into governance
+
+- **Artifacts**: Each change request must include DAG diagram + health gate definitions + rollback plan + version/event plan.
+- **Review gates**: Architecture review rejects changes that don’t pass the checklist.
+- **Automation**: CI/CD pipelines enforce phase/wave order, health checks, and block merges if impacts cross domain boundaries without contracts.
+- **Metrics**: Track rollback MTTR, parallel version counts, cross‑domain edge density, schema‑compat coverage.
+
+### Example: Governance Enforcement in CI
+
+To automate review gates, use GitHub Actions to lint DAGs, check schemas, and enforce flag expiry—blocking non-compliant PRs:
+
+```yaml
+# GitHub Actions: enforce stale flag cleanup and schema/contract checks
+name: governance
+on: [pull_request]
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Contract lint
+        run: npm run contracts:lint
+      - name: Schema compatibility
+        run: npm run schema:check
+      - name: Feature-flag expiry
+        run: node scripts/flag-expiry-check.js --maxAgeDays=30
+```
+
+This embeds governance into CI, ensuring version policies and DAG rules are checked automatically.
 
 ***
 

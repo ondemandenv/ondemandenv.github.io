@@ -11,6 +11,11 @@ permalink: /articles/root-cause-x-ops-flat-worldview-2
 
 This second installment catalogs the recurring failure modes of the x-ops flat worldview and explains why they surface, how they compound, and what “good looks like” instead. Each anti-pattern is a symptom of missing semantic abstraction—domains, contracts, versioning, order, and health gates—papered over by tools.
 
+### Key Concepts
+- **Anti-Pattern**: A common but harmful practice, like using mesh for cross-domain fixes.
+- **Domain DAG**: Ordered graph of domain steps with health checks.
+- **Trunk-Based Development**: Short branches, always-releasable main.
+
 ## Why these anti-patterns keep recurring
 - Flat thinking collapses heterogeneous concerns into “the same YAML/traffic problem,” erasing domain boundaries and transactional units.
 - Tools become stand-ins for design: gateways, meshes, cost dashboards, and chaos tooling are asked to fix semantic gaps they cannot address.
@@ -107,6 +112,68 @@ This second installment catalogs the recurring failure modes of the x-ops flat w
 - Transactional stacks (plan-time): CloudFormation/Terraform + custom resources for dependencies, idempotency, and compensations; use when “one change, one rollback” across heterogeneous resources is required.
 - Platform APIs (convergence-time): Crossplane XRD + Compositions + Composition Functions to define domain-level APIs; accept non-transactional semantics; combine with ordered sync and health gates.
 - GitOps for order, not abstraction: Argo CD phases/waves, readiness checks; avoid “environment = branch/dir.”
+
+### Practitioner Snippets: Implementing Ordered GitOps and Scoped Mesh
+
+To avoid the "GitOps without order" anti-pattern, here's how to use Argo CD waves for explicit sequencing in a domain DAG:
+
+```yaml
+# Argo CD Sync Waves example (ordered delivery)
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: my-domain
+spec:
+  syncPolicy:
+    automated: { prune: true, selfHeal: true }
+  source:
+    repoURL: https://github.com/org/repo
+    targetRevision: main
+    path: environments/prod
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: my-domain
+  # Wave ordering via hooks/annotations (per resource manifests)
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: storage
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+```
+
+This enforces deployment order (storage before API), with health gates, preventing "apply everything, retry until green" chaos.
+
+For "Service Mesh as gold-plated coupling," scope policies to domains like this Istio rule:
+
+```yaml
+# Istio mesh policy scoped in-domain (avoid cross-domain overrides)
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: api-retries
+  namespace: my-domain
+spec:
+  host: api.my-domain.svc.cluster.local
+  trafficPolicy:
+    connectionPool:
+      http:
+        http1MaxPendingRequests: 100
+    outlierDetection:
+      consecutive5xxErrors: 5
+      interval: 5s
+      baseEjectionTime: 30s
+```
+
+This keeps resiliency local to "my-domain," avoiding global overrides that hide missing contracts.
 
 ## What “good” looks like: the domain DAG
 - Change unit: the domain DAG encodes order, dependencies, health gates, timeouts, retries, and compensations, including extra-cluster resources.

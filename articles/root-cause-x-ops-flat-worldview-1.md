@@ -7,6 +7,11 @@ part: 1
 permalink: /articles/root-cause-x-ops-flat-worldview-1
 ---
 
+### Key Concepts
+- **x-ops Flat Worldview**: Treating all system parts as uniform (e.g., everything is just YAML or traffic), ignoring domain differences.
+- **Domain-Driven Design (DDD)**: Organizing software around business domains for clearer boundaries and less chaos.
+- **Domain DAG**: A map of ordered steps within a domain, like a recipe ensuring things happen in sequence.
+
 ### Article 1: The Root Cause and Symptoms of the x-ops Flat Worldview—Rejecting Boundaries and Using Tools as Shields
 
 **Opening Layout**
@@ -15,6 +20,10 @@ Welcome to the first installment of our series critiquing the "x-ops flat worldv
 
 **The Root Cause: Rejection of Boundaries**
 At the heart of the x-ops flat worldview lies a fundamental flaw: the refusal to acknowledge and design around "domains," "contexts," and "boundaries." By compressing diverse system elements into a singular, uniform problem space—often reduced to mere YAML configurations or traffic routing issues—this mindset ignores the intrinsic semantic differences that define distinct domains. The result is a lack of transactional integrity, health gates, and ordered change management in deployments and rollbacks.
+
+In a payment processing system, for example:
+- Flat: All services share a global database schema—changes ripple everywhere.
+- Domain-First: Payment domain owns its schema and contracts; interacts with Order domain async via events.
 
 **Symptoms of the Flat Worldview**
 - **Tool Dependency as a Shield**: Tools are often misused as crutches to cover up the lack of proper boundary design. API gateways are stretched into cross-domain orchestrators, Service Mesh is used to sanctify synchronous coupling, FinOps becomes an excuse for poor cost allocation, and Chaos Engineering turns into a ritualistic exercise rather than a targeted validation of isolation. These tools are inherently neutral; their misuse amplifies coupling and blast radius.

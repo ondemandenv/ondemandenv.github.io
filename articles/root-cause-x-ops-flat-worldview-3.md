@@ -11,6 +11,11 @@ permalink: /articles/root-cause-x-ops-flat-worldview-3
 
 This third installment clarifies a source of chronic confusion: “unifying the Git working surface” with YAML isn’t abstraction; it’s declaration. Real abstraction must live either at plan-time (code that produces an executable, ordered, compensable plan) or at convergence-time (a control plane that exposes higher-level platform APIs and continuously reconciles toward them). This piece compares the two dominant paths—CDK-style plan-time abstraction and Crossplane-style convergence-time abstraction—and shows how to align each with the domain DAG as the unit of change.
 
+### Key Concepts
+- **Plan-Time Abstraction**: Code that builds an executable plan (e.g., CDK).
+- **Convergence-Time**: Control plane that reconciles state (e.g., Crossplane).
+- **GitOps**: Tool for ordered application, not core abstraction.
+
 ## The two places abstraction can live
 
 - Plan-time abstraction (code → plan → execution)
@@ -41,6 +46,53 @@ The key alignment remains: changes must be governed by a domain dependency graph
 - Where it struggles
   - Cross-provider convergence and long-tail external side effects require careful compensations and idempotency beyond the plan engine.
 
+### Example: L2 Construct for Versioned API
+
+To show plan-time abstraction in action, here's a CDK L2 construct creating a versioned API with canary routing—emitting an ordered CloudFormation plan:
+
+```ts
+// CDK L2/L3 example: opinionated construct emitting an ordered plan
+import { Construct } from 'constructs';
+import { Stack, Duration } from 'aws-cdk-lib';
+import * as apigw from 'aws-cdk-lib/aws-apigateway';
+import * as lambda from 'aws-cdk-lib/aws-lambda';
+
+export class ApiWithCanary extends Construct {
+  public readonly api: apigw.RestApi;
+
+  constructor(scope: Construct, id: string) {
+    super(scope, id);
+
+    const fnV1 = new lambda.Function(this, 'FnV1', {
+      runtime: lambda.Runtime.NODEJS_20_X,
+      code: lambda.Code.fromAsset('dist/v1'),
+      handler: 'index.handler',
+      timeout: Duration.seconds(5),
+    });
+
+    const fnV2 = new lambda.Function(this, 'FnV2', {
+      runtime: lambda.Runtime.NODEJS_20_X,
+      code: lambda.Code.fromAsset('dist/v2'),
+      handler: 'index.handler',
+      timeout: Duration.seconds(5),
+    });
+
+    this.api = new apigw.RestApi(this, 'Api');
+    const resource = this.api.root.addResource('hello');
+
+    // Version-aware routing (header based)
+    resource.addMethod('GET', new apigw.LambdaIntegration(fnV1), {
+      requestParameters: { 'method.request.header.X-Version': false },
+      methodResponses: [{ statusCode: '200' }],
+    });
+
+    // Canary stage can direct small % to v2 via stage variables or a separate route
+  }
+}
+```
+
+This demonstrates how L2 constructs bundle resources with defaults, producing a transactional plan that aligns with a domain DAG—deploy V1 before routing, with rollback semantics.
+
 ## Crossplane’s layered abstractions: XRD/Composition at convergence-time
 
 - Compositions and why PnT hit limits
@@ -52,6 +104,35 @@ The key alignment remains: changes must be governed by a domain dependency graph
   - Platform teams can export domain-level CRDs (XRDs) that encode enterprise patterns and policy; application teams declare intent against those APIs and get lifecycle management and reconciliation “for free.”
 - Where it struggles
   - Semantics remain non-transactional; failures require governance (timeouts, retries, backoffs) and compensations defined at the platform API level; testing and debugging require good tooling discipline because logic spans functions and controllers.
+
+### Example: Crossplane Composition Pipeline
+
+For convergence-time abstraction, here's a conceptual Crossplane pipeline defining a domain CRD—continuously reconciling resources with functions for dynamic logic:
+
+```yaml
+# Crossplane Composition Function pipeline (conceptual)
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: xapis.myorg.io
+spec:
+  compositeTypeRef:
+    apiVersion: myorg.io/v1alpha1
+    kind: XAPI
+  mode: Pipeline
+  pipeline:
+    - step: derive-config
+      functionRef:
+        name: function-go-templating
+    - step: render
+      functionRef:
+        name: function-kcl-render
+    - step: auto-ready
+      functionRef:
+        name: function-auto-ready
+```
+
+This shows how functions enable programmatic composition, turning XRD declarations into reconciled infrastructure—governed by GitOps health gates for order.
 
 ## GitOps provides order, not abstraction
 

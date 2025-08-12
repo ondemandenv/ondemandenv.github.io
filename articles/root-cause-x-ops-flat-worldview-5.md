@@ -73,6 +73,35 @@ Decision fork:
 
 **Why**: Supports safe parallel evolution; rollback is “route flipping” instead of full redeploy.
 
+### Example: Version-Aware Routing
+
+To implement parallel versions, use header-based routing in an ingress controller—deploy V1 and V2 independently and route at the edge:
+
+```yaml
+# Version-aware routing (NGINX ingress example; route by header)
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: api-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/canary: "true"
+    nginx.ingress.kubernetes.io/canary-by-header: "X-Version"
+    nginx.ingress.kubernetes.io/canary-by-header-value: "v2"
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /api
+        pathType: Prefix
+        backend:
+          service:
+            name: api-v1
+            port:
+              number: 80
+```
+
+This enables traffic splitting without shared deployments, aligning with domain DAG rollback (flip header rules to revert).
+
 ***
 
 ## 4. Event and schema evolution
@@ -84,6 +113,25 @@ Decision fork:
 - For breaking changes: run dual streams (v1/v2) with explicit migration and reconciliation plans
 
 **Why**: Avoids the Friday‑afternoon surprise of breaking every consumer with one unannounced schema tweak.
+
+### Example: Schema Compatibility Check in CI
+
+To enforce additive evolution, add a CI step that checks schema compatibility before merge—preventing breaking changes:
+
+```yaml
+# Schema compatibility in CI (Kafka + Avro + Redpanda/Confluent style)
+steps:
+  - name: schema-compat
+    image: ghcr.io/org/schema-checker:latest
+    script: |
+      schema-check \
+        --registry $SCHEMA_REGISTRY \
+        --subject order-created-value \
+        --schema file://schemas/order-created-v2.avsc \
+        --compatibility BACKWARD
+```
+
+This gates PRs on BACKWARD compatibility, ensuring tolerant readers can handle additive fields without disruption.
 
 ***
 
