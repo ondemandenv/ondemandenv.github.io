@@ -97,18 +97,6 @@ const enver = contracts.getTargetEnver('order-manager', 'b..feature-x')
        style="display: inline-flex; align-items: center; gap: 0.5rem; background: #0366d6; color: white; padding: 0.5rem 1rem; border-radius: 4px; text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease;">
         🔍 View Fullscreen
     </a>
-    
-    <a href="/diagrams/walking-on-many-feet-branch-ecology.mmd" 
-       target="_blank" 
-       style="display: inline-flex; align-items: center; gap: 0.5rem; margin-left: 0.5rem; background: #4b5563; color: white; padding: 0.5rem 1rem; border-radius: 4px; text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease;">
-        📝 View Source
-    </a>
-    
-    <a href="https://mermaid.live/edit#mmd:Ly8gQnJhbmNoIEVjb2xvZ3kgLSBNaW5pZml..." 
-       target="_blank" 
-       style="display: inline-flex; align-items: center; gap: 0.5rem; margin-left: 0.5rem; background: #10b981; color: white; padding: 0.5rem 1rem; border-radius: 4px; text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease;">
-        ✏️ Edit Online
-    </a>
 </div>
 
 ### A. Merge & Replace (Enver Promotion)
