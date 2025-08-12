@@ -6,7 +6,7 @@ description: "The software industry has been sold a lie: that 'merge hell' is a 
 author: "Gary Yang"
 date: 2025-07-16
 featured: true
-keywords: ["merge hell", "x-ops contamination", "ops incompetence", "branch conflicts", "evaluation environments", "engineering decisions", "administrative convenience", "ONDEMANDENV"]
+keywords: ["merge hell", "x-ops contamination", "ops infrastructure", "branch conflicts", "evaluation environments", "engineering decisions", "administrative convenience"]
 ---
 
 *The software industry has been sold a lie so pervasive that questioning it feels like heresy. That lie is that "merge hell" is a developer workflow problem. In reality, it's ops teams manufacturing a crisis to hide their fundamental incompetence: the inability to provide proper environments for evaluating engineering decisions.*

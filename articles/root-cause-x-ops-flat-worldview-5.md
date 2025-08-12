@@ -147,6 +147,15 @@ This gates PRs on BACKWARD compatibility, ensuring tolerant readers can handle a
 
 **Rule of thumb**: Branches are for exploration with their own environments, not for serial environment promotion.
 
+### Load-Bearing Contract and Branch Ecology (from "Walking on Many Feet")
+
+- **Load-Bearing Contract**: Production stability rests on one immutable contract version (the platform’s “theOne” enver). Exploration never mutates this load-bearing unit.
+- **Branch = Environment = Evolution Path**: Each branch gets its own full environment (e.g., `SRC_Rev_REF('b', 'feature-x')`), making evaluation evidence-based, not political.
+- **Promotion as Enver Switch**: Winners promote by changing the load-bearing enver (tag or branch) rather than forcing code merges that break consumers.
+- **Losers Are Archived with Learnings**: Retire unfit branches with explicit archival notes, preserving organizational learning.
+
+See also: <a href="/articles/walking-on-many-feet-contract-branches/">Walking on Many Feet: Contract Branches</a>
+
 For deeper dives on branch conflicts as architectural signals and transforming them into innovation, see our MERGE HELL SCANDAL SERIES:
 - <a href="/articles/merge-hell-myth-x-ops-contamination">The 'Merge Hell' myth</a>
 - <a href="/articles/branch-conflicts-architectural-signals">Branch Conflicts as Signals</a>

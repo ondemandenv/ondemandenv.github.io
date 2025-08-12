@@ -2,7 +2,7 @@
 layout: article
 title: "Branch Conflicts as System Architecture Signals: The Evaluation Framework Missing from Every Git Guide"
 permalink: /articles/branch-conflicts-architectural-signals/
-description: "Every Git guide treats merge conflicts as technical obstacles to overcome. But conflicts are actually architectural intelligence—system boundaries trying to tell you something crucial about your software design. Here's the evaluation framework the industry refuses to acknowledge."
+description: "Most guides treat merge conflicts as technical obstacles. This reframes them as architectural signals about boundaries and assumptions, with a practical evaluation framework."
 author: "Gary Yang"
 date: 2025-01-18
 featured: true

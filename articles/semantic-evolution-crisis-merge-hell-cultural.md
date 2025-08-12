@@ -2,11 +2,11 @@
 layout: article
 title: "The Semantic Evolution Crisis: How Merge Hell Exposed the Collapse of Cultural Modeling"
 permalink: /articles/semantic-evolution-crisis-merge-hell-cultural/
-description: "The final investigation revealing how 'merge hell' symptoms expose a cultural crisis: the industry's lost capacity for semantic modeling and architectural thinking. From Zhuangzi's philosophy to LLM evolution paradigms, discover how ONDEMANDENV enables semantic species evolution."
+description: "A finale connecting 'merge hell' symptoms to the loss of semantic modeling and domain boundaries, with references from classical philosophy to modern systems. Background for why practical governance and evaluation matter."
 author: "Gary Yang"
 date: 2025-01-18
 featured: true
-keywords: ["semantic evolution", "cultural modeling", "Domain-Driven Design", "Zhuangzi philosophy", "Cook Ding", "bounded contexts", "LLM paradigm", "semantic species", "architectural thinking", "ONDEMANDENV"]
+keywords: ["semantic evolution", "cultural modeling", "Domain-Driven Design", "Zhuangzi", "Cook Ding", "bounded contexts", "LLM paradigm", "architectural thinking"]
 ---
 
 *The Fifth and Final Installment of the MERGE HELL SCANDAL SERIES*

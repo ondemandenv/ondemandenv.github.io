@@ -124,6 +124,17 @@ This builds on concepts from our MERGE HELL SCANDAL SERIES—see:
 - <a href="/articles/semantic-evolution-crisis-merge-hell-cultural">The Semantic Evolution Crisis</a>
 - <a href="/articles/walking-on-many-feet-contract-branches">Walking on Many Feet: Contract Branches</a>
 
+### Evolution Pathways in Practice (from "Walking on Many Feet")
+
+The platform governs five evolutionary outcomes for branches:
+- **Merge & Replace**: Winner becomes the new load-bearing enver; consumers continue seamlessly. Criteria: compatibility preserved, performance meets baseline, contracts validated.
+- **Merge & Extend**: Additive enhancements coexist (e.g., REST + GraphQL), preserving existing producers; consumers opt-in gradually.
+- **Co-Exist Long-Term**: Multiple envers serve different consumer needs; platform manages routing and observability.
+- **Rejected/Archived**: Unfit branches are retired with recorded lessons (performance, schema, dependency issues).
+- **Speciation**: Domain splits into new bounded contexts when semantics diverge (ownership, compliance, scaling).
+
+See: <a href="/articles/walking-on-many-feet-contract-branches/">Walking on Many Feet: Contract Branches</a>
+
 ***
 
 ## 4) Selection and governance: codify how winners win

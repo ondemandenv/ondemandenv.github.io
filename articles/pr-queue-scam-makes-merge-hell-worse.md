@@ -2,7 +2,7 @@
 layout: article
 title: "The PR Queue Scam: How the Industry's 'Solution' Makes Merge Hell Infinitely Worse"
 permalink: /articles/pr-queue-scam-makes-merge-hell-worse/
-description: "Pull Request queues were sold as the solution to merge hell. In reality, they create contextual invalidation cascades that turn manageable conflicts into never-ending rework spirals. Here's how the cure became worse than the disease."
+description: "Pull Request queues were sold as a solution to merge hell. In practice they cause contextual invalidation cascades that turn manageable conflicts into rework spirals. Explains why and outlines alternatives."
 author: "Gary Yang"
 date: 2025-01-18
 featured: true
