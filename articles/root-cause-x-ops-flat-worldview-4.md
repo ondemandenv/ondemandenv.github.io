@@ -89,12 +89,18 @@ When designing a system, ask:
 
 In Article 5, we’ll move from metaphor back to concrete practice: how to encode the domain‑first cut into a working set of **critical practices and decision criteria**—from building and executing domain DAGs to version and event governance—and how to enforce “semantic‑first” design in reviews so that every change, regardless of tooling, respects the primary abstraction axis.
 
-**Diagram**
+**Diagrams**
 
-- Embedded viewer (interactive):
-  <div style="border:1px solid #e1e4e8; border-radius:8px; overflow:hidden; height:70vh; margin:1rem 0;">
+- K‑D tree partitioning (domain‑first vs network‑first):
+  <div style="border:1px solid #e1e4e8; border-radius:8px; overflow:hidden; height:60vh; margin:1rem 0;">
     <iframe src="/mmd-render.html?mmd=diagrams/kd-tree-domain-first-vs-network-first.mmd&back=/articles.html&autofullscreen=0" style="width:100%; height:100%; border:0;"></iframe>
   </div>
   <p><a href="/mmd-render.html?mmd=diagrams/kd-tree-domain-first-vs-network-first.mmd&back=/articles.html" target="_blank">Open full-screen</a></p>
+
+- Mesh/Gateway posture (composite/serving vs extending/overriding):
+  <div style="border:1px solid #e1e4e8; border-radius:8px; overflow:hidden; height:60vh; margin:1rem 0;">
+    <iframe src="/mmd-render.html?mmd=diagrams/mesh-gateway-cut-order.mmd&back=/articles.html&autofullscreen=0" style="width:100%; height:100%; border:0;"></iframe>
+  </div>
+  <p><a href="/mmd-render.html?mmd=diagrams/mesh-gateway-cut-order.mmd&back=/articles.html" target="_blank">Open full-screen</a></p>
 
 

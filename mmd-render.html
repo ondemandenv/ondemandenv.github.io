@@ -406,15 +406,18 @@ layout: null
             }
 
             showError(title, detail) {
-                const container = document.getElementById('diagram-content');
-                container.innerHTML = `
-                    <div class="error">
-                        <h3>⚠️ ${title}</h3>
-                        <p>Please check the file path and try again.</p>
-                        ${detail ? `<div class="error-detail">${detail}</div>` : ''}
-                    </div>
-                `;
-                this.disableControls();
+                // Prefer the known diagram container in standalone mode
+                const container = this?.container || document.getElementById('diagram') || document.body;
+                if (container) {
+                    container.innerHTML = `
+                        <div class="error" style="color:#b00020; padding:1rem; font-family: system-ui;">
+                            <h3>⚠️ ${title}</h3>
+                            <p>Please check the file path and try again.</p>
+                            ${detail ? `<div class="error-detail" style="opacity:.8;">${detail}</div>` : ''}
+                        </div>
+                    `;
+                }
+                this.disableControls?.();
             }
         }
 
