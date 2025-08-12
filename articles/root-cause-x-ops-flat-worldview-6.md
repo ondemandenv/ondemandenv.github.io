@@ -66,34 +66,119 @@ What “good” looks like:
 - Measured rollback MTTR meeting domain SLOs.
 - No reliance on “retry until green”; failures result in compensations or a clean abort.
 
-### Example: Simple DAG Executor for Plan-Time Simulation
+### Example: Plan-Time Rehearsal with CloudFormation and Terraform
 
-To rehearse DAG execution, use this TypeScript skeleton—test order, timeouts, and compensations before real deployment:
+Plan-time simulation should use the plan artifacts themselves. Rehearse order and safety via CloudFormation change sets or Terraform plans (the plan is the DAG):
 
-```ts
-// Example: simple domain DAG step shape for plan-time simulation
-export type DagEdge = {
-  from: string;
-  to: string;
-  timeoutMs: number;
-  retryBudget: number;
-  compensation?: () => Promise<void>;
-};
+```yaml
+# CloudFormation template (synthesized from CDK) — encode order with DependsOn
+Resources:
+  Storage:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: example-storage
+      BillingMode: PAYPERREQUEST
+      AttributeDefinitions:
+        - AttributeName: pk
+          AttributeType: S
+      KeySchema:
+        - AttributeName: pk
+          KeyType: HASH
 
-export async function executeDag(nodes: Record<string, () => Promise<void>>, edges: DagEdge[]) {
-  const pending = new Set(Object.keys(nodes));
-  while (pending.size > 0) {
-    const ready = Array.from(pending).filter((n) => edges.every((e) => e.to !== n || !pending.has(e.from)));
-    if (ready.length === 0) throw new Error('Cyclic or unsatisfied dependencies');
-    for (const n of ready) {
-      await nodes[n]();
-      pending.delete(n);
-    }
-  }
+  ApiLambda:
+    Type: AWS::Lambda::Function
+    DependsOn: [Storage]
+    Properties:
+      FunctionName: example-api
+      Runtime: nodejs20.x
+      Handler: index.handler
+      Role: !GetAtt LambdaRole.Arn
+      Code:
+        ZipFile: |
+          exports.handler = async () => ({ statusCode: 200, body: 'ok' })
+
+  LambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal: { Service: [ lambda.amazonaws.com ] }
+            Action: sts:AssumeRole
+
+  ApiGateway:
+    Type: AWS::ApiGateway::RestApi
+    Properties:
+      Name: example-api
+
+  LambdaPermission:
+    Type: AWS::Lambda::Permission
+    DependsOn: [ApiLambda, ApiGateway]
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !Ref ApiLambda
+      Principal: apigateway.amazonaws.com
+```
+
+Rehearse safely:
+
+```bash
+# From CDK: synth then review plan operations via a change set
+cdk synth > template.yaml
+aws cloudformation create-change-set \
+  --stack-name example-stack \
+  --change-set-name dryrun \
+  --change-set-type UPDATE \
+  --template-body file://template.yaml
+aws cloudformation describe-change-set \
+  --stack-name example-stack \
+  --change-set-name dryrun | cat
+
+# Optional: use DeletionPolicy/UpdateReplacePolicy on stateful resources
+# to constrain blast radius during rehearsals
+```
+
+Terraform plan-time rehearsal (the plan is the DAG, make dependencies explicit):
+
+```hcl
+resource "aws_dynamodb_table" "storage" {
+  name         = "example-storage"
+  billing_mode = "PAY_PER_REQUEST"
+  hash_key     = "pk"
+  attribute { name = "pk" type = "S" }
+}
+
+resource "aws_lambda_function" "api" {
+  function_name = "example-api"
+  role          = aws_iam_role.lambda.arn
+  runtime       = "nodejs20.x"
+  handler       = "index.handler"
+  filename      = "dist/api.zip"
+  depends_on    = [aws_dynamodb_table.storage]  # order in the plan
+  lifecycle { create_before_destroy = true }
+}
+
+resource "aws_api_gateway_rest_api" "api_gw" { name = "example-api" }
+
+resource "aws_lambda_permission" "allow_invoke" {
+  statement_id  = "AllowAPIGatewayInvoke"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.api.arn
+  principal     = "apigateway.amazonaws.com"
+  depends_on    = [aws_lambda_function.api, aws_api_gateway_rest_api.api_gw]
 }
 ```
 
-This simulates plan-time order; add timeouts/retries to mimic failures and test compensations.
+Rehearse and visualize:
+
+```bash
+terraform init && terraform plan -out=plan.bin
+terraform show -json plan.bin > plan.json   # inspect ordered operations
+terraform graph -type=plan | dot -Tpng > plan.png  # visualize DAG
+```
+
+Note: Plans encode order and basic safety. Compensations/rollbacks beyond what CFN/TF provide should be modeled in code (custom resources) and validated in rehearsal environments.
 
 ***
 
