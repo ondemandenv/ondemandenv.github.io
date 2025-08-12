@@ -1,0 +1,29 @@
+flowchart LR
+  subgraph Domain_First_Posture
+    direction TB
+    DOMA[Domain A APIs]
+    DOMB[Domain B APIs]
+    MESH[Mesh: in-domain mTLS/observability]
+    GW[Gateway: in-domain ingress/BFF]
+    CONTRACTS[Explicit Contracts,prefer async]
+    DOMA --- MESH
+    DOMB --- MESH
+    DOMA --- GW
+    DOMA --> CONTRACTS <-- DOMB
+    note1[Posture: composite/serving inside domain]
+  end
+
+  subgraph Network_First_Posture
+    direction TB
+    CGW[Central Gateway as Orchestrator]
+    CMESH[Mesh with global retries/timeouts]
+    SRVA[Service A]
+    SRVB[Service B]
+    CGW --> CMESH --> SRVA
+    CGW --> SRVB
+    note2["Posture: extending/overriding across domains \n\u2192 wide blast radius, blurred rollback"]
+  end
+
+  Domain_First_Posture -. small blast radius .-> Network_First_Posture
+  Network_First_Posture -. coupling & coordination tax .-> Domain_First_Posture
+
