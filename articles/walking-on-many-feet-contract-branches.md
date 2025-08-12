@@ -15,9 +15,9 @@ keywords: ["ONDEMANDENV core capability", "contract branches", "semantic evoluti
 
 ---
 
-## 🦶 **MERGE HELL SCANDAL SERIES** - Article 6 of 6 (Implementation Bridge)
+## 🦶 **MERGE HELL SCANDAL SERIES** — Implementation Bridge
 
-*This series finale bridges the philosophical insights from the 5-part MERGE HELL SCANDAL SERIES to the actual ONDEMANDENV platform implementation. After exposing the crisis and revealing the philosophy, we now show how the platform transforms theory into systematic architectural evolution through real code.*
+*This implementation bridge connects the 5‑part MERGE HELL SCANDAL SERIES to the actual ONDEMANDENV platform implementation. After exposing the crisis and revealing the philosophy, we now show how the platform transforms theory into systematic architectural evolution through real code.*
 
 **→ Foundation:** [**The Crisis**] [The Ops Incompetence Behind Merge Hell](https://ondemandenv.dev/articles/merge-hell-myth-x-ops-contamination/)  
 **→ Intelligence:** [**The Signals**] [Branch Conflicts as Architecture](https://ondemandenv.dev/articles/branch-conflicts-architectural-signals/)  
@@ -34,39 +34,14 @@ In human gait, only one foot carries the body's full weight at any moment—the 
 
 **Your current contract version becomes the platform's immutable foundation:**
 
-```typescript
-// REAL ONDEMANDENV CONTRACT - Coffee Shop Order Manager
-// From: /mnt/d/odmd-sbx/_contractsLib-sbx/lib/repos/coffee-shop/coffee-shop-order-manager-cdk.ts
-export class CoffeeShopOrderManagerEnver extends OdmdEnverCdk {
-    constructor(owner: CoffeeShopOrderManagerCdk, targetAWSAccountID: string,
-                targetAWSRegion: string, targetRevision: SRC_Rev_REF) {
-        super(owner, targetAWSAccountID, targetAWSRegion, targetRevision);
-
-        // REAL ONDEMANDENV CROSS-REFERENCE CONSUMERS (load-bearing dependencies)
-        const foundationCdk = owner.contracts.coffeeShopFoundationCdk.theOne;
-        this.eventBus = new OdmdCrossRefConsumer(this, 'eventBus', foundationCdk.eventBusSrc);
-        this.eventSrc = new OdmdCrossRefConsumer(this, 'eventSrc', foundationCdk.eventBusSrc.source);
-        this.configTableName = new OdmdCrossRefConsumer(this, 'configTableName', foundationCdk.configTableName);
-        this.countTableName = new OdmdCrossRefConsumer(this, 'countTableName', foundationCdk.countTableName);
-    }
-
-    // REAL PLATFORM-MANAGED DEPENDENCIES (immutable references)
-    readonly eventBus: OdmdCrossRefConsumer<CoffeeShopOrderManagerEnver, CoffeeShopFoundationEnver>;
-    readonly eventSrc: OdmdCrossRefConsumer<CoffeeShopOrderManagerEnver, CoffeeShopFoundationEnver>;
-    readonly configTableName: OdmdCrossRefConsumer<CoffeeShopOrderManagerEnver, CoffeeShopFoundationEnver>;
-    readonly countTableName: OdmdCrossRefConsumer<CoffeeShopOrderManagerEnver, CoffeeShopFoundationEnver>;
-}
-
-// REAL ONDEMANDENV BUILD MANAGEMENT
-export class CoffeeShopOrderManagerCdk extends OdmdBuild<OdmdEnverCdk> {
-    protected initializeEnvers(): void {
-        const coffeeF = this.contracts.coffeeShopFoundationCdk.theOne;
-        // Platform automatically creates environments based on SRC_Rev_REF
-        this._envers = [new CoffeeShopOrderManagerEnver(this, 
-            coffeeF.targetAWSAccountID, 
-            coffeeF.targetAWSRegion,
-            new SRC_Rev_REF('b', 'master'))];
-    }
+```ts
+// Load‑bearing enver consumes stable producers from foundation
+class OrderManagerEnver extends Enver {
+  constructor(rev: SRC_Rev_REF) {
+    super(rev)
+    this.eventBus = consume(foundation.eventBus)
+    this.configTable = consume(foundation.configTable)
+  }
 }
 ```
 
@@ -88,59 +63,14 @@ export class CoffeeShopOrderManagerCdk extends OdmdBuild<OdmdEnverCdk> {
 ### ONDEMANDENV Branch Registration (Fully Automated)
 
 ```bash
-# Real ONDEMANDENV Environment Creation (As Documented in CLAUDE.md)
+# New exploration enver from a branch
 git checkout -b feature/graphql-optimization
 git commit -m "odmd: create@main"
-
-# Platform uses SRC_Rev_REF system to create environments:
 ```
 
-```typescript
-// Real ONDEMANDENV Environment Management
-// From: OndemandContracts.getTargetEnver() method
-export abstract class OndemandContracts {
-    getTargetEnver(buildId = process.env['ODMD_build_id'], enverRef = OndemandContracts.REV_REF_value) {
-        // Real environment variables: ODMD_build_id, ODMD_rev_ref
-        if (!buildId || !enverRef) {
-            throw new Error(`Environment resolution failed: ${buildId} || ${enverRef}`);
-        }
-        
-        // Platform finds the build by ID
-        const b = this.odmdBuilds.find(b => b.buildId == buildId)
-        if (!b) {
-            throw new Error(`can't find build by id:${buildId}`)
-        }
-
-        // Platform matches environment by revision reference
-        const found = b.envers.find(e => e.targetRevision.toPathPartStr() == enverRef)
-        if (found) {
-            if (found.targetRevision.type == "b") {
-                // Platform validates current branch matches target
-                const currentBranch = execSync('git rev-parse --abbrev-ref HEAD').toString().trim()
-                if (currentBranch != found.targetRevision.value) {
-                    console.warn(`Branch mismatch: ${currentBranch} != ${found.targetRevision.value}`)
-                }
-            } else {
-                // Platform validates current tag matches target
-                const currentTags = execSync('git tag --points-at HEAD').toString().trim().split('\n')
-                if (!currentTags.find(t => t == found.targetRevision.value)) {
-                    console.warn(`Tag mismatch: ${currentTags} not including ${found.targetRevision.value}`)
-                }
-            }
-            return found
-        }
-        throw new Error(`can't find envers by ref:${enverRef} in buildId:${buildId}`)
-    }
-}
-
-// Real Branch/Tag Reference System
-export class SRC_Rev_REF {
-    constructor(public type: "b" | "t", public value: string) {}
-    
-    toPathPartStr(): string {
-        return `${this.type}..${this.value}`  // Real format: "b..master" or "t..v1.0.0"
-    }
-}
+```ts
+// Target an enver by build and revision reference (branch/tag)
+const enver = contracts.getTargetEnver('order-manager', 'b..feature-x')
 ```
 
 **Real ONDEMANDENV Platform Lifecycle (From Implementation):**
@@ -186,76 +116,50 @@ graph TD
     style L fill:#e0f2f1
 ```
 
-### A. Merge & Replace (Winner Takes Ground)
-**The Clean Victory**: Branch passes all consumer tests and demonstrably beats parent on KPIs.
+### A. Merge & Replace (Enver Promotion)
+**The Clean Victory**: New enver becomes the load-bearing deployment unit.
 
-```typescript
-// Before: v2.1.3 (REST only)
-Products: {
-  orderAPI: RestEndpoint<OrderRequest, OrderResponse>
-}
-
-// After: v2.2.0 (GraphQL replaces REST - clean migration)
-Products: {
-  orderAPI: GraphQLEndpoint<OrderSchema, QueryResolvers>
-}
+```ts
+// Promotion: new enver becomes the load‑bearing one, mapping preserved
+theOne = new OrderManagerEnver(new SRC_Rev_REF('t','v2.2.0'))
 ```
 
 **Promotion Criteria:**
-- Zero consumer regression
-- Performance improvements > 20%
-- Operational complexity unchanged or reduced
-- Team consensus through governance process
+- All consumer envers continue to resolve context mapping
+- Performance improvements validated across complete deployment unit
+- All cross-reference producers/consumers maintain compatibility
+- Platform validation through `odmdValidate()` passes
 
-### B. Merge & Extend (Co-Existing Engines)
-**The Hybrid Solution**: Both approaches prove valuable for different use cases.
+### B. Merge & Extend (Enver Enhancement)
+**The Additive Evolution**: New enver adds capabilities while preserving existing context mapping.
 
-```typescript
-// Hybrid contract supporting multiple protocols
-Products: {
-  // Mobile clients prefer GraphQL (bandwidth-optimized)
-  orderQueryAPI: GraphQLEndpoint<OrderSchema, QueryResolvers>
-  
-  // Legacy systems continue using REST (stability-optimized)  
-  orderSubmissionAPI: RestEndpoint<OrderRequest, OrderResponse>
-  
-  // Both emit identical events
-  orderStatusEvents: EventBridgePattern<OrderStatusChanged>
-}
+```ts
+// Extend: add producers without breaking existing consumers
+foundation.metricsTable = produce('metrics')
 ```
 
-**Example**: Netflix's hybrid REST+gRPC architecture where external APIs use REST while internal microservice communication uses gRPC for performance.
+**Example**: Foundation service adds analytics capabilities in new enver while maintaining all existing producer contracts for backward compatibility.
 
-### C. Co-Exist Long-Term (Plural Species)
-**The Multi-Tenant Reality**: Different consumer ecosystems prefer different contract flavors indefinitely.
+### C. Co-Exist Long-Term (Multiple Envers)
+**The Multi-Enver Reality**: Different deployment environments serve different consumer needs simultaneously.
 
-```typescript
-// Blue/Green API versioning
-Products: {
-  orderAPI_v2: RestEndpoint<OrderRequestV2, OrderResponseV2>  // Legacy consumers
-  orderAPI_v3: RestEndpoint<OrderRequestV3, OrderResponseV3>  // New consumers
-  
-  // Consumer choice through routing headers
-  routingStrategy: "Accept-Version: application/vnd.orderservice.v2+json"
-}
+```ts
+// Co‑exist: stable tag + exploratory branch run in parallel
+envers = [ new OrderManagerEnver(t('v2.1.0')), new OrderManagerEnver(b('feature-v2.2')) ]
 ```
 
-**Governance Pattern**: Sunset timeline negotiated but not enforced—market forces determine adoption velocity.
+**Governance Pattern**: Multiple complete deployment environments coexist, each serving different consumer segments through platform-managed routing.
 
 ### D. Rejected/Culled (Failed Experiments)
-**The Learning Archive**: Experiments that fail provide crucial intelligence for future architectural decisions.
+**The Learning Archive**: Keep only essentials—reason, a couple of lessons, and what to try next.
 
 ```yaml
-# Archived branch metadata preserved
-archivalReason: "Performance regression - GraphQL resolver N+1 queries"
-lessonsLearned:
-  - "ORM lazy loading incompatible with GraphQL resolver patterns"
-  - "Database query optimization required before GraphQL viable"
-  - "REST endpoint batching may be superior interim solution"
-relatedWork:
-  futureExperiments:
-    - "Database query optimization (Q2 2025)"
-    - "GraphQL with DataLoader pattern (Q3 2025)"
+archivalReason: "Regression under load"
+lessons:
+  - "Resolver N+1 surfaced"
+next:
+  - "Optimize queries"
+  - "Evaluate batching"
 ```
 
 ### E. Speciation (Architectural Fission)
@@ -322,230 +226,24 @@ echo $ODMD_rev_ref     # Current revision reference (b..feature-branch)
 ```
 
 ### 2. ONDEMANDENV's Contract Intelligence + Consumer Replay
-```typescript
-// Real ONDEMANDENV Contract Analysis (From Implementation)
-// Platform uses OdmdCrossRefConsumer to validate all dependencies
-export class OndemandContracts {
-    public getRefConsumerFromOdmdRef(s: string): OdmdCrossRefConsumer<AnyOdmdEnVer, AnyOdmdEnVer> {
-        if (!s.startsWith(OdmdCrossRefConsumer.OdmdRef_prefix + "${")) {
-            throw new Error('Only OdmdRefConsumer allowed')
-        }
-
-        const targetPath = s.substring(OdmdCrossRefConsumer.OdmdRef_prefix.length + 2, s.indexOf("}"));
-
-        // Platform searches all builds for cross-references
-        for (const b of this.odmdBuilds) {
-            const f = b.node.findAll().find(e => e.node.path == targetPath)
-            if (f) {
-                return f as OdmdCrossRefConsumer<AnyOdmdEnVer, AnyOdmdEnVer>;
-            }
-        }
-        throw new Error('Cross-reference not found: ' + targetPath)
-    }
-
-    // Real validation method that prevents deployment of broken contracts
-    public odmdValidate() {
-        // Ensure cross-region references are not allowed
-        this.node.findAll().filter(enver => enver instanceof OdmdCrossRefConsumer).forEach(enver => {
-            const c = enver as OdmdCrossRefConsumer<AnyOdmdEnVer, AnyOdmdEnVer>
-            if (c.owner.targetAWSRegion != c.producer.owner.targetAWSRegion) {
-                throw new Error(`Cross region not supported: consumer ${c.owner.node.path} in ${c.owner.targetAWSRegion}, producer ${c.producer.node.path} in ${c.producer.owner.targetRevision}`)
-            }
-        })
-
-        // Validate all builds have environments
-        this._builds.forEach(b => {
-            if (!(b instanceof OdmdBuildDefaultVpcRds || b instanceof OdmdBuildDefaultKubeEks)
-                && (b.envers == undefined || b.envers.length == 0)) {
-                throw new Error(b.buildId + ' has 0 envers defined!')
-            }
-        })
-    }
-}
-
-// Example of real consumer impact analysis from coffee shop implementation
-const orderManagerDependencies = {
-    eventBus: "foundation.eventBusSrc",           // EventBridge dependency
-    eventSrc: "foundation.eventBusSrc.source",   // Event source
-    configTable: "foundation.configTableName",   // DynamoDB config
-    countTable: "foundation.countTableName"      // DynamoDB counters
-}
-// Platform automatically validates these exist before deployment
+```ts
+// Validate cross‑service wiring and surface consumer impacts
+contracts.odmdValidate()
 ```
 
-### 3. Real ONDEMANDENV Validation (Through CDK and Testing)
+### 3. Validation Flow (Essentials)
 ```bash
-# Real ONDEMANDENV validation commands from CLAUDE.md
-# TypeScript/CDK Projects validation
-npm run build    # Compiles all contracts and validates TypeScript
-npm run test     # Runs Jest tests with ts-jest
-npm run watch    # Watch mode for development
-
-# CDK-specific validation
-npm run cdk-ls   # List CDK stacks - validates stack definitions
-npm run cdk-sa   # Synth all stacks - validates CloudFormation
-npx cdk synth    # Synthesize CloudFormation templates
-npx cdk deploy   # Deploy stacks with validation
-
-# Contract library validation
-npm run generate-exports  # Generates and validates contract exports
-
-# Cross-account deployment validation
-# Platform validates:
-# - Proper IAM roles exist in target accounts
-# - Account IDs in contract definitions are valid
-# - Region consistency across related services
-# - Contract dependencies resolved at deployment time
+npm run build && npm run test && npm run cdk-sa && npx cdk deploy
 ```
 
-```typescript
-// Real Test Configuration (from actual codebase)
-// jest.config.js in multiple projects
-module.exports = {
-  preset: 'ts-jest',
-  testEnvironment: 'node',
-  testMatch: ['**/tests/**/*.test.ts'],
-  collectCoverage: true,
-  verbose: true
-};
-
-// Real validation from coffee-shop--order-manager tests
-import { CoffeeShopOrderManagerCdk } from '../lib/coffee-shop--order-manager-stack'
-
-describe('CoffeeShopOrderManager', () => {
-  test('validates contract dependencies', () => {
-    // Platform ensures EventBridge, DynamoDB dependencies exist
-    expect(orderManager.eventBus).toBeDefined()
-    expect(orderManager.configTableName).toBeDefined()
-    expect(orderManager.countTableName).toBeDefined()
-  })
-
-  test('cross-reference validation', () => {
-    // Platform validates cross-service references work
-    expect(() => orderManager.validateCrossRefs()).not.toThrow()
-  })
-})
-```
-
-### 4. Real ONDEMANDENV Build Status (From Implementation)
+### 4. Build Status (Essentials)
 ```bash
-# Real ONDEMANDENV Build Status (From Implementation)
-# Environment variables that track platform state
-echo $ODMD_build_id     # Current build identifier
-echo $ODMD_rev_ref      # Current revision reference (b..branch or t..tag)
-echo $CDK_DEFAULT_REGION      # Target AWS region
-echo $CDK_DEFAULT_ACCOUNT     # Target AWS account
-echo $CODEBUILD_BUILD_ARN     # CodeBuild context (if in CI/CD)
-
-# Real platform status from OndemandContractsSandbox
-const platformStatus = {
-  accounts: {
-    central: '590184031795',      // Platform orchestration
-    networking: '590183907424',   // Shared networking
-    workspace0: '975050243618',   // Platform services
-    workspace1: '590184130740'    // Application services
-  },
-  
-  githubRepos: {
-    coffeeShopFoundation: 'ondemandenv/coffee-shop--foundation',
-    coffeeShopOrderManager: 'ondemandenv/coffee-shop--order-manager',
-    coffeeShopOrderProcessor: 'ondemandenv/coffee-shop--order-processor',
-    networking: 'ondemandenv/networking',
-    odmdEks: 'ondemandenv/odmd-eks',
-    contractsSandbox: 'ondemandenv/odmd-contracts-sandbox'
-  },
-  
-  // Real validation results from odmdValidate()
-  validationResults: {
-    crossRegionReferences: 'VALIDATED - No cross-region dependencies',
-    duplicateBuilds: 'VALIDATED - No duplicate environments',
-    environmentCoverage: 'VALIDATED - All builds have environments',
-    contractIntegrity: 'VALIDATED - All OdmdCrossRefConsumer references valid'
-  },
-  
-  // Real deployment status
-  deploymentStatus: {
-    cdkStacks: 'DEPLOYED - All CloudFormation stacks successful',
-    crossAccountIAM: 'CONFIGURED - Multi-account roles active',
-    serviceDependencies: 'RESOLVED - EventBridge + DynamoDB + Lambda connected',
-    environmentIsolation: 'ACTIVE - Complete AWS account separation'
-  }
-}
-
-# Platform provides real CDK output for service discovery
-# From: coffee-shop--order-manager CloudFormation outputs
-const serviceOutputs = {
-  orderApiEndpoint: 'https://abc123.execute-api.us-west-1.amazonaws.com/prod',
-  orderStateMachineArn: 'arn:aws:states:us-west-1:590184130740:stateMachine:OrderWorkflow',
-  eventBridgeArn: 'arn:aws:events:us-west-1:590184130740:event-bus/coffee-shop-events',
-  configTableName: 'coffee-shop-config-b-master',
-  countTableName: 'coffee-shop-count-b-master'
-}
+echo $ODMD_build_id; echo $ODMD_rev_ref; echo $CDK_DEFAULT_ACCOUNT; echo $CDK_DEFAULT_REGION
 ```
 
-### 5. Real ONDEMANDENV Contract Governance
-**Contract changes happen through TypeScript modifications and PR reviews:**
-
-```typescript
-// Real ONDEMANDENV Contract Evolution Process
-// From: _contractsLib-sbx/lib/repos/coffee-shop/coffee-shop-order-manager-cdk.ts
-
-// Step 1: Developer modifies contract in TypeScript
-export class CoffeeShopOrderManagerEnver extends OdmdEnverCdk {
-    constructor(owner: CoffeeShopOrderManagerCdk, targetAWSAccountID: string,
-                targetAWSRegion: string, targetRevision: SRC_Rev_REF) {
-        super(owner, targetAWSAccountID, targetAWSRegion, targetRevision);
-
-        const foundationCdk = owner.contracts.coffeeShopFoundationCdk.theOne;
-        
-        // EXISTING DEPENDENCIES (load-bearing - cannot change)
-        this.eventBus = new OdmdCrossRefConsumer(this, 'eventBus', foundationCdk.eventBusSrc);
-        this.configTableName = new OdmdCrossRefConsumer(this, 'configTableName', foundationCdk.configTableName);
-        
-        // NEW DEPENDENCY ADDED (safe evolution)
-        this.metricsTable = new OdmdCrossRefConsumer(this, 'metricsTable', foundationCdk.metricsTableName);
-    }
-    
-    // Platform enforces type safety - cannot break existing contracts
-    readonly eventBus: OdmdCrossRefConsumer<CoffeeShopOrderManagerEnver, CoffeeShopFoundationEnver>;
-    readonly configTableName: OdmdCrossRefConsumer<CoffeeShopOrderManagerEnver, CoffeeShopFoundationEnver>;
-    readonly metricsTable: OdmdCrossRefConsumer<CoffeeShopOrderManagerEnver, CoffeeShopFoundationEnver>; // NEW
-}
-
-// Step 2: Platform validates through compilation and tests
-// npm run build  # TypeScript compilation catches breaking changes
-// npm run test   # Jest tests validate contract integrity
-
-// Step 3: PR Review Process (Human + Platform)
-// - Platform: TypeScript compiler prevents breaking changes
-// - Platform: odmdValidate() ensures cross-references exist
-// - Platform: CDK synth validates infrastructure changes
-// - Human: Review architectural coherence and business logic
-
-// Step 4: Platform deploys through CDK
-// npm run cdk-sa   # Synth all stacks
-// npx cdk deploy   # Deploy to target AWS accounts
-```
-
-```markdown
-## Real Contract Evolution: Coffee Shop Order Manager Enhancement
-
-### Platform Validation Results:
-✅ **TypeScript Compilation**: No breaking changes detected
-✅ **Cross-Reference Validation**: metricsTable dependency exists in foundation
-✅ **CDK Synthesis**: CloudFormation templates valid
-✅ **Multi-Account Deployment**: IAM roles configured for workspace1 account
-
-### Human Review (Platform-Assisted):
-- ✅ **Service Boundary**: New metrics table stays within order management domain
-- ✅ **Dependency Direction**: Foundation → Order Manager (correct)
-- ✅ **Resource Naming**: Follows ONDEMANDENV conventions (odmd- prefix)
-
-### Deployment Result:
-- ✅ **Zero Downtime**: New dependency added without service interruption
-- ✅ **Environment Isolation**: Change deployed to b..feature-branch environment first
-- ✅ **Rollback Ready**: Platform maintains previous environment for instant revert
-```
+### 5. Contract Governance (Essentials)
+- Change contracts in code; compiler + validation block breaking changes
+- PRs review semantics; deploy when evidence is green
 
 ---
 
@@ -622,20 +320,12 @@ const accounts = {
 }
 ```
 
-**ONDEMANDENV Platform Metrics** (Automatically Collected):
-- **Mobile bandwidth usage**: ↓ 60% (platform measured via traffic analysis)
-- **Mobile development velocity**: ↑ 3x (platform tracked via deployment frequency)
-- **Legacy system stability**: → 100% (platform guaranteed via contract immutability)
-- **Operational complexity**: ↑ 12% (platform reduced through automation)
-- **Platform deployment time**: 3.2 minutes (branch → production)
-- **Zero-downtime transitions**: 7/7 successful rollouts
-- **Automatic rollback capability**: < 30 seconds recovery time
+**Observed outcomes (examples):**
+- Lower client bandwidth; faster iteration cycles
+- Production stability preserved during exploration
+- Zero‑downtime transitions with quick rollback paths
 
-**ONDEMANDENV Decision**: **MERGE_AND_EXTEND** with platform-managed coexistence
-- Platform handles protocol routing automatically
-- Platform maintains both REST and GraphQL semantic equivalence
-- Platform provides unified monitoring across both interfaces
-- Platform enables gradual consumer migration at their own pace
+Decision: **Merge & Extend** with coexistence (routing, equivalence, gradual migration)
 
 ### Vignette 2: The Speciation Evolution (ONDEMANDENV-Orchestrated Split)
 
@@ -726,99 +416,22 @@ export class OndemandContractsSandbox extends OndemandContracts {
 // - Order Services: Business logic + workflow (workspace1)
 ```
 
-**ONDEMANDENV Speciation Intelligence**:
-- **Performance Analysis**: Platform detected CPU/I/O split (tax vs billing workloads)
-- **Compliance Requirements**: Platform identified different audit/security requirements
-- **Team Boundaries**: Platform mapped organizational ownership to service boundaries
-- **Consumer Impact**: Platform guaranteed zero disruption during transition
+Speciation drivers:
+- Performance split, compliance separation, clear team boundaries, zero‑disruption goals
 
-**Platform-Measured Speciation Results**:
-- **Billing service performance**: ↑ 5.2x improvement (platform removed tax bottleneck)
-- **Tax compliance accuracy**: ↑ 43% (platform enabled dedicated regulatory focus)
-- **Cross-service complexity**: ↑ 8% (platform automation reduced coordination overhead)
-- **Speciation deployment time**: 4.7 minutes (platform-orchestrated split)
-- **Consumer migration**: 0 breaking changes (platform maintained backward compatibility)
-- **Monitoring coverage**: 100% (platform auto-configured service observability)
+Results:
+- Faster billing paths, focused compliance ownership, bounded complexity, no breaking changes
 
-**ONDEMANDENV Achievement**: **SUCCESSFUL SPECIATION**
-- Platform created two optimized, domain-focused services
-- Platform maintained semantic equivalence throughout transition
-- Platform enabled independent scaling and team ownership
-- Platform provides ongoing governance for service evolution
+Outcome: Two domain‑focused services; semantic equivalence maintained; independent scaling and ownership
 
 ---
 
 ## ONDEMANDENV's Built-In Tooling: Platform Support for Branch Ecosystems
 
 ### Real ONDEMANDENV Cross-Service Integration
-```typescript
-// Real ONDEMANDENV integration through OdmdCrossRefConsumer
-// From actual coffee shop implementation
-export class CoffeeShopOrderManagerEnver extends OdmdEnverCdk {
-    constructor(owner: CoffeeShopOrderManagerCdk, targetAWSAccountID: string,
-                targetAWSRegion: string, targetRevision: SRC_Rev_REF) {
-        super(owner, targetAWSAccountID, targetAWSRegion, targetRevision);
-
-        const foundationCdk = owner.contracts.coffeeShopFoundationCdk.theOne;
-        
-        // REAL ONDEMANDENV CROSS-REFERENCE SYSTEM
-        // Platform automatically resolves these at deployment time
-        this.eventBus = new OdmdCrossRefConsumer(this, 'eventBus', foundationCdk.eventBusSrc);
-        this.eventSrc = new OdmdCrossRefConsumer(this, 'eventSrc', foundationCdk.eventBusSrc.source);
-        this.configTableName = new OdmdCrossRefConsumer(this, 'configTableName', foundationCdk.configTableName);
-        this.countTableName = new OdmdCrossRefConsumer(this, 'countTableName', foundationCdk.countTableName);
-    }
-
-    // Platform enforces type safety across service boundaries
-    readonly eventBus: OdmdCrossRefConsumer<CoffeeShopOrderManagerEnver, CoffeeShopFoundationEnver>;
-    readonly eventSrc: OdmdCrossRefConsumer<CoffeeShopOrderManagerEnver, CoffeeShopFoundationEnver>;
-    readonly configTableName: OdmdCrossRefConsumer<CoffeeShopOrderManagerEnver, CoffeeShopFoundationEnver>;
-    readonly countTableName: OdmdCrossRefConsumer<CoffeeShopOrderManagerEnver, CoffeeShopFoundationEnver>;
-}
-
-// Real service integration validation from OndemandContracts
-export abstract class OndemandContracts {
-    public getRefConsumerFromOdmdRef(s: string): OdmdCrossRefConsumer<AnyOdmdEnVer, AnyOdmdEnVer> {
-        if (!s.startsWith(OdmdCrossRefConsumer.OdmdRef_prefix + "${")) {
-            throw new Error('Only OdmdRefConsumer allowed')
-        }
-
-        const targetPath = s.substring(OdmdCrossRefConsumer.OdmdRef_prefix.length + 2, s.indexOf("}"));
-
-        // Platform searches all builds for the referenced service
-        for (const b of this.odmdBuilds) {
-            const f = b.node.findAll().find(e => e.node.path == targetPath)
-            if (f) {
-                return f as OdmdCrossRefConsumer<AnyOdmdEnVer, AnyOdmdEnVer>;
-            }
-        }
-        throw new Error('Cross-reference not found: ' + targetPath)
-    }
-
-    // Platform validates all cross-service references
-    public odmdValidate() {
-        this.node.findAll().filter(enver => enver instanceof OdmdCrossRefConsumer).forEach(enver => {
-            const c = enver as OdmdCrossRefConsumer<AnyOdmdEnVer, AnyOdmdEnVer>
-            // Platform prevents cross-region service dependencies
-            if (c.owner.targetAWSRegion != c.producer.owner.targetAWSRegion) {
-                throw new Error(`Cross region not supported: consumer ${c.owner.node.path} in ${c.owner.targetAWSRegion}, producer ${c.producer.node.path} in ${c.producer.owner.targetRevision}`)
-            }
-        })
-    }
-}
-
-// Real deployment integration across AWS accounts
-// From OndemandContractsSandbox implementation
-const realAccountMapping = {
-    central: '590184031795',      // ContractsLib orchestration
-    networking: '590183907424',   // VPC + Transit Gateway 
-    workspace0: '975050243618',   // Platform services (EKS, RDS)
-    workspace1: '590184130740'    // Application services (Coffee shop)
-}
-
-// Platform automatically creates CloudFormation cross-stack references
-// Example: Order Manager → Foundation EventBridge ARN
-// Resolved at deployment time through AWS CloudFormation Exports/Imports
+```ts
+// Cross‑references wire producers → consumers; validation prevents bad links
+consume(foundation.eventBus)
 ```
 
 ### Real ONDEMANDENV Multi-Account Deployment Management
@@ -961,150 +574,72 @@ const environmentCommands = {
 
 ---
 
-## Cultural Transformation: How ONDEMANDENV Changes Everything
+## From Real Projects: Platform Practices You Should Apply
 
-### ONDEMANDENV Makes Branch Proliferation a Competitive Advantage
-**Old Reality**: "Too many branches create chaos and technical debt."  
-**ONDEMANDENV Reality**: "Multiple explorations create innovation acceleration when the platform manages lineage and evaluation automatically."
+The platform docs in `_platforms/` capture practices we use in real deployments. Apply these when evolving contracts and branches:
 
-```typescript
-// ONDEMANDENV transforms branch proliferation into systematic innovation
-interface ONDEMANDENVServiceEvolution {
-  platformManagedStability: ProductionVersion    // Platform-guaranteed load-bearing foot
-  platformOrchestratedExploration: SemanticHypothesis[]  // Platform-managed moving feet
-  
-  platformGovernance: {
-    automaticLineageTracking: "Platform maintains complete branch genealogy"
-    intelligentEvaluation: "Platform generates evidence-based scorecards"
-    dataDrivernDecisions: "Platform removes politics from architecture"
-    zeroOverheadManagement: "Platform handles all coordination complexity"
-  }
-  
-  businessImpact: {
-    innovationVelocity: "Teams explore 5x more architectural options safely"
-    riskElimination: "Platform prevents production destabilization"
-    learningAcceleration: "Platform captures and shares architectural insights"
-    competitiveAdvantage: "Faster architectural evolution than competitors"
-  }
-}
-```
+- **Constellations (dev/main/mock)**
+  - Select constellation via `SRC_Rev_REF('b','dev'|'main'|'mock')`; do not encode constellation names in stack IDs/resource names. Constellations emerge from Enver wiring.
+  - Maintain a dedicated `mock` constellation for contract/BDD validation.
 
-### ONDEMANDENV Makes Breaking Changes Structurally Impossible
-**The Platform Guarantee**: ONDEMANDENV prevents breaking changes to load-bearing contracts through automated enforcement—it's literally impossible to destabilize production.
+- **Dynamic clone workflow (per feature branch)**
+  - Create: commit with `odmd: create@dev`; Delete: `odmd: delete` when finished.
+  - Each clone provisions an isolated, complete SDLC environment with unique endpoints.
+
+- **Two‑layer schema architecture (contract surface vs implementation schemas)**
+  - Publish concrete addresses via `OdmdShareOut` (contract surface). Consumers resolve with `getSharedValue(...)`.
+  - Deploy schema artifacts during build; generate types for consumers.
 
 ```typescript
-// ONDEMANDENV PREVENTS THIS - Platform blocks breaking changes automatically
-interface OrderService_v2_1_3 {  // PLATFORM-PROTECTED PRODUCTION CONTRACT
-  readonly platformEnforced: true
-  readonly breakingChangesBlocked: true
-  
-  Products: {
-    orderAPI: RestEndpoint<OrderRequest, OrderResponse>
-//  ^ Platform prevents any mutations that break consumer contracts
-//  ^ Attempting this triggers: "❌ ONDEMANDENV: Breaking change detected - PR blocked"
-  }
-}
+// Producer: deploy schema artifact at build/deploy time
+import { deploySchema, SchemaTypeGenerator } from '@org/contracts-lib/utils'
 
-// ONDEMANDENV ENABLES THIS - Platform facilitates safe evolution
-interface OrderService_vNext_2_2_0 {  // PLATFORM-MANAGED EXPLORATION
-  readonly platformValidated: true
-  readonly safeEvolution: true
-  readonly automatedTesting: true
-  
-  Products: {
-    // Platform guarantees stability of existing interfaces
-    orderAPI: RestEndpoint<OrderRequest, OrderResponse>  // IMMUTABLE
-    
-    // Platform enables safe addition of new capabilities
-    orderGraphQL: GraphQLEndpoint<OrderSchema, Resolvers>  // ADDITIVE
-  }
-  
-  platformGuarantees: {
-    noConsumerBreakage: "Platform validates all existing consumers continue working"
-    semanticEquivalence: "Platform ensures identical business outcomes"
-    performanceBaseline: "Platform prevents performance regressions"
-    instantRollback: "Platform provides immediate revert capability"
-  }
-}
+// In producer stack (publishes schema URL to contract surface)
+await deploySchema(this, MyRequestSchema, this.contracts.orderApi.requestSchema)
 
-// The result: Breaking changes become structurally impossible
-class ONDEMANDENVSafetyNet {
-  @PlatformEnforced
-  preventMergeHell(): never {
-    throw new Error(
-      "ONDEMANDENV: This architectural mistake is impossible in our platform. " +
-      "Load-bearing contracts are immutable by design. " +
-      "Use branch exploration for safe evolution."
-    )
-  }
-}
+// In consumer build (generates types from upstream schema)
+await new SchemaTypeGenerator(myEnver, [this.contracts.orderApi.requestSchema]).run()
 ```
 
-### ONDEMANDENV Transforms Chaos Engineering into Branch Fitness Validation
-**Old Approach**: "Chaos engineering finds production problems we didn't know existed."  
-**ONDEMANDENV Approach**: "Chaos engineering automatically validates branch fitness before promotion—production problems become impossible."
+- **CDK app initialization pattern**
+  - Initialize org ContractsLib, then select target Enver: `contracts.getTargetEnver()`.
+  - Derive stable stack IDs via `enver.getRevStackNames()`; pass `env` using `CDK_DEFAULT_ACCOUNT/REGION`.
+  - Pin the exact same `aws-cdk-lib` version across ContractsLib and all service repos.
 
-```yaml
-# ONDEMANDENV automatically configures chaos as platform governance
-ondemandenvChaosIntelligence:
-  purpose: "Platform validates branch readiness through intelligent stress testing"
-  timing: "Automated during branch evaluation - prevents production incidents"
-  automation: "Platform configures scenarios based on your architecture"
-  
-  platformFitnessValidation:
-    - test: "Branch maintains consumer SLAs under simulated Black Friday load"
-      result: "Platform measured: 99.97% SLA compliance (exceeds production baseline)"
-    - test: "Graceful degradation identical to production patterns"
-      result: "Platform validated: Circuit breaker behavior semantically equivalent"
-    - test: "Consumer contract preservation under extreme stress"
-      result: "Platform confirmed: Zero contract violations across 47 chaos scenarios"
-    
-  platformPreventionEngine:
-    productionSafety: "Platform only promotes branches that pass ALL chaos validation"
-    automaticRollback: "Platform reverts immediately if ANY fitness test fails"
-    zeroIncidentGoal: "Platform eliminates production chaos through pre-validation"
-    
-  businessImpact:
-    incidentReduction: "97% fewer production incidents (platform prevents deployment of unfit branches)"
-    confidenceIncrease: "Teams deploy fearlessly knowing platform validated resilience"
-    innovationAcceleration: "Chaos validation removes deployment anxiety barriers"
-```
+- **Build order and wiring rules**
+  - Construct all builds first; each build populates `_envers` only inside `initializeEnvers()`.
+  - After all builds are ready, run default wiring (e.g., `initializeDefaults()`/`wireX(...)`). Avoid cross-build consumption in constructors.
+
+- **In‑Enver Playwright BDD (optional but recommended)**
+  - Run browser BDD inside each enver post-deploy; publish artifacts/URLs via `OdmdShareOut` and gate promotions on results.
+
+- **Account structure and naming**
+  - Central + workspace accounts with cross‑account roles; resource names derive from `buildId` and Enver context (avoid hardcoded physical names).
 
 ---
 
-## Conclusion: ONDEMANDENV - The Platform That Enables Natural Software Evolution
+## Practical implications for branching and contracts
 
-We don't stop walking because one foot is in motion—we move **because** both feet take turns carrying load while the other explores new ground. **ONDEMANDENV brings this natural coordination to software systems**, enabling systematic innovation through platform-orchestrated stability and exploration.
+### Branch proliferation
+- Keep a stable production version while running parallel explorations
+- Treat branches as hypotheses with clear lineage and evaluation criteria
+- Promote or archive based on evidence, not politics
 
-**The ONDEMANDENV Load-Bearing Principle**: The platform guarantees production contract immutability while providing the stable foundation from which unlimited exploration branches safely.
+### Preventing breaking changes
+- Keep load‑bearing interfaces immutable during exploration
+- Evolve additively (introduce new endpoints/capabilities) and measure equivalence
+- Automated checks block incompatible changes; rollback remains available
 
-**The ONDEMANDENV Moving Foot Principle**: The platform enables infinite semantic hypotheses to explore simultaneously without any risk of system destabilization through intelligent lineage tracking and automated evaluation.
+### Fitness checks before promotion
+- Run stress and failure scenarios against candidate branches
+- Compare behavior against production baselines (SLOs, degradation patterns)
+- Promote only branches that meet agreed fitness criteria; keep fast rollback ready
 
-**The ONDEMANDENV Transition Principle**: The platform orchestrates the moment of weight transfer—when an exploring branch becomes the new load-bearing contract—through comprehensive evidence-based governance that eliminates politics and risk.
+---
 
-### ONDEMANDENV's Revolutionary Role: Making Software Evolution Natural
+## Conclusion
 
-**This is what ONDEMANDENV was built for**: The platform doesn't force architectural decisions—it makes healthy architectural evolution the natural, inevitable outcome:
-
-- **Platform-Enforced Contracts**: Semantic boundaries become structurally impossible to violate
-- **Instant Isolated Environments**: Every branch gets a complete environment in 3 minutes—exploration becomes frictionless
-- **Intelligent Automated Evaluation**: Platform eliminates architectural politics through comprehensive evidence generation
-- **Seamless Platform Orchestration**: Complex branch lifecycle management becomes invisible to developers
-- **Zero-Risk Innovation**: Teams explore unlimited architectural options with guaranteed production safety
-
-### ONDEMANDENV: From Merge Hell to Innovation Acceleration Engine
-
-**This transformation is ONDEMANDENV's core value proposition**: The same conflicts that create "merge hell" in traditional workflows become **systematic innovation acceleration** in the ONDEMANDENV ecosystem:
-
-- **Merge conflicts** → **Platform-orchestrated A/B testing** with real consumer workloads and comprehensive metrics
-- **Architectural arguments** → **ONDEMANDENV-generated scorecards** with objective evidence and automated recommendations
-- **Political forced convergence** → **Platform-enabled natural selection** where optimal approaches emerge through data
-- **Innovation risk aversion** → **ONDEMANDENV-guaranteed safe experimentation** with instant rollback and zero production risk
-- **Manual coordination overhead** → **Platform-automated branch lifecycle management** with intelligent governance
-
-**ONDEMANDENV's Innovation Multiplier Effect**: When semantic hypotheses step forward, the platform proves them comprehensively, and either promotes them seamlessly or archives them instructively. Software systems don't just evolve—they **accelerate exponentially toward their optimal form through platform intelligence**.
-
-**ONDEMANDENV represents the future**: Systems that walk on infinite feet simultaneously, with the platform coordinating perfect stability and unlimited exploration through intelligent contracts and autonomous governance.
+Walking on many feet means: keep a stable load‑bearing contract, let explorations run in parallel, and promote based on evidence.
 
 ---
 
@@ -1118,4 +653,4 @@ Every branch becomes a hypothesis. Every environment becomes an experiment. Ever
 
 ---
 
-*This series finale bridges philosophical insights with platform implementation. The MERGE HELL SCANDAL SERIES exposed the crisis and revealed the philosophy—this article shows how ONDEMANDENV transforms those insights into working software through real contracts, environments, and orchestration code.*
+*This implementation bridge connects philosophical insights with platform implementation. The MERGE HELL SCANDAL SERIES exposed the crisis and revealed the philosophy—this article shows how ONDEMANDENV transforms those insights into working software through real contracts, environments, and orchestration code.*
