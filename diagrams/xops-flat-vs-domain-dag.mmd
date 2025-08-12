@@ -3,7 +3,7 @@ flowchart LR
     GW[Gateway as Central Brain]
     MESH[Service Mesh Global Policies]
     CHAOS[Chaos as Ritual]
-    GITOPS["GitOps: apply-all, retry-to-green"]
+    GITOPS[GitOps apply all retry to green]
     GW -->|Cross-domain orchestration| MESH
     MESH -->|Global retries/timeouts| APPS[Apps]
     GITOPS --> APPS
@@ -15,10 +15,10 @@ flowchart LR
     D1[Domain A DAG]
     D2[Domain B DAG]
     D3[Domain C DAG]
-    CONTRACTS[Explicit Contracts, prefer async]
-    GITOPS2[GitOps: phases/waves + health]
-    MESH2[Mesh: in‑domain mTLS/observability]
-    GW2[Gateway: in‑domain ingress/BFF]
+    CONTRACTS[Explicit Contracts prefer async]
+    GITOPS2[GitOps phases and waves and health]
+    MESH2[Mesh in domain mTLS and observability]
+    GW2[Gateway in domain ingress and BFF]
     D1 --> CONTRACTS <-- D2
     D2 --> CONTRACTS <-- D3
     GITOPS2 --> D1

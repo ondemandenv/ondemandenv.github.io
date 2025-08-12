@@ -91,16 +91,32 @@ In Article 5, we’ll move from metaphor back to concrete practice: how to encod
 
 **Diagrams**
 
-- K‑D tree partitioning (domain‑first vs network‑first):
-  <div style="border:1px solid #e1e4e8; border-radius:8px; overflow:hidden; height:60vh; margin:1rem 0;">
-    <iframe src="/mmd-render.html?mmd=diagrams/kd-tree-domain-first-vs-network-first.mmd&back=/articles.html&autofullscreen=0" style="width:100%; height:100%; border:0;"></iframe>
-  </div>
-  <p><a href="/mmd-render.html?mmd=diagrams/kd-tree-domain-first-vs-network-first.mmd&back=/articles.html" target="_blank">Open full-screen</a></p>
+- KD tree partitioning domain-first vs network-first
+<div id="kd-tree-domain-first-vs-network-first" 
+     class="mermaid-diagram-simple" 
+     data-external-diagram="/diagrams/kd-tree-domain-first-vs-network-first.mmd">
+</div>
 
-- Mesh/Gateway posture (composite/serving vs extending/overriding):
-  <div style="border:1px solid #e1e4e8; border-radius:8px; overflow:hidden; height:60vh; margin:1rem 0;">
-    <iframe src="/mmd-render.html?mmd=diagrams/mesh-gateway-cut-order.mmd&back=/articles.html&autofullscreen=0" style="width:100%; height:100%; border:0;"></iframe>
-  </div>
-  <p><a href="/mmd-render.html?mmd=diagrams/mesh-gateway-cut-order.mmd&back=/articles.html" target="_blank">Open full-screen</a></p>
+<div style="text-align: center; margin: 0.75rem 0 1.25rem;">
+  <a href="/mmd-render.html?mmd=diagrams/kd-tree-domain-first-vs-network-first.mmd&back=/articles.html" 
+     target="_blank" 
+     style="display: inline-flex; align-items: center; gap: 0.5rem; background: #0366d6; color: white; padding: 0.4rem 0.9rem; border-radius: 4px; text-decoration: none; font-size: 0.9rem;">
+    🔍 View Fullscreen
+  </a>
+</div>
+
+- Mesh gateway posture composite vs extending
+<div id="mesh-gateway-cut-order" 
+     class="mermaid-diagram-simple" 
+     data-external-diagram="/diagrams/mesh-gateway-cut-order.mmd">
+</div>
+
+<div style="text-align: center; margin: 0.75rem 0 1.25rem;">
+  <a href="/mmd-render.html?mmd=diagrams/mesh-gateway-cut-order.mmd&back=/articles.html" 
+     target="_blank" 
+     style="display: inline-flex; align-items: center; gap: 0.5rem; background: #0366d6; color: white; padding: 0.4rem 0.9rem; border-radius: 4px; text-decoration: none; font-size: 0.9rem;">
+    🔍 View Fullscreen
+  </a>
+</div>
 
 

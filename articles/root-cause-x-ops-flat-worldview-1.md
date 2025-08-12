@@ -31,10 +31,20 @@ This opening article sets the stage for a critical examination of the x-ops flat
 
 **Diagram**
 
-- Embedded viewer (interactive):
-  <div style="border:1px solid #e1e4e8; border-radius:8px; overflow:hidden; height:70vh; margin:1rem 0;">
-    <iframe src="/mmd-render.html?mmd=diagrams/xops-flat-vs-domain-dag.mmd&back=/articles.html&autofullscreen=0" style="width:100%; height:100%; border:0;"></iframe>
+<div id="xops-flat-vs-domain-dag" 
+     class="mermaid-diagram-simple" 
+     data-external-diagram="/diagrams/xops-flat-vs-domain-dag.mmd">
+</div>
+
+<div style="text-align: center; margin: 0.75rem 0 1.25rem;">
+  <a href="/mmd-render.html?mmd=diagrams/xops-flat-vs-domain-dag.mmd&back=/articles.html" 
+     target="_blank" 
+     style="display: inline-flex; align-items: center; gap: 0.5rem; background: #0366d6; color: white; padding: 0.4rem 0.9rem; border-radius: 4px; text-decoration: none; font-size: 0.9rem;">
+    🔍 View Fullscreen
+  </a>
+  <div style="font-size: 0.85rem; color: #6a737d; margin-top: 0.5rem;">
+    Fits width and natural height; click to open interactive viewer if needed.
   </div>
-  <p><a href="/mmd-render.html?mmd=diagrams/xops-flat-vs-domain-dag.mmd&back=/articles.html" target="_blank">Open full-screen</a></p>
+</div>
 
 
