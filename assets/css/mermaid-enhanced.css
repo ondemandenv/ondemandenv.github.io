@@ -44,6 +44,14 @@
   background: #ffffff !important;
 }
 
+/* Make embedded diagrams naturally expand height while fitting width */
+.mermaid svg {
+  width: 100% !important;
+  height: auto !important;
+  max-width: none !important;
+  max-height: none !important;
+}
+
 .mermaid svg {
   background: #ffffff !important;
 }
