@@ -13,6 +13,11 @@ This final installment pulls the series together into a practical methodology fo
 
 The sequence matters: semantics → simulation → parallelism → selection. Each stage builds guardrails that prevent tools from becoming a centralized “brain” and keeps the Domain DAG as the unit of change.
 
+For related reading on application-centric infrastructure that complements this methodology, check our Embracing series:
+- <a href="/articles/embracing-application-centric-infrastructure-cloud-1">Embracing Application-Centric Infrastructure in the Cloud 1</a>
+- <a href="/articles/embracing-application-centric-infrastructure-cloud-2">Embracing Application-Centric Infrastructure in the Cloud 2</a>
+- <a href="/articles/implementing-application-centricity-declarative-contracts">Implementing Application-Centricity Part 3</a>
+
 ***
 
 ## 1) Semantic abstraction first: make the “first cut” explicit
@@ -113,6 +118,11 @@ Promotion and retirement:
 Mainline discipline:
 - Trunk stays releasable: small steps, short-lived branches, feature flags, CI covers flag combinations.
 - Flags have owners, expiry dates, and removal tasks; stale flags fail the build.
+
+This builds on concepts from our MERGE HELL SCANDAL SERIES—see:
+- <a href="/articles/pr-queue-scam-makes-merge-hell-worse">The PR Queue Scam</a>
+- <a href="/articles/semantic-evolution-crisis-merge-hell-cultural">The Semantic Evolution Crisis</a>
+- <a href="/articles/walking-on-many-feet-contract-branches">Walking on Many Feet: Contract Branches</a>
 
 ***
 

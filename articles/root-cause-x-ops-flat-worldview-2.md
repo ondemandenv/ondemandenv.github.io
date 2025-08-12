@@ -115,7 +115,7 @@ This second installment catalogs the recurring failure modes of the x-ops flat w
 
 ### Practitioner Snippets: Implementing Ordered GitOps and Scoped Mesh
 
-To avoid the "GitOps without order" anti-pattern, here's how to use Argo CD waves for explicit sequencing in a domain DAG:
+To avoid the "GitOps without order" anti-pattern after modeling your domain DAG semantically (e.g., in CDK code or Crossplane CRDs), use Argo CD waves to add explicit sequencing during leaf reconciliation. Remember: GitOps conducts order on YAML—it's not for abstraction.
 
 ```yaml
 # Argo CD Sync Waves example (ordered delivery)
@@ -150,7 +150,7 @@ metadata:
     argocd.argoproj.io/sync-wave: "1"
 ```
 
-This enforces deployment order (storage before API), with health gates, preventing "apply everything, retry until green" chaos.
+This enforces deployment order (storage before API), with health gates, preventing "apply everything, retry until green" chaos. Note: This sequences reconciliation only—model the full DAG with compensations elsewhere to avoid flat YAML pitfalls.
 
 For "Service Mesh as gold-plated coupling," scope policies to domains like this Istio rule:
 
@@ -173,7 +173,7 @@ spec:
       baseEjectionTime: 30s
 ```
 
-This keeps resiliency local to "my-domain," avoiding global overrides that hide missing contracts.
+This keeps resiliency local to "my-domain," avoiding global overrides that hide missing contracts. Use mesh for in-domain needs only—cross-domain goes through explicit contracts.
 
 ## What “good” looks like: the domain DAG
 - Change unit: the domain DAG encodes order, dependencies, health gates, timeouts, retries, and compensations, including extra-cluster resources.

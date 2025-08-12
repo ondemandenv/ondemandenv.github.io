@@ -24,6 +24,11 @@ This third installment clarifies a source of chronic confusion: “unifying the 
   - Strengths: Clear dependency order, transactional semantics, strong encapsulation and reuse in familiar languages, testable before apply.
   - Trade-offs: Plan accuracy matters; drift and long-running external reconciliation need explicit handling; “continuous convergence” is not intrinsic.
 
+For more on plan-time abstraction with CDK, see our series: 
+- <a href="/articles/embracing-application-centric-infrastructure-cloud-1">Embracing Application-Centric Infrastructure in the Cloud 1</a>
+- <a href="/articles/embracing-application-centric-infrastructure-cloud-2">Embracing Application-Centric Infrastructure in the Cloud 2</a>
+- <a href="/articles/implementing-application-centricity-declarative-contracts">Implementing Application-Centricity Part 3</a>
+
 - Convergence-time abstraction (API → reconciliation → steady state)
   - What it is: Define higher-level platform APIs; a control plane composes underlying resources and continuously reconciles to the declared desired state.
   - Typical stack: Crossplane XRD + Composition (+ Composition Functions) exposing domain-level CRDs; GitOps tools apply and monitor them with ordered sync and health gates.
@@ -104,6 +109,8 @@ This demonstrates how L2 constructs bundle resources with defaults, producing a 
   - Platform teams can export domain-level CRDs (XRDs) that encode enterprise patterns and policy; application teams declare intent against those APIs and get lifecycle management and reconciliation “for free.”
 - Where it struggles
   - Semantics remain non-transactional; failures require governance (timeouts, retries, backoffs) and compensations defined at the platform API level; testing and debugging require good tooling discipline because logic spans functions and controllers.
+
+These articles dive deeper into CDK for application-centric infra and contracts for domain abstraction.
 
 ### Example: Crossplane Composition Pipeline
 

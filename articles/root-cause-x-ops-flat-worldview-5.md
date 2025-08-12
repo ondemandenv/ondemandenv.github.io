@@ -147,6 +147,11 @@ This gates PRs on BACKWARD compatibility, ensuring tolerant readers can handle a
 
 **Rule of thumb**: Branches are for exploration with their own environments, not for serial environment promotion.
 
+For deeper dives on branch conflicts as architectural signals and transforming them into innovation, see our MERGE HELL SCANDAL SERIES:
+- <a href="/articles/merge-hell-myth-x-ops-contamination">The 'Merge Hell' myth</a>
+- <a href="/articles/branch-conflicts-architectural-signals">Branch Conflicts as Signals</a>
+- <a href="/articles/business-logic-branch-conflicts-political-warfare">Branch Diversity and Innovation</a>
+
 ***
 
 ## 6. Gateway/Mesh stance
