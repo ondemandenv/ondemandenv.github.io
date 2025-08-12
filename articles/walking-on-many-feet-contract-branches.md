@@ -86,35 +86,30 @@ const enver = contracts.getTargetEnver('order-manager', 'b..feature-x')
 
 **This is where ONDEMANDENV's intelligence shines**: When multiple semantic hypotheses mature simultaneously, the platform automatically categorizes them into distinct evolutionary pathways. Just like biological species exploring different ecological niches, ONDEMANDENV orchestrates their coexistence, competition, and resolution.
 
-```mermaid
-graph TD
-    A["🔄 ONDEMANDENV Branch Creation<br/>git commit -m 'odmd: create@main'"] --> B{"🤖 Platform Intelligence<br/>Automated Evaluation"}
-    B --> C["🏆 Merge & Replace<br/>Winner Takes All"]
-    B --> D["🔄 Merge & Extend<br/>Hybrid Coexistence"] 
-    B --> E["🌐 Co-Exist Long-Term<br/>Multi-Tenant APIs"]
-    B --> F["📚 Rejected/Archived<br/>Learning Repository"]
-    B --> G["🧬 Speciation Split<br/>New Bounded Context"]
+<div id="walking-on-many-feet-branch-ecology" 
+     class="mermaid-diagram-simple" 
+     data-external-diagram="/diagrams/walking-on-many-feet-branch-ecology.mmd">
+</div>
+
+<div style="text-align: center; margin: 1rem 0;">
+    <a href="/mmd-render.html?mmd=diagrams/walking-on-many-feet-branch-ecology.mmd" 
+       target="_blank" 
+       style="display: inline-flex; align-items: center; gap: 0.5rem; background: #0366d6; color: white; padding: 0.5rem 1rem; border-radius: 4px; text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease;">
+        🔍 View Fullscreen
+    </a>
     
-    C --> H["✅ New Production Contract<br/>Platform Updates All Consumers"]
-    D --> I["🔀 Multi-Protocol Service<br/>Platform Manages Routing"]
-    E --> J["🎯 Consumer Choice APIs<br/>Platform Handles Versioning"]
-    F --> K["🔍 Experiment Database<br/>Platform Archives Insights"]
-    G --> L["⚡ Microservice Split<br/>Platform Orchestrates Migration"]
+    <a href="/diagrams/walking-on-many-feet-branch-ecology.mmd" 
+       target="_blank" 
+       style="display: inline-flex; align-items: center; gap: 0.5rem; margin-left: 0.5rem; background: #4b5563; color: white; padding: 0.5rem 1rem; border-radius: 4px; text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease;">
+        📝 View Source
+    </a>
     
-    H --> M["🚀 Automatic Rollout<br/>Zero-Downtime Deployment"]
-    I --> N["🔗 Intelligent Load Balancing<br/>REST + GraphQL + gRPC"]
-    J --> O["📊 Usage Analytics<br/>JSON/Avro/Protobuf Adoption"]
-    K --> P["📈 Failure Pattern Analysis<br/>Prevent Future Mistakes"]
-    L --> Q["🏗️ Domain Boundary Evolution<br/>OrderService → Billing + Tax"]
-    
-    style A fill:#e1f5fe
-    style B fill:#f3e5f5
-    style H fill:#e8f5e8
-    style I fill:#fff3e0
-    style J fill:#f1f8e9
-    style K fill:#fce4ec
-    style L fill:#e0f2f1
-```
+    <a href="https://mermaid.live/edit#mmd:Ly8gQnJhbmNoIEVjb2xvZ3kgLSBNaW5pZml..." 
+       target="_blank" 
+       style="display: inline-flex; align-items: center; gap: 0.5rem; margin-left: 0.5rem; background: #10b981; color: white; padding: 0.5rem 1rem; border-radius: 4px; text-decoration: none; font-size: 0.9rem; transition: all 0.2s ease;">
+        ✏️ Edit Online
+    </a>
+</div>
 
 ### A. Merge & Replace (Enver Promotion)
 **The Clean Victory**: New enver becomes the load-bearing deployment unit.
