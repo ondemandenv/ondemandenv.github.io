@@ -115,6 +115,8 @@
             if (!svgEl) return;
             try {
                 // Remove Mermaid inline constraints and scale to container
+                // First drop any pre-existing inline style caps
+                svgEl.removeAttribute('style');
                 svgEl.removeAttribute('width');
                 svgEl.removeAttribute('height');
                 // Some Mermaid versions inject inline style with max-width; neutralize it
@@ -181,6 +183,31 @@
                 // Normalize sizing so the full graph fits within the container
                 const svgEl = container.querySelector('svg');
                 normalizeSvg(svgEl);
+
+                // Use pan/zoom to fit the full graph similarly to the fullscreen viewer
+                if (typeof svgPanZoom !== 'undefined' && svgEl) {
+                    try {
+                        const pz = svgPanZoom(svgEl, {
+                            zoomEnabled: true,
+                            controlIconsEnabled: false,
+                            fit: true,
+                            center: true,
+                            minZoom: 0.05,
+                            maxZoom: 20,
+                            zoomScaleSensitivity: 0.25,
+                            dblClickZoomEnabled: true,
+                            mouseWheelZoomEnabled: true,
+                            preventMouseEventsDefault: true,
+                            eventsListenerElement: svgEl.parentElement
+                        });
+                        // Immediate fit/center
+                        pz.resize(); pz.fit(); pz.center();
+                        // Next-frame fit/center to ensure layout settled
+                        afterNextPaint(() => { try { pz.resize(); pz.fit(); pz.center(); } catch(e){} });
+                        // Small delayed nudge for screenshots that tap too early
+                        setTimeout(() => { try { pz.resize(); pz.fit(); pz.center(); } catch(e){} }, 60);
+                    } catch (e) { console.warn('panzoom init failed', e); }
+                }
 
                 // Mark ready after paint to avoid early screenshots before fit
                 afterNextPaint(() => {
