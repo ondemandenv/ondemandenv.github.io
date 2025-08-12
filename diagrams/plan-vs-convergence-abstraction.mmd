@@ -1,0 +1,21 @@
+flowchart LR
+  subgraph Plan_Time_Abstraction
+    CODE[TypeScript CDK L2/L3 Constructs]
+    PLAN[Executable Plan (CFN/TF DAG)]
+    EXEC[Ordered Execution + Compensations]
+    CODE --> PLAN --> EXEC
+  end
+
+  subgraph Convergence_Time_Abstraction
+    API[Platform API (XRD/CRD)]
+    FUNC[Composition Functions]
+    RECONC[Continuous Reconciliation]
+    API --> FUNC --> RECONC
+  end
+
+  GITOPS[GitOps: Phases, Waves, Health] --> PLAN
+  GITOPS --> API
+  NOTE["Unit of Change: Domain DAG (order, health, compensations)"]
+  NOTE -. governs .- PLAN
+  NOTE -. governs .- API
+

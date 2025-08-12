@@ -1,0 +1,24 @@
+flowchart TB
+  subgraph Domain_First_Cut
+    direction TB
+    D0[Cut 1: Domain Semantics]
+    D1A[Cut 2: Transport]
+    D1B[Cut 2: Security]
+    D2A[Cut 3: Cost]
+    D0 --> D1A
+    D0 --> D1B
+    D1A --> D2A
+    NOTE1["Balanced cells, small blast radius, reversible moves"]
+  end
+
+  subgraph Network_First_Cut
+    direction TB
+    N0[Cut 1: Mesh/Gateway]
+    N1A[Cut 2: YAML/Env]
+    N1B[Cut 2: Tooling Teams]
+    N2A[Cut 3: Domains (late)]
+    N0 --> N1A --> N2A
+    N0 --> N1B --> N2A
+    NOTE2["Elongated cells, wide blast radius, expensive rollbacks"]
+  end
+
