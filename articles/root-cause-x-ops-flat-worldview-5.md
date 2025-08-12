@@ -87,17 +87,17 @@ Decision fork:
 
 ***
 
-## 5. Feature delivery and branching discipline
+## 5. Feature delivery and branching discipline (branches as environments/evolution paths)
 
-- **Single‑track evolution**:  
+- **Single‑track evolution (for stable products)**:  
   Trunk‑based development — small steps, short‑lived branches, always‑releasable mainline, feature flags for WIP, CI exercises flag combinations, clean up stale flags rapidly.
 
-- **Exploratory forks**:  
-  Entirely independent product lines — separate builds, envs, budgets.  
-  Use traffic routing (A/B, canary) for evaluation.  
-  Winning variant integrates via promotion, not code merge; losers decommission per contract.
+- **Exploratory branches as environments**:  
+  Branch = environment = evolution path — independent builds, deployments, budgets, telemetry.
+  Use traffic routing (A/B, canary, shadow) to evaluate in production‑like conditions.  
+  Winners promote via contract‑aware rollout; losers retire per deprecation plan.
 
-**Rule of thumb**: Branches are for exploration, not environment promotion.
+**Rule of thumb**: Branches are for exploration with their own environments, not for serial environment promotion.
 
 ***
 

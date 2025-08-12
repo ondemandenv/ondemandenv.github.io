@@ -38,10 +38,10 @@ This second installment catalogs the recurring failure modes of the x-ops flat w
     - Harm: Risk without learning; validates lack of isolation rather than resilience.
     - Do instead: Hypothesis-driven experiments with clear exit criteria; use chaos to validate designed isolation and small blast radius.
 
-- Single-branch bottleneck
-    - Symptom: Everyone piles into one long-lived branch; main often broken.
-    - Harm: Serialized delivery, high merge friction, hidden work-in-progress.
-    - Do instead: Real trunk-based development: small steps, short-lived branches, feature flags with CI exercising combinations, ruthless flag cleanup.
+- Single-deployment bottleneck (merge-to-one-branch → deploy-to-one-runtime)
+    - Symptom: A service can only ship by merging into a single branch that drives a single deployment instance. Parallel branch variants cannot be evaluated because environments are not branch-scoped.
+    - Harm: Kills evolutionary paths and evidence-based comparison; forces political merge decisions; creates rework from premature convergence.
+    - Do instead: Treat each branch as an environment/evolution path with its own deployment, traffic controls, budgets, and telemetry. Use A/B/canary/shadow to evaluate variants; promote winners contract‑aware, retire losers on schedule.
 
 - Two versions in one container
     - Symptom: /v1 and /v2 in the same process/deployment.
