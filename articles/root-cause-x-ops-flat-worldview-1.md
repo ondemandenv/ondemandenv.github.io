@@ -31,7 +31,10 @@ This opening article sets the stage for a critical examination of the x-ops flat
 
 **Diagram**
 
-- View the comparison of flat worldview vs domain-first governance:
-  - Mermaid viewer: [Open Diagram](../mmd-render.html?mmd=diagrams/xops-flat-vs-domain-dag.mmd&back=../articles.html)
+- Embedded viewer (interactive):
+  <div style="border:1px solid #e1e4e8; border-radius:8px; overflow:hidden; height:70vh; margin:1rem 0;">
+    <iframe src="/mmd-render.html?mmd=diagrams/xops-flat-vs-domain-dag.mmd&back=/articles.html&autofullscreen=0" style="width:100%; height:100%; border:0;"></iframe>
+  </div>
+  <p><a href="/mmd-render.html?mmd=diagrams/xops-flat-vs-domain-dag.mmd&back=/articles.html" target="_blank">Open full-screen</a></p>
 
 
