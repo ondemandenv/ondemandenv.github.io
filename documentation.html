@@ -2,6 +2,158 @@
 layout: default
 title: Documentation - ONDEMANDENV.dev
 ---
+<style>
+    /* Main layout */
+    .docs-container {
+        display: flex;
+        flex-grow: 1;
+    }
+
+    /* Sidebar (Table of Contents) */
+    .docs-sidebar {
+        width: 260px; /* Fixed width for the sidebar */
+        flex-shrink: 0; /* Prevent sidebar from shrinking */
+        height: calc(100vh - 60px); /* Adjust 60px based on actual header height */
+        position: sticky;
+        top: 60px; /* Adjust based on actual header height */
+        overflow-y: auto; /* Allow scrolling within sidebar */
+        padding: 2rem 1rem 2rem 0; /* Add padding */
+        border-right: 1px solid var(--border-color);
+        background-color: #fdfdfd; /* Slightly off-white background */
+    }
+
+    .docs-sidebar h2 {
+        font-size: 1.2rem;
+        margin-bottom: 1rem;
+        color: var(--primary-color);
+        padding-left: 1rem; /* Indent heading */
+    }
+
+    .docs-sidebar ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .docs-sidebar ul ul { /* Nested lists for sub-sections */
+       padding-left: 1.5rem; /* Indent sub-items */
+       margin-top: 0.25rem;
+       margin-bottom: 0.5rem;
+    }
+
+    .docs-sidebar li {
+        margin-bottom: 0.25rem;
+    }
+
+    .docs-sidebar a {
+        display: block;
+        text-decoration: none;
+        color: var(--secondary-color);
+        padding: 0.4rem 1rem; /* Padding for clickable area */
+        border-radius: 4px;
+        font-size: 0.9rem;
+        transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    .docs-sidebar a:hover {
+        background-color: #f0f0f0;
+        color: var(--primary-color);
+    }
+
+    /* Main Content Area */
+    .docs-content-area {
+        flex-grow: 1; /* Allow content to take remaining space */
+        padding: 2rem 3rem; /* Add padding around content */
+        max-width: 900px; /* Optional: Limit content width for readability */
+        margin-left: auto; /* Center the content area if max-width is set */
+        margin-right: auto; /* Center the content area if max-width is set */
+    }
+
+    /* Doc Section Styling */
+    .doc-section {
+         margin-bottom: 3rem;
+         padding-bottom: 1.5rem;
+         border-bottom: 1px solid var(--border-color);
+         scroll-margin-top: 70px; /* Adjust offset for sticky header */
+     }
+
+    .doc-section:last-child {
+        border-bottom: none;
+    }
+
+    .doc-section h1 {
+        font-size: 2.5rem;
+        margin-bottom: 1.5rem;
+        color: var(--text-color);
+    }
+
+    .doc-section h2 {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+        color: var(--primary-color);
+        padding-top: 1rem;
+        border-top: 1px dashed var(--border-color);
+    }
+
+    .doc-section h2:first-of-type {
+        border-top: none;
+        padding-top: 0;
+    }
+
+    .doc-section h3 {
+        font-size: 1.5rem;
+        margin-top: 1.5rem;
+        margin-bottom: 0.75rem;
+        color: var(--secondary-color);
+    }
+
+    .doc-section .inline-code {
+        background-color: #f0f0f0;
+        padding: 0.1em 0.4em;
+        border-radius: 3px;
+        font-family: monospace;
+        font-size: 0.9em;
+        color: #343a40;
+    }
+
+    .repo-link {
+        display: inline-block;
+        background-color: var(--primary-color);
+        color: white;
+        padding: 0.5rem 1rem;
+        text-decoration: none;
+        border-radius: 5px;
+        margin-top: 0.5rem;
+    }
+
+    .repo-link:hover {
+        background-color: var(--secondary-color);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .docs-container {
+            flex-direction: column;
+        }
+
+        .docs-sidebar {
+            width: 100%;
+            height: auto;
+            position: static;
+            border-right: none;
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem;
+            overflow-y: visible;
+        }
+
+        .docs-content-area {
+            padding: 1.5rem;
+             margin-left: 0;
+             margin-right: 0;
+             max-width: none;
+        }
+    }
+</style>
 <div class="docs-container">
 
     <aside class="docs-sidebar" aria-labelledby="toc-heading">
@@ -1100,4 +1252,4 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 </body>
-</html> 
+</html>

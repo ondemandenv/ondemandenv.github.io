@@ -581,7 +581,7 @@ a:focus, button:focus, select:focus, input:focus {
     background: #f8f9fa;
     padding: 2rem; /* Reduced padding */
     border-radius: 8px;
-    margin: 2rem 0; /* Reduced margin */
+    margin: 1rem 0; /* Further reduced margin */
     border-left: 4px solid #e74c3c;
 }
 
@@ -622,7 +622,7 @@ a:focus, button:focus, select:focus, input:focus {
     padding: 2rem; /* Reduced padding */
     border-radius: 8px;
     text-align: center;
-    margin: 2rem 0; /* Reduced margin */
+    margin: 1rem 0; /* Further reduced margin */
 }
 
 .prevention-demo {
@@ -662,6 +662,23 @@ a:focus, button:focus, select:focus, input:focus {
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     border-top: 4px solid var(--primary-color);
+    color: var(--text-color); /* Ensure text is readable on white background */
+}
+
+.next-step-card h3, .prevention-feature h3 {
+    color: var(--secondary-color);
+}
+
+.next-step-card p {
+    color: var(--text-color);
+}
+
+.next-step-card a {
+    color: var(--primary-color);
+}
+
+.prevention-feature {
+    color: var(--text-color); /* Ensure text is readable on white background */
 }
 
 @media (max-width: 768px) {
