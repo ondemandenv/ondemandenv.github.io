@@ -25,6 +25,24 @@ title: Articles | ONDEMANDENV.dev
         border-bottom: none;
         margin-bottom: 0;
     }
+    .source-history-link {
+        color: #666 !important;
+        text-decoration: none !important;
+        font-size: 0.85em;
+        margin-left: 8px;
+        opacity: 0.7;
+        transition: opacity 0.3s ease, color 0.3s ease;
+        border: 1px solid #ddd;
+        padding: 2px 6px;
+        border-radius: 3px;
+        background-color: #f8f9fa;
+    }
+    .source-history-link:hover {
+        opacity: 1;
+        color: var(--primary-color) !important;
+        background-color: #e8f4fd;
+        border-color: var(--primary-color);
+    }
 </style>
 
 <h1>Article Library</h1>
@@ -35,15 +53,15 @@ title: Articles | ONDEMANDENV.dev
     <p>Start here. These flagship articles lay out the core vision for the next paradigm of software development.</p>
     <ul class="articles-list">
         <li>
-            <h3><a href="articles/semantic-engineering-revolution">Semantic Engineering Revolution: Building AI-Native Enterprises Around Living Models</a></h3>
+            <h3><a href="articles/semantic-engineering-revolution">Semantic Engineering Revolution: Building AI-Native Enterprises Around Living Models</a> <a href="https://github.com/ondemandenv/ondemandenv.github.io/commits/main/articles/semantic-engineering-revolution.md" class="source-history-link" title="View source history">[📝]</a></h3>
             <p>A comprehensive report on shifting from code-centric to semantic model-driven development, leveraging LLMs for enterprise knowledge management and workflow automation.</p>
         </li>
         <li>
-            <h3><a href="articles/semantic-projection-ondemandenv-ai-architecture">The Semantic Projection: How ONDEMANDENV Makes AI-Assisted Architecture a Reality</a></h3>
+            <h3><a href="articles/semantic-projection-ondemandenv-ai-architecture">The Semantic Projection: How ONDEMANDENV Makes AI-Assisted Architecture a Reality</a> <a href="https://github.com/ondemandenv/ondemandenv.github.io/commits/main/articles/semantic-projection-ondemandenv-ai-architecture.md" class="source-history-link" title="View source history">[📝]</a></h3>
             <p>Exploring how ONDEMANDENV bridges the gap between semantic models and running systems, enabling AI-assisted development through semantic projection.</p>
         </li>
          <li>
-            <h3><a href="articles/ai-agent-workflow-platform-architecture">🤖 AI Agent Workflow Platform: Enterprise Architecture Design</a></h3>
+            <h3><a href="articles/ai-agent-workflow-platform-architecture">🤖 AI Agent Workflow Platform: Enterprise Architecture Design</a> <a href="https://github.com/ondemandenv/ondemandenv.github.io/commits/main/articles/ai-agent-workflow-platform-architecture.md" class="source-history-link" title="View source history">[📝]</a></h3>
             <p>A comprehensive enterprise architecture for a distributed, multi-tenant platform enabling AI-driven workflow automation through conversational DSL generation.</p>
         </li>
     </ul>
@@ -54,24 +72,108 @@ title: Articles | ONDEMANDENV.dev
     <p>A collection of series and articles exposing the root causes of inefficiency, complexity, and stagnation in modern software operations.</p>
     <ul class="articles-list">
         <li>
-            <h3><a href="articles/x-ops-railroading-software-architecture">The X-Ops Railroading of Software Architecture</a></h3>
-            <p>How operational convenience created distributed systems chaos and a generation of "container tenants" instead of system architects.</p>
+            <h3>🧭 <strong>X‑OPS FLAT WORLDVIEW SERIES</strong> (New)</h3>
+            <p><em>A six‑part series exposing the root cause behind the “x‑ops flat worldview,” cataloging its anti‑patterns, and laying out a practical governance method centered on domain‑first design and the Domain Dependency Graph (DAG).</em></p>
         </li>
         <li>
-            <h3><a href="articles/emperor-new-cluster-cross-cloud-kubernetes-lie">The Emperor's New Cluster: Exposing the Cross-Cloud Kubernetes Lie</a></h3>
+            <h3><a href="articles/root-cause-x-ops-flat-worldview-1">The Root Cause and Symptoms of the x‑ops Flat Worldview — Rejecting Boundaries and Using Tools as Shields</a></h3>
+            <p><strong>🧩 Part 1 of 6:</strong> Diagnoses the flat worldview’s rejection of semantics and why tools become shields. Introduces the Domain DAG as the correct unit of change.</p>
+        </li>
+        <li>
+            <h3><a href="articles/root-cause-x-ops-flat-worldview-2">The Anti‑Patterns of the x‑ops Flat Worldview — From Mesh and Gateways to Chaos as Ritual</a></h3>
+            <p><strong>🧪 Part 2 of 6:</strong> A field guide to failure modes (gateway as brain, mesh as coupling, GitOps without order), with concrete “do instead” guidance.</p>
+        </li>
+        <li>
+            <h3><a href="articles/root-cause-x-ops-flat-worldview-3">Where Abstraction Lives — CDK vs Crossplane, Plan‑Time vs Convergence‑Time, and GitOps as Order</a></h3>
+            <p><strong>🧠 Part 3 of 6:</strong> Clarifies the two legitimate abstraction homes and how to align both to the Domain DAG; positions GitOps as the conductor of order, not abstraction.</p>
+        </li>
+        <li>
+            <h3><a href="articles/root-cause-x-ops-flat-worldview-4">Partition Order Matters — K‑D Tree, Domain‑First Cuts, and Lessons from History</a></h3>
+            <p><strong>🔪 Part 4 of 6:</strong> Uses K‑D tree and societal partition orders to show why the first semantic cut determines blast radius, rollback cost, and long‑term agility.</p>
+        </li>
+        <li>
+            <h3><a href="articles/root-cause-x-ops-flat-worldview-5">Critical Practices and Decision Criteria — Domain DAGs, Versions, Events</a></h3>
+            <p><strong>📋 Part 5 of 6:</strong> Operationalizes the model: domain DAG as unit of change, version governance, event evolution, GitOps ordering, and review checklists.</p>
+        </li>
+        <li>
+            <h3><a href="articles/root-cause-x-ops-flat-worldview-6">The Method for Navigating Complex Systems — Semantics → Simulation → Parallel Experiments → Selection</a></h3>
+            <p><strong>🏁 Part 6 of 6:</strong> A practical playbook to de‑risk first cuts, rehearse rollbacks, run parallel variants, and promote winners with codified governance.</p>
+        </li>
+        <li>
+            <h3>🔥 <strong>MERGE HELL SCANDAL SERIES</strong> 🔥</h3>
+            <p><em>A systematic exposé of how "merge hell" is a manufactured crisis designed to hide ops team incompetence and corrupt software engineering decisions.</em></p>
+        </li>
+        <li>
+            <h3><a href="articles/merge-hell-myth-x-ops-contamination">The 'Merge Hell' Myth: How Ops Incompetence Manufactured a Crisis to Hide Their Failure</a> <a href="https://github.com/ondemandenv/ondemandenv.github.io/commits/main/articles/merge-hell-myth-x-ops-contamination.md" class="source-history-link" title="View source history">[📝]</a></h3>
+            <p><strong>🎯 Part 1 of 5:</strong> Exposes how "merge hell" isn't a developer workflow problem—it's ops teams covering for their inability to provide proper evaluation environments.</p>
+        </li>
+        <li>
+            <h3><a href="articles/branch-conflicts-architectural-signals">Branch Conflicts as System Architecture Signals: The Evaluation Framework Missing from Every Git Guide</a> <a href="https://github.com/ondemandenv/ondemandenv.github.io/commits/main/articles/branch-conflicts-architectural-signals.md" class="source-history-link" title="View source history">[📝]</a></h3>
+            <p><strong>🧠 Part 2 of 5:</strong> Reveals how merge conflicts are actually architectural intelligence—your system trying to communicate crucial information about boundaries and design.</p>
+        </li>
+        <li>
+            <h3><a href="articles/pr-queue-scam-makes-merge-hell-worse">The PR Queue Scam: How the Industry's 'Solution' Makes Merge Hell Infinitely Worse</a> <a href="https://github.com/ondemandenv/ondemandenv.github.io/commits/main/articles/pr-queue-scam-makes-merge-hell-worse.md" class="source-history-link" title="View source history">[📝]</a></h3>
+            <p><strong>⚡ Part 3 of 5:</strong> Demolishes the PR queue mythology by showing how sequential processing creates contextual invalidation cascades that turn manageable conflicts into never-ending rework spirals.</p>
+        </li>
+        <li>
+            <h3><a href="articles/business-logic-branch-conflicts-political-warfare">Branch Diversity and Innovation: Parallel Exploration Over Premature Convergence</a> <a href="https://github.com/ondemandenv/ondemandenv.github.io/commits/main/articles/business-logic-branch-conflicts-political-warfare.md" class="source-history-link" title="View source history">[📝]</a></h3>
+            <p><strong>🌟 Part 4 of 5:</strong> Reframes conflicts as opportunities for parallel exploration. Focuses on service‑level isolation and environment‑per‑branch to evaluate competing ideas.</p>
+        </li>
+        <li>
+            <h3><a href="articles/semantic-evolution-crisis-merge-hell-cultural">The Semantic Evolution Crisis: How Merge Hell Exposed the Collapse of Cultural Modeling</a> <a href="https://github.com/ondemandenv/ondemandenv.github.io/commits/main/articles/semantic-evolution-crisis-merge-hell-cultural.md" class="source-history-link" title="View source history">[📝]</a></h3>
+            <p><strong>🧬 Philosophical context:</strong> Connects merge‑conflict symptoms to lost semantic modeling capacity and domain boundaries.</p>
+        </li>
+        <li>
+            <h3><a href="articles/walking-on-many-feet-contract-branches">🦶 Walking on Many Feet: How Contract Branches Compete, Cooperate, and Speciate</a> <a href="https://github.com/ondemandenv/ondemandenv.github.io/commits/main/articles/walking-on-many-feet-contract-branches.md" class="source-history-link" title="View source history">[📝]</a></h3>
+            <p><strong>🌉 Implementation bridge:</strong> Links the series to practical patterns with concise examples: load‑bearing contracts, versioned environments, and cross‑service references.</p>
+        </li>
+        <li>
+            <h3><a href="articles/kubernetes-2-0-engineering-victory">⚔️ Kubernetes 2.0: From YAML and Administrative Ops to Typed Abstractions and Engineering</a> <a href="https://github.com/ondemandenv/ondemandenv.github.io/commits/main/articles/kubernetes-2-0-engineering-victory.md" class="source-history-link" title="View source history">[📝]</a></h3>
+            <p>The definitive analysis of how engineering is decisively defeating administrative operations in modern infrastructure.</p>
+        </li>
+        <li>
+            <h3><a href="articles/skewer-problem-fake-engineering-ops">🔧 The Skewer Problem: How Fake Engineering in Ops Hijacked the SDLC</a> <a href="https://github.com/ondemandenv/ondemandenv.github.io/commits/main/articles/skewer-problem-fake-engineering-ops.md" class="source-history-link" title="View source history">[📝]</a></h3>
+            <p>A comprehensive technical critique exposing how tool mastery disguised as engineering is strangling software development.</p>
+        </li>
+        <li>
+            <h3><a href="articles/shallow-technical-leadership-authority-problem">⚔️ The Authority Problem: How Shallow Technical Leadership Destroys Engineering Culture</a> <a href="https://github.com/ondemandenv/ondemandenv.github.io/commits/main/articles/shallow-technical-leadership-authority-problem.md" class="source-history-link" title="View source history">[📝]</a></h3>
+            <p>The devastating companion to "The Skewer Problem" - reveals how leaders built on fake engineering actively suppress real engineering to protect their power base.</p>
+        </li>
+        <li>
+            <h3><a href="articles/x-ops-railroading-software-architecture">🚂 The X-Ops Railroading of Software Architecture</a> <a href="https://github.com/ondemandenv/ondemandenv.github.io/commits/main/articles/x-ops-railroading-software-architecture.md" class="source-history-link" title="View source history">[📝]</a></h3>
+            <p>A comprehensive critique of how DevOps, Kubernetes, and operational tooling have systematically fragmented distributed systems architecture.</p>
+        </li>
+        <li>
+            <h3><a href="articles/microservices-testing-complexity-gcp-outage">🔬 The Root Cause of Microservices Testing Complexity: Architectural Lessons from Cloud Platform Outages</a> <a href="https://github.com/ondemandenv/ondemandenv.github.io/commits/main/articles/microservices-testing-complexity-gcp-outage.md" class="source-history-link" title="View source history">[📝]</a></h3>
+            <p>A comprehensive examination of how cloud platform outages demonstrate why traditional testing approaches fail in distributed systems.</p>
+        </li>
+        <li>
+            <h3><a href="articles/yaml-stagnation-container-comfort-zone">🐚 So You Haven't Touched Your Shared YAML for Months: The Container Comfort Zone Trap</a> <a href="https://github.com/ondemandenv/ondemandenv.github.io/commits/main/articles/yaml-stagnation-container-comfort-zone.md" class="source-history-link" title="View source history">[📝]</a></h3>
+            <p>Why developers retreat inside containers while deployment configurations stagnate into dangerous lies about production reality.</p>
+        </li>
+        <li>
+            <h3><a href="articles/emperor-new-cluster-cross-cloud-kubernetes-lie">👑 The Emperor's New Cluster: Exposing the Cross-Cloud Kubernetes Lie and How Ops Killed Innovation</a> <a href="https://github.com/ondemandenv/ondemandenv.github.io/commits/main/articles/emperor-new-cluster-cross-cloud-kubernetes-lie.md" class="source-history-link" title="View source history">[📝]</a></h3>
             <p>The definitive takedown of the cross-cloud Kubernetes mythology and how it has empowered operations teams to become gatekeepers, systematically killing developer innovation.</p>
         </li>
         <li>
-            <h3><a href="articles/merge-hell-myth-x-ops-contamination">The 'Merge Hell' Myth Series</a></h3>
-            <p>Exposes how "merge hell" is a manufactured crisis designed to hide ops team incompetence and corrupt software engineering decisions.</p>
+            <h3><a href="articles/dismantling-kubernetes-hype">Dismantling the Kubernetes Hype: Why It's Not the Cloud Native Panacea You Think It Is</a> <a href="https://github.com/ondemandenv/ondemandenv.github.io/commits/main/articles/dismantling-kubernetes-hype.md" class="source-history-link" title="View source history">[📝]</a></h3>
+            <p>Challenges the pervasive hype around Kubernetes, exposing its limitations in cross-cloud portability, application management, and inherent complexity.</p>
         </li>
-         <li>
-            <h3><a href="articles/root-cause-x-ops-flat-worldview-1">The X‑OPS Flat Worldview Series</a></h3>
-            <p>A six‑part series exposing the root cause behind the “x‑ops flat worldview,” cataloging its anti‑patterns, and laying out a practical governance method.</p>
+        <li>
+            <h3><a href="articles/eks-pants-off-scenario">The EKS "Pants Off to Fart" Scenario: Accidental Complexity vs. ECS/CDK Simplicity in the SDLC</a> <a href="https://github.com/ondemandenv/ondemandenv.github.io/commits/main/articles/eks-pants-off-scenario.md" class="source-history-link" title="View source history">[📝]</a></h3>
+            <p>Details why, for many enterprise applications, the EKS route often introduces profound, unnecessary, and counterproductive accidental complexity.</p>
         </li>
-         <li>
-            <h3><a href="articles/skewer-problem-fake-engineering-ops">The Skewer Problem: How Fake Engineering in Ops Hijacked the SDLC</a></h3>
-            <p>A comprehensive technical critique exposing how tool mastery disguised as engineering is strangling software development.</p>
+        <li>
+            <h3><a href="articles/perilous-ops-leading-enhanced">The Perilous Path: How Operator-Led Microservices Create Distributed Monoliths</a> <a href="https://github.com/ondemandenv/ondemandenv.github.io/commits/main/articles/perilous-ops-leading-enhanced.md" class="source-history-link" title="View source history">[📝]</a></h3>
+            <p>A comprehensive analysis of the dangerous anti-pattern where ops teams forcibly decompose Phase 1 monoliths into service mesh-connected microservices.</p>
+        </li>
+        <li>
+            <h3><a href="articles/gcp-outage-contracts-cure">The GCP Outage We Should Have Seen Coming: How Shared Environments Breed Chaos and Why Contracts are the Cure</a> <a href="https://github.com/ondemandenv/ondemandenv.github.io/commits/main/articles/gcp-outage-contracts-cure.md" class="source-history-link" title="View source history">[📝]</a></h3>
+            <p>Analyzes the massive Google Cloud outage of June 2025 through the lens of ONDEMANDENV's contracts-first methodology.</p>
+        </li>
+        <li>
+            <h3><a href="articles/fragmentation-trap">The Fragmentation Trap: How YAML/Container-Centric GitOps are Hindering Cloud-Native Evolution and Breed Organizational inefficiencies</a> <a href="https://github.com/ondemandenv/ondemandenv.github.io/commits/main/articles/fragmentation-trap.md" class="source-history-link" title="View source history">[📝]</a></h3>
+            <p>Analyzes how prevalent YAML-centric GitOps practices lead to fragmentation, complexity, and friction, hindering true cloud-native progress.</p>
         </li>
     </ul>
 </div>
@@ -81,20 +183,60 @@ title: Articles | ONDEMANDENV.dev
     <p>Explore the principles of building resilient, adaptable systems through proper domain modeling and architectural partitioning.</p>
     <ul class="articles-list">
         <li>
-            <h3><a href="articles/boundaries-coupling-complexity-lessons-software-society-nature">Boundaries, Coupling, and Complexity: Lessons from Software, Society, and Nature</a></h3>
-            <p>A foundational exploration of how boundaries and coupling represent universal patterns for resilient systems.</p>
+            <h3><a href="articles/boundaries-coupling-complexity-lessons-software-society-nature">🌍 Boundaries, Coupling, and Complexity: Lessons from Software, Society, and Nature</a> <a href="https://github.com/ondemandenv/ondemandenv.github.io/commits/main/articles/boundaries-coupling-complexity-lessons-software-society-nature.md" class="source-history-link" title="View source history">[📝]</a></h3>
+            <p>A foundational exploration of how boundaries, coupling, and system decomposition represent universal patterns across software engineering, human society, and natural systems.</p>
         </li>
         <li>
-            <h3><a href="articles/eliminating-accidental-complexity">From Exponential to Linear: How Domain Boundaries Eliminate Accidental Complexity</a></h3>
-            <p>The foundational article showing how proper domain boundaries transform complexity from exponential to linear growth patterns.</p>
+            <h3><a href="articles/eliminating-accidental-complexity">🎯 From Exponential to Linear: How Domain Boundaries Eliminate Accidental Complexity</a> <a href="https://github.com/ondemandenv/ondemandenv.github.io/commits/main/articles/eliminating-accidental-complexity.md" class="source-history-link" title="View source history">[📝]</a></h3>
+            <p>The foundational article showing how proper domain boundaries eliminate multiple forms of exponential accidental complexity.</p>
         </li>
         <li>
-            <h3><a href="articles/kd-tree-software-partition-sequence">The K-D Tree of Software: Why Partition Sequence Determines System Complexity</a></h3>
-            <p>The first article to explicitly connect k-d tree data structures to software architecture design, revealing how partition sequence creates exponential complexity differences.</p>
+            <h3><a href="articles/dependency-hell-architectural-necessity">⚙️ JAR Hell: A Concrete Example of How Domain Entanglement Creates Exponential Accidental Complexity</a> <a href="https://github.com/ondemandenv/ondemandenv.github.io/commits/main/articles/dependency-hell-architectural-necessity.md" class="source-history-link" title="View source history">[📝]</a></h3>
+            <p>Using dependency conflicts as a concrete, hands-on example of broader DDD principles.</p>
         </li>
         <li>
-            <h3><a href="articles/from-rds-to-distributed-phases-evolution-enhanced">From RDS-Centric to Distributed Systems: An Evolution Through Architectural Phases</a></h3>
+            <h3><a href="articles/great-constraint-shift-physical-logical-partitioning">⚡ The Great Constraint Shift: From Physical to Logical Partitioning in Modern Systems</a> <a href="https://github.com/ondemandenv/ondemandenv.github.io/commits/main/articles/great-constraint-shift-physical-logical-partitioning.md" class="source-history-link" title="View source history">[📝]</a></h3>
+            <p>How the evolution from metal to cloud represents a fundamental constraint inversion that enables entirely new approaches to system design and organizational structure.</p>
+        </li>
+        <li>
+            <h3><a href="articles/kd-tree-software-partition-sequence">The K-D Tree of Software: Why Partition Sequence Determines System Complexity</a> <a href="https://github.com/ondemandenv/ondemandenv.github.io/commits/main/articles/kd-tree-software-partition-sequence.md" class="source-history-link" title="View source history">[📝]</a></h3>
+            <p>The first article to explicitly connect k-d tree data structures to software architecture design.</p>
+        </li>
+        <li>
+            <h3><a href="articles/stateful-deployment-dimensional-partitioning">Breaking the Stateful Deployment Ceiling: Dimensional Partitioning for DevOps</a> <a href="https://github.com/ondemandenv/ondemandenv.github.io/commits/main/articles/stateful-deployment-dimensional-partitioning.md" class="source-history-link" title="View source history">[📝]</a></h3>
+            <p>Applies dimensional partitioning principles to solve the last barrier in continuous delivery—stateful deployments.</p>
+        </li>
+        <li>
+            <h3><a href="articles/strategic-partitioning-k-d-trees-ddd-event-sourcing">The Art of Strategic Partitioning: Lessons from K-d Trees, Domain-Driven Design, and Event Sourcing</a> <a href="https://github.com/ondemandenv/ondemandenv.github.io/commits/main/articles/strategic-partitioning-k-d-trees-ddd-event-sourcing.md" class="source-history-link" title="View source history">[📝]</a></h3>
+            <p>A complete guide to understanding partitioning strategy through k-d tree foundations.</p>
+        </li>
+        <li>
+            <h3><a href="articles/from-rds-to-distributed-phases-evolution-enhanced">From RDS-Centric to Distributed Systems: An Evolution Through Architectural Phases</a> <a href="https://github.com/ondemandenv/ondemandenv.github.io/commits/main/articles/from-rds-to-distributed-phases-evolution-enhanced.md" class="source-history-link" title="View source history">[📝]</a></h3>
             <p>A comprehensive guide to understanding the evolutionary phases of modern application architecture.</p>
+        </li>
+        <li>
+            <h3><a href="articles/kubernetes-bounded-contexts">Kubernetes, Bounded Contexts, and Accidental Complexity</a> <a href="https://github.com/ondemandenv/ondemandenv.github.io/commits/main/articles/kubernetes-bounded-contexts.md" class="source-history-link" title="View source history">[📝]</a></h3>
+            <p>A pragmatic DDD-first guide to deciding when clusters help—and when they just get in the way.</p>
+        </li>
+        <li>
+            <h3><a href="articles/domain-driven-design-automation">Domain-Driven Design: From Theory to Practice with Modern Automation Platforms</a> <a href="https://github.com/ondemandenv/ondemandenv.github.io/commits/main/articles/domain-driven-design-automation.md" class="source-history-link" title="View source history">[📝]</a></h3>
+            <p>How platforms like ONDEMANDENV are emerging to bridge the gap between DDD theory and operational reality.</p>
+        </li>
+        <li>
+            <h3><a href="articles/architecting-for-agility-cqrs-event-driven">Architecting for Agility and Resilience: An Event-Driven CQRS Approach on a Modern Development Platform</a> <a href="https://github.com/ondemandenv/ondemandenv.github.io/commits/main/articles/architecting-for-agility-cqrs-event-driven.md" class="source-history-link" title="View source history">[📝]</a></h3>
+            <p>Outlines a CQRS and event-driven approach for distributed systems, emphasizing how platforms like ONDEMANDENV.dev simplify development.</p>
+        </li>
+        <li>
+            <h3><a href="articles/distributed-monolith">The Perils of the Distributed Monolith: Why Monolithic Thinking Fails in Distributed Systems</a> <a href="https://github.com/ondemandenv/ondemandenv.github.io/commits/main/articles/distributed-monolith.md" class="source-history-link" title="View source history">[📝]</a></h3>
+            <p>Explores how attempting to build distributed systems with a monolithic mindset leads to architectures that inherit the complexities of distribution without the benefits.</p>
+        </li>
+        <li>
+            <h3><a href="articles/spring-monolith-enabler">Spring Framework: The Monolith Enabler in a Microservices World</a> <a href="https://github.com/ondemandenv/ondemandenv.github.io/commits/main/articles/spring-monolith-enabler.md" class="source-history-link" title="View source history">[📝]</a></h3>
+            <p>Examines how Spring's design influences architecture decisions towards monolithic tendencies.</p>
+        </li>
+        <li>
+            <h3><a href="articles/frameworks-flux">Frameworks in Flux: Rethinking Internal Architecture in the Age of Microservices</a> <a href="https://github.com/ondemandenv/ondemandenv.github.io/commits/main/articles/frameworks-flux.md" class="source-history-link" title="View source history">[📝]</a></h3>
+            <p>Explores how the role of traditional application frameworks evolves in microservices architecture.</p>
         </li>
     </ul>
 </div>
@@ -104,20 +246,68 @@ title: Articles | ONDEMANDENV.dev
     <p>Deeper dives into the specific mechanics and philosophical underpinnings of the ONDEMANDENV platform and the Semantic Engineering approach.</p>
     <ul class="articles-list">
         <li>
-            <h3><a href="articles/architectural-prevention-paradigm">The Architectural Prevention Paradigm</a></h3>
-            <p>The definitive guide to architectural prevention—a paradigm shift from reactive governance to proactive elimination of failure classes using `contractsLib`.</p>
+            <h3><a href="articles/architectural-prevention-paradigm">🏛️ The Architectural Prevention Paradigm</a> <a href="https://github.com/ondemandenv/ondemandenv.github.io/commits/main/articles/architectural-prevention-paradigm.md" class="source-history-link" title="View source history">[📝]</a></h3>
+            <p>The definitive guide to architectural prevention - a paradigm shift from reactive governance to proactive elimination of failure classes using `contractsLib`.</p>
         </li>
         <li>
-            <h3><a href="articles/great-constraint-shift-physical-logical-partitioning">The Great Constraint Shift: From Physical to Logical Partitioning</a></h3>
-            <p>How the evolution from metal to cloud represents a fundamental constraint inversion that enables entirely new approaches to system design.</p>
+            <h3><a href="articles/fundamental-impossibility-declarative-infrastructure">The Fundamental Impossibility of Declarative Infrastructure: Why IaC Will Always Be Incomplete</a> <a href="https://github.com/ondemandenv/ondemandenv.github.io/commits/main/articles/fundamental-impossibility-declarative-infrastructure.md" class="source-history-link" title="View source history">[📝]</a></h3>
+            <p>A deep dive into the mathematical and philosophical limitations of Infrastructure as Code.</p>
         </li>
         <li>
-            <h3><a href="articles/provocative-sre-manifesto">The Provocative SRE Manifesto</a></h3>
-            <p>Transforms SRE from reactive firefighting to proactive innovation, advocating for white-box visibility and application-centric environments.</p>
+            <h3><a href="articles/provocative-sre-manifesto">The Provocative SRE Manifesto</a> <a href="https://github.com/ondemandenv/ondemandenv.github.io/commits/main/articles/provocative-sre-manifesto.md" class="source-history-link" title="View source history">[📝]</a></h3>
+            <p>A foundational manifesto that challenges traditional Site Reliability Engineering approaches.</p>
         </li>
-         <li>
-            <h3><a href="articles/odmd-arc">ONDEMANDENV Architecture Deep Dive</a></h3>
+        <li>
+            <h3><a href="articles/cognitive-architecture-of-code">The Cognitive Architecture of Code: Taming Ambiguity and Accidental Complexity</a> <a href="https://github.com/ondemandenv/ondemandenv.github.io/commits/main/articles/cognitive-architecture-of-code.md" class="source-history-link" title="View source history">[📝]</a></h3>
+            <p>Explores how strong type systems serve as cognitive architecture tools, managing human working memory and eliminating ambiguity.</p>
+        </li>
+        <li>
+            <h3><a href="articles/taming-complexity-moving-beyond-yaml-github-actions">Taming the Complexity: Moving Beyond YAML for Robust GitHub Actions Workflows</a> <a href="https://github.com/ondemandenv/ondemandenv.github.io/commits/main/articles/taming-complexity-moving-beyond-yaml-github-actions.md" class="source-history-link" title="View source history">[📝]</a></h3>
+            <p>Explores the challenges of YAML-centric GitHub Actions workflows and proposes a robust solution.</p>
+        </li>
+        <li>
+            <h3><a href="articles/siren-song-ai-vibe-coding-accidental-complexity">The Siren Song of AI Vibe Coding and the Shore of Accidental Complexity</a> <a href="https://github.com/ondemandenv/ondemandenv.github.io/commits/main/articles/siren-song-ai-vibe-coding-accidental-complexity.md" class="source-history-link" title="View source history">[📝]</a></h3>
+            <p>Discusses how AI-assisted coding can lead to accidental complexity, using GitHub Actions YAML as an example.</p>
+        </li>
+        <li>
+            <h3><a href="articles/compounding-complexity-trap">The Compounding Complexity Trap: Navigating Engineering's Messy Reality to Design Simpler Futures</a> <a href="https://github.com/ondemandenv/ondemandenv.github.io/commits/main/articles/compounding-complexity-trap.md" class="source-history-link" title="View source history">[📝]</a></h3>
+            <p>Navigating engineering's messy reality to design simpler futures.</p>
+        </li>
+        <li>
+            <h3><a href="articles/circuit-breaker-paradox">The Circuit Breaker Paradox: Resilience Savior or Symptom of a Deeper Malaise?</a> <a href="https://github.com/ondemandenv/ondemandenv.github.io/commits/main/articles/circuit-breaker-paradox.md" class="source-history-link" title="View source history">[📝]</a></h3>
+            <p>Explores the nuanced role of circuit breakers and the seductive simplicity of gateway-level fallbacks.</p>
+        </li>
+        <li>
+            <h3><a href="articles/scope-localization-ambiguity">The Entanglement of Complexity: Fragmentation, Inconsistency, and Ambiguity in Modern SDLC/DevOps</a> <a href="https://github.com/ondemandenv/ondemandenv.github.io/commits/main/articles/scope-localization-ambiguity.md" class="source-history-link" title="View source history">[📝]</a></h3>
+            <p>Explores how fragmentation, environmental inconsistency, and ambiguity in modern SDLC/DevOps are deeply intertwined symptoms.</p>
+        </li>
+        <li>
+            <h3><a href="articles/offload-to-platform">Abstracting and Offloading Infrastructure: Transforming the Software Development Lifecycle</a> <a href="https://github.com/ondemandenv/ondemandenv.github.io/commits/main/articles/offload-to-platform.md" class="source-history-link" title="View source history">[📝]</a></h3>
+            <p>Explores how abstracting and offloading infrastructure logic fundamentally benefits the entire SDLC.</p>
+        </li>
+        <li>
+            <h3><a href="articles/ilusion-smooth-yml">The Illusion of Smoothness: How Oversimplified Technologies Mask Complexity and Breed Inefficiency</a> <a href="https://github.com/ondemandenv/ondemandenv.github.io/commits/main/articles/ilusion-smooth-yml.md" class="source-history-link" title="View source history">[📝]</a></h3>
+            <p>Examines how oversimplified technologies and abstractions can mask underlying complexity.</p>
+        </li>
+        <li>
+            <h3><a href="articles/embracing-application-centric-infrastructure-cloud-1">Embracing Application-Centric Infrastructure in the Cloud 1</a> <a href="https://github.com/ondemandenv/ondemandenv.github.io/commits/main/articles/embracing-application-centric-infrastructure-cloud-1.md" class="source-history-link" title="View source history">[📝]</a></h3>
+            <p>Introduces the concept of Application-Centric Infrastructure, contrasting CloudFormation and Kubernetes philosophies.</p>
+        </li>
+        <li>
+            <h3><a href="articles/embracing-application-centric-infrastructure-cloud-2">Embracing Application-Centric Infrastructure in the Cloud 2</a> <a href="https://github.com/ondemandenv/ondemandenv.github.io/commits/main/articles/aws-cdk-eks-falling-short-multi-account-kubernetes.md" class="source-history-link" title="View source history">[📝]</a></h3>
+            <p>Discusses the limitations of the AWS CDK EKS module in practical, shared, multi-account EKS scenarios.</p>
+        </li>
+        <li>
+            <h3><a href="articles/implementing-application-centricity-declarative-contracts">Implementing Application-Centricity Part 3: The Power of Declarative Contracts and Platform Abstraction</a> <a href="https://github.com/ondemandenv/ondemandenv.github.io/commits/main/articles/implementing-application-centricity-declarative-contracts.md" class="source-history-link" title="View source history">[📝]</a></h3>
+            <p>Explains how ONDEMANDENV uses `contractsLib` to enable declarative contracts and platform abstraction.</p>
+        </li>
+        <li>
+            <h3><a href="articles/odmd-arc">ONDEMANDENV Architecture Deep Dive</a> <a href="https://github.com/ondemandenv/ondemandenv.github.io/commits/main/articles/odmd-arc.md" class="source-history-link" title="View source history">[📝]</a></h3>
             <p>A comprehensive overview of ONDEMANDENV architecture and implementation details.</p>
+        </li>
+        <li>
+            <h3><a href="articles/blurring-lines-dev-ops-modern-cloud">🔄 The Blurring Lines Between Development and Operations</a> <a href="https://github.com/ondemandenv/ondemandenv.github.io/commits/main/articles/blurring-lines-dev-ops-modern-cloud.md" class="source-history-link" title="View source history">[📝]</a></h3>
+            <p>How the traditional boundary between development and operations is rapidly dissolving in modern cloud environments.</p>
         </li>
     </ul>
 </div>
