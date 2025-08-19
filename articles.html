@@ -1,197 +1,123 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Articles | ONDEMANDENV.dev</title>
-    <link rel="stylesheet" href="styles.css">
-    
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-HLWV6BZQE1"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-HLWV6BZQE1');
-    </script>
-    <style>
-        .article-category {
-            margin-bottom: 3rem;
-            padding: 2rem;
-            border-radius: 8px;
-            background-color: #f8f9fa;
-            border-left: 4px solid var(--primary-color);
-        }
-        .article-category h2 {
-            margin-top: 0;
-            margin-bottom: 1.5rem;
-            font-size: 2rem;
-            color: var(--primary-color);
-        }
-        .articles-list li {
-            border-bottom: 1px solid #e1e5e9;
-            padding-bottom: 1rem;
-            margin-bottom: 1rem;
-        }
-        .articles-list li:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
-        }
-    </style>
-</head>
-<body>
-<header>
-    <nav>
-        <div class="logo">ONDEMANDENV.dev</div>
-        <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle mobile menu">
-            ☰
-        </button>
-        <ul class="nav-menu" id="nav-menu">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="philosophy.html">Philosophy</a></li>
-            <li><a href="platform.html">Platform</a></li>
-            <li><a href="articles.html">Articles</a></li>
-            <li><a href="documentation.html">Documentation</a></li>
-            <li><a href="https://github.com/ondemandenv" target="_blank">GitHub Org</a></li>
-            <li><a href="mailto:contacts@ondemandenv.dev">Request Demo</a></li>
-            <li class="language-switcher">
-                <select onchange="window.location.href=this.value;">
-                    <option value="articles.html" selected>English</option>
-                    <option value="ja/articles.html">日本語</option>
-                    <option value="zh-TW/articles.html">繁體中文</option>
-                </select>
-            </li>
-        </ul>
-    </nav>
-</header>
-
-<main>
-    <h1>Article Library</h1>
-    <p>Explore deeper dives into the concepts, challenges, and solutions related to Semantic Engineering and the ONDEMANDENV platform. The articles are grouped by theme to guide your reading.</p>
-
-    <div class="article-category" id="category-revolution">
-        <h2>🔥 The Semantic Engineering Revolution</h2>
-        <p>Start here. These flagship articles lay out the core vision for the next paradigm of software development.</p>
-        <ul class="articles-list">
-            <li>
-                <h3><a href="articles/semantic-engineering-revolution">Semantic Engineering Revolution: Building AI-Native Enterprises Around Living Models</a></h3>
-                <p>A comprehensive report on shifting from code-centric to semantic model-driven development, leveraging LLMs for enterprise knowledge management and workflow automation.</p>
-            </li>
-            <li>
-                <h3><a href="articles/semantic-projection-ondemandenv-ai-architecture">The Semantic Projection: How ONDEMANDENV Makes AI-Assisted Architecture a Reality</a></h3>
-                <p>Exploring how ONDEMANDENV bridges the gap between semantic models and running systems, enabling AI-assisted development through semantic projection.</p>
-            </li>
-             <li>
-                <h3><a href="articles/ai-agent-workflow-platform-architecture">🤖 AI Agent Workflow Platform: Enterprise Architecture Design</a></h3>
-                <p>A comprehensive enterprise architecture for a distributed, multi-tenant platform enabling AI-driven workflow automation through conversational DSL generation.</p>
-            </li>
-        </ul>
-    </div>
-
-    <div class="article-category" id="category-critiques">
-        <h2>⚔️ Critiques of Modern Ops & The Stagnation Cycle</h2>
-        <p>A collection of series and articles exposing the root causes of inefficiency, complexity, and stagnation in modern software operations.</p>
-        <ul class="articles-list">
-            <li>
-                <h3><a href="articles/x-ops-railroading-software-architecture">The X-Ops Railroading of Software Architecture</a></h3>
-                <p>How operational convenience created distributed systems chaos and a generation of "container tenants" instead of system architects.</p>
-            </li>
-            <li>
-                <h3><a href="articles/emperor-new-cluster-cross-cloud-kubernetes-lie">The Emperor's New Cluster: Exposing the Cross-Cloud Kubernetes Lie</a></h3>
-                <p>The definitive takedown of the cross-cloud Kubernetes mythology and how it has empowered operations teams to become gatekeepers, systematically killing developer innovation.</p>
-            </li>
-            <li>
-                <h3><a href="articles/merge-hell-myth-x-ops-contamination">The 'Merge Hell' Myth Series</a></h3>
-                <p>Exposes how "merge hell" is a manufactured crisis designed to hide ops team incompetence and corrupt software engineering decisions.</p>
-            </li>
-             <li>
-                <h3><a href="articles/root-cause-x-ops-flat-worldview-1">The X‑OPS Flat Worldview Series</a></h3>
-                <p>A six‑part series exposing the root cause behind the “x‑ops flat worldview,” cataloging its anti‑patterns, and laying out a practical governance method.</p>
-            </li>
-             <li>
-                <h3><a href="articles/skewer-problem-fake-engineering-ops">The Skewer Problem: How Fake Engineering in Ops Hijacked the SDLC</a></h3>
-                <p>A comprehensive technical critique exposing how tool mastery disguised as engineering is strangling software development.</p>
-            </li>
-        </ul>
-    </div>
-
-    <div class="article-category" id="category-ddd">
-        <h2>🏛️ Domain-Driven Design, Partitioning & Architecture</h2>
-        <p>Explore the principles of building resilient, adaptable systems through proper domain modeling and architectural partitioning.</p>
-        <ul class="articles-list">
-            <li>
-                <h3><a href="articles/boundaries-coupling-complexity-lessons-software-society-nature">Boundaries, Coupling, and Complexity: Lessons from Software, Society, and Nature</a></h3>
-                <p>A foundational exploration of how boundaries and coupling represent universal patterns for resilient systems.</p>
-            </li>
-            <li>
-                <h3><a href="articles/eliminating-accidental-complexity">From Exponential to Linear: How Domain Boundaries Eliminate Accidental Complexity</a></h3>
-                <p>The foundational article showing how proper domain boundaries transform complexity from exponential to linear growth patterns.</p>
-            </li>
-            <li>
-                <h3><a href="articles/kd-tree-software-partition-sequence">The K-D Tree of Software: Why Partition Sequence Determines System Complexity</a></h3>
-                <p>The first article to explicitly connect k-d tree data structures to software architecture design, revealing how partition sequence creates exponential complexity differences.</p>
-            </li>
-            <li>
-                <h3><a href="articles/from-rds-to-distributed-phases-evolution-enhanced">From RDS-Centric to Distributed Systems: An Evolution Through Architectural Phases</a></h3>
-                <p>A comprehensive guide to understanding the evolutionary phases of modern application architecture.</p>
-            </li>
-        </ul>
-    </div>
-
-    <div class="article-category" id="category-foundations">
-        <h2>🧬 Foundational Principles & Platform Mechanics</h2>
-        <p>Deeper dives into the specific mechanics and philosophical underpinnings of the ONDEMANDENV platform and the Semantic Engineering approach.</p>
-        <ul class="articles-list">
-            <li>
-                <h3><a href="articles/architectural-prevention-paradigm">The Architectural Prevention Paradigm</a></h3>
-                <p>The definitive guide to architectural prevention—a paradigm shift from reactive governance to proactive elimination of failure classes using `contractsLib`.</p>
-            </li>
-            <li>
-                <h3><a href="articles/great-constraint-shift-physical-logical-partitioning">The Great Constraint Shift: From Physical to Logical Partitioning</a></h3>
-                <p>How the evolution from metal to cloud represents a fundamental constraint inversion that enables entirely new approaches to system design.</p>
-            </li>
-            <li>
-                <h3><a href="articles/provocative-sre-manifesto">The Provocative SRE Manifesto</a></h3>
-                <p>Transforms SRE from reactive firefighting to proactive innovation, advocating for white-box visibility and application-centric environments.</p>
-            </li>
-             <li>
-                <h3><a href="articles/odmd-arc">ONDEMANDENV Architecture Deep Dive</a></h3>
-                <p>A comprehensive overview of ONDEMANDENV architecture and implementation details.</p>
-            </li>
-        </ul>
-    </div>
-
-</main>
-
-<footer style="text-align: center; padding: 2rem; border-top: 2px solid #e1e5e9; margin-top: 3rem;">
-    <p>&copy; 2025 ONDEMANDENV.dev. All rights reserved.</p>
-    <div style="margin-top: 1rem;">
-        <a href="https://github.com/ondemandenv" style="margin: 0 1rem; color: #4ecdc4; text-decoration: none;">GitHub Organization</a>
-        <a href="mailto:contacts@ondemandenv.dev" style="margin: 0 1rem; color: #4ecdc4; text-decoration: none;">Contact Us</a>
-        <a href="documentation.html" style="margin: 0 1rem; color: #4ecdc4; text-decoration: none;">Documentation</a>
-    </div>
-</footer>
-
-<script>
-// Mobile menu toggle functionality
-document.addEventListener('DOMContentLoaded', function() {
-    const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
-    const navMenu = document.getElementById('nav-menu');
-    
-    if (mobileMenuToggle && navMenu) {
-        mobileMenuToggle.addEventListener('click', function() {
-            navMenu.classList.toggle('open');
-            
-            // Update aria-expanded for accessibility
-            const isOpen = navMenu.classList.contains('open');
-            mobileMenuToggle.setAttribute('aria-expanded', isOpen);
-            
-            // Change hamburger icon
-            mobileMenuToggle.textContent = isOpen ? '×' : '☰';
-        });
+---
+layout: default
+title: Articles | ONDEMANDENV.dev
+---
+<style>
+    .article-category {
+        margin-bottom: 3rem;
+        padding: 2rem;
+        border-radius: 8px;
+        background-color: #f8f9fa;
+        border-left: 4px solid var(--primary-color);
     }
-});
-</script>
+    .article-category h2 {
+        margin-top: 0;
+        margin-bottom: 1.5rem;
+        font-size: 2rem;
+        color: var(--primary-color);
+    }
+    .articles-list li {
+        border-bottom: 1px solid #e1e5e9;
+        padding-bottom: 1rem;
+        margin-bottom: 1rem;
+    }
+    .articles-list li:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+    }
+</style>
 
-</body>
-</html>
+<h1>Article Library</h1>
+<p>Explore deeper dives into the concepts, challenges, and solutions related to Semantic Engineering and the ONDEMANDENV platform. The articles are grouped by theme to guide your reading.</p>
+
+<div class="article-category" id="category-revolution">
+    <h2>🔥 The Semantic Engineering Revolution</h2>
+    <p>Start here. These flagship articles lay out the core vision for the next paradigm of software development.</p>
+    <ul class="articles-list">
+        <li>
+            <h3><a href="articles/semantic-engineering-revolution">Semantic Engineering Revolution: Building AI-Native Enterprises Around Living Models</a></h3>
+            <p>A comprehensive report on shifting from code-centric to semantic model-driven development, leveraging LLMs for enterprise knowledge management and workflow automation.</p>
+        </li>
+        <li>
+            <h3><a href="articles/semantic-projection-ondemandenv-ai-architecture">The Semantic Projection: How ONDEMANDENV Makes AI-Assisted Architecture a Reality</a></h3>
+            <p>Exploring how ONDEMANDENV bridges the gap between semantic models and running systems, enabling AI-assisted development through semantic projection.</p>
+        </li>
+         <li>
+            <h3><a href="articles/ai-agent-workflow-platform-architecture">🤖 AI Agent Workflow Platform: Enterprise Architecture Design</a></h3>
+            <p>A comprehensive enterprise architecture for a distributed, multi-tenant platform enabling AI-driven workflow automation through conversational DSL generation.</p>
+        </li>
+    </ul>
+</div>
+
+<div class="article-category" id="category-critiques">
+    <h2>⚔️ Critiques of Modern Ops & The Stagnation Cycle</h2>
+    <p>A collection of series and articles exposing the root causes of inefficiency, complexity, and stagnation in modern software operations.</p>
+    <ul class="articles-list">
+        <li>
+            <h3><a href="articles/x-ops-railroading-software-architecture">The X-Ops Railroading of Software Architecture</a></h3>
+            <p>How operational convenience created distributed systems chaos and a generation of "container tenants" instead of system architects.</p>
+        </li>
+        <li>
+            <h3><a href="articles/emperor-new-cluster-cross-cloud-kubernetes-lie">The Emperor's New Cluster: Exposing the Cross-Cloud Kubernetes Lie</a></h3>
+            <p>The definitive takedown of the cross-cloud Kubernetes mythology and how it has empowered operations teams to become gatekeepers, systematically killing developer innovation.</p>
+        </li>
+        <li>
+            <h3><a href="articles/merge-hell-myth-x-ops-contamination">The 'Merge Hell' Myth Series</a></h3>
+            <p>Exposes how "merge hell" is a manufactured crisis designed to hide ops team incompetence and corrupt software engineering decisions.</p>
+        </li>
+         <li>
+            <h3><a href="articles/root-cause-x-ops-flat-worldview-1">The X‑OPS Flat Worldview Series</a></h3>
+            <p>A six‑part series exposing the root cause behind the “x‑ops flat worldview,” cataloging its anti‑patterns, and laying out a practical governance method.</p>
+        </li>
+         <li>
+            <h3><a href="articles/skewer-problem-fake-engineering-ops">The Skewer Problem: How Fake Engineering in Ops Hijacked the SDLC</a></h3>
+            <p>A comprehensive technical critique exposing how tool mastery disguised as engineering is strangling software development.</p>
+        </li>
+    </ul>
+</div>
+
+<div class="article-category" id="category-ddd">
+    <h2>🏛️ Domain-Driven Design, Partitioning & Architecture</h2>
+    <p>Explore the principles of building resilient, adaptable systems through proper domain modeling and architectural partitioning.</p>
+    <ul class="articles-list">
+        <li>
+            <h3><a href="articles/boundaries-coupling-complexity-lessons-software-society-nature">Boundaries, Coupling, and Complexity: Lessons from Software, Society, and Nature</a></h3>
+            <p>A foundational exploration of how boundaries and coupling represent universal patterns for resilient systems.</p>
+        </li>
+        <li>
+            <h3><a href="articles/eliminating-accidental-complexity">From Exponential to Linear: How Domain Boundaries Eliminate Accidental Complexity</a></h3>
+            <p>The foundational article showing how proper domain boundaries transform complexity from exponential to linear growth patterns.</p>
+        </li>
+        <li>
+            <h3><a href="articles/kd-tree-software-partition-sequence">The K-D Tree of Software: Why Partition Sequence Determines System Complexity</a></h3>
+            <p>The first article to explicitly connect k-d tree data structures to software architecture design, revealing how partition sequence creates exponential complexity differences.</p>
+        </li>
+        <li>
+            <h3><a href="articles/from-rds-to-distributed-phases-evolution-enhanced">From RDS-Centric to Distributed Systems: An Evolution Through Architectural Phases</a></h3>
+            <p>A comprehensive guide to understanding the evolutionary phases of modern application architecture.</p>
+        </li>
+    </ul>
+</div>
+
+<div class="article-category" id="category-foundations">
+    <h2>🧬 Foundational Principles & Platform Mechanics</h2>
+    <p>Deeper dives into the specific mechanics and philosophical underpinnings of the ONDEMANDENV platform and the Semantic Engineering approach.</p>
+    <ul class="articles-list">
+        <li>
+            <h3><a href="articles/architectural-prevention-paradigm">The Architectural Prevention Paradigm</a></h3>
+            <p>The definitive guide to architectural prevention—a paradigm shift from reactive governance to proactive elimination of failure classes using `contractsLib`.</p>
+        </li>
+        <li>
+            <h3><a href="articles/great-constraint-shift-physical-logical-partitioning">The Great Constraint Shift: From Physical to Logical Partitioning</a></h3>
+            <p>How the evolution from metal to cloud represents a fundamental constraint inversion that enables entirely new approaches to system design.</p>
+        </li>
+        <li>
+            <h3><a href="articles/provocative-sre-manifesto">The Provocative SRE Manifesto</a></h3>
+            <p>Transforms SRE from reactive firefighting to proactive innovation, advocating for white-box visibility and application-centric environments.</p>
+        </li>
+         <li>
+            <h3><a href="articles/odmd-arc">ONDEMANDENV Architecture Deep Dive</a></h3>
+            <p>A comprehensive overview of ONDEMANDENV architecture and implementation details.</p>
+        </li>
+    </ul>
+</div>
