@@ -677,6 +677,10 @@ a:focus, button:focus, select:focus, input:focus {
     color: var(--primary-color);
 }
 
+.next-step-card a.btn-primary, .next-step-card a.btn-secondary {
+    color: white; /* Override to ensure readability on colored buttons */
+}
+
 .prevention-feature {
     color: var(--text-color); /* Ensure text is readable on white background */
 }
