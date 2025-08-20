@@ -204,7 +204,7 @@ title: Documentation - ONDEMANDENV.dev
     <main class="docs-content-area">
         <section class="doc-section" id="top"> <!-- Added id=top for potential skip link -->
              <h1>Documentation & Getting Started</h1>
-            <p>This documentation guides you through setting up and using ONDEMANDENV to implement the core <strong>anti-stagnation patterns</strong> that enable your teams to break free from integration complexity and accelerate innovation. By following these steps, you will get the platform operational and learn how to integrate your services into an ecosystem built for velocity.</p>
+            <p>This documentation guides you through the setup and practical application of the ONDEMANDENV platform. The goal is to provide the technical foundation needed to implement the principles of <strong>Semantic Engineering</strong> described in the <a href="philosophy.html">Philosophy</a> section. By following these steps, you will learn how to use the platform to create, project, and evolve your own living semantic models.</p>
          </section>
 
         <section class="doc-section" id="setup">
@@ -381,13 +381,11 @@ cdk bootstrap aws://WORKSPACE0_ACCOUNT_ID/YOUR_REGION</code></pre>
         </section>
 
         <section class="doc-section" id="core-workflow">
-            <h2>Core Workflow & How-To Guide</h2>
-            <p>Once the platform is running, here's the detailed workflow for defining, implementing, and managing a
-                service Enver, incorporating common how-to tasks:</p>
+            <h2>Core Workflow: The Semantic Projection in Action</h2>
+            <p>This workflow demonstrates how to use the ONDEMANDENV platform to translate your architectural intent into a running system. Each step is a part of the <strong>Semantic Projection</strong> process.</p>
 
-            <h3 id="define-in-contractslib">1. Define a New Service & its Envers in `contractsLib`</h3>
-            <p>Architecture, dependencies, and target environments are defined centrally. Edit your organization's <span
-                    class="inline-code">contractsLib</span> repository (e.g., <span class="inline-code">&lt;your-org&gt;/my-contracts-lib-repo</span>).
+            <h3 id="define-in-contractslib">1. Anchor Your Intent in `contractsLib`</h3>
+            <p>The process begins by codifying your architectural intent in the `contractsLib`. This is where you define the boundaries, dependencies, and products of your services, creating the **Semantic Anchor** for your system.
             </p>
             <h4>Key Actions:</h4>
             <ul>
@@ -508,9 +506,8 @@ export class MyOrgContracts extends OdmdContracts {
                 The platform then generates/updates the specific CI/CD workflow file (e.g., <span class="inline-code">.github/workflows/ODMD_OrderManagerDev_*.yaml</span>)
                 in the service repository (<span class="inline-code">order-manager-service</span>).</p>
 
-            <h3 id="implement-service">2. Implement the Service (CDK Stack / Dockerfile / Script)</h3>
-            <p>In the service's repository (e.g., <span class="inline-code">order-manager-service</span>), implement the
-                logic and infrastructure definitions.</p>
+            <h3 id="implement-service">2. Implement the Service Logic</h3>
+            <p>With the architectural contracts defined, you can now implement the service's internal logic. The `contractsLib` provides the guardrails, ensuring your implementation adheres to the agreed-upon architecture.</p>
             <h4>How-To: Consume a Product in CDK</h4>
             <p>Within your CDK stack class (extending <span class="inline-code">OdmdEnverCdk</span> from <span
                     class="inline-code">@ondemandenv/odmd-contracts-base</span>), use the static method <span
@@ -620,9 +617,8 @@ export class OrderManagerStack extends OdmdEnverCdk {
             </code>
 </pre>
 
-            <h3 id="deploy-iterate">3. Deploy & Iterate</h3>
-            <p>Once your service is implemented, you can deploy it to the target environment. The platform automates the
-                deployment process based on Git events and dependency updates.</p>
+            <h3 id="deploy-iterate">3. Project, Validate, and Iterate</h3>
+            <p>Once your service is implemented, you can deploy it. This is the **Semantic Projection** in action: the platform takes your intent (from `contractsLib`) and your logic (from your service repo) and projects it into a running, verifiable `Enver`.</p>
             <h4>Key Actions & Triggers:</h4>
             <ul>
                 <li><strong>Code Change Trigger:</strong> Pushing commits to a branch in the service repository triggers
@@ -646,10 +642,8 @@ export class OrderManagerStack extends OdmdEnverCdk {
                 </li>
             </ul>
 
-            <h3 id="clone-enver">4. Clone an Enver</h3>
-            <p>You can clone an existing Enver to create a new one with a different configuration or target environment.
-                This is useful for creating a staging environment, testing new features, or deploying to a different
-                AWS account.</p>
+            <h3 id="clone-enver">4. Evolve and Experiment with Clones</h3>
+            <p>To test changes or experiment with new features without destabilizing existing environments, you can clone any `Enver`. This creates a safe, isolated sandbox that is a perfect projection of its parent, allowing for fearless innovation.</p>
             <h4>Key Actions:</h4>
             <ul>
                 <li><strong>Define Clone in `contractsLib`:</strong> In your <span
@@ -668,9 +662,8 @@ export class OrderManagerStack extends OdmdEnverCdk {
                 </li>
             </ul>
 
-            <h3 id="delete-clone">5. Delete a Clone</h3>
-            <p>When you no longer need a cloned Enver, you can delete it to clean up resources and avoid unnecessary
-                costs.</p>
+            <h3 id="delete-clone">5. Clean Up Evolved Clones</h3>
+            <p>Ephemeral environments should be short-lived. Once an experiment is complete, the cloned `Enver` can be destroyed, ensuring no resources are left behind.</p>
             <h4>Key Actions:</h4>
             <ul>
                 <li><strong>Remove from `contractsLib`:</strong> In your <span class="inline-code">contractsLib</span>
