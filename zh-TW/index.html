@@ -1,136 +1,86 @@
-<!DOCTYPE html>
-<html lang="zh-TW">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ONDEMANDENV.dev - 為分散式系統提供全方位環境管理</title>
-    <meta name="description" content="ONDEMANDENV.dev 為分散式系統提供全方位的環境管理，透過隔離的、按需的生命週期實現真正的微服務敏捷性。我們正在尋求投資者、合作夥伴和SDE合約機會。">
-    <meta name="keywords" content="ondemandenv, 分散式系統, 微服務, 環境管理, devops, 雲端, aws, SDE, 軟體開發工程師, 自由工作者, 合約, 投資, 合作夥伴">
-    <link rel="stylesheet" href="../styles.css">
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-HLWV6BZQE1"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
+---
+layout: default
+---
+<section id="hero">
+    <h1>駕馭分散式系統的複雜性</h1>
+    <p>釋放真正的微服務敏捷性。ONDEMANDENV透過完全由程式碼定義的隔離式、按需生命週期，將服務從共享環境中解放出來。</p>
+    <div class="cta-buttons">
+        <a href="documentation.html" class="btn btn-primary">開始使用</a>
+        <a href="concepts.html" class="btn btn-secondary">學習核心概念</a>
+    </div>
+</section>
 
-      gtag('config', 'G-HLWV6BZQE1');
-    </script>
-</head>
-<body>
-<header>
-    <nav>
-        <div class="logo">ONDEMANDENV.dev</div>
-        <ul>
-            <li><a href="../index.html">首頁</a></li>
-            <li><a href="concepts.html">核心概念</a></li>
-            <li><a href="patterns.html">模式和使用案例</a></li>
-            <li><a href="documentation.html">文檔</a></li>
-            <li><a href="articles.html">文章</a></li>
-            <li><a href="https://github.com/ondemandenv" target="_blank">GitHub 組織</a></li>
-            <li><a href="mailto:contacts@ondemandenv.dev">申請演示</a></li>
-        </ul>
-        <div class="language-switcher">
-            <select onchange="window.location.href=this.value;">
-                <option value="../index.html">English</option>
-                <option value="../ja/index.html">日本語</option>
-                <option value="index.html" selected>繁體中文</option>
-            </select>
+<section id="introduction">
+    <h2>分散式系統的挑戰：複雜性</h2>
+    <p>現代系統常面臨零散化、不一致性、模糊不清以及效率低落的 GitOps 實踐等問題。ONDEMANDENV 正面解決這些挑戰。</p>
+     <div class="challenges-grid">
+        <div class="challenge">
+            <img src="../images/fragmentation-icon.png" alt="零散化圖示"> <!-- Placeholder: Replace with actual icon -->
+            <h3>零散化與單體式環境</h3>
+            <p>服務規模可能不大，但它們往往共享僵化的開發/測試/生產環境，這阻礙了獨立部署並造成瓶頸。基礎架構和應用程式配置變得分散且缺乏連結。</p>
         </div>
-    </nav>
-</header>
-
-<main>
-    <section id="hero">
-        <h1>駕馭分散式系統的複雜性</h1>
-        <p>釋放真正的微服務敏捷性。ONDEMANDENV透過完全由程式碼定義的隔離式、按需生命週期，將服務從共享環境中解放出來。</p>
-        <div class="cta-buttons">
-            <a href="documentation.html" class="btn btn-primary">開始使用</a>
-            <a href="concepts.html" class="btn btn-secondary">學習核心概念</a>
+        <div class="challenge">
+            <img src="../images/inconsistency-icon.png" alt="不一致性圖示"> <!-- Placeholder: Replace with actual icon -->
+            <h3>不一致性</h3>
+            <p>環境與服務之間的配置差異會導致不可靠的部署以及「在我機器上可以運作」的問題。</p>
         </div>
-    </section>
-
-    <section id="introduction">
-        <h2>分散式系統的挑戰：複雜性</h2>
-        <p>現代系統常面臨零散化、不一致性、模糊不清以及效率低落的 GitOps 實踐等問題。ONDEMANDENV 正面解決這些挑戰。</p>
-         <div class="challenges-grid">
-            <div class="challenge">
-                <img src="../images/fragmentation-icon.png" alt="零散化圖示"> <!-- Placeholder: Replace with actual icon -->
-                <h3>零散化與單體式環境</h3>
-                <p>服務規模可能不大，但它們往往共享僵化的開發/測試/生產環境，這阻礙了獨立部署並造成瓶頸。基礎架構和應用程式配置變得分散且缺乏連結。</p>
-            </div>
-            <div class="challenge">
-                <img src="../images/inconsistency-icon.png" alt="不一致性圖示"> <!-- Placeholder: Replace with actual icon -->
-                <h3>不一致性</h3>
-                <p>環境與服務之間的配置差異會導致不可靠的部署以及「在我機器上可以運作」的問題。</p>
-            </div>
-            <div class="challenge">
-                <img src="../images/ambiguity-icon.png" alt="模糊不清圖示"> <!-- Placeholder: Replace with actual icon -->
-                <h3>模糊不清</h3>
-                <p>服務與基礎設施之間隱晦的依賴關係和不明確的權責歸屬會造成混淆並拖慢開發速度。</p>
-            </div>
-            <div class="challenge">
-                <img src="../images/gitops-trap-icon.png" alt="GitOps 陷阱圖示"> <!-- Placeholder: Replace with actual icon -->
-                <h3>YAML/GitOps 陷阱</h3>
-                <p>過度依賴靜態 YAML 和以容器為中心的工具，往往無法有效管理完整的應用程式生命週期及其依賴關係。</p>
-            </div>
+        <div class="challenge">
+            <img src="../images/ambiguity-icon.png" alt="模糊不清圖示"> <!-- Placeholder: Replace with actual icon -->
+            <h3>模糊不清</h3>
+            <p>服務與基礎設施之間隱晦的依賴關係和不明確的權責歸屬會造成混淆並拖慢開發速度。</p>
         </div>
-    </section>
-
-     <section id="how-it-works-overview">
-        <h2>ONDEMANDENV 如何提供幫助</h2>
-         <p>ONDEMANDENV 提供一個基於編碼合約 (`contractsLib`)、版本化環境 (`Envers`) 和按需複製的統一平台。</p>
-        <div class="architecture-diagram">
-            <img src="https://raw.githubusercontent.com/ondemandenv/.github/main/profile/img_4.png"
-                 alt="ONDEMANDENV 平台架構"
-                 class="arch-image">
-            <div class="diagram-caption">
-                <p>定義合約後，平台會在您的 AWS 帳戶中協調基礎設施、依賴關係和部署。</p>
-            </div>
+        <div class="challenge">
+            <img src="../images/gitops-trap-icon.png" alt="GitOps 陷阱圖示"> <!-- Placeholder: Replace with actual icon -->
+            <h3>YAML/GitOps 陷阱</h3>
+            <p>過度依賴靜態 YAML 和以容器為中心的工具，往往無法有效管理完整的應用程式生命週期及其依賴關係。</p>
         </div>
-        <div class="cta-buttons">
-             <a href="concepts.html" class="btn btn-secondary">探索核心概念</a>
-             <a href="patterns.html" class="btn btn-secondary">查看使用案例</a>
+    </div>
+</section>
+
+ <section id="how-it-works-overview">
+    <h2>ONDEMANDENV 如何提供幫助</h2>
+     <p>ONDEMANDENV 提供一個基於編碼合約 (`contractsLib`)、版本化環境 (`Envers`) 和按需複製的統一平台。</p>
+    <div class="architecture-diagram">
+        <img src="https://raw.githubusercontent.com/ondemandenv/.github/main/profile/img_4.png"
+             alt="ONDEMANDENV 平台架構"
+             class="arch-image">
+        <div class="diagram-caption">
+            <p>定義合約後，平台會在您的 AWS 帳戶中協調基礎設施、依賴關係和部署。</p>
         </div>
-    </section>
+    </div>
+    <div class="cta-buttons">
+         <a href="concepts.html" class="btn btn-secondary">探索核心概念</a>
+         <a href="patterns.html" class="btn btn-secondary">查看使用案例</a>
+    </div>
+</section>
 
-    <section id="next-steps">
-        <h2>準備好深入了解了嗎？</h2>
-        <div class="next-steps-grid">
-             <div class="next-step-item">
-                 <h3>理解核心概念</h3>
-                 <p>了解 Envers、ContractsLib、複製以及以應用程式為中心的方法。</p>
-                 <a href="concepts.html" class="btn btn-primary">閱讀概念</a>
-            </div>
-             <div class="next-step-item">
-                 <h3>查看實際模式</h3>
-                 <p>探索 ONDEMANDENV 如何解決共享基礎設施和跨帳戶部署等常見挑戰。</p>
-                 <a href="patterns.html" class="btn btn-primary">查看模式</a>
-            </div>
-             <div class="next-step-item">
-                 <h3>開始使用</h3>
-                 <p>遵循設定指南，探索 GitHub 上的程式碼範例，並開始管理您的環境。</p>
-                 <a href="documentation.html" class="btn btn-primary">查看文件</a>
-            </div>
+<section id="next-steps">
+    <h2>準備好深入了解了嗎？</h2>
+    <div class="next-steps-grid">
+         <div class="next-step-item">
+             <h3>理解核心概念</h3>
+             <p>了解 Envers、ContractsLib、複製以及以應用程式為中心的方法。</p>
+             <a href="concepts.html" class="btn btn-primary">閱讀概念</a>
         </div>
-    </section>
-
-    <section id="opportunities">
-        <h2>加入我們並進行合作</h2>
-        <p>ONDEMANDENV.dev 正積極尋求投資者和策略合作夥伴，幫助我們成長並革新分散式系統的管理方式。我們相信合作創新的方法，並願意討論各種合作夥伴模式。</p>
-        <p>與此同時，ONDEMANDENV.dev 背後的核心專業知識也可用於顧問、合約和自由軟體開發工程師（SDE）角色。如果您在分散式系統、雲端架構（特別是 AWS）或 DevOps 自動化方面有具挑戰性的項目，讓我們連結吧！</p>
-        <div class="cta-buttons">
-            <a href="mailto:contacts@ondemandenv.dev?subject=投資/合作夥伴查詢" class="btn btn-primary">聯絡投資/合作夥伴</a>
-            <a href="mailto:contacts@ondemandenv.dev?subject=SDE合約/自由工作查詢" class="btn btn-secondary">聯絡SDE角色</a>
+         <div class="next-step-item">
+             <h3>查看實際模式</h3>
+             <p>探索 ONDEMANDENV 如何解決共享基礎設施和跨帳戶部署等常見挑戰。</p>
+             <a href="patterns.html" class="btn btn-primary">查看模式</a>
         </div>
-    </section>
+         <div class="next-step-item">
+             <h3>開始使用</h3>
+             <p>遵循設定指南，探索 GitHub 上的程式碼範例，並開始管理您的環境。</p>
+             <a href="documentation.html" class="btn btn-primary">查看文件</a>
+        </div>
+    </div>
+</section>
 
-</main>
-
-<footer>
-    <p>&copy; 2024 ONDEMANDENV.dev. 版權所有。</p>
-    <!-- 可視需要添加指向概念、模式、文件的鏈接 -->
-</footer>
-
-</body>
-</html>
+<section id="opportunities">
+    <h2>加入我們並進行合作</h2>
+    <p>ONDEMANDENV.dev 正積極尋求投資者和策略合作夥伴，幫助我們成長並革新分散式系統的管理方式。我們相信合作創新的方法，並願意討論各種合作夥伴模式。</p>
+    <p>與此同時，ONDEMANDENV.dev 背後的核心專業知識也可用於顧問、合約和自由軟體開發工程師（SDE）角色。如果您在分散式系統、雲端架構（特別是 AWS）或 DevOps 自動化方面有具挑戰性的項目，讓我們連結吧！</p>
+    <div class="cta-buttons">
+        <a href="mailto:contacts@ondemandenv.dev?subject=投資/合作夥伴查詢" class="btn btn-primary">聯絡投資/合作夥伴</a>
+        <a href="mailto:contacts@ondemandenv.dev?subject=SDE合約/自由工作查詢" class="btn btn-secondary">聯絡SDE角色</a>
+    </div>
+</section>

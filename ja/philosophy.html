@@ -1,176 +1,57 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ONDEMANDENVの哲学 - プロアクティブなアーキテクチャ的予防</title>
-    <meta name="description" content="ONDEMANDENVの核心的な哲学を学びます。リアクティブなガバナンスからプロアクティブなアーキテクチャ的予防へと移行し、回復力とアジリティのある分散システムを構築します。">
-    <link rel="stylesheet" href="../styles.css">
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-HLWV6BZQE1"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-HLWV6BZQE1');
-    </script>
-    <style>
-        .page-header {
-            background: var(--header-bg-color);
-            padding: 3rem 2rem;
-            text-align: center;
-            border-bottom: 1px solid var(--border-color);
-            margin-bottom: 3rem;
-        }
-        .page-header h1 {
-            font-size: 2.8rem;
-            margin-bottom: 0.5rem;
-            color: var(--primary-color);
-        }
-        .page-header p {
-            font-size: 1.25rem;
-            color: var(--text-color-secondary);
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        .content-section {
-            margin-bottom: 4rem;
-        }
-        .content-section h2 {
-            font-size: 2.2rem;
-            margin-bottom: 1.5rem;
-            border-bottom: 2px solid var(--primary-color);
-            padding-bottom: 0.5rem;
-            display: inline-block;
-        }
-        .content-section p, .content-section ul {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            margin-bottom: 1rem;
-        }
-        .content-section li {
-            margin-bottom: 0.75rem;
-        }
-        .callout-box {
-            background: #f0f4f8;
-            border-left: 5px solid #4a90e2;
-            padding: 1.5rem 2rem;
-            margin: 2rem 0;
-            border-radius: 5px;
-        }
-        .comparison-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-        .comparison-card {
-            border: 1px solid var(--border-color);
-            padding: 2rem;
-            border-radius: 8px;
-        }
-        .comparison-card h3 {
-            font-size: 1.5rem;
-            margin-top: 0;
-            color: var(--primary-color);
-        }
-        .comparison-card--bad {
-            border-color: #e53935;
-            background: #fff1f0;
-        }
-        .comparison-card--bad h3 { color: #c62828; }
-        .comparison-card--good {
-            border-color: #43a047;
-            background: #f1f8e9;
-        }
-        .comparison-card--good h3 { color: #2e7d32; }
-    </style>
-</head>
-<body>
-<header>
-    <nav>
-        <div class="logo">ONDEMANDENV.dev</div>
-        <ul>
-            <li><a href="index.html">ホーム</a></li>
-            <li><a href="philosophy.html">私たちの哲学</a></li>
-            <li><a href="concepts.html">コアコンセプト</a></li>
-            <li><a href="patterns.html">パターンとユースケース</a></li>
-            <li><a href="documentation.html">ドキュメンテーション</a></li>
-            <li><a href="articles.html">記事</a></li>
-            <li><a href="https://github.com/ondemandenv" target="_blank">GitHub組織</a></li>
-            <li><a href="mailto:contacts@ondemandenv.dev">デモのリクエスト</a></li>
-        </ul>
-        <div class="language-switcher">
-            <select onchange="window.location.href=this.value;">
-                <option value="../philosophy.html">English</option>
-                <option value="philosophy.html" selected>日本語</option>
-                <option value="../zh-TW/philosophy.html">繁體中文</option>
-            </select>
+---
+layout: default
+---
+<section class="page-header">
+    <h1>私たちの哲学</h1>
+    <p>ONDEMANDENVは、機能やツールを超えたパラダイムシフトです。私たちは、ほとんどの分散システムの障害の根本原因は、悪いコードではなく、アーキテクチャの規律の欠如にあると信じています。私たちは症状だけでなく、病気そのものを治療します。</p>
+</section>
+
+<section class="content-section" id="trap">
+    <h2>病気：断片化の罠の必然性</h2>
+    <p>現代のマイクロサービス開発は、チームが独立して作業することを奨励します。この自律性は強力ですが、ダークサイドがあります。強制的なシステム全体の調整メカニズムがなければ、<a href="articles/fragmentation-trap.html">「断片化の罠」</a>に陥ります。</p>
+    <p>これは、それぞれが独立してうまく設計されたサービスが、意図せずして「分散モノリス」を作成する場所です。つまり、変更が危険で遅くなるほど、もつれて壊れやすいシステムです。かつてホワイトボード上で明確だったアーキテクチャは、コミットごとに崩壊します。</p>
+</section>
+
+<section class="content-section" id="reactive-governance">
+    <h2>リアクティブガバナンスの幻想</h2>
+    <p>ほとんどの組織は、この崩壊にリアクティブな対策で対抗しようとします。</p>
+    <div class="comparison-grid">
+        <div class="comparison-card comparison-card--bad">
+            <h3>旧来の方法</h3>
+            <ul>
+                <li><strong>ドキュメントによるアーキテクチャ：</strong>公開された瞬間に時代遅れになるWikiや設計書に依存します。</li>
+                <li><strong>委員会によるガバナンス：</strong>アーキテクチャレビューボードがゲートキーパーとして機能し、自動化された強制力を提供することなく開発を遅らせます。</li>
+                <li><strong>セーフティネットとしてのテスト：</strong>修正に最も費用がかかる後期CIまたはステージング環境で、根本的な統合とセキュリティの欠陥を発見します。</li>
+            </ul>
         </div>
-    </nav>
-</header>
-
-<main>
-    <section class="page-header">
-        <h1>私たちの哲学</h1>
-        <p>ONDEMANDENVは、機能やツールを超えたパラダイムシフトです。私たちは、ほとんどの分散システムの障害の根本原因は、悪いコードではなく、アーキテクチャの規律の欠如にあると信じています。私たちは症状だけでなく、病気そのものを治療します。</p>
-    </section>
-
-    <section class="content-section" id="trap">
-        <h2>病気：断片化の罠の必然性</h2>
-        <p>現代のマイクロサービス開発は、チームが独立して作業することを奨励します。この自律性は強力ですが、ダークサイドがあります。強制的なシステム全体の調整メカニズムがなければ、<a href="articles/fragmentation-trap.html">「断片化の罠」</a>に陥ります。</p>
-        <p>これは、それぞれが独立してうまく設計されたサービスが、意図せずして「分散モノリス」を作成する場所です。つまり、変更が危険で遅くなるほど、もつれて壊れやすいシステムです。かつてホワイトボード上で明確だったアーキテクチャは、コミットごとに崩壊します。</p>
-    </section>
-
-    <section class="content-section" id="reactive-governance">
-        <h2>リアクティブガバナンスの幻想</h2>
-        <p>ほとんどの組織は、この崩壊にリアクティブな対策で対抗しようとします。</p>
-        <div class="comparison-grid">
-            <div class="comparison-card comparison-card--bad">
-                <h3>旧来の方法</h3>
-                <ul>
-                    <li><strong>ドキュメントによるアーキテクチャ：</strong>公開された瞬間に時代遅れになるWikiや設計書に依存します。</li>
-                    <li><strong>委員会によるガバナンス：</strong>アーキテクチャレビューボードがゲートキーパーとして機能し、自動化された強制力を提供することなく開発を遅らせます。</li>
-                    <li><strong>セーフティネットとしてのテスト：</strong>修正に最も費用がかかる後期CIまたはステージング環境で、根本的な統合とセキュリティの欠陥を発見します。</li>
-                </ul>
-            </div>
-            <div class="comparison-card comparison-card--good">
-                <h3>ONDEMANDENVの方法</h3>
-                <ul>
-                    <li><strong>コードとしてのアーキテクチャ：</strong><code>contractsLib</code>は、システムのアーキテクチャに関する単一の実行可能な信頼できる情報源です。陳腐化することはありません。</li>
-                    <li><strong>コンパイラによるガバナンス：</strong>アーキテクチャのルールはプログラムで強制されます。非準拠の変更は、設計段階での「コンパイルエラー」です。</li>
-                    <li><strong>治療としての予防：</strong>サービスの実装が始まる前に欠陥が検出されます。テストは、基本的な互換性ではなく、ビジネスロジックを検証します。</li>
-                </ul>
-            </div>
+        <div class="comparison-card comparison-card--good">
+            <h3>ONDEMANDENVの方法</h3>
+            <ul>
+                <li><strong>コードとしてのアーキテクチャ：</strong><code>contractsLib</code>は、システムのアーキテクチャに関する単一の実行可能な信頼できる情報源です。陳腐化することはありません。</li>
+                <li><strong>コンパイラによるガバナンス：</strong>アーキテクチャのルールはプログラムで強制されます。非準拠の変更は、設計段階での「コンパイルエラー」です。</li>
+                <li><strong>治療としての予防：</strong>サービスの実装が始まる前に欠陥が検出されます。テストは、基本的な互換性ではなく、ビジネスロジックを検証します。</li>
+            </ul>
         </div>
-        <p style="margin-top: 2rem;">リアクティブガバナンスは高尚な努力ですが、スケーラブルではなく、強制力がなく、常に古い情報で動作するため、根本的に失敗します。</p>
-    </section>
+    </div>
+    <p style="margin-top: 2rem;">リアクティブガバナンスは高尚な努力ですが、スケーラブルではなく、強制力がなく、常に古い情報で動作するため、根本的に失敗します。</p>
+</section>
 
-    <section class="content-section" id="proactive-prevention">
-        <h2>パラダイムシフト：プロアクティブなアーキテクチャ的予防</h2>
-        <p>ONDEMANDENVのアプローチは、アーキテクチャをシステムの第一級の、テスト可能で、強制力のあるコンポーネントとして扱うことです。これは、サービスの憲法として機能する実行可能な仕様である<strong><code>contractsLib</code></strong>を通じて実現されます。</p>
-        <div class="callout-box">
-            <p><strong><code>contractsLib</code>は強制関数です。</strong>悪いアーキテクチャ上の決定を表現することを不可能にします。契約ライブラリの「言語」がそれを許可しないため、循環依存関係を作成したり、存在しないサービスを消費したり、セキュリティポリシーに違反したりすることはできません。</p>
-        </div>
-        <p>これは単なるアーキテクチャのリンターではありません。初日からシステムの整合性を保証する基盤となるフレームワークです。設計されたものが構築されることを保証します。</p>
-    </section>
+<section class="content-section" id="proactive-prevention">
+    <h2>パラダイムシフト：プロアクティブなアーキテクチャ的予防</h2>
+    <p>ONDEMANDENVのアプローチは、アーキテクチャをシステムの第一級の、テスト可能で、強制力のあるコンポーネントとして扱うことです。これは、サービスの憲法として機能する実行可能な仕様である<strong><code>contractsLib</code></strong>を通じて実現されます。</p>
+    <div class="callout-box">
+        <p><strong><code>contractsLib</code>は強制関数です。</strong>悪いアーキテクチャ上の決定を表現することを不可能にします。契約ライブラリの「言語」がそれを許可しないため、循環依存関係を作成したり、存在しないサービスを消費したり、セキュリティポリシーに違反したりすることはできません。</p>
+    </div>
+    <p>これは単なるアーキテクチャのリンターではありません。初日からシステムの整合性を保証する基盤となるフレームワークです。設計されたものが構築されることを保証します。</p>
+</section>
 
-    <section class="content-section" id="freedom">
-        <h2>自由の基盤としての規律</h2>
-        <p>これは制限的に聞こえるかもしれませんが、その逆が真実です。この厳格で事前の規律こそが、下流の自由とアジリティを可能にするものです。</p>
-        <ul>
-            <li><strong>開発者の自信：</strong>チームは、より広いシステムを壊していないと確信して、サービスの境界内で迅速に革新できます。契約は彼らのセーフティネットです。</li>
-            <li><strong>意味のある自律性：</strong>アーキテクチャのガードレールが自動化され、強制されているため、チームは混乱を引き起こすリスクなしに真の自律性を与えられます。</li>
-            <li><strong>リスクのないオンデマンド環境：</strong>単一のコマンドでエフェメラル環境をスピンアップする機能は、その環境が本番環境の忠実度の高い準拠したレプリカである場合にのみ強力です。私たちのガバナンスモデルはこれを保証します。</li>
-        </ul>
-        <p>ガバナンスを左にシフトし、プロアクティブにすることで、障害を防ぐだけではありません。真にアジャイルで革新的なチームを構築できる、安定した予測可能な基盤を構築します。</p>
-    </section>
-
-</main>
-
-<footer>
-    <p>&copy; 2024 ONDEMANDENV.dev. All rights reserved.</p>
-</footer>
-
-</body>
-</html> 
+<section class="content-section" id="freedom">
+    <h2>自由の基盤としての規律</h2>
+    <p>これは制限的に聞こえるかもしれませんが、その逆が真実です。この厳格で事前の規律こそが、下流の自由とアジリティを可能にするものです。</p>
+    <ul>
+        <li><strong>開発者の自信：</strong>チームは、より広いシステムを壊していないと確信して、サービスの境界内で迅速に革新できます。契約は彼らのセーフティネットです。</li>
+        <li><strong>意味のある自律性：</strong>アーキテクチャのガードレールが自動化され、強制されているため、チームは混乱を引き起こすリスクなしに真の自律性を与えられます。</li>
+        <li><strong>リスクのないオンデマンド環境：</strong>単一のコマンドでエフェメラル環境をスピンアップする機能は、その環境が本番環境の忠実度の高い準拠したレプリカである場合にのみ強力です。私たちのガバナンスモデルはこれを保証します。</li>
+    </ul>
+    <p>ガバナンスを左にシフトし、プロアクティブにすることで、障害を防ぐだけではありません。真にアジャイルで革新的なチームを構築できる、安定した予測可能な基盤を構築します。</p>
+</section>
