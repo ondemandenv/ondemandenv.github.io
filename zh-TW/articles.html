@@ -1,110 +1,54 @@
-<!DOCTYPE html>
-<html lang="zh-TW">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>文章 - ONDEMANDENV.dev</title>
-    <link rel="stylesheet" href="../styles.css">
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-HLWV6BZQE1"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
+---
+layout: default
+---
+<h1>文章</h1>
+<p>探索與 ONDEMANDENV 和現代軟體開發實踐相關的概念、挑戰和解決方案的更深入探討。</p>
 
-      gtag('config', 'G-HLWV6BZQE1');
-    </script>
-    <style>
-        /* Basic styling for articles list */
-        .articles-list { list-style: none; padding-left: 0; }
-        .articles-list li { margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-color); }
-        .articles-list h3 { margin-bottom: 0.5rem; }
-        .articles-list a { text-decoration: none; color: var(--primary-color); }
-        .articles-list a:hover { text-decoration: underline; }
-    </style>
-</head>
-<body>
-<header>
-    <nav>
-        <div class="logo">ONDEMANDENV.dev</div>
-        <ul>
-            <li><a href="index.html">首頁</a></li>
-            <li><a href="concepts.html">核心概念</a></li>
-            <li><a href="patterns.html">模式和使用案例</a></li>
-            <li><a href="documentation.html">文檔</a></li>
-            <li><a href="articles.html">文章</a></li>
-            <li><a href="https://github.com/ondemandenv" target="_blank">GitHub 組織</a></li>
-            <li><a href="mailto:contacts@ondemandenv.dev">申請演示</a></li>
-        </ul>
-        <div class="language-switcher">
-            <select onchange="window.location.href=this.value;">
-                <option value="../articles.html">English</option>
-                <option value="../ja/articles.html">日本語</option>
-                <option value="articles.html" selected>繁體中文</option>
-            </select>
-        </div>
-    </nav>
-</header>
-
-<main>
-    <h1>文章</h1>
-    <p>探索與 ONDEMANDENV 和現代軟體開發實踐相關的概念、挑戰和解決方案的更深入探討。</p>
-
-    <ul class="articles-list">
-        <li>
-            <h3><a href="../articles/kubernetes-2-0-engineering-victory/">⚔️ Kubernetes 2.0: From YAML and Administrative Ops to Typed Abstractions and Engineering</a> <span style="color: #666;">[僅英文版]</span></h3>
-            <p><strong>🔥 旗艦勝利宣言:</strong> 工程技術如何在現代基礎設施中決定性地戰勝行政運營的權威分析。揭露以YAML為中心的方法如何產生組織病理（部落知識、英雄文化、創新癱瘓），同時展示像ONDEMANDENV這樣的TypeScript優先平台如何代表抽象化成為一等公民的未來。展示從配置語言到工程語言、從Helm模板到代碼驅動基礎設施、從運維把關到平台賦能的完整轉型。</p>
-        </li>
-        <li>
-            <h3><a href="https://www.linkedin.com/pulse/fragmentation-trap-how-yaml-centric-gitops-mentality-hindering-yang-ufaje/">The Fragmentation Trap: How YAML/Container-Centric GitOps are Hindering Cloud-Native Evolution and Breed Organizational inefficiencies</a> <a href="../articles/fragmentation-trap.html">[英文版]</a></h3>
-            <p>Analyzes how prevalent YAML-centric GitOps practices lead to fragmentation, complexity, and friction, hindering true cloud-native progress.</p>
-        </li>
-        <li>
-            <h3><a href="https://www.linkedin.com/pulse/from-fragmented-tools-unified-stacks-embracing-cloud-gary-yang-zfjpe">Embracing Application-Centric Infrastructure in the Cloud 1</a> <a href="articles/embracing-application-centric-infrastructure-cloud-1.html">[中文版]</a></h3>
-            <p>Introduces the concept of Application-Centric Infrastructure, contrasting CloudFormation and Kubernetes philosophies and advocating for managing vertical slices.</p>
-        </li>
-        <li>
-            <h3><a href="https://www.linkedin.com/pulse/embracing-application-centric-infrastructure-cloud-2-gary-yang-6jzje/">Embracing Application-Centric Infrastructure in the Cloud 2</a> <a href="articles/app-centric-infra2.html">[中文版]</a></h3>
-            <p>Discusses the limitations of the AWS CDK EKS module, particularly `Cluster.addManifest`, in practical, shared, multi-account EKS scenarios.</p>
-        </li>
-        <li>
-            <h3><a href="https://www.linkedin.com/pulse/embracing-application-centric-infrastructure-cloud-3-power-gary-yang-3ziqe/">Implementing Application-Centricity Part 3: The Power of Declarative Contracts and Platform Abstraction</a> <a href="articles/app-centric-infra3.html">[中文版]</a></h3>
-            <p>Explains how ONDEMANDENV uses `contractsLib` and independent `Envers` to enable true ACI, contrast traditional silos, and provide powerful debugging capabilities via environment comparison.</p>
-        </li>
-         <li>
-            <h3><a href="https://www.linkedin.com/pulse/entanglement-complexity-fragmentation-inconsistency-ambiguity-yang-pqohe">The Entanglement of Complexity: Fragmentation, Inconsistency, and Ambiguity in Modern SDLC/DevOps</a> <a href="../articles/scope-localization-ambiguity.html">[英文版]</a></h3>
-            <p>Explores the interconnected challenges of fragmentation, environment inconsistency ("snowflaking"), and ambiguity in modern software development and operations.</p>
-        </li>
-         <li>
-            <h3><a href="https://www.linkedin.com/pulse/abstracting-offloading-infrastructure-transforming-software-gary-yang-murpe">Abstracting and Offloading Infrastructure: Transforming the Software Development Lifecycle</a> <a href="../articles/offload-to-platform.html">[英文版]</a></h3>
-            <p>Highlights the benefits of abstracting infrastructure logic via IaC, enabling focus on business value and accelerating delivery.</p>
-        </li>
-        <li>
-            <h3><a href="https://www.linkedin.com/pulse/perils-distributed-monolith-why-monolithic-thinking-fails-gary-yang-ocfvc">The Perils of the Distributed Monolith: Why Monolithic Thinking Fails in Distributed Systems</a> <a href="../articles/distributed-monolith.html">[英文版]</a></h3>
-            <p>Examines the anti-pattern of applying monolithic thinking (synchronous calls, RDS reliance) to microservices, leading to distributed monoliths.</p>
-        </li>
-         <li>
-            <h3><a href="https://www.linkedin.com/pulse/operator-trap-why-sysadmin-led-sdlcs-stifle-agility-gary-yang-qlwxc">The Perilous Path: Operator-Led SDLC in the Age of Microservices</a> <a href="../articles/perilous-ops-leading.html">[英文版]</a></h3>
-            <p>Discusses the limitations of operator-led SDLC for microservices, focusing on source control and YAML configuration complexities.</p>
-        </li>
-         <li>
-            <h3><a href="https://www.linkedin.com/pulse/illusion-smoothness-how-oversimplified-technologies-mask-gary-yang-qohoc">The Illusion of Smoothness: How Oversimplified Technologies Mask Real Conflicts in Modern Software and kill innovation</a> <a href="../articles/ilusion-smooth-yml.html">[英文版]</a></h3>
-            <p>Compares how technologies like RDS transactions and YAML-centric GitOps can oversimplify and mask underlying business logic and configuration conflicts.</p>
-        </li>
-        <!--
-        <li>
-            <h3><a href="articles/odmd-arc.html">ONDEMANDENV Architecture Deep Dive</a> <a href="articles/odmd-arc.html">[中文版]</a></h3>
-            <p>Provides a detailed look into the core concepts and components of the ONDEMANDENV platform architecture.</p>
-        </li>
-        -->
-    </ul>
-
-</main>
-
-<footer>
-    <p>&copy; 2024 ONDEMANDENV.dev. 版權所有。</p>
-    <!-- 可視需要添加指向概念、模式、文件、文章的鏈接 -->
-</footer>
-
-</body>
-</html> 
+<ul class="articles-list">
+    <li>
+        <h3><a href="../articles/kubernetes-2-0-engineering-victory/">⚔️ Kubernetes 2.0: From YAML and Administrative Ops to Typed Abstractions and Engineering</a> <span style="color: #666;">[僅英文版]</span></h3>
+        <p><strong>🔥 旗艦勝利宣言:</strong> 工程技術如何在現代基礎設施中決定性地戰勝行政運營的權威分析。揭露以YAML為中心的方法如何產生組織病理（部落知識、英雄文化、創新癱瘓），同時展示像ONDEMANDENV這樣的TypeScript優先平台如何代表抽象化成為一等公民的未來。展示從配置語言到工程語言、從Helm模板到代碼驅動基礎設施、從運維把關到平台賦能的完整轉型。</p>
+    </li>
+    <li>
+        <h3><a href="https://www.linkedin.com/pulse/fragmentation-trap-how-yaml-centric-gitops-mentality-hindering-yang-ufaje/">The Fragmentation Trap: How YAML/Container-Centric GitOps are Hindering Cloud-Native Evolution and Breed Organizational inefficiencies</a> <a href="../articles/fragmentation-trap.html">[英文版]</a></h3>
+        <p>Analyzes how prevalent YAML-centric GitOps practices lead to fragmentation, complexity, and friction, hindering true cloud-native progress.</p>
+    </li>
+    <li>
+        <h3><a href="https://www.linkedin.com/pulse/from-fragmented-tools-unified-stacks-embracing-cloud-gary-yang-zfjpe">Embracing Application-Centric Infrastructure in the Cloud 1</a> <a href="articles/embracing-application-centric-infrastructure-cloud-1.html">[中文版]</a></h3>
+        <p>Introduces the concept of Application-Centric Infrastructure, contrasting CloudFormation and Kubernetes philosophies and advocating for managing vertical slices.</p>
+    </li>
+    <li>
+        <h3><a href="https://www.linkedin.com/pulse/embracing-application-centric-infrastructure-cloud-2-gary-yang-6jzje/">Embracing Application-Centric Infrastructure in the Cloud 2</a> <a href="articles/app-centric-infra2.html">[中文版]</a></h3>
+        <p>Discusses the limitations of the AWS CDK EKS module, particularly `Cluster.addManifest`, in practical, shared, multi-account EKS scenarios.</p>
+    </li>
+    <li>
+        <h3><a href="https://www.linkedin.com/pulse/embracing-application-centric-infrastructure-cloud-3-power-gary-yang-3ziqe/">Implementing Application-Centricity Part 3: The Power of Declarative Contracts and Platform Abstraction</a> <a href="articles/app-centric-infra3.html">[中文版]</a></h3>
+        <p>Explains how ONDEMANDENV uses `contractsLib` and independent `Envers` to enable true ACI, contrast traditional silos, and provide powerful debugging capabilities via environment comparison.</p>
+    </li>
+     <li>
+        <h3><a href="https://www.linkedin.com/pulse/entanglement-complexity-fragmentation-inconsistency-ambiguity-yang-pqohe">The Entanglement of Complexity: Fragmentation, Inconsistency, and Ambiguity in Modern SDLC/DevOps</a> <a href="../articles/scope-localization-ambiguity.html">[英文版]</a></h3>
+        <p>Explores the interconnected challenges of fragmentation, environment inconsistency ("snowflaking"), and ambiguity in modern software development and operations.</p>
+    </li>
+     <li>
+        <h3><a href="https://www.linkedin.com/pulse/abstracting-offloading-infrastructure-transforming-software-gary-yang-murpe">Abstracting and Offloading Infrastructure: Transforming the Software Development Lifecycle</a> <a href="../articles/offload-to-platform.html">[英文版]</a></h3>
+        <p>Highlights the benefits of abstracting infrastructure logic via IaC, enabling focus on business value and accelerating delivery.</p>
+    </li>
+    <li>
+        <h3><a href="https://www.linkedin.com/pulse/perils-distributed-monolith-why-monolithic-thinking-fails-gary-yang-ocfvc">The Perils of the Distributed Monolith: Why Monolithic Thinking Fails in Distributed Systems</a> <a href="../articles/distributed-monolith.html">[英文版]</a></h3>
+        <p>Examines the anti-pattern of applying monolithic thinking (synchronous calls, RDS reliance) to microservices, leading to distributed monoliths.</p>
+    </li>
+     <li>
+        <h3><a href="https://www.linkedin.com/pulse/operator-trap-why-sysadmin-led-sdlcs-stifle-agility-gary-yang-qlwxc">The Perilous Path: Operator-Led SDLC in the Age of Microservices</a> <a href="../articles/perilous-ops-leading.html">[英文版]</a></h3>
+        <p>Discusses the limitations of operator-led SDLC for microservices, focusing on source control and YAML configuration complexities.</p>
+    </li>
+     <li>
+        <h3><a href="https://www.linkedin.com/pulse/illusion-smoothness-how-oversimplified-technologies-mask-gary-yang-qohoc">The Illusion of Smoothness: How Oversimplified Technologies Mask Real Conflicts in Modern Software and kill innovation</a> <a href="../articles/ilusion-smooth-yml.html">[英文版]</a></h3>
+        <p>Compares how technologies like RDS transactions and YAML-centric GitOps can oversimplify and mask underlying business logic and configuration conflicts.</p>
+    </li>
+    <!--
+    <li>
+        <h3><a href="articles/odmd-arc.html">ONDEMANDENV Architecture Deep Dive</a> <a href="articles/odmd-arc.html">[中文版]</a></h3>
+        <p>Provides a detailed look into the core concepts and components of the ONDEMANDENV platform architecture.</p>
+    </li>
+    -->
+</ul>
