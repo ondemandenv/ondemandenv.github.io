@@ -9,7 +9,7 @@ author: "Gary Yang"
 
 The promise of Kubernetes was a unified, portable, and scalable future for application deployment. We were sold a dream of a "cloud operating system" that would free us from the specifics of any single provider. But for many, the reality has been a descent into a labyrinth of accidental complexity, vendor lock-in, and organizational dysfunction.
 
-This four-part series is a deep-dive into the hidden costs of that complexity. It challenges the foundational myths of the Kubernetes ecosystem and explores the profound impact—technical, financial, and cultural—of choosing a solution that is often far more powerful and complicated than the problem it is meant to solve.
+This seven-part series is a deep-dive into the hidden costs of that complexity. It challenges the foundational myths of the Kubernetes ecosystem and explores the profound impact—technical, financial, and cultural—of choosing a solution that is often far more powerful and complicated than the problem it is meant to solve.
 
 From the strategic lie of cross-cloud portability to the tactical nightmare of the daily developer workflow, this series deconstructs the hype and offers a path back to a simpler, more productive, and developer-centric approach to cloud-native infrastructure.
 
@@ -17,14 +17,23 @@ From the strategic lie of cross-cloud portability to the tactical nightmare of t
 
 ### The Articles in This Series
 
-1.  **[Part 1: The Emperor's New Cluster: Exposing the Cross-Cloud Kubernetes Lie](/articles/eks-critique-series/part-1-emperor-new-cluster/)**
-    *   *We begin by tackling the foundational myth of cross-cloud portability that seduces organizations into the Kubernetes ecosystem.*
+1.  **[Part 1: Dismantling the Kubernetes Hype](/articles/eks-critique-series/part-1-dismantling-hype/)**
+    *   *We begin by deconstructing the hype and exposing the misleading promises of the K8s ecosystem.*
 
-2.  **[Part 2: The EKS "Pants Off to Fart" Scenario](/articles/eks-critique-series/part-2-pants-off-scenario/)**
-    *   *A concrete, technical breakdown of the immense, unnecessary complexity of deploying a simple web application on EKS compared to a cloud-native alternative.*
+2.  **[Part 2: The Emperor's New Cluster](/articles/eks-critique-series/part-2-emperor-new-cluster/)**
+    *   *A dive into the specific, pervasive myth of seamless cross-cloud portability.*
 
-3.  **[Part 3: The Colonizers: How the Kubernetes Industrial Complex Preys on Accidental Complexity](/articles/eks-critique-series/part-3-the-colonizers-tax/)**
-    *   *An exploration of the vendor ecosystem that thrives on the complexity created by EKS, selling expensive "solutions" to problems that shouldn't exist in the first place.*
+3.  **[Part 3: The EKS "Pants Off to Fart" Scenario](/articles/eks-critique-series/part-3-pants-off-scenario/)**
+    *   *A concrete, technical breakdown of the immense, unnecessary complexity of deploying a simple web application on EKS.*
 
-4.  **[Part 4: The Unspoken Trap: How the Kubernetes Industrial Complex Enforces Cultural Lock-In](/articles/eks-critique-series/part-4-the-cultural-virus/)**
-    *   *The final piece examines the cultural rot that sets in—how complexity creates knowledge silos, stifles innovation, and turns platform teams into gatekeepers.*
+4.  **[Part 4: Kubernetes and Misaligned Boundaries](/articles/eks-critique-series/part-4-bounded-contexts/)**
+    *   *An architectural framework (DDD) to understand *why* this complexity happens and how to make better design decisions.*
+
+5.  **[Part 5: The Colonizers: An EKS Complexity Tax](/articles/eks-critique-series/part-5-the-colonizers-tax/)**
+    *   *An exploration of the vendor ecosystem that thrives on the complexity created by EKS, selling expensive "solutions" to problems that shouldn't exist.*
+
+6.  **[Part 6: The Cultural Virus of Complexity](/articles/eks-critique-series/part-6-the-cultural-virus/)**
+    *   *An examination of the cultural rot that sets in—how complexity creates knowledge silos, stifles innovation, and turns platform teams into gatekeepers.*
+
+7.  **[Part 7: Kubernetes 2.0: The Engineering Victory](/articles/eks-critique-series/part-7-engineering-victory/)**
+    *   *A forward-looking vision for solving these problems by moving from YAML-based administration to code-based platform engineering.*

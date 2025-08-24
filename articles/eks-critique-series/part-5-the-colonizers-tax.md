@@ -2,18 +2,22 @@
 ---
 layout: article
 title: "The Colonizers: How the Kubernetes Industrial Complex Preys on Accidental Complexity"
-permalink: /articles/eks-critique-series/part-3-the-colonizers-tax/
+permalink: /articles/eks-critique-series/part-5-the-colonizers-tax/
 author: "Gary Yang"
 ---
 
 <div class="series-notice">
-  <p><strong>This is Part 3 of a 4-part series on the hidden costs and complexities of Kubernetes.</strong></p>
-  <ul>
-    <li><a href="/articles/eks-critique-series/part-1-emperor-new-cluster/">Part 1: The Emperor's New Cluster: Exposing the Cross-Cloud Kubernetes Lie</a></li>
-    <li><a href="/articles/eks-critique-series/part-2-pants-off-scenario/">Part 2: The EKS "Pants Off to Fart" Scenario</a></li>
-    <li>Part 3: The Colonizers: How the Kubernetes Industrial Complex Preys on Accidental Complexity</li>
-    <li><a href="/articles/eks-critique-series/part-4-the-cultural-virus/">Part 4: The Unspoken Trap: How the Kubernetes Industrial Complex Enforces Cultural Lock-In</a></li>
-  </ul>
+  <p><strong>This is Part 5 of a 7-part series on the hidden costs and complexities of Kubernetes.</strong></p>
+  <p>This series deconstructs the hype, examines the architectural fallacies, and explores the cultural damage wrought by the "Kubernetes Complexity Engine."</p>
+  <ol>
+    <li><a href="/articles/eks-critique-series/part-1-dismantling-hype/">Dismantling the Kubernetes Hype</a></li>
+    <li><a href="/articles/eks-critique-series/part-2-emperor-new-cluster/">The Emperor's New Cluster</a></li>
+    <li><a href="/articles/eks-critique-series/part-3-pants-off-scenario/">The EKS "Pants Off to Fart" Scenario</a></li>
+    <li><a href="/articles/eks-critique-series/part-4-bounded-contexts/">Kubernetes and Misaligned Boundaries</a></li>
+    <li><strong>The Colonizers: An EKS Complexity Tax</strong> (You are here)</li>
+    <li><a href="/articles/eks-critique-series/part-6-the-cultural-virus/">The Cultural Virus of Complexity</a></li>
+    <li><a href="/articles/eks-critique-series/part-7-engineering-victory/">Kubernetes 2.0: The Engineering Victory</a></li>
+  </ol>
 </div>
 
 ## The Colonizers: How the Kubernetes Industrial Complex Preys on Accidental Complexity
@@ -92,6 +96,6 @@ The colonizers are naked. Their entire empire is built on the foundation of acci
 ---
 
 <div class="series-navigation">
-  <a href="/articles/eks-critique-series/part-2-pants-off-scenario/" class="previous">&laquo; Previous: Part 2</a>
-  <a href="/articles/eks-critique-series/part-4-the-cultural-virus/" class="next">Next: Part 4 &raquo;</a>
+  <a href="/articles/eks-critique-series/part-4-bounded-contexts/" class="previous">&laquo; Previous: Part 4</a>
+  <a href="/articles/eks-critique-series/part-6-the-cultural-virus/" class="next">Next: Part 6 &raquo;</a>
 </div>

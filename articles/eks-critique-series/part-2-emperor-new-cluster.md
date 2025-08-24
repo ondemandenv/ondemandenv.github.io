@@ -1,7 +1,7 @@
 ---
 layout: article
 title: "The Emperor's New Cluster: Exposing the Cross-Cloud Kubernetes Lie and How Ops Killed Innovation"
-permalink: /articles/eks-critique-series/part-1-emperor-new-cluster/
+permalink: /articles/eks-critique-series/part-2-emperor-new-cluster/
 date: 2025-01-21
 author: "Gary Yang"
 description: "The cross-cloud Kubernetes promise is a myth that has empowered operations teams to become gatekeepers, killing developer innovation and creating unnecessary complexity in pursuit of a portability fantasy."
@@ -9,13 +9,17 @@ keywords: ["kubernetes", "cross-cloud", "portability", "ops", "devops", "innovat
 ---
 
 <div class="series-notice">
-  <p><strong>This is Part 1 of a 4-part series on the hidden costs and complexities of Kubernetes.</strong></p>
-  <ul>
-    <li>Part 1: The Emperor's New Cluster: Exposing the Cross-Cloud Kubernetes Lie</li>
-    <li><a href="/articles/eks-critique-series/part-2-pants-off-scenario/">Part 2: The EKS "Pants Off to Fart" Scenario</a></li>
-    <li><a href="/articles/eks-critique-series/part-3-the-colonizers-tax/">Part 3: The Colonizers: How the Kubernetes Industrial Complex Preys on Accidental Complexity</a></li>
-    <li><a href="/articles/eks-critique-series/part-4-the-cultural-virus/">Part 4: The Unspoken Trap: How the Kubernetes Industrial Complex Enforces Cultural Lock-In</a></li>
-  </ul>
+  <p><strong>This is Part 2 of a 7-part series on the hidden costs and complexities of Kubernetes.</strong></p>
+  <p>This series deconstructs the hype, examines the architectural fallacies, and explores the cultural damage wrought by the "Kubernetes Complexity Engine."</p>
+  <ol>
+    <li><a href="/articles/eks-critique-series/part-1-dismantling-hype/">Dismantling the Kubernetes Hype</a></li>
+    <li><strong>The Emperor's New Cluster</strong> (You are here)</li>
+    <li><a href="/articles/eks-critique-series/part-3-pants-off-scenario/">The EKS "Pants Off to Fart" Scenario</a></li>
+    <li><a href="/articles/eks-critique-series/part-4-bounded-contexts/">Kubernetes and Misaligned Boundaries</a></li>
+    <li><a href="/articles/eks-critique-series/part-5-the-colonizers-tax/">The Colonizers: An EKS Complexity Tax</a></li>
+    <li><a href="/articles/eks-critique-series/part-6-the-cultural-virus/">The Cultural Virus of Complexity</a></li>
+    <li><a href="/articles/eks-critique-series/part-7-engineering-victory/">Kubernetes 2.0: The Engineering Victory</a></li>
+  </ol>
 </div>
 
 ![The Emperor's New Cluster Illustration](/assets/emperor-new-cluster-cross-cloud-kubernetes-lie.png)
@@ -216,5 +220,6 @@ The emperor has no clothes. It's time to stop pretending otherwise.
 ---
 
 <div class="series-navigation">
-  <a href="/articles/eks-critique-series/part-2-pants-off-scenario/" class="next">Next: Part 2 &raquo;</a>
+  <a href="/articles/eks-critique-series/part-1-dismantling-hype/" class="previous">&laquo; Previous: Part 1</a>
+  <a href="/articles/eks-critique-series/part-3-pants-off-scenario/" class="next">Next: Part 3 &raquo;</a>
 </div>
