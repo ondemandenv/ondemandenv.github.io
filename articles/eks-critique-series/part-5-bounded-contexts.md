@@ -1,21 +1,23 @@
 ---
 layout: article
 title: "Kubernetes, Bounded Contexts, and Accidental Complexity"
-permalink: /articles/eks-critique-series/part-4-bounded-contexts/
+permalink: /articles/eks-critique-series/part-5-bounded-contexts/
 author: "Gary Yang"
 ---
 
 <div class="series-notice">
-  <p><strong>This is Part 4 of a 7-part series on the hidden costs and complexities of Kubernetes.</strong></p>
+  <p><strong>This is Part 5 of a 9-part series on the hidden costs and complexities of Kubernetes.</strong></p>
   <p>This series deconstructs the hype, examines the architectural fallacies, and explores the cultural damage wrought by the "Kubernetes Complexity Engine."</p>
   <ol>
     <li><a href="/articles/eks-critique-series/part-1-dismantling-hype/">Dismantling the Kubernetes Hype</a></li>
     <li><a href="/articles/eks-critique-series/part-2-emperor-new-cluster/">The Emperor's New Cluster</a></li>
     <li><a href="/articles/eks-critique-series/part-3-pants-off-scenario/">The EKS "Pants Off to Fart" Scenario</a></li>
+    <li><a href="/articles/eks-critique-series/part-4-flawed-gitops-model/">How a Flawed GitOps Model Betrayed the Developer</a></li>
     <li><strong>Kubernetes and Misaligned Boundaries</strong> (You are here)</li>
-    <li><a href="/articles/eks-critique-series/part-5-the-colonizers-tax/">The Colonizers: An EKS Complexity Tax</a></li>
-    <li><a href="/articles/eks-critique-series/part-6-the-cultural-virus/">The Cultural Virus of Complexity</a></li>
-    <li><a href="/articles/eks-critique-series/part-7-engineering-victory/">Kubernetes 2.0: The Engineering Victory</a></li>
+    <li><a href="/articles/eks-critique-series/part-6-the-colonizers-tax/">The Colonizers: An EKS Complexity Tax</a></li>
+    <li><a href="/articles/eks-critique-series/part-7-the-cultural-virus/">The Cultural Virus of Complexity</a></li>
+    <li><a href="/articles/eks-critique-series/part-8-the-authority-problem/">The Authority Problem: Shallow Leadership</a></li>
+    <li><a href="/articles/eks-critique-series/part-9-engineering-victory/">Kubernetes 2.0: The Engineering Victory</a></li>
   </ol>
 </div>
 
@@ -116,6 +118,6 @@ Use the right tool for the right bounded context—and let simplicity be your co
 ---
 
 <div class="series-navigation">
-  <a href="/articles/eks-critique-series/part-3-pants-off-scenario/" class="previous">&laquo; Previous: Part 3</a>
-  <a href="/articles/eks-critique-series/part-5-the-colonizers-tax/" class="next">Next: Part 5 &raquo;</a>
+  <a href="/articles/eks-critique-series/part-4-flawed-gitops-model/" class="previous">&laquo; Previous: Part 4</a>
+  <a href="/articles/eks-critique-series/part-6-the-colonizers-tax/" class="next">Next: Part 6 &raquo;</a>
 </div>

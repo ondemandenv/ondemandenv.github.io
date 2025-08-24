@@ -1,21 +1,23 @@
 ---
 layout: article
 title: "The Unspoken Trap: How the Kubernetes Industrial Complex Enforces Cultural Lock-In"
-permalink: /articles/eks-critique-series/part-6-the-cultural-virus/
+permalink: /articles/eks-critique-series/part-7-the-cultural-virus/
 author: "Gary Yang"
 ---
 
 <div class="series-notice">
-  <p><strong>This is Part 6 of a 7-part series on the hidden costs and complexities of Kubernetes.</strong></p>
+  <p><strong>This is Part 7 of a 9-part series on the hidden costs and complexities of Kubernetes.</strong></p>
   <p>This series deconstructs the hype, examines the architectural fallacies, and explores the cultural damage wrought by the "Kubernetes Complexity Engine."</p>
   <ol>
     <li><a href="/articles/eks-critique-series/part-1-dismantling-hype/">Dismantling the Kubernetes Hype</a></li>
     <li><a href="/articles/eks-critique-series/part-2-emperor-new-cluster/">The Emperor's New Cluster</a></li>
     <li><a href="/articles/eks-critique-series/part-3-pants-off-scenario/">The EKS "Pants Off to Fart" Scenario</a></li>
-    <li><a href="/articles/eks-critique-series/part-4-bounded-contexts/">Kubernetes and Misaligned Boundaries</a></li>
-    <li><a href="/articles/eks-critique-series/part-5-the-colonizers-tax/">The Colonizers: An EKS Complexity Tax</a></li>
+    <li><a href="/articles/eks-critique-series/part-4-flawed-gitops-model/">How a Flawed GitOps Model Betrayed the Developer</a></li>
+    <li><a href="/articles/eks-critique-series/part-5-bounded-contexts/">Kubernetes and Misaligned Boundaries</a></li>
+    <li><a href="/articles/eks-critique-series/part-6-the-colonizers-tax/">The Colonizers: An EKS Complexity Tax</a></li>
     <li><strong>The Cultural Virus of Complexity</strong> (You are here)</li>
-    <li><a href="/articles/eks-critique-series/part-7-engineering-victory/">Kubernetes 2.0: The Engineering Victory</a></li>
+    <li><a href="/articles/eks-critique-series/part-8-the-authority-problem/">The Authority Problem: Shallow Leadership</a></li>
+    <li><a href="/articles/eks-critique-series/part-9-engineering-victory/">Kubernetes 2.0: The Engineering Victory</a></li>
   </ol>
 </div>
 
@@ -80,6 +82,6 @@ This is the devastating end state: an organization that has **confused activity 
 ---
 
 <div class="series-navigation">
-  <a href="/articles/eks-critique-series/part-5-the-colonizers-tax/" class="previous">&laquo; Previous: Part 5</a>
-  <a href="/articles/eks-critique-series/part-7-engineering-victory/" class="next">Next: Part 7 &raquo;</a>
+  <a href="/articles/eks-critique-series/part-6-the-colonizers-tax/" class="previous">&laquo; Previous: Part 6</a>
+  <a href="/articles/eks-critique-series/part-8-the-authority-problem/" class="next">Next: Part 8 &raquo;</a>
 </div>

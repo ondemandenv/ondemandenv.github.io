@@ -9,16 +9,18 @@ keywords: ["kubernetes", "cross-cloud", "portability", "ops", "devops", "innovat
 ---
 
 <div class="series-notice">
-  <p><strong>This is Part 2 of a 7-part series on the hidden costs and complexities of Kubernetes.</strong></p>
+  <p><strong>This is Part 2 of a 9-part series on the hidden costs and complexities of Kubernetes.</strong></p>
   <p>This series deconstructs the hype, examines the architectural fallacies, and explores the cultural damage wrought by the "Kubernetes Complexity Engine."</p>
   <ol>
     <li><a href="/articles/eks-critique-series/part-1-dismantling-hype/">Dismantling the Kubernetes Hype</a></li>
     <li><strong>The Emperor's New Cluster</strong> (You are here)</li>
     <li><a href="/articles/eks-critique-series/part-3-pants-off-scenario/">The EKS "Pants Off to Fart" Scenario</a></li>
-    <li><a href="/articles/eks-critique-series/part-4-bounded-contexts/">Kubernetes and Misaligned Boundaries</a></li>
-    <li><a href="/articles/eks-critique-series/part-5-the-colonizers-tax/">The Colonizers: An EKS Complexity Tax</a></li>
-    <li><a href="/articles/eks-critique-series/part-6-the-cultural-virus/">The Cultural Virus of Complexity</a></li>
-    <li><a href="/articles/eks-critique-series/part-7-engineering-victory/">Kubernetes 2.0: The Engineering Victory</a></li>
+    <li><a href="/articles/eks-critique-series/part-4-flawed-gitops-model/">How a Flawed GitOps Model Betrayed the Developer</a></li>
+    <li><a href="/articles/eks-critique-series/part-5-bounded-contexts/">Kubernetes and Misaligned Boundaries</a></li>
+    <li><a href="/articles/eks-critique-series/part-6-the-colonizers-tax/">The Colonizers: An EKS Complexity Tax</a></li>
+    <li><a href="/articles/eks-critique-series/part-7-the-cultural-virus/">The Cultural Virus of Complexity</a></li>
+    <li><a href="/articles/eks-critique-series/part-8-the-authority-problem/">The Authority Problem: Shallow Leadership</a></li>
+    <li><a href="/articles/eks-critique-series/part-9-engineering-victory/">Kubernetes 2.0: The Engineering Victory</a></li>
   </ol>
 </div>
 
