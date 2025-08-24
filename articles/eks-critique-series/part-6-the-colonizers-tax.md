@@ -1,4 +1,3 @@
-
 ---
 layout: article
 title: "The Colonizers: How the Kubernetes Industrial Complex Preys on Accidental Complexity"
