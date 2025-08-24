@@ -1,3 +1,26 @@
+---
+layout: article
+title: "The Unspoken Trap: How the Kubernetes Industrial Complex Enforces Cultural Lock-In"
+permalink: /articles/eks-critique-series/part-7-the-cultural-virus/
+author: "Gary Yang"
+---
+
+<div class="series-notice">
+  <p><strong>This is Part 7 of a 9-part series on the hidden costs and complexities of Kubernetes.</strong></p>
+  <p>This series deconstructs the hype, examines the architectural fallacies, and explores the cultural damage wrought by the "Kubernetes Complexity Engine."</p>
+  <ol>
+    <li><a href="/articles/eks-critique-series/part-1-dismantling-hype/">Dismantling the Kubernetes Hype</a></li>
+    <li><a href="/articles/eks-critique-series/part-2-emperor-new-cluster/">The Emperor's New Cluster</a></li>
+    <li><a href="/articles/eks-critique-series/part-3-pants-off-scenario/">The EKS "Pants Off to Fart" Scenario</a></li>
+    <li><a href="/articles/eks-critique-series/part-4-flawed-gitops-model/">How a Flawed GitOps Model Betrayed the Developer</a></li>
+    <li><a href="/articles/eks-critique-series/part-5-bounded-contexts/">Kubernetes and Misaligned Boundaries</a></li>
+    <li><a href="/articles/eks-critique-series/part-6-the-colonizers-tax/">The Colonizers: An EKS Complexity Tax</a></li>
+    <li><strong>The Cultural Virus of Complexity</strong> (You are here)</li>
+    <li><a href="/articles/eks-critique-series/part-8-the-authority-problem/">The Authority Problem: Shallow Leadership</a></li>
+    <li><a href="/articles/eks-critique-series/part-9-engineering-victory/">Kubernetes 2.0: The Engineering Victory</a></li>
+  </ol>
+</div>
+
 # The Unspoken Trap: How the Kubernetes Industrial Complex Enforces Cultural Lock-In
 
 *This article is a follow-up to* [*"Shallow Technical Leadership & The Authority Problem"*](https://ondemandenv.dev/articles/shallow-technical-leadership-authority-problem/) *and continues the critique of how misapplied technology leads to organizational dysfunction.*
@@ -54,4 +77,11 @@ The system is now too big to fail. It can no longer be judged on its merits—it
 
 The original goal—developer enablement—has been completely forgotten. The platform is now the product. The business is merely a vehicle that funds the platform's continued expansion. The developers are no longer the customers of the platform; they are its **human resources,** inputs to be managed and controlled.
 
-This is the devastating end state: an organization that has **confused activity for achievement** and **complexity for sophistication.** It is a collective fiction that everyone is too invested to stop playing. The ones who were meant to be innovative for the business are now blind and lame, utterly dependent on the very system that was supposed to set them free. The virus has won.
+This is the devastating end state: an organization that has **confused activity for achievement** and **complexity for sophistication.** It is a collective fiction that everyone is too invested to stop playing. The ones who were meant to be innovative for the business are now blind and lame, utterly dependent on the very system that was supposed toset them free. The virus has won.
+
+---
+
+<div class="series-navigation">
+  <a href="/articles/eks-critique-series/part-6-the-colonizers-tax/" class="previous">&laquo; Previous: Part 6</a>
+  <a href="/articles/eks-critique-series/part-8-the-authority-problem/" class="next">Next: Part 8 &raquo;</a>
+</div>

@@ -1,4 +1,27 @@
 
+---
+layout: article
+title: "The Colonizers: How the Kubernetes Industrial Complex Preys on Accidental Complexity"
+permalink: /articles/eks-critique-series/part-6-the-colonizers-tax/
+author: "Gary Yang"
+---
+
+<div class="series-notice">
+  <p><strong>This is Part 6 of a 9-part series on the hidden costs and complexities of Kubernetes.</strong></p>
+  <p>This series deconstructs the hype, examines the architectural fallacies, and explores the cultural damage wrought by the "Kubernetes Complexity Engine."</p>
+  <ol>
+    <li><a href="/articles/eks-critique-series/part-1-dismantling-hype/">Dismantling the Kubernetes Hype</a></li>
+    <li><a href="/articles/eks-critique-series/part-2-emperor-new-cluster/">The Emperor's New Cluster</a></li>
+    <li><a href="/articles/eks-critique-series/part-3-pants-off-scenario/">The EKS "Pants Off to Fart" Scenario</a></li>
+    <li><a href="/articles/eks-critique-series/part-4-flawed-gitops-model/">How a Flawed GitOps Model Betrayed the Developer</a></li>
+    <li><a href="/articles/eks-critique-series/part-5-bounded-contexts/">Kubernetes and Misaligned Boundaries</a></li>
+    <li><strong>The Colonizers: An EKS Complexity Tax</strong> (You are here)</li>
+    <li><a href="/articles/eks-critique-series/part-7-the-cultural-virus/">The Cultural Virus of Complexity</a></li>
+    <li><a href="/articles/eks-critique-series/part-8-the-authority-problem/">The Authority Problem: Shallow Leadership</a></li>
+    <li><a href="/articles/eks-critique-series/part-9-engineering-victory/">Kubernetes 2.0: The Engineering Victory</a></li>
+  </ol>
+</div>
+
 ## The Colonizers: How the Kubernetes Industrial Complex Preys on Accidental Complexity
 
 You’ve seen through the lie. You’ve read the pieces on the [EKS Pants-Off Scenario](https://ondemandenv.dev/articles/eks-pants-off-scenario/) and the [Emperor's New Cross-Cloud Cluster](https://ondemandenv.dev/articles/emperor-new-cluster-cross-cloud-kubernetes-lie/). You know that choosing EKS—Kubernetes on the cloud it was never designed for—is the original sin. It’s the creation of **accidental, unnecessary, manufactured complexity**.
@@ -71,3 +94,10 @@ The way out is not another tool. It is a philosophy of ruthless simplification.
 4.  **Measure What Matters:** Stop measuring the success of your platform team on technological adoption ("we use a service mesh!"). Measure it on **developer velocity** and **business outcomes**.
 
 The colonizers are naked. Their entire empire is built on the foundation of accidental complexity. It’s time to stop paying the rent. It’s time to take back your architecture, simplify your systems, and let your developers build for the business again.
+
+---
+
+<div class="series-navigation">
+  <a href="/articles/eks-critique-series/part-5-bounded-contexts/" class="previous">&laquo; Previous: Part 5</a>
+  <a href="/articles/eks-critique-series/part-7-the-cultural-virus/" class="next">Next: Part 7 &raquo;</a>
+</div>

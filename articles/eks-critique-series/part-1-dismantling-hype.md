@@ -1,11 +1,27 @@
 ---
 layout: article
 title: "Dismantling the Kubernetes Hype: Why It's Not the Cloud Native Panacea You Think It Is"
-permalink: /articles/dismantling-kubernetes-hype/
+permalink: /articles/eks-critique-series/part-1-dismantling-hype/
 author: "Gary Yang"
+redirect_from:
+  - /articles/dismantling-kubernetes-hype/
 ---
 
-
+<div class="series-notice">
+  <p><strong>This is Part 1 of a 9-part series on the hidden costs and complexities of Kubernetes.</strong></p>
+  <p>This series deconstructs the hype, examines the architectural fallacies, and explores the cultural damage wrought by the "Kubernetes Complexity Engine."</p>
+  <ol>
+    <li><strong>Dismantling the Kubernetes Hype</strong> (You are here)</li>
+    <li><a href="/articles/eks-critique-series/part-2-emperor-new-cluster/">The Emperor's New Cluster</a></li>
+    <li><a href="/articles/eks-critique-series/part-3-pants-off-scenario/">The EKS "Pants Off to Fart" Scenario</a></li>
+    <li><a href="/articles/eks-critique-series/part-4-flawed-gitops-model/">How a Flawed GitOps Model Betrayed the Developer</a></li>
+    <li><a href="/articles/eks-critique-series/part-5-bounded-contexts/">Kubernetes and Misaligned Boundaries</a></li>
+    <li><a href="/articles/eks-critique-series/part-6-the-colonizers-tax/">The Colonizers: An EKS Complexity Tax</a></li>
+    <li><a href="/articles/eks-critique-series/part-7-the-cultural-virus/">The Cultural Virus of Complexity</a></li>
+    <li><a href="/articles/eks-critique-series/part-8-the-authority-problem/">The Authority Problem: Shallow Leadership</a></li>
+    <li><a href="/articles/eks-critique-series/part-9-engineering-victory/">Kubernetes 2.0: The Engineering Victory</a></li>
+  </ol>
+</div>
 
 ## Introduction: The K8s Emperor and the Gell-Mann Amnesia Effect
 
@@ -96,3 +112,9 @@ However, blinded by the Gell-Mann Amnesia effect, the industry often overlooks i
   * The resulting complexity imposes a heavy burden on developers, often distracting from core business logic and making simpler PaaS alternatives increasingly attractive.8
 
 Kubernetes is not a silver bullet, nor is it a magical, universal application platform. It's a specific tool with specific strengths and glaring weaknesses. Before adopting it, especially in a cloud environment, organizations need to look beyond the hype, honestly assess the evidence, and weigh the substantial complexity against the actual, tangible benefits for their specific context. The reality of Kubernetes is far more nuanced, complex, and often more burdensome than the prevailing narrative admits. Don't fall victim to the amnesia – demand the details.
+
+---
+
+<div class="series-navigation">
+  <a href="/articles/eks-critique-series/part-2-emperor-new-cluster/" class="next">Next: Part 2 &raquo;</a>
+</div>

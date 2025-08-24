@@ -1,12 +1,30 @@
 ---
 layout: article
 title: "The Emperor's New Cluster: Exposing the Cross-Cloud Kubernetes Lie and How Ops Killed Innovation"
-permalink: /articles/emperor-new-cluster-cross-cloud-kubernetes-lie/
+permalink: /articles/eks-critique-series/part-2-emperor-new-cluster/
 date: 2025-01-21
 author: "Gary Yang"
 description: "The cross-cloud Kubernetes promise is a myth that has empowered operations teams to become gatekeepers, killing developer innovation and creating unnecessary complexity in pursuit of a portability fantasy."
 keywords: ["kubernetes", "cross-cloud", "portability", "ops", "devops", "innovation", "complexity", "multi-cloud", "vendor lock-in", "platform engineering", "developer autonomy", "sdlc", "anti-stagnation"]
+redirect_from:
+  - /articles/emperor-new-cluster-cross-cloud-kubernetes-lie/
 ---
+
+<div class="series-notice">
+  <p><strong>This is Part 2 of a 9-part series on the hidden costs and complexities of Kubernetes.</strong></p>
+  <p>This series deconstructs the hype, examines the architectural fallacies, and explores the cultural damage wrought by the "Kubernetes Complexity Engine."</p>
+  <ol>
+    <li><a href="/articles/eks-critique-series/part-1-dismantling-hype/">Dismantling the Kubernetes Hype</a></li>
+    <li><strong>The Emperor's New Cluster</strong> (You are here)</li>
+    <li><a href="/articles/eks-critique-series/part-3-pants-off-scenario/">The EKS "Pants Off to Fart" Scenario</a></li>
+    <li><a href="/articles/eks-critique-series/part-4-flawed-gitops-model/">How a Flawed GitOps Model Betrayed the Developer</a></li>
+    <li><a href="/articles/eks-critique-series/part-5-bounded-contexts/">Kubernetes and Misaligned Boundaries</a></li>
+    <li><a href="/articles/eks-critique-series/part-6-the-colonizers-tax/">The Colonizers: An EKS Complexity Tax</a></li>
+    <li><a href="/articles/eks-critique-series/part-7-the-cultural-virus/">The Cultural Virus of Complexity</a></li>
+    <li><a href="/articles/eks-critique-series/part-8-the-authority-problem/">The Authority Problem: Shallow Leadership</a></li>
+    <li><a href="/articles/eks-critique-series/part-9-engineering-victory/">Kubernetes 2.0: The Engineering Victory</a></li>
+  </ol>
+</div>
 
 ![The Emperor's New Cluster Illustration](/assets/emperor-new-cluster-cross-cloud-kubernetes-lie.png)
 
@@ -202,3 +220,10 @@ The evidence is overwhelming: for most organizations, the cross-cloud Kubernetes
 By choosing simplicity, empowering developers, and embracing the native power of the cloud, we can **dethrone the emperor and let innovation flourish once more**.
 
 The emperor has no clothes. It's time to stop pretending otherwise.
+
+---
+
+<div class="series-navigation">
+  <a href="/articles/eks-critique-series/part-1-dismantling-hype/" class="previous">&laquo; Previous: Part 1</a>
+  <a href="/articles/eks-critique-series/part-3-pants-off-scenario/" class="next">Next: Part 3 &raquo;</a>
+</div>
