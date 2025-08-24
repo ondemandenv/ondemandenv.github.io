@@ -6,6 +6,8 @@ date: 2025-01-21
 author: "Gary Yang"
 description: "The cross-cloud Kubernetes promise is a myth that has empowered operations teams to become gatekeepers, killing developer innovation and creating unnecessary complexity in pursuit of a portability fantasy."
 keywords: ["kubernetes", "cross-cloud", "portability", "ops", "devops", "innovation", "complexity", "multi-cloud", "vendor lock-in", "platform engineering", "developer autonomy", "sdlc", "anti-stagnation"]
+redirect_from:
+  - /articles/emperor-new-cluster-cross-cloud-kubernetes-lie/
 ---
 
 <div class="series-notice">

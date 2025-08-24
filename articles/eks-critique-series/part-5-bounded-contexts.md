@@ -3,6 +3,8 @@ layout: article
 title: "Kubernetes, Bounded Contexts, and Accidental Complexity"
 permalink: /articles/eks-critique-series/part-5-bounded-contexts/
 author: "Gary Yang"
+redirect_from:
+  - /articles/kubernetes-bounded-contexts/
 ---
 
 <div class="series-notice">

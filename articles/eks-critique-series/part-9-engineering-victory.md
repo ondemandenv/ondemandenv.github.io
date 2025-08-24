@@ -6,6 +6,8 @@ date: 2025-01-13
 author: "Gary Yang"
 description: "How the era of YAML-driven infrastructure is ending, replaced by typed abstractions and platform engineering that transforms ops from administration to engineering. The decisive victory of engineering over administration."
 keywords: ["kubernetes", "yaml", "typescript", "platform engineering", "devops", "infrastructure", "abstraction", "helm", "cdk8s", "anti-stagnation", "fragmentation trap", "engineering", "administration"]
+redirect_from:
+  - /articles/kubernetes-2-0-engineering-victory/
 ---
 
 <div class="series-notice">

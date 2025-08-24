@@ -3,6 +3,8 @@ layout: article
 title: 'The EKS "Pants Off to Fart" Scenario: Accidental Complexity vs. ECS/CDK Simplicity in the SDLC'
 permalink: /articles/eks-critique-series/part-3-pants-off-scenario/
 author: "Gary Yang"
+redirect_from:
+  - /articles/eks-pants-off-scenario/
 ---
 
 <div class="series-notice">
