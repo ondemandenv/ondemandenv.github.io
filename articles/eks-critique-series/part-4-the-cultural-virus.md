@@ -1,3 +1,20 @@
+---
+layout: article
+title: "The Unspoken Trap: How the Kubernetes Industrial Complex Enforces Cultural Lock-In"
+permalink: /articles/eks-critique-series/part-4-the-cultural-virus/
+author: "Gary Yang"
+---
+
+<div class="series-notice">
+  <p><strong>This is Part 4 of a 4-part series on the hidden costs and complexities of Kubernetes.</strong></p>
+  <ul>
+    <li><a href="/articles/eks-critique-series/part-1-emperor-new-cluster/">Part 1: The Emperor's New Cluster: Exposing the Cross-Cloud Kubernetes Lie</a></li>
+    <li><a href="/articles/eks-critique-series/part-2-pants-off-scenario/">Part 2: The EKS "Pants Off to Fart" Scenario</a></li>
+    <li><a href="/articles/eks-critique-series/part-3-the-colonizers-tax/">Part 3: The Colonizers: How the Kubernetes Industrial Complex Preys on Accidental Complexity</a></li>
+    <li>Part 4: The Unspoken Trap: How the Kubernetes Industrial Complex Enforces Cultural Lock-In</li>
+  </ul>
+</div>
+
 # The Unspoken Trap: How the Kubernetes Industrial Complex Enforces Cultural Lock-In
 
 *This article is a follow-up to* [*"Shallow Technical Leadership & The Authority Problem"*](https://ondemandenv.dev/articles/shallow-technical-leadership-authority-problem/) *and continues the critique of how misapplied technology leads to organizational dysfunction.*
@@ -54,4 +71,10 @@ The system is now too big to fail. It can no longer be judged on its merits—it
 
 The original goal—developer enablement—has been completely forgotten. The platform is now the product. The business is merely a vehicle that funds the platform's continued expansion. The developers are no longer the customers of the platform; they are its **human resources,** inputs to be managed and controlled.
 
-This is the devastating end state: an organization that has **confused activity for achievement** and **complexity for sophistication.** It is a collective fiction that everyone is too invested to stop playing. The ones who were meant to be innovative for the business are now blind and lame, utterly dependent on the very system that was supposed to set them free. The virus has won.
+This is the devastating end state: an organization that has **confused activity for achievement** and **complexity for sophistication.** It is a collective fiction that everyone is too invested to stop playing. The ones who were meant to be innovative for the business are now blind and lame, utterly dependent on the very system that was supposed toset them free. The virus has won.
+
+---
+
+<div class="series-navigation">
+  <a href="/articles/eks-critique-series/part-3-the-colonizers-tax/" class="previous">&laquo; Previous: Part 3</a>
+</div>

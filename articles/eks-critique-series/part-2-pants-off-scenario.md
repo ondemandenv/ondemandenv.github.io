@@ -1,9 +1,19 @@
 ---
 layout: article
 title: 'The EKS "Pants Off to Fart" Scenario: Accidental Complexity vs. ECS/CDK Simplicity in the SDLC'
-permalink: /articles/eks-pants-off-scenario/
+permalink: /articles/eks-critique-series/part-2-pants-off-scenario/
 author: "Gary Yang"
 ---
+
+<div class="series-notice">
+  <p><strong>This is Part 2 of a 4-part series on the hidden costs and complexities of Kubernetes.</strong></p>
+  <ul>
+    <li><a href="/articles/eks-critique-series/part-1-emperor-new-cluster/">Part 1: The Emperor's New Cluster: Exposing the Cross-Cloud Kubernetes Lie</a></li>
+    <li>Part 2: The EKS "Pants Off to Fart" Scenario</li>
+    <li><a href="/articles/eks-critique-series/part-3-the-colonizers-tax/">Part 3: The Colonizers: How the Kubernetes Industrial Complex Preys on Accidental Complexity</a></li>
+    <li><a href="/articles/eks-critique-series/part-4-the-cultural-virus/">Part 4: The Unspoken Trap: How the Kubernetes Industrial Complex Enforces Cultural Lock-In</a></li>
+  </ul>
+</div>
 
 Deploying a standard web application – a Spring Boot or Express container, secured with a certificate and DNS, fronted by an Application Load Balancer (ALB), and backed by an RDS database – is a common pattern. However, the journey through the Software Development Life Cycle (SDLC) diverges dramatically depending on whether you choose Amazon EKS (Elastic Kubernetes Service) or a more integrated AWS-native approach like ECS (Elastic Container Service) with the AWS CDK (Cloud Development Kit) and CloudFormation.
 
@@ -203,3 +213,10 @@ Before defaulting to EKS because "Kubernetes is the standard," organizations mus
   7. <https://docs.aws.amazon.com/decision-guides/latest/containers-on-aws-how-to-choose/choosing-aws-container-service.html>
   8. <https://www.economize.cloud/blog/aws-eks-vs-ecs/>
   9. <https://www.ranthebuilder.cloud/post/build-a-serverless-web-application-on-fargate-ecs-and-cdk>
+
+---
+
+<div class="series-navigation">
+  <a href="/articles/eks-critique-series/part-1-emperor-new-cluster/" class="previous">&laquo; Previous: Part 1</a>
+  <a href="/articles/eks-critique-series/part-3-the-colonizers-tax/" class="next">Next: Part 3 &raquo;</a>
+</div>

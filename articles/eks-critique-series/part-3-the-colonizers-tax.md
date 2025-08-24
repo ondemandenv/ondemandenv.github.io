@@ -1,4 +1,21 @@
 
+---
+layout: article
+title: "The Colonizers: How the Kubernetes Industrial Complex Preys on Accidental Complexity"
+permalink: /articles/eks-critique-series/part-3-the-colonizers-tax/
+author: "Gary Yang"
+---
+
+<div class="series-notice">
+  <p><strong>This is Part 3 of a 4-part series on the hidden costs and complexities of Kubernetes.</strong></p>
+  <ul>
+    <li><a href="/articles/eks-critique-series/part-1-emperor-new-cluster/">Part 1: The Emperor's New Cluster: Exposing the Cross-Cloud Kubernetes Lie</a></li>
+    <li><a href="/articles/eks-critique-series/part-2-pants-off-scenario/">Part 2: The EKS "Pants Off to Fart" Scenario</a></li>
+    <li>Part 3: The Colonizers: How the Kubernetes Industrial Complex Preys on Accidental Complexity</li>
+    <li><a href="/articles/eks-critique-series/part-4-the-cultural-virus/">Part 4: The Unspoken Trap: How the Kubernetes Industrial Complex Enforces Cultural Lock-In</a></li>
+  </ul>
+</div>
+
 ## The Colonizers: How the Kubernetes Industrial Complex Preys on Accidental Complexity
 
 You’ve seen through the lie. You’ve read the pieces on the [EKS Pants-Off Scenario](https://ondemandenv.dev/articles/eks-pants-off-scenario/) and the [Emperor's New Cross-Cloud Cluster](https://ondemandenv.dev/articles/emperor-new-cluster-cross-cloud-kubernetes-lie/). You know that choosing EKS—Kubernetes on the cloud it was never designed for—is the original sin. It’s the creation of **accidental, unnecessary, manufactured complexity**.
@@ -71,3 +88,10 @@ The way out is not another tool. It is a philosophy of ruthless simplification.
 4.  **Measure What Matters:** Stop measuring the success of your platform team on technological adoption ("we use a service mesh!"). Measure it on **developer velocity** and **business outcomes**.
 
 The colonizers are naked. Their entire empire is built on the foundation of accidental complexity. It’s time to stop paying the rent. It’s time to take back your architecture, simplify your systems, and let your developers build for the business again.
+
+---
+
+<div class="series-navigation">
+  <a href="/articles/eks-critique-series/part-2-pants-off-scenario/" class="previous">&laquo; Previous: Part 2</a>
+  <a href="/articles/eks-critique-series/part-4-the-cultural-virus/" class="next">Next: Part 4 &raquo;</a>
+</div>

@@ -1,12 +1,22 @@
 ---
 layout: article
 title: "The Emperor's New Cluster: Exposing the Cross-Cloud Kubernetes Lie and How Ops Killed Innovation"
-permalink: /articles/emperor-new-cluster-cross-cloud-kubernetes-lie/
+permalink: /articles/eks-critique-series/part-1-emperor-new-cluster/
 date: 2025-01-21
 author: "Gary Yang"
 description: "The cross-cloud Kubernetes promise is a myth that has empowered operations teams to become gatekeepers, killing developer innovation and creating unnecessary complexity in pursuit of a portability fantasy."
 keywords: ["kubernetes", "cross-cloud", "portability", "ops", "devops", "innovation", "complexity", "multi-cloud", "vendor lock-in", "platform engineering", "developer autonomy", "sdlc", "anti-stagnation"]
 ---
+
+<div class="series-notice">
+  <p><strong>This is Part 1 of a 4-part series on the hidden costs and complexities of Kubernetes.</strong></p>
+  <ul>
+    <li>Part 1: The Emperor's New Cluster: Exposing the Cross-Cloud Kubernetes Lie</li>
+    <li><a href="/articles/eks-critique-series/part-2-pants-off-scenario/">Part 2: The EKS "Pants Off to Fart" Scenario</a></li>
+    <li><a href="/articles/eks-critique-series/part-3-the-colonizers-tax/">Part 3: The Colonizers: How the Kubernetes Industrial Complex Preys on Accidental Complexity</a></li>
+    <li><a href="/articles/eks-critique-series/part-4-the-cultural-virus/">Part 4: The Unspoken Trap: How the Kubernetes Industrial Complex Enforces Cultural Lock-In</a></li>
+  </ul>
+</div>
 
 ![The Emperor's New Cluster Illustration](/assets/emperor-new-cluster-cross-cloud-kubernetes-lie.png)
 
@@ -202,3 +212,9 @@ The evidence is overwhelming: for most organizations, the cross-cloud Kubernetes
 By choosing simplicity, empowering developers, and embracing the native power of the cloud, we can **dethrone the emperor and let innovation flourish once more**.
 
 The emperor has no clothes. It's time to stop pretending otherwise.
+
+---
+
+<div class="series-navigation">
+  <a href="/articles/eks-critique-series/part-2-pants-off-scenario/" class="next">Next: Part 2 &raquo;</a>
+</div>
