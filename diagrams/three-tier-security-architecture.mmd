@@ -121,28 +121,59 @@ flowchart TB
     %% ========================================
     
     %% TGW Connections within each tier
-    T1TGW === T1DBVPC
-    T1TGW === T1EKSVPC
-    T1TGW === T1App1VPC
-    T1TGW === T1App1Branch
-    T1TGW === T1App2VPC
-    T1TGW === T1App3VPC
-    T1TGW === T1App4VPC
-    
-    T2TGW === T2DBVPC
-    T2TGW === T2EKSVPC
-    T2TGW === T2App1VPC
-    T2TGW === T2App2VPC
-    T2TGW === T2App3VPC
-    T2TGW === T2App4VPC
-    
-    T3TGW === T3DBVPC
-    T3TGW === T3EKSVPC
-    T3TGW === T3App1VPC
-    T3TGW === T3App2VPC
-    T3TGW === T3App3VPC
-    T3TGW === T3App4VPC
-    T3TGW === T3VPCEndpoints
+
+    %% TGW-VPC Connections (add class for red lines)
+    T1TGW === T1DBVPC:::red-link
+    T1TGW === T1EKSVPC:::red-link
+    T1TGW === T1App1VPC:::red-link
+    T1TGW === T1App1Branch:::red-link
+    T1TGW === T1App2VPC:::red-link
+    T1TGW === T1App3VPC:::red-link
+    T1TGW === T1App4VPC:::red-link
+
+    T2TGW === T2DBVPC:::red-link
+    T2TGW === T2EKSVPC:::red-link
+    T2TGW === T2App1VPC:::red-link
+    T2TGW === T2App2VPC:::red-link
+    T2TGW === T2App3VPC:::red-link
+    T2TGW === T2App4VPC:::red-link
+
+    T3TGW === T3DBVPC:::red-link
+    T3TGW === T3EKSVPC:::red-link
+    T3TGW === T3App1VPC:::red-link
+    T3TGW === T3App2VPC:::red-link
+    T3TGW === T3App3VPC:::red-link
+    T3TGW === T3App4VPC:::red-link
+    T3TGW === T3VPCEndpoints:::red-link
+
+    %% Add classes to edges for red styling
+    class T1TGW,T1DBVPC,T1EKSVPC,T1App1VPC,T1App1Branch,T1App2VPC,T1App3VPC,T1App4VPC red-outline;
+    class T2TGW,T2DBVPC,T2EKSVPC,T2App1VPC,T2App2VPC,T2App3VPC,T2App4VPC red-outline;
+    class T3TGW,T3DBVPC,T3EKSVPC,T3App1VPC,T3App2VPC,T3App3VPC,T3App4VPC,T3VPCEndpoints red-outline;
+
+    %% Edge classes (for all TGW-VPC connections)
+    classDef red-link stroke:#e53935,stroke-width:3px;
+    linkStyle 0 red-link
+    linkStyle 1 red-link
+    linkStyle 2 red-link
+    linkStyle 3 red-link
+    linkStyle 4 red-link
+    linkStyle 5 red-link
+    linkStyle 6 red-link
+    linkStyle 7 red-link
+    linkStyle 8 red-link
+    linkStyle 9 red-link
+    linkStyle 10 red-link
+    linkStyle 11 red-link
+    linkStyle 12 red-link
+    linkStyle 13 red-link
+    linkStyle 14 red-link
+    linkStyle 15 red-link
+    linkStyle 16 red-link
+    linkStyle 17 red-link
+    linkStyle 18 red-link
+    linkStyle 19 red-link
+
     
     %% Platform serves Applications
     T1Platform ==> T1Apps
@@ -179,20 +210,9 @@ flowchart TB
     style Tier2 fill:#fff3e0,stroke:#ff8f00,stroke-width:3px
     style Tier3 fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
     
-    %% Network Platform styling
-    style T1Network fill:#81c784,stroke:#388e3c,stroke-width:2px
-    style T2Network fill:#ffb74d,stroke:#f57c00,stroke-width:2px
-    style T3Network fill:#ba68c8,stroke:#7b1fa2,stroke-width:2px
-    
-    %% Platform services styling  
-    style T1Platform fill:#bbdefb,stroke:#0288d1,stroke-width:2px
-    style T2Platform fill:#ffe0b2,stroke:#fb8c00,stroke-width:2px
-    style T3Platform fill:#e1bee7,stroke:#8e24aa,stroke-width:2px
-    
-    %% Application VPC styling
-    style T1Apps fill:#e8f4fd,stroke:#039be5,stroke-width:1px
-    style T2Apps fill:#fef7e0,stroke:#ffa000,stroke-width:1px
-    style T3Apps fill:#f8f4f8,stroke:#9c27b0,stroke-width:1px
+
+    %% Node class for red outlines
+    classDef red-outline stroke:#e53935,stroke-width:3px;
     
     %% Dynamic capability styling
     style DynamicCapability fill:#e8f5e8,stroke:#4caf50,stroke-width:3px
