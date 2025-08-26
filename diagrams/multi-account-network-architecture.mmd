@@ -230,12 +230,24 @@ flowchart TB
     style LEEnver1 fill:#c8e6c9,stroke:#66bb6a,stroke-width:2px
     
     %% Central VPC styling
-    style ProdCentralVPC fill:#ffe0b2,stroke:#f57c00,stroke-width:2px
-    style LECentralVPC fill:#ffe0b2,stroke:#f57c00,stroke-width:2px
+    style ProdCentralVPC fill:#ffe0b2,stroke:red,stroke-width:2px
+    style LECentralVPC fill:#ffe0b2,stroke:red,stroke-width:2px
     
+    %% TGW and VPC node styling
+    style TGWProd stroke:red,stroke-width:2px
+    style TGWLE stroke:red,stroke-width:2px
+    style EKSVPCProd stroke:red,stroke-width:2px
+    style RDSVPCProd stroke:red,stroke-width:2px
+    style App1VPCProd stroke:red,stroke-width:2px
+    style App2VPCProd stroke:red,stroke-width:2px
+    style EKSVPCLENet stroke:red,stroke-width:2px
+    style RDSVPCLENet stroke:red,stroke-width:2px
+    style App1VPCLENet stroke:red,stroke-width:2px
+
     %% Network infrastructure styling
     style ProdNetInfra fill:#ffecb3,stroke:#ffa000,stroke-width:2px
     style LENetInfra fill:#ffecb3,stroke:#ffa000,stroke-width:2px
 
     %% TGW to VPC link styling
+    %% This style makes the TGW-VPC connections red, as requested.
     linkStyle 0,1,2,3,4,5,6,7,8 stroke:red,stroke-width:2px
