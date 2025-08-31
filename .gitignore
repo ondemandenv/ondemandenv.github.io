@@ -1,7 +1,9 @@
 # build output
 dist/
+_site/
 
 .idea
+Gemfile.lock
 
 # dependencies
 node_modules/
