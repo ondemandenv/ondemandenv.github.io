@@ -111,6 +111,7 @@ flowchart TB
     subgraph DynamicCapability["🌿 DYNAMIC ENVER CREATION ON ANY GIT BRANCH"]
         direction TB
         BranchFlow["Git Branch Created<br/>↓<br/>odmd: create@source-enver<br/>↓<br/>Platform Auto-Creates:<br/>• New VPC (auto-allocated CIDR)<br/>• New Infrastructure<br/>• Complete Isolated SDLC<br/>↓<br/>Full Application Environment<br/>Ready for Development"]
+
         AppliesTo["🎯 APPLIES TO ALL ENVERS:<br/>• Application Envers<br/>• Database Platform Envers<br/>• EKS Platform Envers<br/>• Network Platform Envers<br/>• Any Enver in Any Tier"]
     end
 
@@ -126,12 +127,14 @@ flowchart TB
     T1TGW === T1App2VPC
     T1TGW === T1App3VPC
     T1TGW === T1App4VPC
+
     T2TGW === T2DBVPC
     T2TGW === T2EKSVPC
     T2TGW === T2App1VPC
     T2TGW === T2App2VPC
     T2TGW === T2App3VPC
     T2TGW === T2App4VPC
+
     T3TGW === T3DBVPC
     T3TGW === T3EKSVPC
     T3TGW === T3App1VPC
@@ -139,42 +142,46 @@ flowchart TB
     T3TGW === T3App3VPC
     T3TGW === T3App4VPC
     T3TGW === T3VPCEndpoints
-%% DIRECT LINK STYLING - This is the fix
-    linkStyle 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19 stroke: #e53935, stroke-width: 3px
-%% Node class for red outlines (No change needed here)
-    classDef red-outline stroke: #e53935, stroke-width: 3px;
-    class T1TGW, T1DBVPC, T1EKSVPC, T1App1VPC, T1App1Branch, T1App2VPC, T1App3VPC, T1App4VPC red-outline;
-    class T2TGW, T2DBVPC, T2EKSVPC, T2App1VPC, T2App2VPC, T2App3VPC, T2App4VPC red-outline;
-    class T3TGW, T3DBVPC, T3EKSVPC, T3App1VPC, T3App2VPC, T3App3VPC, T3App4VPC, T3VPCEndpoints red-outline;
 
-%% Platform serves Applications
-    T1Platform ==> T1Apps
-    T2Platform ==> T2Apps
-    T3Platform ==> T3Apps
+%% DIRECT LINK STYLING
+    linkStyle 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19 stroke:#e53935,stroke-width:3px
+
+%% Node class for red outlines
+    classDef red-outline stroke:#e53935,stroke-width:3px;
+    class T1TGW,T1DBVPC,T1EKSVPC,T1App1VPC,T1App1Branch,T1App2VPC,T1App3VPC,T1App4VPC red-outline;
+    class T2TGW,T2DBVPC,T2EKSVPC,T2App1VPC,T2App2VPC,T2App3VPC,T2App4VPC red-outline;
+    class T3TGW,T3DBVPC,T3EKSVPC,T3App1VPC,T3App2VPC,T3App3VPC,T3App4VPC,T3VPCEndpoints red-outline;
+
 %% Dynamic Enver Creation Example
-    T1App1VPC -.->|" odmd: create@main<br/>Git Branch → Auto VPC "| T1App1Branch
+    T1App1VPC -.->|"odmd: create@main<br/>Git Branch → Auto VPC"| T1App1Branch
+
 %% Internet/Repository Access
-    T1TGW -.->|" 🌐 Internet via NAT "| Internet["Public Internet<br/>Repos & APIs"]
-    T2TGW -.->|" 📦 Internal Repos Only "| T2InternalRepo["Internal Artifactory<br/>Pre-approved Packages<br/>Container Registry"]
-    T3TGW -.->|" 📦 Internal Repos Only "| T3InternalRepo["Internal Artifactory<br/>Approved Packages Only<br/>Private Container Registry"]
+    T1TGW -.->|"🌐 Internet via NAT"| Internet["Public Internet<br/>Repos & APIs"]
+    T2TGW -.->|"📦 Internal Repos Only"| T2InternalRepo["Internal Artifactory<br/>Pre-approved Packages<br/>Container Registry"]
+    T3TGW -.->|"📦 Internal Repos Only"| T3InternalRepo["Internal Artifactory<br/>Approved Packages Only<br/>Private Container Registry"]
+
 %% Application Code Promotion Between Tiers
-    T1App1VPC -.->|" Git Fork App Code "| T2App1VPC
-    T1App2VPC -.->|" Git Fork App Code "| T2App2VPC
-    T1App3VPC -.->|" Git Fork App Code "| T2App3VPC
-    T1App4VPC -.->|" Git Fork App Code "| T2App4VPC
-    T2App1VPC -.->|" Security Approval "| T3App1VPC
-    T2App2VPC -.->|" Security Approval "| T3App2VPC
-    T2App3VPC -.->|" Security Approval "| T3App3VPC
-    T2App4VPC -.->|" Security Approval "| T3App4VPC
+    T1App1VPC -.->|"Git Fork App Code"| T2App1VPC
+    T1App2VPC -.->|"Git Fork App Code"| T2App2VPC
+    T1App3VPC -.->|"Git Fork App Code"| T2App3VPC
+    T1App4VPC -.->|"Git Fork App Code"| T2App4VPC
+
+    T2App1VPC -.->|"Security Approval"| T3App1VPC
+    T2App2VPC -.->|"Security Approval"| T2App2VPC
+    T2App3VPC -.->|"Security Approval"| T3App3VPC
+    T2App4VPC -.->|"Security Approval"| T3App4VPC
+
 %% Platform Infrastructure Promotion Between Tiers
-    T1Network -.->|" Network Platform Git Fork "| T2Network
-    T2Network -.->|" Network Platform Git Fork "| T3Network
-    T1Platform -.->|" Platform Git Fork "| T2Platform
-    T2Platform -.->|" Platform Git Fork "| T3Platform
+    T1Network -.->|"Network Platform Git Fork"| T2Network
+    T2Network -.->|"Network Platform Git Fork"| T3Network
+    T1Platform -.->|"Platform Git Fork"| T2Platform
+    T2Platform -.->|"Platform Git Fork"| T3Platform
+
 %% Tier styling
-    style Tier1 fill: #e1f5fe, stroke: #0277bd, stroke-width: 3px
-    style Tier2 fill: #fff3e0, stroke: #ff8f00, stroke-width: 3px
-    style Tier3 fill: #f3e5f5, stroke: #7b1fa2, stroke-width: 3px
+    style Tier1 fill:#e1f5fe,stroke:#0277bd,stroke-width:3px
+    style Tier2 fill:#fff3e0,stroke:#ff8f00,stroke-width:3px
+    style Tier3 fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+
 %% Dynamic capability styling
-    style DynamicCapability fill: #e8f5e8, stroke: #4caf50, stroke-width: 3px
-    style T1App1Branch fill: #c8e6c9, stroke: #66bb6a, stroke-width: 2px
+    style DynamicCapability fill:#e8f5e8,stroke:#4caf50,stroke-width:3px
+    style T1App1Branch fill:#c8e6c9,stroke:#66bb6a,stroke-width:2px
