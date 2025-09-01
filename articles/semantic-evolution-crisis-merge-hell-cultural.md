@@ -13,14 +13,15 @@ keywords: ["semantic evolution", "cultural modeling", "Domain-Driven Design", "Z
 
 ---
 
-## 🧬 **MERGE HELL SCANDAL SERIES** - Article 5 of 5 (Finale)
+## 🧬 **MERGE HELL SCANDAL SERIES** - Article 5 of 6 (Finale)
 
 *This series finale transcends software engineering to reveal cultural implications. Complete the investigation:*
 
 **→ Foundation:** [**The Crisis**] [The Ops Incompetence Behind Merge Hell](https://ondemandenv.dev/articles/merge-hell-myth-x-ops-contamination/)  
 **→ Intelligence:** [**The Signals**] [Branch Conflicts as Architecture](https://ondemandenv.dev/articles/branch-conflicts-architectural-signals/)  
 **→ Cascade:** [**The Problem**] [The PR Queue Scam Makes It Worse](https://ondemandenv.dev/articles/pr-queue-scam-makes-merge-hell-worse/)  
-**→ Platform:** [**The Solution**] [Branch Diversity and Innovation](https://ondemandenv.dev/articles/business-logic-branch-conflicts-political-warfare/)  
+**→ Politics:** [**The Politics**] [The Ops Communist Colonization of Engineering](https://ondemandenv.dev/articles/ops-communist-colonization-of-engineering/)
+**→ Solution:** [**The Solution**] [Branch Diversity and Innovation](https://ondemandenv.dev/articles/business-logic-branch-conflicts-political-warfare/)
 **→ Current:** [**The Philosophy**] Semantic Evolution Crisis and Cultural Modeling
 
 ---

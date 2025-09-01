@@ -13,13 +13,14 @@ keywords: ["merge hell", "x-ops contamination", "ops infrastructure", "branch co
 
 ---
 
-## 🔥 **MERGE HELL SCANDAL SERIES** - Article 1 of 5
+## 🔥 **MERGE HELL SCANDAL SERIES** - Article 1 of 6
 
 *This article launches our systematic exposé of the "merge hell" crisis and the operational incompetence behind it. Follow the complete investigation:*
 
 **→ Current:** [**The Foundation**] The Ops Incompetence Crisis  
 **→ Next:** [**The Intelligence**] [Branch Conflicts as System Architecture Signals](https://ondemandenv.dev/articles/branch-conflicts-architectural-signals/)  
 **→ Then:** [**The Cascade**] [The PR Queue Scam Makes It Worse](https://ondemandenv.dev/articles/pr-queue-scam-makes-merge-hell-worse/)  
+**→ Then:** [**The Politics**] [The Ops Communist Colonization of Engineering](https://ondemandenv.dev/articles/ops-communist-colonization-of-engineering/)
 **→ Then:** [**The Solution**] [Branch Diversity and Innovation](https://ondemandenv.dev/articles/business-logic-branch-conflicts-political-warfare/)  
 **→ Finale:** [**The Philosophy**] [The Semantic Evolution Crisis](https://ondemandenv.dev/articles/semantic-evolution-crisis-merge-hell-cultural/)
 
