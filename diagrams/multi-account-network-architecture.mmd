@@ -4,7 +4,7 @@ flowchart TB
     %% ========================================
     subgraph NetworkingAccount["🌐 NETWORKING ACCOUNT (590183907424)"]
         direction TB
-        
+
         %% Production Network Infrastructure
         subgraph ProdNetInfra["🔒 Production Network Infrastructure"]
             direction LR
@@ -12,8 +12,8 @@ flowchart TB
             NATProd["🌍 NAT Gateway"]
             IPAMProd["📊 IPAM<br/>10.0.0.0/8"]
         end
-        
-        %% LE Network Infrastructure  
+
+        %% LE Network Infrastructure
         subgraph LENetInfra["🛠️ LE Network Infrastructure"]
             direction LR
             TGWLE["🔗 Transit Gateway<br/>172.16.0.1"]
@@ -27,13 +27,13 @@ flowchart TB
     %% ========================================
     subgraph CentralAccount["🎯 CENTRAL ORCHESTRATION ACCOUNT (590184031795)"]
         direction LR
-        
+
         %% Production Network Central VPC with its deployment hub
         subgraph ProdCentralVPC["🔒 Production Central VPC<br/>10.1.0.0/16"]
             direction TB
             CentralControlProd["🎯 Production Deployment Hub<br/>🔧 Lambda Functions<br/>• K8s manifest deployment<br/>• DB schema deployment<br/>• VPC management<br/>🔐 Cross-account IAM roles"]
         end
-        
+
         %% LE Network Central VPC with its deployment hub
         subgraph LECentralVPC["🛠️ LE Central VPC<br/>172.16.1.0/16"]
             direction TB
@@ -47,8 +47,8 @@ flowchart TB
     %% ========================================
     subgraph ProdNetwork["🔒 PRODUCTION NETWORK - 10.0.0.0/8"]
         direction TB
-        
-        
+
+
         %% Left: Application Envers
         subgraph ProdApp1["📱 APP ENVER 1 (Account: 590184130740)"]
             direction TB
@@ -59,7 +59,7 @@ flowchart TB
                 App1VPCProd["📦 VPC: 10.4.0.0/16"]
             end
         end
-        
+
         subgraph ProdApp2["📱 APP ENVER 2 (Account: 590184130741)"]
             direction TB
             subgraph ProdEnver2["🚀 Application Enver 2"]
@@ -68,7 +68,7 @@ flowchart TB
                 App2VPCProd["📦 VPC: 10.5.0.0/16"]
             end
         end
-        
+
         %% Right: Platform Services
         subgraph ProdEKSAccount["⚙️ EKS PLATFORM ACCOUNT (975050243618)"]
             direction TB
@@ -78,7 +78,7 @@ flowchart TB
                 EKSDeployProd["🚀 K8s Functions"]
             end
         end
-        
+
         subgraph ProdRDSAccount["🗄️ RDS PLATFORM ACCOUNT (975050243619)"]
             direction TB
             subgraph ProdRDS["🗄️ RDS Platform Service"]
@@ -87,7 +87,7 @@ flowchart TB
                 RDSDeployProd["🚀 DB Functions"]
             end
         end
-        
+
         %% Position around network infrastructure
         ProdNetInfra
     end
@@ -98,8 +98,8 @@ flowchart TB
     %% ========================================
     subgraph LENetwork["🛠️ LOWER ENVIRONMENT NETWORK - 172.16.0.0/12"]
         direction TB
-        
-        
+
+
         %% Left: Application Envers
         subgraph LEApp1["📱 APP ENVER 1 (Account: 590184130740)"]
             direction TB
@@ -110,7 +110,7 @@ flowchart TB
                 App1VPCLENet["📦 VPC: 172.16.4.0/16"]
             end
         end
-        
+
         %% Right: Platform Services
         subgraph LEEKSAccount["⚙️ EKS PLATFORM ACCOUNT (975050243618)"]
             direction TB
@@ -120,7 +120,7 @@ flowchart TB
                 EKSDeployLE["🚀 K8s Functions"]
             end
         end
-        
+
         subgraph LERDSAccount["🗄️ RDS PLATFORM ACCOUNT (975050243619)"]
             direction TB
             subgraph LERDS["🗄️ RDS Platform Service"]
@@ -129,7 +129,7 @@ flowchart TB
                 RDSDeployLE["🚀 DB Functions"]
             end
         end
-        
+
         %% Position around network infrastructure
         LENetInfra
     end
@@ -144,22 +144,22 @@ flowchart TB
     %% ========================================
     %% NETWORK BACKBONE CONNECTIONS
     %% ========================================
-    
+
     %% Central VPCs connect to their respective TGWs
     ProdCentralVPC === TGWProd
     LECentralVPC === TGWLE
-    
+
     %% Production TGW Hub - connecting all VPCs in production network
     TGWProd === EKSVPCProd
     TGWProd === RDSVPCProd
     TGWProd === App1VPCProd
     TGWProd === App2VPCProd
-    
+
     %% LE TGW Hub - connecting all VPCs in LE network
     TGWLE === EKSVPCLENet
     TGWLE === RDSVPCLENet
     TGWLE === App1VPCLENet
-    
+
     %% Internet Access
     TGWProd --> NATProd --> ExtServices
     TGWLE --> NATLE --> ExtServices
@@ -167,72 +167,87 @@ flowchart TB
     %% ========================================
     %% APPLICATION-CENTRIC DEPLOYMENT FLOWS
     %% ========================================
-    
+
     %% PRODUCTION: Apps → Production Hub → Platforms
     App1ManifestProd ==>|"📤 Manifests"| CentralControlProd
     App1SchemaProd ==>|"📤 Schema"| CentralControlProd
     App2ManifestProd ==>|"📤 Manifests"| CentralControlProd
-    
+
     CentralControlProd ==>|"🔧 Deploy Prod"| EKSDeployProd
     CentralControlProd ==>|"🔧 Deploy Prod"| RDSDeployProd
-    
+
     EKSDeployProd ==> EKSProd
     RDSDeployProd ==> RDSProd
-    
-    %% LOWER ENVIRONMENT: Apps → LE Hub → Platforms  
+
+    %% LOWER ENVIRONMENT: Apps → LE Hub → Platforms
     App1ManifestLE ==>|"📤 Manifests"| CentralControlLE
     App1SchemaLE ==>|"📤 Schema"| CentralControlLE
-    
+
     CentralControlLE ==>|"🔧 Deploy LE"| EKSDeployLE
     CentralControlLE ==>|"🔧 Deploy LE"| RDSDeployLE
-    
+
     EKSDeployLE ==> EKSLENet
     RDSDeployLE ==> RDSLENet
-    
+
     %% ========================================
     %% RUNTIME COMMUNICATION (IRSA)
     %% ========================================
-    
+
     %% Enver 1 & 2 Runtime Access
     EKSProd -.->|"🔐 Role 1 → DynamoDB"| App1ResProd
     EKSProd -.->|"🔐 Role 2 → RDS"| RDSProd
-    EKSProd -.->|"🔐 Role A → DB"| RDSProd  
+    EKSProd -.->|"🔐 Role A → DB"| RDSProd
     EKSProd -.->|"🔐 Role B → S3"| App2ResProd
 
     %% ========================================
     %% STYLING
     %% ========================================
-    
+
     %% Main network styling
     style ProdNetwork fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
     style LENetwork fill:#e8f4fd,stroke:#039be5,stroke-width:3px
-    
+
     %% Networking account styling
     style NetworkingAccount fill:#e8f5e8,stroke:#4caf50,stroke-width:3px
-    
+
     %% Central account styling
-    style CentralAccount fill:#fff3e0,stroke:#e65100,stroke-width:3px
-    
-    %% Platform account styling  
+    style CentralAccount fill:#fff3e0, stroke:#222,stroke-width:8px
+
+    %% Platform account styling
     style ProdEKSAccount fill:#bbdefb,stroke:#0288d1,stroke-width:2px
     style ProdRDSAccount fill:#ffcdd2,stroke:#d32f2f,stroke-width:2px
     style LEEKSAccount fill:#bbdefb,stroke:#0288d1,stroke-width:2px
     style LERDSAccount fill:#ffcdd2,stroke:#d32f2f,stroke-width:2px
-    
+
     %% Application account styling
     style ProdApp1 fill:#e8f4fd,stroke:#039be5,stroke-width:2px
     style ProdApp2 fill:#e8f4fd,stroke:#039be5,stroke-width:2px
     style LEApp1 fill:#e8f4fd,stroke:#039be5,stroke-width:2px
-    
+
     %% Enver styling
     style ProdEnver1 fill:#c8e6c9,stroke:#66bb6a,stroke-width:2px
     style ProdEnver2 fill:#c8e6c9,stroke:#66bb6a,stroke-width:2px
     style LEEnver1 fill:#c8e6c9,stroke:#66bb6a,stroke-width:2px
-    
+
     %% Central VPC styling
-    style ProdCentralVPC fill:#ffe0b2,stroke:#f57c00,stroke-width:2px
-    style LECentralVPC fill:#ffe0b2,stroke:#f57c00,stroke-width:2px
-    
+    style ProdCentralVPC fill:#ffe0b2,stroke:red,stroke-width:2px
+    style LECentralVPC fill:#ffe0b2,stroke:red,stroke-width:2px
+
+    %% TGW and VPC node styling
+    style TGWProd stroke:red,stroke-width:2px
+    style TGWLE stroke:red,stroke-width:2px
+    style EKSVPCProd stroke:red,stroke-width:2px
+    style RDSVPCProd stroke:red,stroke-width:2px
+    style App1VPCProd stroke:red,stroke-width:2px
+    style App2VPCProd stroke:red,stroke-width:2px
+    style EKSVPCLENet stroke:red,stroke-width:2px
+    style RDSVPCLENet stroke:red,stroke-width:2px
+    style App1VPCLENet stroke:red,stroke-width:2px
+
     %% Network infrastructure styling
     style ProdNetInfra fill:#ffecb3,stroke:#ffa000,stroke-width:2px
     style LENetInfra fill:#ffecb3,stroke:#ffa000,stroke-width:2px
+
+    %% TGW to VPC link styling
+    %% This style makes the TGW-VPC connections red, as requested.
+    linkStyle 0,1,2,3,4,5,6,7,8 stroke:red,stroke-width:2px

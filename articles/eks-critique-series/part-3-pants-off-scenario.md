@@ -1,9 +1,27 @@
 ---
 layout: article
 title: 'The EKS "Pants Off to Fart" Scenario: Accidental Complexity vs. ECS/CDK Simplicity in the SDLC'
-permalink: /articles/eks-pants-off-scenario/
+permalink: /articles/eks-critique-series/part-3-pants-off-scenario/
 author: "Gary Yang"
+redirect_from:
+  - /articles/eks-pants-off-scenario/
 ---
+
+<div class="series-notice">
+  <p><strong>This is Part 3 of a 9-part series on the hidden costs and complexities of Kubernetes.</strong></p>
+  <p>This series deconstructs the hype, examines the architectural fallacies, and explores the cultural damage wrought by the "Kubernetes Complexity Engine."</p>
+  <ol>
+    <li><a href="/articles/eks-critique-series/part-1-dismantling-hype/">Dismantling the Kubernetes Hype</a></li>
+    <li><a href="/articles/eks-critique-series/part-2-emperor-new-cluster/">The Emperor's New Cluster</a></li>
+    <li><strong>The EKS "Pants Off to Fart" Scenario</strong> (You are here)</li>
+    <li><a href="/articles/eks-critique-series/part-4-flawed-gitops-model/">How a Flawed GitOps Model Betrayed the Developer</a></li>
+    <li><a href="/articles/eks-critique-series/part-5-bounded-contexts/">Kubernetes and Misaligned Boundaries</a></li>
+    <li><a href="/articles/eks-critique-series/part-6-the-colonizers-tax/">The Colonizers: An EKS Complexity Tax</a></li>
+    <li><a href="/articles/eks-critique-series/part-7-the-cultural-virus/">The Cultural Virus of Complexity</a></li>
+    <li><a href="/articles/eks-critique-series/part-8-the-authority-problem/">The Authority Problem: Shallow Leadership</a></li>
+    <li><a href="/articles/eks-critique-series/part-9-engineering-victory/">Kubernetes 2.0: The Engineering Victory</a></li>
+  </ol>
+</div>
 
 Deploying a standard web application – a Spring Boot or Express container, secured with a certificate and DNS, fronted by an Application Load Balancer (ALB), and backed by an RDS database – is a common pattern. However, the journey through the Software Development Life Cycle (SDLC) diverges dramatically depending on whether you choose Amazon EKS (Elastic Kubernetes Service) or a more integrated AWS-native approach like ECS (Elastic Container Service) with the AWS CDK (Cloud Development Kit) and CloudFormation.
 
@@ -203,3 +221,10 @@ Before defaulting to EKS because "Kubernetes is the standard," organizations mus
   7. <https://docs.aws.amazon.com/decision-guides/latest/containers-on-aws-how-to-choose/choosing-aws-container-service.html>
   8. <https://www.economize.cloud/blog/aws-eks-vs-ecs/>
   9. <https://www.ranthebuilder.cloud/post/build-a-serverless-web-application-on-fargate-ecs-and-cdk>
+
+---
+
+<div class="series-navigation">
+  <a href="/articles/eks-critique-series/part-2-emperor-new-cluster/" class="previous">&laquo; Previous: Part 2</a>
+  <a href="/articles/eks-critique-series/part-4-flawed-gitops-model/" class="next">Next: Part 4 &raquo;</a>
+</div>

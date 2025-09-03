@@ -1,0 +1,65 @@
+graph TD
+
+    %% Technical illusion
+    subgraph Technical illusion folder as environment
+        SB[Single branch policy controlled by ops]
+        F1[Folder based environment overlay example kustomize]
+        F2[Repeated config copy paste across folders]
+        F3[Cross folder contamination shared secrets or config drift]
+        F4[Validation impossible until deployment]
+        M1[Distributed monolith emerges system tightly coupled but pretending to be modular]
+
+        SB -->|ops denies branch as environment so folders used instead| F1
+        F1 -->|engineers must duplicate config manually| F2
+        F1 -->|folders overlap without isolation| F3
+        F2 -->|small changes copied into many places leads to divergence| M1
+        F3 -->|config leaks between environments cause instability| M1
+        F1 -->|no real test path before production| F4
+        F4 -->|errors only visible at deployment| M1
+    end
+
+    %% Ops power
+    subgraph Ops power and privilege
+        L1[Ops elites and vendors hold control]
+        P1[Force push rights to main branch]
+        P2[Manual or secret security group deployments]
+        P3[Pull request prioritization by connections]
+        P4[Policy blocks and intentional delay of approvals]
+        E1[Engineers with privilege allowed shortcuts]
+        E2[Engineers without privilege blocked or punished]
+
+        L1 -->|create rules and exceptions| P1
+        L1 -->|create hidden paths to bypass process| P2
+        L1 -->|approve or reject based on relationships| P3
+        L1 -->|delay or block when inconvenient| P4
+        P1 -->|exclusive right to override code base| E1
+        P2 -->|hidden deployments outside pipeline| E1
+        P3 -->|fast path for insiders| E1
+        P4 -->|outsiders stuck miss context and deadlines| E2
+    end
+
+    %% Cultural layer
+    subgraph Cultural revolution theater
+        C1[Ops theater fake bustle of activity but no real engineering]
+        C2[Metrics as ideology example how many pods how many kafka messages]
+        C3[Brown bag propaganda one way talks pre approved content]
+        C4[Political correctness criticism forbidden]
+        C5[Punishment performance improvement plan for outsiders]
+        C6[Innovation suppressed focus on compliance]
+        C7[Abstraction failure no modeling no diagrams only yaml]
+        C8[Culture of fear and compliance dominates]
+
+        M1 -->|technical fragility presented as managed complexity| C1
+        E1 -->|insiders amplify narrative| C2
+        E1 -->|insiders host propaganda sessions| C3
+        E1 -->|enforce dont say wrong thing| C4
+        E2 -->|outsiders targeted with punishment| C5
+        C1 -->|spectacle hides system weakness| C8
+        C2 -->|metrics replace value with volume| C8
+        C3 -->|training becomes indoctrination| C8
+        C4 -->|dissent suppressed| C8
+        C5 -->|fear used as control| C8
+        C8 -->|fear reduces experimentation| C6
+        C6 -->|no safe space for design exploration| C7
+        C7 -->|no abstractions no diagrams loop back to distributed monolith| M1
+    end

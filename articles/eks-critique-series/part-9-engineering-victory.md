@@ -1,13 +1,30 @@
 ---
 layout: article
 title: "Kubernetes 2.0: From YAML and Administrative Ops to Typed Abstractions and Engineering"
-permalink: /articles/kubernetes-2-0-engineering-victory/
+permalink: /articles/eks-critique-series/part-9-engineering-victory/
 date: 2025-01-13
 author: "Gary Yang"
 description: "How the era of YAML-driven infrastructure is ending, replaced by typed abstractions and platform engineering that transforms ops from administration to engineering. The decisive victory of engineering over administration."
 keywords: ["kubernetes", "yaml", "typescript", "platform engineering", "devops", "infrastructure", "abstraction", "helm", "cdk8s", "anti-stagnation", "fragmentation trap", "engineering", "administration"]
+redirect_from:
+  - /articles/kubernetes-2-0-engineering-victory/
 ---
 
+<div class="series-notice">
+  <p><strong>This is Part 9 of a 9-part series on the hidden costs and complexities of Kubernetes.</strong></p>
+  <p>This series deconstructs the hype, examines the architectural fallacies, and explores the cultural damage wrought by the "Kubernetes Complexity Engine."</p>
+  <ol>
+    <li><a href="/articles/eks-critique-series/part-1-dismantling-hype/">Dismantling the Kubernetes Hype</a></li>
+    <li><a href="/articles/eks-critique-series/part-2-emperor-new-cluster/">The Emperor's New Cluster</a></li>
+    <li><a href="/articles/eks-critique-series/part-3-pants-off-scenario/">The EKS "Pants Off to Fart" Scenario</a></li>
+    <li><a href="/articles/eks-critique-series/part-4-flawed-gitops-model/">How a Flawed GitOps Model Betrayed the Developer</a></li>
+    <li><a href="/articles/eks-critique-series/part-5-bounded-contexts/">Kubernetes and Misaligned Boundaries</a></li>
+    <li><a href="/articles/eks-critique-series/part-6-the-colonizers-tax/">The Colonizers: An EKS Complexity Tax</a></li>
+    <li><a href="/articles/eks-critique-series/part-7-the-cultural-virus/">The Cultural Virus of Complexity</a></li>
+    <li><a href="/articles/eks-critique-series/part-8-the-authority-problem/">The Authority Problem: Shallow Leadership</a></li>
+    <li><strong>Kubernetes 2.0: The Engineering Victory</strong> (You are here)</li>
+  </ol>
+</div>
 
 ## Introduction: The Great Paradigm Shift
 
@@ -840,3 +857,9 @@ This isn't just technological evolution—it's **organizational evolution** towa
 - [The Fragmentation Trap: How YAML/Container-Centric GitOps are Hindering Cloud-Native Evolution](/articles/fragmentation-trap/) - YAML complexity analysis
 
 *This article is part of the ONDEMANDENV.dev knowledge base on distributed systems architecture and engineering excellence.*
+
+---
+
+<div class="series-navigation">
+  <a href="/articles/eks-critique-series/part-8-the-authority-problem/" class="previous">&laquo; Previous: Part 8</a>
+</div>

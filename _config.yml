@@ -11,9 +11,10 @@ plugins:
   - jekyll-feed
   - jekyll-sitemap
   - jekyll-seo-tag
+  - jekyll-redirect-from
 
 # GitHub Pages compatible settings
-safe: true
+safe: false
 source: .
 destination: ./_site
 incremental: false
