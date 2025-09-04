@@ -112,13 +112,20 @@ The correct use of the ladder is to declare the **behavior** and invariants of t
 - Jobs/CronJobs: completion counts and active pods are status, not configuration.
 - Databases: storage class and backup policy are declarative; current replica lag, failover leadership, and connection counts are runtime.
 
-### **The Kubernetes Anomaly: A Competing Reconciliation Model**
+### The Declarative/Runtime Divide and the Kubernetes Anomaly
 
-In stark contrast to Terraform's discrete, user-triggered model stands the implicit, continuous reconciliation model of Kubernetes. When a user executes kubectl apply \-f manifest.yaml, they are not executing a discrete plan. Instead, they are writing the desired state specification directly into the etcd database of the Kubernetes control plane.21 This
+The central crisis in modern infrastructure management, and the primary source of friction when using tools like Terraform to manage Kubernetes, is the conflict between two types of state:
 
-etcd database serves as the live, authoritative desired state for the cluster's reconciliation engine (the controllers at Layer \-1).3 The moment the API server validates and persists this change, the various controllers in the cluster begin working autonomously and continuously to make the actual state of the world match this new desired state. This is not a discrete execution; it is the direct manipulation of the target for a live, closed-loop control system.
+1.  **Declarative State (The Blueprint):** This is the state defined by engineers in files (`.yaml`, `.tf`). It represents the *intended baseline configuration*. This is what Layers 1 through 4 are designed to manage. Examples: a container `image`, a memory limit, or the *configuration* of an autoscaler (`minReplicas: 3`, `maxReplicas: 10`).
+2.  **Runtime State (The Reality):** This is the dynamic, fluctuating state of the live system, managed by the **Layer -1** engine in response to real-world conditions. In Kubernetes, this is the state managed by controllers in the control plane, which continuously work to make reality match the desired state stored in `etcd`. A prime example is the *current number of pods* being 7 due to high traffic, as determined by a Horizontal Pod Autoscaler (HPA).
 
-This fundamental architectural mismatch is the primary source of friction when using a discrete execution tool like Terraform to manage dynamic, application-level Kubernetes resources. The core problem is state drift. For example, if the Horizontal Pod Autoscaler (HPA), a native Kubernetes controller, scales a Deployment from 3 to 5 replicas in response to traffic, the live state in etcd changes. Kubernetes is functioning as designed. However, Terraform's state file, a snapshot from the last apply, still records the replica count as 3\. On the next terraform plan, this discrepancy will be reported as "drift." An unsuspecting operator might "correct" this drift by running terraform apply, which would instruct the Kubernetes API to scale the Deployment back down to 3, potentially causing an outage by fighting against the cluster's own autoscaling mechanism.25
+The problem is that the APIs we use often fail to distinguish between the two. The ability to set `replicas: 3` in a Kubernetes `Deployment.yaml` is a **leaky abstraction**—a fundamental API design flaw. It invites the user to declare a value that is fundamentally a *runtime concern*.
+
+This creates an irreconcilable conflict, particularly when a discrete execution tool like Terraform manages dynamic Kubernetes resources. The core problem is state drift:
+* The **Declarative State** in Terraform's state file says `replicas: 3`.
+* The **Runtime State** managed by the HPA in Layer -1 says `replicas: 7`.
+
+On the next `terraform plan`, this discrepancy will be reported as "drift." An unsuspecting operator might "correct" this drift by running `terraform apply`, which would instruct the Kubernetes API to scale the Deployment back down to 3, potentially causing an outage by fighting against the cluster's own autoscaling mechanism.25 This is not a tooling problem; it's an architectural impedance mismatch. The correct use of the declarative ladder is to define the *behavior* of the runtime (the HPA configuration), not to dictate its *transient state* (the current replica count).
 
 This has led to the mainstream view that the "native" solution is GitOps, where tools like ArgoCD and Flux use a Git repository as the external source of truth.27 However, this view is an oversimplification. Logically, a Git repository in a GitOps workflow and a
 
