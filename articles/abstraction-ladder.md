@@ -4,7 +4,7 @@ title: "The Engineer's Compass: An Analytical Review of the SDE's Ladder of Abst
 ---
 
 # **The Engineer's Compass: An Analytical Review of the SDE's Ladder of Abstraction**
-
+![GitOps Communist Colonization](/images/abstraction-ladder.png)
 ## **Introduction: Charting the Modern Infrastructure Stack**
 
 The primary challenge for modern software and platform engineers is not a scarcity of tools, but the absence of a coherent mental model to navigate the dizzying layers of abstraction they represent. We work on platforms built on services, which run on infrastructure we rarely see. The user's proposed "Ladder of Abstraction" provides an essential map for this complex terrain. This report serves as a rigorous, evidence-based validation and expansion of that model, offering an honest guide to the architectural layers software development engineers (SDEs) interact with daily.
