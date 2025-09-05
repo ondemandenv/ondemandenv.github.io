@@ -17,10 +17,10 @@ The framework for this analysis is the "Complete Ladder of Abstraction," which p
 
 | Layer | Name | Core Concept | How it Decomposes Abstraction | Key Abstraction |
 | :---- | :---- | :---- | :---- | :---- |
-| **\-1** | **Reconciliation Engine** | A stateful engine that makes reality match a desired state. | Decomposes the cloud into a unified, state-driven control plane, hiding the disparate and inconsistent raw APIs of individual services. | The raw, imperative cloud APIs. |
+| **\-1** | **Reconciliation Engine** | A stateful, continuous control loop that makes reality match a desired state. | Decomposes live system drift via controllers that observe and act until convergence. | The raw, imperative cloud APIs. |
 | **0** | **Direct API Action** | You tell the system *how* to do something, step-by-step. | Decomposes the data center into discrete, consumable API endpoints, hiding the physical hardware and network fabric. | The physical hardware and network fabric. |
 | **1** | **Declarative State** | You describe the desired *end state* of a single logical resource. | Decomposes a resource's lifecycle into a single state definition, hiding the sequence of imperative API calls needed for creation or updates. | The imperative API calls for one resource. |
-| **2** | **Declarative Composition** | You define a **schema** for a graph of related logical resources. | Decomposes an application stack into a graph of interconnected resources, hiding the complex dependency management and order of operations. | The dependency graph (DAG) and the transactional state boundary. |
+| **2** | **Declarative Composition** | You define a **schema** for a graph of related logical resources. | Decomposes an application stack into a graph of interconnected resources, hiding the complex dependency management and order of operations. | The dependency graph (DAG) and the persisted state boundary. |
 | **3** | **Procedural Abstraction** | You use a programming language to *generate* a declarative composition. | Decomposes infrastructure patterns into reusable software components (classes, functions), hiding the verbose and logic-less declarative configuration. | The verbose declarative configuration (YAML/HCL). |
 | **4** | **Semantic Modeling** | You model your infrastructure based on *business concepts*. | Decomposes infrastructure into business-centric services, hiding the underlying cloud primitives and implementation details entirely. | **The infrastructure itself.** |
 
@@ -28,15 +28,17 @@ The framework for this analysis is the "Complete Ladder of Abstraction," which p
 
 ### **Layer \-1: The Reconciliation Engine — The Unseen Foundation**
 
-The engine room of the modern cloud is not a pristine, logically consistent foundation. It is a complex, stateful, and often inconsistent implementation of a cloud service's internal machinery. This is Layer \-1, the Reconciliation Engine. It comprises the proprietary controllers of AWS CloudFormation, the core graph engine of Terraform, and, most significantly, the collection of controllers that form the Kubernetes control plane. Its core purpose is to continuously work to make reality match a desired state.
+The engine room of the modern cloud is not a pristine, logically consistent foundation. It is a complex, stateful, and often inconsistent implementation of a cloud service's internal machinery. This is Layer \-1, the Reconciliation Engine. It comprises the continuously running controllers that form the Kubernetes control plane. Its core purpose is to continuously work to make reality match a desired state.
 
-This layer's function is to decompose the problem of "state convergence." It takes a desired state declaration (e.g., a Kubernetes manifest or a CloudFormation template) as its input from a higher-level tool or user. It then relies on the layer below it—the raw, imperative APIs of Layer 0—to execute a continuous series of commands to force the real world to match the desired state. It hides the immense complexity of distributed state management, error handling, and retries, presenting a unified control plane over a collection of otherwise disconnected services.
+This layer's function is to decompose the problem of "state convergence" via continuous control loops. Controllers observe the desired state (as stored in the API server/etcd) and the actual state of the world, then issue corrective actions until the two align. There is no discrete, idempotent interface or transaction boundary at this layer; idempotency lives at Layer 1 (resource semantics), while Layer \-1 provides eventual convergence through repeated observe–compare–act cycles. It relies on the layer below—the raw, imperative APIs of Layer 0—to issue commands and hides the immense complexity of distributed state management, error handling, and retries, presenting a unified control plane over otherwise disconnected services.
 
 It is at this foundational layer that Kubernetes finds its true architectural home. Despite often being marketed as an application platform (PaaS), Kubernetes is often described as a "data center operating system". Its core components—the API server acting as a central communication hub, the scheduler assigning workloads to nodes, and the controller manager running reconciliation loops—operate on a persistent, distributed key-value store called
 
 etcd.3 This architecture perfectly matches the definition of a "stateful engine that works to make reality match a desired state".3
 
 etcd reliably stores the configuration data, representing the desired state of the cluster at any given time, while the controllers continuously observe the actual state and issue commands to converge the two.3 Kubernetes, therefore, is not the platform itself, but the powerful, general-purpose reconciliation engine upon which platforms can be built.
+
+Importantly, tools like Terraform Core and AWS CloudFormation do not live at Layer \-1. They belong at Layer 2 (Declarative Composition): they take declarative inputs, compute an execution plan, and perform discrete, ordered operations against Layer 0 APIs. They do not continuously reconcile drift; once an apply/stack update finishes, the engine stops. Only continuously running controllers (e.g., those in Kubernetes) fit the definition of Layer \-1.
 
 ### **Layer 0: Direct API Action — The Imperative Baseline**
 
@@ -141,8 +143,8 @@ This layer's function is to decompose infrastructure *patterns* into reusable so
 
 However, as the user's analysis correctly identifies, this layer is still tightly coupled to the underlying tools and their conceptual models. A comparison of the distinct architectural models of AWS CDK and Pulumi is instructive.
 
-* **AWS CDK: The Transpiler Model:** The AWS CDK functions as a *transpiler*. The code written by an engineer does not directly provision infrastructure. Instead, when executed, it synthesizes AWS CloudFormation templates. These templates are then deployed by the underlying CloudFormation reconciliation engine (a Layer \-1 service). Debugging can be challenging because errors often manifest in the generated template, not in the original CDK code.34
-* **Pulumi: The Direct Orchestration Model:** Pulumi operates as a direct orchestration engine. The code written by the engineer *is* the deployment program. The Pulumi engine executes this code, making direct API calls to the cloud provider to provision resources. This model provides a tighter feedback loop and a more familiar debugging experience.
+* **AWS CDK: The Transpiler Model:** The AWS CDK functions as a *transpiler*. The code written by an engineer does not directly provision infrastructure. Instead, when executed, it synthesizes AWS CloudFormation templates. These templates are then deployed by the CloudFormation service operating at **Layer 2 (Declarative Composition)**, which performs a discrete, ordered stack update against Layer 0 APIs. Debugging can be challenging because errors often manifest in the generated template, not in the original CDK code.34
+* **Pulumi: The Direct Orchestration Model:** Pulumi operates as a direct orchestration engine. The code written by the engineer *is* the deployment program. The Pulumi engine executes this code, making direct API calls to the cloud provider to provision resources. This model provides a tighter feedback loop and a more familiar debugging experience, but it is still a **discrete** executor (Layer 2 orchestration + Layer 0 calls), not a continuous Layer \-1 reconciler.
 
 ### **Layer 4: Semantic Modeling — The Platform Engineering Endgame**
 
@@ -173,9 +175,9 @@ The most compelling evidence that Kubernetes is not a coherent, top-down design 
 
 The accumulation of pragmatic design choices, leaky abstractions, and operational necessities results in a significant "complexity tax." This is not merely a steep learning curve; it is a continuous operational burden that shifts engineering resources away from application development and toward infrastructure management. Industry surveys consistently cite operational complexity and skills gaps as top challenges for Kubernetes adopters. This aligns with practitioner sentiment that day-to-day cluster work often skews toward operations-heavy tasks relative to engineering and incident response.
 
-### **Leaky Abstractions in Practice: Ingress Controller Vulnerabilities**
+### **Gell‑Mann Amnesia and Leaky Abstractions in Practice**
 
-The Law of Leaky Abstractions states that all non-trivial abstractions, to some degree, are leaky, forcing users to understand underlying details. A practical example is the class of vulnerabilities in ingress controllers (e.g., nginx-based). The Kubernetes Ingress object is a simple abstraction for routing traffic; however, historically there have been input vectors where crafted annotations or fields could influence generated nginx configuration in unsafe ways. The lesson is architectural, not vendor-specific: when an abstraction compiles user input into complex lower-layer configurations, you must assume the lower layer's threat model still applies.
+The Gell‑Mann Amnesia effect reminds us that trust in simplified narratives can be misplaced, especially when we personally know a domain’s messy details. Paired with the Law of Leaky Abstractions, it implies caution: simple APIs often sit atop complex, failure‑prone machinery. A practical example is ingress controllers: a Kubernetes Ingress object abstracts routing, yet historically crafted inputs (e.g., annotations) could influence generated lower‑layer configurations in unsafe ways. The lesson is architectural, not vendor‑specific: when an abstraction compiles user input into complex configurations, assume the lower layer’s threat model still applies.
 
 ### **The Lie of Portability: A Tether to the Cloud**
 
