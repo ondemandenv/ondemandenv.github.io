@@ -1,6 +1,7 @@
 ---
 layout: article
 title: "The Engineer's Compass: An Analytical Review of the SDE's Ladder of Abstraction"
+permalink: /articles/abstraction-ladder/
 author: "Gary Yang"
 date: 2025-09-02
 ---
