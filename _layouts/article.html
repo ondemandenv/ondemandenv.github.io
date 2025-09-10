@@ -89,6 +89,48 @@ layout: default
     </div>
 </article>
 
+<!-- Citation/Attribution Block -->
+<div class="citation-block">
+    <h3>Cite This Article</h3>
+    <p id="citation-text">{% if page.author %}{{ page.author }}. {% endif %}"{{ page.title | escape }}." <em>{{ site.title }}</em>, {{ page.date | date: "%B %-d, %Y" }}. {{ site.url }}{{ page.url }}.</p>
+    <button id="copy-citation-btn" class="copy-btn">Copy Citation</button>
+</div>
+
+<style>
+.citation-block {
+    margin-top: 3rem;
+    padding: 1.5rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+.citation-block h3 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    color: var(--primary-color);
+    font-size: 1.25rem;
+}
+.citation-block p {
+    margin-bottom: 1rem;
+    color: #333;
+    line-height: 1.6;
+}
+.copy-btn {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.2s ease;
+}
+.copy-btn:hover {
+    background-color: #0056b3;
+}
+</style>
+
 <!-- Source History Floating Button -->
 <a id="source-history-btn" class="source-history-floating-btn" title="View source history on GitHub" href="#" target="_blank" rel="noopener noreferrer">
     <div class="source-btn-icon">📝</div>
@@ -583,6 +625,27 @@ Ask what user want next:
     }
 
     window.addEventListener('scroll', updateButtonVisibility);
+
+    // Citation copy button
+    const copyBtn = document.getElementById('copy-citation-btn');
+    const citationText = document.getElementById('citation-text');
+    if (copyBtn && citationText) {
+        copyBtn.addEventListener('click', () => {
+            // Use modern clipboard API
+            navigator.clipboard.writeText(citationText.innerText.trim()).then(() => {
+                copyBtn.innerText = 'Copied!';
+                copyBtn.style.backgroundColor = '#28a745'; // Green for success
+                setTimeout(() => {
+                    copyBtn.innerText = 'Copy Citation';
+                    copyBtn.style.backgroundColor = ''; // Revert to original color
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy text: ', err);
+                copyBtn.innerText = 'Error';
+                copyBtn.style.backgroundColor = '#dc3545'; // Red for error
+            });
+        });
+    }
 
     console.log('AI Analysis button script fully loaded and ready!');
 });
