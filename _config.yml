@@ -60,7 +60,10 @@ twitter:
 social:
   name: ONDEMANDENV
   links:
-    - https://github.com/ondemandenv
+    - name: GitHub
+      url: https://github.com/ondemandenv
+    - name: Discord
+      url: https://discord.gg/FR7pJ6jJ
 
 # Sitemap settings
 sitemap:

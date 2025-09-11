@@ -460,6 +460,28 @@ footer a:hover {
     color: var(--primary-color);
 }
 
+.social-links {
+    margin-bottom: 2rem;
+}
+
+.social-links h3 {
+    margin-bottom: 1rem;
+}
+
+.social-links ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+}
+
+.social-links a {
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
 /* ===== ACCESSIBILITY & FINAL ENHANCEMENTS ===== */
 /* Focus improvements for accessibility */
 a:focus, button:focus, select:focus, input:focus {

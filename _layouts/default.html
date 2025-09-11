@@ -297,6 +297,14 @@
 </main>
 
 <footer>
+    <div class="social-links">
+        <h3>Community</h3>
+        <ul>
+            {% for social in site.social.links %}
+                <li><a href="{{ social.url }}" target="_blank" rel="noopener noreferrer">{{ social.name }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
     <p>&copy; 2024 {{ site.title }}. All rights reserved.</p>
     <p style="text-align: center; margin-top: 1rem;">
         <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">
