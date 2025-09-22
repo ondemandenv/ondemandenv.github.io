@@ -173,7 +173,7 @@ Multiply this by ingress configurations, secrets, service definitions, network p
 
 ### **What Is ONDEMANDENV?**
 
-ONDEMANDENV.dev is a platform specifically designed for On-Demand Environments and Service Contract Management in Distributed Systems. According to the official GitHub organization, it focuses on[1]:
+ONDEMANDENV.dev is a platform specifically designed for On-Demand Environments and Service Contract Management in Distributed Systems. According to the official GitHub organization, it focuses on[^1]:
   * Streamlining Service Dependencies
   * Enhancing Team Collaboration
   * Accelerating Development Cycles
@@ -181,13 +181,13 @@ ONDEMANDENV.dev is a platform specifically designed for On-Demand Environments a
 
 ### **contractsLib: The Codified Congress**
 
-At the core of ONDEMANDENV is contractsLib, described in the documentation as "a codified, declarative congress defining the architecture and agreed-upon boundaries between services and teams."[4] This is not just configuration-it's a comprehensive architectural definition that lives in its own version-controlled repository.
+At the core of ONDEMANDENV is contractsLib, described in the documentation as "a codified, declarative congress defining the architecture and agreed-upon boundaries between services and teams."[^4] This is not just configuration-it's a comprehensive architectural definition that lives in its own version-controlled repository.
 
-The `odmd-contracts-sandbox` repository serves as a concrete example of a contractsLib within the ONDEMANDENV ecosystem, acting as what they call "the 'congress' of your services, where teams negotiate and agree upon how services interact."[1]
+The `odmd-contracts-sandbox` repository serves as a concrete example of a contractsLib within the ONDEMANDENV ecosystem, acting as what they call "the 'congress' of your services, where teams negotiate and agree upon how services interact."[^1]
 
 ### **Actual contractsLib Implementation**
 
-ONDEMANDENV's documentation provides a concrete example of how contractsLib is structured using TypeScript[4]:
+ONDEMANDENV's documentation provides a concrete example of how contractsLib is structured using TypeScript[^4]:
 
 
     # In MyOrgContracts.ts (within the contractsLib repo)
@@ -210,7 +210,7 @@ ONDEMANDENV's documentation provides a concrete example of how contractsLib is s
       inventoryConsumer: new Consumer(this, 'InventoryServiceDependency', inventoryServiceDev.outputsProduct)
     });
 
-This example demonstrates how contractsLib concretely defines the four key components of ONDEMANDENV's architecture[4]:
+This example demonstrates how contractsLib concretely defines the four key components of ONDEMANDENV's architecture[^4]:
 
   1. **Builds** : Defining the source code location and build type for a service
   2. **Envers** (Environment Versions): Declaring deployment environments with specific characteristics
@@ -219,7 +219,7 @@ This example demonstrates how contractsLib concretely defines the four key compo
 
 ### **The Enver System: Static Baselines and Dynamic Clones**
 
-ONDEMANDENV revolutionizes environment management through two types of Envers (Environment Versions)[4]:
+ONDEMANDENV revolutionizes environment management through two types of Envers (Environment Versions)[^4]:
 
   1. **Static Envers (Baselines)** : These are explicitly declared in contractsLib, tied to specific branches (e.g., dev, main) or tags (e.g., v1.2.0, stable). They represent stable, well-defined baseline versions of services deployed to known target environments.
   2. **Dynamic Envers (Clones)** : Temporary environments created on-demand by developers for feature branches or experiments, typically through simple Git operations.
@@ -245,10 +245,10 @@ ONDEMANDENV's contract-based platform distributes control:
 ### **Benefits for Spring Application Decomposition**
 
 ONDEMANDENV's approach provides several key benefits for organizations looking to break down Spring monoliths:
-  * **Architecture as Code** : The system's architecture is explicitly defined and versioned in the contractsLib repository[1]
-  * **Team Collaboration Through Code** : Service contracts are negotiated through code and Pull Requests[1]
-  * **Clear Service Boundaries** : Dependencies and interactions are explicitly defined through Products and Consumers[4]
-  * **Environment Isolation** : Each service can have independent environments with clearly defined dependencies[1]
+  * **Architecture as Code** : The system's architecture is explicitly defined and versioned in the contractsLib repository[^1]
+  * **Team Collaboration Through Code** : Service contracts are negotiated through code and Pull Requests[^1]
+  * **Clear Service Boundaries** : Dependencies and interactions are explicitly defined through Products and Consumers[^4]
+  * **Environment Isolation** : Each service can have independent environments with clearly defined dependencies[^1]
 
 ## Conclusion: Moving Beyond the Spring Monolith
 
@@ -265,3 +265,7 @@ The future of Spring in the microservices era lies not in adding more features t
 
 For organizations struggling with Spring monoliths, the path forward isn't necessarily abandoning Spring, but complementing it with platforms that make service decomposition operationally feasible. When creating a new microservice becomes as easy as adding a new Spring bean, architectural decisions can truly be driven by business needs rather than operational constraints.
 
+## References
+
+[^1]: <https://github.com/ondemandenv/odmd-contracts-sandbox>
+[^4]: <https://ondemandenv.dev/articles/odmd-arc/>
