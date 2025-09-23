@@ -65,7 +65,7 @@ The dominant paradigm of modern Infrastructure as Code, pioneered by tools like 
 
 The genius of this model is its architectural pattern: treating infrastructure not as a collection of items, but as a **graph database**. This analogy is technically precise.
 
-* **Graph Schema:** The .tf or .yaml configuration files define the *schema* of the graph. resource blocks are the *nodes* in the graph. References between resources (implicit dependencies) and depends\_on blocks are the *edges* that define relationships.[^9]
+* **Graph Schema:** The .tf or .yaml configuration files define the *schema* of the graph. resource blocks are the *nodes* in the graph. References between resources (implicit dependencies) and depends_on blocks are the *edges* that define relationships.[^9]
 * **Graph Instance:** The state file (.tfstate or a CloudFormation Stack object) is the persisted *instance* of this graph database. It maps the logical nodes and edges in your code to the real-world resources and their relationships in the cloud.[^11]
 * **Graph Operations:** A terraform plan is a query against this graph. Terraform builds a Directed Acyclic Graph (DAG) from your configuration, compares it to the state, and determines the correct traversal path (the order of operations) to create, update, or delete resources in parallel where possible.[^9] The
   terraform apply command then executes this traversal plan.
@@ -218,41 +218,41 @@ The inescapable conclusion is this: abstraction is the only viable weapon agains
 
 ## References
 
-[^1]: Can Kubernetes Abstractions be Useful? : r/devops \- Reddit, accessed September 3, 2025, [https://www.reddit.com/r/devops/comments/j2g9s9/can\_kubernetes\_abstractions\_be\_useful/](https://www.reddit.com/r/devops/comments/j2g9s9/can_kubernetes_abstractions_be_useful/)
-[^2]: Why do devops keep piling abstractions on top of abstractions? There's the machi... | Hacker News, accessed September 3, 2025, [https://news.ycombinator.com/item?id=42833558](https://news.ycombinator.com/item?id=42833558)
-[^3]: Kubernetes \- Wikipedia, accessed September 3, 2025, [https://en.wikipedia.org/wiki/Kubernetes](https://en.wikipedia.org/wiki/Kubernetes)
-[^4]: Infrastructure as code \- Wikipedia, accessed September 3, 2025, [https://en.wikipedia.org/wiki/Infrastructure\_as\_code](https://en.wikipedia.org/wiki/Infrastructure_as_code)
-[^5]: GitOps: A Comprehensive Guide \- DEV Community, accessed September 3, 2025, [https://dev.to/iaadidev/gitops-a-comprehensive-guide-909](https://dev.to/iaadidev/gitops-a-comprehensive-guide-909)
-[^6]: Role Of YAML In Infrastructure As Code \- Meegle, accessed September 3, 2025, [https://www.meegle.com/en\_us/topics/infrastructure-as-code/role-of-yaml-in-infrastructure-as-code](https://www.meegle.com/en_us/topics/infrastructure-as-code/role-of-yaml-in-infrastructure-as-code)
-[^7]: JSON Vs YAML In Infrastructure As Code \- Meegle, accessed September 3, 2025, [https://www.meegle.com/en\_us/topics/infrastructure-as-code/json-vs-yaml-in-infrastructure-as-code](https://www.meegle.com/en_us/topics/infrastructure-as-code/json-vs-yaml-in-infrastructure-as-code)
-[^8]: Terraform YAML: Define Infrastructure Using YAML Format \- CyberPanel, accessed September 3, 2025, [https://cyberpanel.net/blog/terraform-yaml](https://cyberpanel.net/blog/terraform-yaml)
-[^9]: Dependency Graph | Terraform \- HashiCorp Developer, accessed September 3, 2025, [https://developer.hashicorp.com/terraform/internals/graph](https://developer.hashicorp.com/terraform/internals/graph)
-[^10]: Terraform Resource Dependencies Explained \- Scalr, accessed September 3, 2025, [https://scalr.com/blog/terraform-resource-dependencies-explained](https://scalr.com/blog/terraform-resource-dependencies-explained)
-[^11]: State | Terraform | HashiCorp Developer, accessed September 3, 2025, [https://developer.hashicorp.com/terraform/language/state/purpose](https://developer.hashicorp.com/terraform/language/state/purpose)
-[^12]: State | Terraform \- HashiCorp Developer, accessed September 3, 2025, [https://developer.hashicorp.com/terraform/language/state](https://developer.hashicorp.com/terraform/language/state)
-[^13]: Mastering Terraform State: Real Incidents, Lessons, and Best Practices | TO THE NEW Blog, accessed September 3, 2025, [https://www.tothenew.com/blog/mastering-terraform-state-real-incidents-lessons-and-best-practices/](https://www.tothenew.com/blog/mastering-terraform-state-real-incidents-lessons-and-best-practices/)
-[^14]: Explaining Terraform using a real-life analogy | by Malinda Jayawardana | Medium, accessed September 3, 2025, [https://jarvislk.medium.com/explaining-terraform-using-a-real-life-analogy-19f689501deb](https://jarvislk.medium.com/explaining-terraform-using-a-real-life-analogy-19f689501deb)
-[^15]: What is Terraform | Terraform \- HashiCorp Developer, accessed September 3, 2025, [https://developer.hashicorp.com/terraform/intro](https://developer.hashicorp.com/terraform/intro)
-[^16]: Terraform Graphs Explained \- TechOps Examples, accessed September 3, 2025, [https://www.techopsexamples.com/p/terraform-graphs-explained](https://www.techopsexamples.com/p/terraform-graphs-explained)
-[^17]: WTH is Terraform Graphs?. Terraform Graphs | by Aditya Dhopade | Medium, accessed September 3, 2025, [https://medium.com/@adityadhopade18/understanding-terraform-graphs-2c8742aa6021](https://medium.com/@adityadhopade18/understanding-terraform-graphs-2c8742aa6021)
-[^18]: Terraform Graph \- Scalr, accessed September 3, 2025, [https://scalr.com/glossary/terraform-graph](https://scalr.com/glossary/terraform-graph)
-[^19]: terraform graph command reference \- HashiCorp Developer, accessed September 3, 2025, [https://developer.hashicorp.com/terraform/cli/commands/graph](https://developer.hashicorp.com/terraform/cli/commands/graph)
-[^20]: Terraform Graph Command \- Generating Dependency Graphs \- Spacelift, accessed September 3, 2025, [https://spacelift.io/blog/terraform-graph](https://spacelift.io/blog/terraform-graph)
-[^21]: Terraform vs. Kubernetes: Key Differences Explained | Brainboard Blog \- Medium, accessed September 3, 2025, [https://medium.com/@mike\_tyson\_cloud/terraform-vs-kubernetes-c7b0f55c4ac6](https://medium.com/@mike_tyson_cloud/terraform-vs-kubernetes-c7b0f55c4ac6)
-[^22]: Terraform vs Kubernetes \- Everything You Need To Know | Loft Labs \- vCluster, accessed September 3, 2025, [https://www.vcluster.com/blog/terraform-vs-kubernetes-everything-you-need-to-know](https://www.vcluster.com/blog/terraform-vs-kubernetes-everything-you-need-to-know)
-[^23]: Terraform vs Kubernetes \- Difference Between Infrastructure Tools \- AWS, accessed September 3, 2025, [https://aws.amazon.com/compare/the-difference-between-terraform-and-kubernetes/](https://aws.amazon.com/compare/the-difference-between-terraform-and-kubernetes/)
-[^24]: Terraform vs. Kubernetes : Key Differences and Comparison \- Spacelift, accessed September 3, 2025, [https://spacelift.io/blog/terraform-vs-kubernetes](https://spacelift.io/blog/terraform-vs-kubernetes)
-[^25]: Is Terraform for Kubernetes Applications Flawed? For Kubernetes, GitOps is The Way, accessed September 3, 2025, [https://dev.to/sarony11/is-terraform-for-kubernetes-applications-flawed-the-case-for-a-gitops-native-future-49ce](https://dev.to/sarony11/is-terraform-for-kubernetes-applications-flawed-the-case-for-a-gitops-native-future-49ce)
-[^26]: Why should I use ArgoCD and not Terraform only? : r/devops \- Reddit, accessed September 3, 2025, [https://www.reddit.com/r/devops/comments/1gb3rwn/why\_should\_i\_use\_argocd\_and\_not\_terraform\_only/](https://www.reddit.com/r/devops/comments/1gb3rwn/why_should_i_use_argocd_and_not_terraform_only/)
-[^27]: A Paradigm Shift in Software Delivery: A Comparative Analysis of GitOps and Traditional CI/CD | Uplatz Blog, accessed September 3, 2025, [https://uplatz.com/blog/a-paradigm-shift-in-software-delivery-a-comparative-analysis-of-gitops-and-traditional-ci-cd/](https://uplatz.com/blog/a-paradigm-shift-in-software-delivery-a-comparative-analysis-of-gitops-and-traditional-ci-cd/)
-[^28]: Four Real-Life Problems that GitOps Could Have Prevented | by Steffen Jäckel \- Medium, accessed September 3, 2025, [https://medium.com/elevate-tech/four-real-life-problems-that-gitops-could-have-prevented-32c6de425833](https://medium.com/elevate-tech/four-real-life-problems-that-gitops-could-have-prevented-32c6de425833)
-[^29]: How teams use GitLab and Terraform for infrastructure as code: A demo, accessed September 3, 2025, [https://about.gitlab.com/topics/gitops/gitlab-enables-infrastructure-as-code/](https://about.gitlab.com/topics/gitops/gitlab-enables-infrastructure-as-code/)
-[^30]: Is this gitops? : r/kubernetes \- Reddit, accessed September 3, 2025, [https://www.reddit.com/r/kubernetes/comments/1kilr5b/is\_this\_gitops/](https://www.reddit.com/r/kubernetes/comments/1kilr5b/is_this_gitops/)
-[^31]: Microservices vs. Monolith: 5 Key Differences \- Codefresh, accessed September 3, 2025, [https://codefresh.io/learn/microservices/microservices-vs-monolith-5-key-differences/](https://codefresh.io/learn/microservices/microservices-vs-monolith-5-key-differences/)
-[^32]: Monolith splitting stories — Part 4 KISS the ArgoCD deployments ..., accessed September 3, 2025, [https://medium.com/@info\_98249/monolith-splitting-stories-part-4-kiss-the-argocd-deployments-d94f4759584a](https://medium.com/@info_98249/monolith-splitting-stories-part-4-kiss-the-argocd-deployments-d94f4759584a)
-[^33]: GitOps at scale: Lessons from the trenches of platform engineering ..., accessed September 3, 2025, [https://medium.com/@immichaelliav/gitops-at-scale-lessons-from-the-trenches-of-platform-engineering-b97af6c75a9e](https://medium.com/@immichaelliav/gitops-at-scale-lessons-from-the-trenches-of-platform-engineering-b97af6c75a9e)
-[^34]: Can someone who has used both Pulumi and AWS CDK describe the differences betwee... | Hacker News, accessed September 3, 2025, [https://news.ycombinator.com/item?id=26881542](https://news.ycombinator.com/item?id=26881542)
-[^35]: What's Next for Infrastructure as Code (IaC) in 2025: Beyond Automation \- VivaOps, accessed September 3, 2025, [https://www.vivaops.ai/post/what-s-next-for-infrastructure-as-code-iac-in-2025](https://www.vivaops.ai/post/what-s-next-for-infrastructure-as-code-iac-in-2025)
-[^36]: Gell-Mann amnesia effect \- Wikipedia, accessed September 3, 2025, [https://en.wikipedia.org/wiki/Gell-Mann\_amnesia\_effect](https://en.wikipedia.org/wiki/Gell-Mann_amnesia_effect)
-[^37]: Terraform and GitOps: Automated Infrastructure as Code \- Terrateam, accessed September 3, 2025, [https://terrateam.io/blog/terraform-and-gitops](https://terrateam.io/blog/terraform-and-gitops)
-[^38]: Overview | Kubernetes, accessed September 3, 2025, [https://kubernetes.io/docs/concepts/overview/](https://kubernetes.io/docs/concepts/overview/)
+[^1]: Can Kubernetes Abstractions be Useful? : r/devops - Reddit, accessed September 3, 2025, https://www.reddit.com/r/devops/comments/j2g9s9/can_kubernetes_abstractions_be_useful/
+[^2]: Why do devops keep piling abstractions on top of abstractions? There's the machi... | Hacker News, accessed September 3, 2025, https://news.ycombinator.com/item?id=42833558
+[^3]: Kubernetes - Wikipedia, accessed September 3, 2025, https://en.wikipedia.org/wiki/Kubernetes
+[^4]: Infrastructure as code - Wikipedia, accessed September 3, 2025, https://en.wikipedia.org/wiki/Infrastructure_as_code
+[^5]: GitOps: A Comprehensive Guide - DEV Community, accessed September 3, 2025, https://dev.to/iaadidev/gitops-a-comprehensive-guide-909
+[^6]: Role Of YAML In Infrastructure As Code - Meegle, accessed September 3, 2025, https://www.meegle.com/en_us/topics/infrastructure-as-code/role-of-yaml-in-infrastructure-as-code
+[^7]: JSON Vs YAML In Infrastructure As Code - Meegle, accessed September 3, 2025, https://www.meegle.com/en_us/topics/infrastructure-as-code/json-vs-yaml-in-infrastructure-as-code
+[^8]: Terraform YAML: Define Infrastructure Using YAML Format - CyberPanel, accessed September 3, 2025, https://cyberpanel.net/blog/terraform-yaml
+[^9]: Dependency Graph | Terraform - HashiCorp Developer, accessed September 3, 2025, https://developer.hashicorp.com/terraform/internals/graph
+[^10]: Terraform Resource Dependencies Explained - Scalr, accessed September 3, 2025, https://scalr.com/blog/terraform-resource-dependencies-explained
+[^11]: State | Terraform | HashiCorp Developer, accessed September 3, 2025, https://developer.hashicorp.com/terraform/language/state/purpose
+[^12]: State | Terraform - HashiCorp Developer, accessed September 3, 2025, https://developer.hashicorp.com/terraform/language/state
+[^13]: Mastering Terraform State: Real Incidents, Lessons, and Best Practices | TO THE NEW Blog, accessed September 3, 2025, https://www.tothenew.com/blog/mastering-terraform-state-real-incidents-lessons-and-best-practices/
+[^14]: Explaining Terraform using a real-life analogy | by Malinda Jayawardana | Medium, accessed September 3, 2025, https://jarvislk.medium.com/explaining-terraform-using-a-real-life-analogy-19f689501deb
+[^15]: What is Terraform | Terraform - HashiCorp Developer, accessed September 3, 2025, https://developer.hashicorp.com/terraform/intro
+[^16]: Terraform Graphs Explained - TechOps Examples, accessed September 3, 2025, https://www.techopsexamples.com/p/terraform-graphs-explained
+[^17]: WTH is Terraform Graphs?. Terraform Graphs | by Aditya Dhopade | Medium, accessed September 3, 2025, https://medium.com/@adityadhopade18/understanding-terraform-graphs-2c8742aa6021
+[^18]: Terraform Graph - Scalr, accessed September 3, 2025, https://scalr.com/glossary/terraform-graph
+[^19]: terraform graph command reference - HashiCorp Developer, accessed September 3, 2025, https://developer.hashicorp.com/terraform/cli/commands/graph
+[^20]: Terraform Graph Command - Generating Dependency Graphs - Spacelift, accessed September 3, 2025, https://spacelift.io/blog/terraform-graph
+[^21]: Terraform vs. Kubernetes: Key Differences Explained | Brainboard Blog - Medium, accessed September 3, 2025, https://medium.com/@mike_tyson_cloud/terraform-vs-kubernetes-c7b0f55c4ac6
+[^22]: Terraform vs Kubernetes - Everything You Need To Know | Loft Labs - vCluster, accessed September 3, 2025, https://www.vcluster.com/blog/terraform-vs-kubernetes-everything-you-need-to-know
+[^23]: Terraform vs Kubernetes - Difference Between Infrastructure Tools - AWS, accessed September 3, 2025, https://aws.amazon.com/compare/the-difference-between-terraform-and-kubernetes/
+[^24]: Terraform vs. Kubernetes : Key Differences and Comparison - Spacelift, accessed September 3, 2025, https://spacelift.io/blog/terraform-vs-kubernetes
+[^25]: Is Terraform for Kubernetes Applications Flawed? For Kubernetes, GitOps is The Way, accessed September 3, 2025, https://dev.to/sarony11/is-terraform-for-kubernetes-applications-flawed-the-case-for-a-gitops-native-future-49ce
+[^26]: Why should I use ArgoCD and not Terraform only? : r/devops - Reddit, accessed September 3, 2025, https://www.reddit.com/r/devops/comments/1gb3rwn/why_should_i_use_argocd_and_not_terraform_only/
+[^27]: A Paradigm Shift in Software Delivery: A Comparative Analysis of GitOps and Traditional CI/CD | Uplatz Blog, accessed September 3, 2025, https://uplatz.com/blog/a-paradigm-shift-in-software-delivery-a-comparative-analysis-of-gitops-and-traditional-ci-cd/
+[^28]: Four Real-Life Problems that GitOps Could Have Prevented | by Steffen Jäckel - Medium, accessed September 3, 2025, https://medium.com/elevate-tech/four-real-life-problems-that-gitops-could-have-prevented-32c6de425833
+[^29]: How teams use GitLab and Terraform for infrastructure as code: A demo, accessed September 3, 2025, https://about.gitlab.com/topics/gitops/gitlab-enables-infrastructure-as-code/
+[^30]: Is this gitops? : r/kubernetes - Reddit, accessed September 3, 2025, https://www.reddit.com/r/kubernetes/comments/1kilr5b/is_this_gitops/
+[^31]: Microservices vs. Monolith: 5 Key Differences - Codefresh, accessed September 3, 2025, https://codefresh.io/learn/microservices/microservices-vs-monolith-5-key-differences/
+[^32]: Monolith splitting stories — Part 4 KISS the ArgoCD deployments ..., accessed September 3, 2025, https://medium.com/@info_98249/monolith-splitting-stories-part-4-kiss-the-argocd-deployments-d94f4759584a
+[^33]: GitOps at scale: Lessons from the trenches of platform engineering ..., accessed September 3, 2025, https://medium.com/@immichaelliav/gitops-at-scale-lessons-from-the-trenches-of-platform-engineering-b97af6c75a9e
+[^34]: Can someone who has used both Pulumi and AWS CDK describe the differences betwee... | Hacker News, accessed September 3, 2025, https://news.ycombinator.com/item?id=26881542
+[^35]: What's Next for Infrastructure as Code (IaC) in 2025: Beyond Automation - VivaOps, accessed September 3, 2025, https://www.vivaops.ai/post/what-s-next-for-infrastructure-as-code-iac-in-2025
+[^36]: Gell-Mann amnesia effect - Wikipedia, accessed September 3, 2025, https://en.wikipedia.org/wiki/Gell-Mann_amnesia_effect
+[^37]: Terraform and GitOps: Automated Infrastructure as Code - Terrateam, accessed September 3, 2025, https://terrateam.io/blog/terraform-and-gitops
+[^38]: Overview | Kubernetes, accessed September 3, 2025, https://kubernetes.io/docs/concepts/overview/
