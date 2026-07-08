@@ -170,7 +170,7 @@ title: Documentation - ONDEMANDENV.dev
             </li>
             <li><a href="#core-workflow">Core Workflow & How-To</a>
                 <ul>
-                    <li><a href="#define-in-contractslib">1. Define in `contractsLib`</a></li>
+                    <li><a href="#define-in-contractslib">1. Define in contractsLib</a></li>
                     <li><a href="#implement-service">2. Implement Service</a></li>
                     <li><a href="#deploy-iterate">3. Deploy & Iterate</a></li>
                     <li><a href="#clone-enver">4. Clone Enver</a></li>
@@ -202,9 +202,9 @@ title: Documentation - ONDEMANDENV.dev
     </aside>
 
     <main class="docs-content-area">
-        <section class="doc-section" id="top"> <!-- Added id=top for potential skip link -->
+        <section class="doc-section" id="top">
              <h1>Documentation & Getting Started</h1>
-            <p>This documentation guides you through the setup and practical application of the ONDEMANDENV platform. The goal is to provide the technical foundation needed to implement the principles of <strong>Semantic Engineering</strong> described in the <a href="philosophy.html">Philosophy</a> section. By following these steps, you will learn how to use the platform to create, project, and evolve your own living semantic models.</p>
+            <p>This documentation guides you through the setup and practical application of the ONDEMANDENV platform — a contract-orchestration layer for distributed systems on AWS. Services declare their interfaces as typed code in a <strong>ContractsLib</strong>; the platform enforces compatibility at compile time and automates deployment in dependency order. See the <a href="platform.html">Platform</a> page for a conceptual overview before diving in here.</p>
          </section>
 
         <section class="doc-section" id="setup">
@@ -289,23 +289,23 @@ cdk bootstrap aws://WORKSPACE0_ACCOUNT_ID/YOUR_REGION</code></pre>
                         </li>
                         <li>Leave the Webhook URL blank for now; you will update this after deploying the platform.</li>
                         <li>Install this GitHub App on the specific repository you intend to use for your
-                            `contractsLib`.
+                            <span class="inline-code">contractsLib</span>.
                         </li>
             </ul>
                 </li>
                 <li>
-                    <strong>`contractsLib` Repository:</strong> Create a repository within your GitHub Organization to
+                    <strong><span class="inline-code">contractsLib</span> Repository:</strong> Create a repository within your GitHub Organization to
                     define your service contracts. This repository will contain your ONDEMANDENV build and enver
                     definitions.
                     <ul>
                         <li>You can use <a
                                 href="https://github.com/ondemandenv/odmd-contracts-sandbox/blob/main/lib/repos/_contracts/odmd-build-contracts-sbx.ts"
-                                target="_blank" rel="noopener noreferrer">`ondemandenv/odmd-contracts-sandbox`</a> as an
+                                target="_blank" rel="noopener noreferrer">ondemandenv/odmd-contracts-sandbox</a> as an
                             example structure.
                         </li>
                         <li>Ensure your repository includes necessary dependencies (like
-                            `@ondemandenv/odmd-contracts-base`) and build scripts (e.g., in `package.json`) to compile
-                            your TypeScript definitions. The `@ondemandenv/odmd-contracts-base` package provides the core interfaces and base classes that your specific `contractsLib` will implement and extend to define your system's architecture and integrate with the ONDEMANDENV platform.
+                            <span class="inline-code">@ondemandenv.dev/contracts-lib-base</span>) and build scripts (e.g., in <span class="inline-code">package.json</span>) to compile
+                            your TypeScript definitions. The <span class="inline-code">@ondemandenv.dev/contracts-lib-base</span> package provides the core interfaces and base classes that your specific <span class="inline-code">contractsLib</span> will implement and extend.
                         </li>
                         <li>You will need to package your compiled <span class="inline-code">contractsLib</span>
                             definition using <span
@@ -381,244 +381,131 @@ cdk bootstrap aws://WORKSPACE0_ACCOUNT_ID/YOUR_REGION</code></pre>
         </section>
 
         <section class="doc-section" id="core-workflow">
-            <h2>Core Workflow: The Semantic Projection in Action</h2>
-            <p>This workflow demonstrates how to use the ONDEMANDENV platform to translate your architectural intent into a running system. Each step is a part of the <strong>Semantic Projection</strong> process.</p>
+            <h2>Core Workflow: Contract-First Development</h2>
+            <p>Every service starts in ContractsLib — contracts are declared before any implementation is written. The platform derives what to build, in what order, and triggers downstream rebuilds automatically when dependencies change.</p>
 
-            <h3 id="define-in-contractslib">1. Anchor Your Intent in `contractsLib`</h3>
-            <p>The process begins by codifying your architectural intent in the `contractsLib`. This is where you define the boundaries, dependencies, and products of your services, creating the **Semantic Anchor** for your system.
-            </p>
-            <h4>Key Actions:</h4>
+            <h3 id="define-in-contractslib">1. Define in ContractsLib</h3>
+            <p>For each service, define an <span class="inline-code">OdmdBuild</span> (links to a GitHub repo) and one or more <span class="inline-code">OdmdEnver</span> instances (<code>mock</code>, <code>dev</code>, <code>main</code>). Each enver declares its <strong>producers</strong> (outputs it publishes) and <strong>consumers</strong> (upstream dependencies). Wire cross-build consumers after all builds exist.</p>
+
+            <h4>Key types:</h4>
             <ul>
-                <li><strong>Define Build Configuration (<span class="inline-code">OdmdBuild&lt;T&gt;</span>):</strong>
-                    For each type of Enver (CDK, Cmd, Docker) associated with a source repository, create an instance of
-                    <span class="inline-code">OdmdBuild&lt;T&gt;</span> (where T is <span class="inline-code">OdmdEnverCdk</span>,
-                    <span class="inline-code">OdmdEnverCmd</span>, etc.). Provide the <span class="inline-code">githubRepoAlias</span>,
-                    <span class="inline-code">buildType</span>, and any source paths/commands.
-                </li>
-                <li><strong>Define Enver(s) (<span class="inline-code">OdmdEnverCdk</span>, etc.):</strong> For each
-                    specific branch/tag you want to manage, create an instance of the appropriate Enver class (e.g.,
-                    <span class="inline-code">new OdmdEnverCdk(...)</span>). Link it to the corresponding <span
-                            class="inline-code">OdmdBuild</span> instance. Specify the target AWS account alias (<span
-                            class="inline-code">targetAccountAlias</span>) and region (<span class="inline-code">targetRegion</span>).
-                    Use the Enver construct ID (e.g., 'OrderManagerDev') to represent the logical environment (often
-                    related to the branch name). Mark production/staging Envers as immutable (<span class="inline-code">immutable: true</span>)
-                    if they correspond to Git tags.
-                </li>
-                <li><strong>Declare Single Product (Convention):</strong> Within the Enver definition, declare <strong>one
-                    primary <span class="inline-code">Product</span></strong> (conventionally named <span
-                        class="inline-code">'Outputs'</span>) that will contain all shared outputs as a structured value
-                    (usually JSON). Example: <span
-                            class="inline-code">outputsProduct: new Product(this, 'Outputs')</span>.
-                </li>
-                <li><strong>Declare Consumers (How-To: Consume a Product):</strong> Within the Enver definition, declare
-                    dependencies on Products from other Envers using <span class="inline-code">new Consumer(this, 'LocalConsumerName', otherEnver.outputsProduct, '{ /* Optional Default JSON */ }')</span>.
-                    The 'LocalConsumerName' is how your CDK code will reference this consumed value (typically a JSON
-                    string). Ensure Tag Envers only consume from other Tag Envers. Default values (provided as a JSON
-                    string) can optionally be provided.
-                </li>
+                <li><span class="inline-code">OdmdCrossRefProducer</span> — an output this enver publishes (e.g., a base URL). Attach a schema artifact child with <code>{ children: [{ pathPart: 'schema-url', s3artifact: true }] }</code>.</li>
+                <li><span class="inline-code">OdmdCrossRefConsumer</span> — a dependency on another enver's producer. The platform resolves the value via SSM at deploy time.</li>
+                <li><span class="inline-code">SRC_Rev_REF('b', 'mock')</span> — a branch revision reference. Use <code>'t'</code> for tag (immutable) envers.</li>
             </ul>
-            <h4>Example (<span class="inline-code">my-org-contracts.ts</span>):</h4>
-            <pre><code class="language-typescript">// Example within your contractsLib repository (e.g., my-org-contracts.ts)
-import { Construct } from 'constructs';
-// Import base classes from the correct base library
-import { OdmdContracts, OdmdBuild, OdmdEnverCdk, OdmdEnverCmd, Product, Consumer } from '@ondemandenv/odmd-contracts-base';
-// Import other Enver definitions if needed for dependency references
-// import { FoundationEnver } from './foundation-stack'; // Assuming Foundation publishes products
 
-// Your main contracts class extends OdmdContracts
-export class MyOrgContracts extends OdmdContracts {
-  constructor(scope: Construct, id: string) {
-    super(scope, id);
+            <h4>Example (<span class="inline-code">contracts-lib/src/order-manager.ts</span>):</h4>
+            <pre><code class="language-typescript">import { App } from 'aws-cdk-lib';
+import {
+  OndemandContracts, OdmdBuild, OdmdEnverCdk,
+  OdmdCrossRefProducer, OdmdCrossRefConsumer, SRC_Rev_REF
+} from '@ondemandenv.dev/contracts-lib-base';
 
-    // --- Foundational Build/Enver (Example - Assuming it exists and has 'Outputs' product) ---
-    // const foundationBuild = new OdmdBuild<FoundationEnver>(...) // Define build for FoundationEnver type
-    // const foundationDev = new FoundationEnver(this, 'FoundationDev', { build: foundationBuild, ... });
-    // const foundationProd = new FoundationEnver(this, 'FoundationProd', { build: foundationBuild, immutable: true, ... });
+// Producer enver: declares what this service publishes
+export class OrderEnver extends OdmdEnverCdk {
+  readonly orderApiBaseUrl: OdmdCrossRefProducer&lt;OrderEnver&gt;;
 
-    // --- Build Configuration for the 'npm' Commands Enver (example for contractsLib itself) ---
-    const npmCmdsBuild = new OdmdBuild<OdmdEnverCmd>(this, 'odmd-contracts-npm-CmdsGH', {
-      githubRepoAlias: 'my-contracts-lib-repo', // Alias for THIS contractsLib repo
-      buildType: 'cmd', // Uses custom commands
-      buildCommand: 'npm run build && npm pack',
+  constructor(owner: OrderBuild, account: string, region: string, rev: SRC_Rev_REF) {
+    super(owner, account, region, rev);
+    // Publish base URL + schema artifact as a child
+    this.orderApiBaseUrl = new OdmdCrossRefProducer(this, 'orderApiBaseUrl', {
+      children: [{ pathPart: 'schema-url', s3artifact: true }]
     });
+  }
 
-    // --- Enver for the 'npm' Commands (example: deploying to workspace0) ---
-    // Enver ID ('us-east-1-workspace0') often combines region and account alias
-    const npmCmdsDev = new OdmdEnverCmd(this, 'us-east-1-workspace0', {
-      build: npmCmdsBuild, // Link to the build config
-      targetAccountAlias: 'workspace0',
-      targetRegion: 'us-east-1',
-      // Typically no product/consumer for a simple command runner like this
-    });
+  getRevStackNames(): string[] { return ['OdmdOrderManager']; }
+}
 
-    // --- Build Configuration for Order Manager Service (CDK type) ---
-    const orderManagerBuild = new OdmdBuild<OdmdEnverCdk>(this, 'OrderManagerBuild', {
-        githubRepoAlias: 'order-manager-service', // Alias for the service repo
-      buildType: 'cdk',
-        sourcePath: 'infra/' // Path to CDK app within the repo
-    });
-
-    // --- Enver Definition for Order Manager 'dev' Branch --- 
-    const orderManagerDev = new OdmdEnverCdk(this, 'OrderManagerDev', {
-        build: orderManagerBuild, // Link to the build config
-        targetAccountAlias: 'workspace0', // Deploying to workspace0 in example
-      targetRegion: 'us-east-1',
-        immutable: false, // Branch Enver
-
-        // Product published by this Enver (convention: single 'Outputs' product)
-        outputsProduct: new Product(this, 'Outputs'),
-
-        // Consumers (Example)
-        // Note: Use otherEnver.outputsProduct to reference the dependency's output product
-        // Example Consumer with a default value (JSON string)
-        // Assuming userPoolDev is another Enver defined elsewhere with an 'outputsProduct'
-        userPoolOutputsConsumer: new Consumer(this, 'UserPoolOutputs', /* userPoolDev.outputsProduct */ undefined,
-             '{ "userPoolId": "default-pool-id", "userPoolClientId": "default-client-id" }' // Default JSON string
-        ),
-        // Example Consumer without default (will fail deployment if foundationDev dependency unavailable)
-        // foundationOutputsConsumer: new Consumer(this, 'FoundationOutputs', foundationDev.outputsProduct),
-    });
-
-    // --- Enver Definition for Order Manager 'prod' Tag (Immutable) --- 
-     const orderManagerProd = new OdmdEnverCdk(this, 'OrderManagerProd', {
-        build: orderManagerBuild, // Link to the build config
-        targetAccountAlias: 'workspace0', // Example: deploying prod to workspace0 too
-        targetRegion: 'us-east-1',
-        immutable: true, // Tag Enver
-
-        // Product published by this Enver (convention: single 'Outputs' product)
-        outputsProduct: new Product(this, 'Outputs'),
-
-        // Consumers (Must consume from other *immutable* Envers)
-        // Assuming foundationProd is an immutable Enver defined elsewhere
-        // foundationOutputsConsumer: new Consumer(this, 'FoundationOutputs', foundationProd.outputsProduct),
-    });
-
-    // ... Define other builds/envers ...
+export class OrderBuild extends OdmdBuild&lt;OrderEnver&gt; {
+  protected initializeEnvers(): void {
+    this._envers = [
+      new OrderEnver(this, this.contracts.accounts.workspace0, 'us-east-1', new SRC_Rev_REF('b', 'mock')),
+      new OrderEnver(this, this.contracts.accounts.workspace0, 'us-east-1', new SRC_Rev_REF('b', 'dev')),
+      new OrderEnver(this, this.contracts.accounts.workspace0, 'us-east-1', new SRC_Rev_REF('b', 'main')),
+    ];
   }
 }
-</code>
-            </pre>
-            <p><strong>Commit, PR, Merge:</strong> Follow standard Git workflow for the <span class="inline-code">contractsLib</span>
-                repo.</p>
-            <p><strong>Platform Synchronization:</strong> Merging triggers the <span
-                    class="inline-code">contractsLib</span> pipeline, which publishes updates and notifies the platform.
-                The platform then generates/updates the specific CI/CD workflow file (e.g., <span class="inline-code">.github/workflows/ODMD_OrderManagerDev_*.yaml</span>)
-                in the service repository (<span class="inline-code">order-manager-service</span>).</p>
 
-            <h3 id="implement-service">2. Implement the Service Logic</h3>
-            <p>With the architectural contracts defined, you can now implement the service's internal logic. The `contractsLib` provides the guardrails, ensuring your implementation adheres to the agreed-upon architecture.</p>
-            <h4>How-To: Consume a Product in CDK</h4>
-            <p>Within your CDK stack class (extending <span class="inline-code">OdmdEnverCdk</span> from <span
-                    class="inline-code">@ondemandenv/odmd-contracts-base</span>), use the static method <span
-                    class="inline-code">OdmdEnverCdk.getSharedValue('LocalConsumerName')</span> to retrieve the concrete
-                value (typically a JSON string) during synthesis. The 'LocalConsumerName' must match the ID given in the
-                <span class="inline-code">Consumer</span> definition in `contractsLib`. You will likely need to parse
-                this JSON string to access individual values.</p>
-            <h4>How-To: Publish a Product from CDK</h4>
-            <p>Instantiate the <strong>single allowed</strong> <span class="inline-code">OdmdShareOut</span> construct
-                per stack (from <span class="inline-code">@ondemandenv/odmd-contracts-base</span>). To publish multiple
-                values, structure them as an object, serialize it to JSON using <span class="inline-code">cdk.Stack.of(this).toJsonString(...)</span>,
-                and publish the string. The ID used for <span class="inline-code">OdmdShareOut</span> (e.g., <span
-                        class="inline-code">'Outputs'</span>) MUST match the corresponding <span class="inline-code">Product</span>
-                ID declared in `contractsLib`.</p>
-            <pre><code class="language-typescript">// Example: order-manager-service/infra/lib/order-manager-stack.ts
+// Consumer enver: declares dependencies on upstream producers
+export class PaymentEnver extends OdmdEnverCdk {
+  readonly orderApiBaseUrl: OdmdCrossRefConsumer&lt;PaymentEnver, OrderEnver&gt;;
+
+  constructor(owner: PaymentBuild, account: string, region: string, rev: SRC_Rev_REF,
+              orderEnver: OrderEnver) {
+    super(owner, account, region, rev);
+    this.orderApiBaseUrl = new OdmdCrossRefConsumer(this, 'orderApiBaseUrl', orderEnver.orderApiBaseUrl);
+  }
+}</code></pre>
+            <p><strong>Commit, PR, Merge:</strong> Merging to ContractsLib triggers its pipeline, which publishes the updated package and notifies the platform. The platform generates or updates the GitHub Actions workflow for each affected service repo.</p>
+
+            <h3 id="implement-service">2. Implement the Service</h3>
+            <p>Each service repo initializes ContractsLib, resolves its target enver by env vars (<span class="inline-code">ODMD_build_id</span>, <span class="inline-code">ODMD_rev_ref</span>), and derives stack names from <span class="inline-code">enver.getRevStackNames()</span> — never hardcode revision labels in stack or resource names.</p>
+
+            <h4>How-To: Publish outputs (<span class="inline-code">OdmdShareOut</span>)</h4>
+            <p>One <span class="inline-code">OdmdShareOut</span> per stack, passing a <span class="inline-code">Map</span> of producer → value pairs. Also call <span class="inline-code">deploySchema()</span> to publish the OpenAPI/AsyncAPI artifact to S3 under the schema-url child.</p>
+
+            <h4>How-To: Read upstream values</h4>
+            <p>Call <span class="inline-code">consumer.getSharedValue(scope)</span> on your <span class="inline-code">OdmdCrossRefConsumer</span> during CDK synth to resolve the upstream SSM parameter. Internally this constructs an <span class="inline-code">OdmdShareIn</span> for you — you don't instantiate it directly.</p>
+
+            <pre><code class="language-typescript">// order-manager-service/bin/cdk.ts
 import * as cdk from 'aws-cdk-lib';
-import { Construct } from 'constructs';
-import * as sqs from 'aws-cdk-lib/aws-sqs';
+import { MyOrgContracts } from '@my-org/contracts-lib';
+import { OrderManagerStack } from '../lib/order-manager-stack';
+
+const app = new cdk.App();
+async function main() {
+  const account = process.env.CDK_DEFAULT_ACCOUNT!;
+  const region  = process.env.CDK_DEFAULT_REGION!;
+  new MyOrgContracts(app);
+  const enver = (MyOrgContracts as any).inst.getTargetEnver() as any;
+  const [stackName] = enver.getRevStackNames();
+  new OrderManagerStack(app, stackName, { env: { account, region }, enver });
+}
+main().catch(e => { console.error(e); process.exit(1); });
+
+// order-manager-service/lib/order-manager-stack.ts
+import * as cdk from 'aws-cdk-lib';
+import * as apigwv2 from 'aws-cdk-lib/aws-apigatewayv2';
+import { HttpLambdaIntegration } from 'aws-cdk-lib/aws-apigatewayv2-integrations';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
-import * as lambdaNode from 'aws-cdk-lib/aws-lambda-nodejs'; // For simplified Node.js Lambda bundling
-import * as apigw from 'aws-cdk-lib/aws-apigateway';
-import * as path from 'path';
-// Ensure this import reflects your setup for the base library
-import { OdmdEnverCdk, OdmdShareOut } from '@ondemandenv/odmd-contracts-base';
+import { OdmdShareOut, deploySchema } from '@ondemandenv.dev/contracts-lib-base';
+import { OrderEnver } from '@my-org/contracts-lib';
 
-// Interface for parsed UserPool outputs (example)
-interface UserPoolOutputs {
-    userPoolId: string;
-    userPoolClientId: string;
-}
-
-// Your stack extends the base OdmdEnverCdk class
-export class OrderManagerStack extends OdmdEnverCdk {
-  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+export class OrderManagerStack extends cdk.Stack {
+  constructor(scope: cdk.App, id: string, props: cdk.StackProps & { enver: OrderEnver }) {
     super(scope, id, props);
+    const { enver } = props;
 
-    // --- Consume structured values defined as Consumers in contractsLib --- 
-    // Retrieve the JSON string using the local consumer name
-    const userPoolOutputsJson = OdmdEnverCdk.getSharedValue('UserPoolOutputs'); 
-    // Parse the JSON string to access individual properties (add error handling as needed)
-    const userPoolOutputs: UserPoolOutputs = JSON.parse(userPoolOutputsJson || '{}'); 
-    const userPoolId = userPoolOutputs.userPoolId; // Example access
+    // Read upstream value (e.g., auth service base URL consumed by this enver)
+    // const authBaseUrl = enver.authApiBaseUrl.getSharedValue(this);
 
-    // --- Create resources specific to this Enver --- 
-    const orderQueue = new sqs.Queue(this, 'OrderQueue', {
-        // Provide a unique name based on the Enver ID suffix
-        queueName: `order-manager-queue-${OdmdEnverCdk.getEnverIdSuffix()}.fifo`, // Example: FIFO queue
-        fifo: true,
-        retentionPeriod: cdk.Duration.days(4),
-        // encryption: sqs.QueueEncryption.KMS_MANAGED, // Consider encryption
+    const handler = new lambda.Function(this, 'Handler', {
+      runtime: lambda.Runtime.NODEJS_22_X,
+      code: lambda.Code.fromAsset('.build/handler'),
+      handler: 'index.handler',
     });
 
-    // Example using NodejsFunction for easier bundling
-    const orderHandlerLambda = new lambdaNode.NodejsFunction(this, 'OrderHandlerLambda', {
-        // Adjust path relative to CDK app root (e.g., infra/)
-        entry: path.join(__dirname, '../../src/lambda/order-handler.ts'), // Example path to lambda code
-        runtime: lambda.Runtime.NODEJS_LATEST, // Specify runtime
-        handler: 'handler', // Function entry point
-        bundling: { // Example bundling options
-            minify: true,
-            externalModules: ['@aws-sdk/*'], // Exclude AWS SDK v3 if using Lambda layer or built-in
-        },
-        environment: {
-            // Use consumed & parsed values if needed
-            USER_POOL_ID: userPoolId,
-            QUEUE_URL: orderQueue.queueUrl,
-        }
-        // ... potentially configure VPC, memorySize, timeout etc. ...
+    const api = new apigwv2.HttpApi(this, 'Api');
+    api.addRoutes({
+      path: '/orders',
+      methods: [apigwv2.HttpMethod.POST],
+      integration: new HttpLambdaIntegration('OrderInt', handler),
     });
 
-    // Grant lambda permissions to interact with queue
-    orderQueue.grantSendMessages(orderHandlerLambda);
-    // Grant other permissions as needed (e.g., DynamoDB access)
+    // Publish base URL — single OdmdShareOut per stack
+    new OdmdShareOut(this, new Map([
+      [enver.orderApiBaseUrl, api.apiEndpoint],
+    ]));
 
-    // Example API Gateway
-    const api = new apigw.RestApi(this, 'OrderManagerApi', {
-        restApiName: `order-manager-api-${OdmdEnverCdk.getEnverIdSuffix()}`,
-        description: `API for Order Manager (${OdmdEnverCdk.getEnverIdSuffix()})`,
-        deployOptions: {
-            stageName: 'v1', // Example stage name
-        },
-        // defaultCorsPreflightOptions: { ... } // Consider CORS
-    });
-    // Define API resources and methods
-    const ordersResource = api.root.addResource('orders');
-    ordersResource.addMethod('POST', new apigw.LambdaIntegration(orderHandlerLambda));
-
-    // --- Structure and Publish Outputs via the SINGLE OdmdShareOut --- 
-    // 1. Create an object containing the outputs you want to share
-    const outputsObject = {
-        apiUrl: api.url,
-        apiId: api.restApiId,
-        queueArn: orderQueue.queueArn,
-        queueUrl: orderQueue.queueUrl,
-        handlerLambdaArn: orderHandlerLambda.functionArn,
-        // Add other relevant outputs here
-    };
-
-    // 2. Use the SINGLE OdmdShareOut construct to publish the JSON string
-    // The second argument ('Outputs') MUST match the Product ID in contractsLib
-    new OdmdShareOut(this, 'Outputs', {
-         value: cdk.Stack.of(this).toJsonString(outputsObject)
-    });
+    // Publish OpenAPI schema artifact under the schema-url child
+    const schemaJson = require('fs').readFileSync('.build/openapi.json', 'utf8');
+    const artifactBucket = /* import by name from SSM or props */ null as any;
+    deploySchema(this, schemaJson, enver.orderApiBaseUrl.children![0], artifactBucket);
   }
-}
-```
-            </code>
-</pre>
+}</code></pre>
 
-            <h3 id="deploy-iterate">3. Project, Validate, and Iterate</h3>
-            <p>Once your service is implemented, you can deploy it. This is the **Semantic Projection** in action: the platform takes your intent (from `contractsLib`) and your logic (from your service repo) and projects it into a running, verifiable `Enver`.</p>
+            <h3 id="deploy-iterate">3. Deploy and Iterate</h3>
+            <p>Once your service is implemented, push to the branch whose name matches a declared enver revision. The platform runs <code>.scripts/build.sh</code>, synthesizes CDK stacks, and deploys them in the order from <code>getRevStackNames()</code>.</p>
             <h4>Key Actions & Triggers:</h4>
             <ul>
                 <li><strong>Code Change Trigger:</strong> Pushing commits to a branch in the service repository triggers
@@ -643,10 +530,10 @@ export class OrderManagerStack extends OdmdEnverCdk {
             </ul>
 
             <h3 id="clone-enver">4. Evolve and Experiment with Clones</h3>
-            <p>To test changes or experiment with new features without destabilizing existing environments, you can clone any `Enver`. This creates a safe, isolated sandbox that is a perfect projection of its parent, allowing for fearless innovation.</p>
+            <p>To test changes or experiment without destabilizing existing envers, create a dynamic clone via a commit message. The clone inherits the dependency graph of its source enver and gets unique resource names to prevent conflicts.</p>
             <h4>Key Actions:</h4>
             <ul>
-                <li><strong>Define Clone in `contractsLib`:</strong> In your <span
+                <li><strong>Define Clone in <span class="inline-code">contractsLib</span>:</strong> In your <span
                         class="inline-code">contractsLib</span>
                     repository, define a new Enver that clones an existing one. Specify the source Enver, the new target
                     environment, and any additional configuration.
@@ -663,7 +550,7 @@ export class OrderManagerStack extends OdmdEnverCdk {
             </ul>
 
             <h3 id="delete-clone">5. Clean Up Evolved Clones</h3>
-            <p>Ephemeral environments should be short-lived. Once an experiment is complete, the cloned `Enver` can be destroyed, ensuring no resources are left behind.</p>
+            <p>Ephemeral environments should be short-lived. Once an experiment is complete, the cloned enver can be destroyed, ensuring no resources are left behind.</p>
             <h4>Key Actions:</h4>
             <ul>
                 <li><strong>Remove from `contractsLib`:</strong> In your <span class="inline-code">contractsLib</span>
@@ -972,59 +859,35 @@ git push origin feature/user-dashboard</code></pre>
 
          <section class="doc-section" id="base-library">
             <h2>Base Library</h2>
-            <p>The ONDEMANDENV platform provides a crucial base library, published as <a href="https://github.com/ondemandenv/odmd-contracts-base" target="_blank" rel="noopener noreferrer"><code class="inline-code">@ondemandenv/odmd-contracts-base</code></a>. This library is fundamental to the platform's operation, serving as the definitive contract between all user-defined builds/envers and the central ONDEMANDENV system. It supplies the essential TypeScript base classes and interfaces that your organization's <code>contractsLib</code> repository will use.</p>
-            <p>When you create your own <code>contractsLib</code> (like the example <a href="https://github.com/ondemandenv/odmd-contracts-sandbox" target="_blank" rel="noopener noreferrer"><code class="inline-code">odmd-contracts-sandbox</code></a>), you will extend these base classes. This extension mechanism is key to how the platform understands your architecture and, critically, how your specific services (including custom console implementations) bridge to the central platform's capabilities, such as AWS AppSync for real-time data synchronization.</p>
-            <p>For instance, a common pattern is for a user-defined contract for console authentication, like <a href="https://github.com/ondemandenv/odmd-contracts-sandbox/blob/main/lib/repos/_user-auth/OdmdBuildUserAuthSbx.ts" target="_blank" rel="noopener noreferrer"><code class="inline-code">OdmdBuildUserAuthSbx.ts</code></a> from the sandbox, to extend a corresponding base class from <a href="https://github.com/ondemandenv/odmd-contracts-base/blob/main/lib/repos/__user-auth/odmd-build-user-auth.ts" target="_blank" rel="noopener noreferrer"><code class="inline-code">odmd-build-user-auth.ts</code></a> in <code>@ondemandenv/odmd-contracts-base</code>. This ensures that your implementation correctly interacts with the platform's expectations for authentication and data exchange with services like AppSync.</p>
+            <p>The platform base library is published as <a href="https://github.com/ondemandenv/odmd-contracts-base" target="_blank" rel="noopener noreferrer"><code class="inline-code">@ondemandenv.dev/contracts-lib-base</code></a>. It supplies the TypeScript base classes that every organization's ContractsLib extends: <span class="inline-code">OndemandContracts</span>, <span class="inline-code">OdmdBuild</span>, <span class="inline-code">OdmdEnverCdk</span>, <span class="inline-code">OdmdCrossRefProducer</span>, <span class="inline-code">OdmdCrossRefConsumer</span>, <span class="inline-code">OdmdShareOut</span>, <span class="inline-code">OdmdShareIn</span>, and <span class="inline-code">SRC_Rev_REF</span>.</p>
+            <p>Your organization's ContractsLib (e.g., <a href="https://github.com/ondemandenv/odmd-contracts-sandbox" target="_blank" rel="noopener noreferrer"><code class="inline-code">odmd-contracts-sandbox</code></a>) extends these base classes to define your specific accounts, GitHub repos, and service graph. All service repos then depend on <em>your</em> ContractsLib package (not the base directly) and must pin <span class="inline-code">aws-cdk-lib</span> to the exact same version as your ContractsLib.</p>
+            <p>Platform built-ins your ContractsLib can optionally include: <span class="inline-code">__user-auth</span> (Google OAuth → AWS Cognito → IAM), <span class="inline-code">__networking</span> (shared VPC/TGW), <span class="inline-code">_default-vpc-rds</span>, <span class="inline-code">_default-kube-eks</span>. The <span class="inline-code">__contracts</span> build (ContractsLib itself) is mandatory — it is always the first enver, serving all regions.</p>
 
-            <h3>Key Features:</h3>
-            <ul>
-                <li><strong>TypeScript:</strong> The base library is written in TypeScript, providing strong typing and
-                    improved developer experience.
-                </li>
-                <li><strong>Extensible:</strong> The library is designed to be extensible, allowing you to customize and
-                    extend its functionality as needed.
-                </li>
-                <li><strong>Modular:</strong> The library is modular, with separate modules for different aspects of the
-                    platform, such as contracts, builds, and Envers.
-                </li>
-                <li><strong>Documentation:</strong> The library is well-documented, with detailed API documentation and
-                    examples.
-                </li>
-                    </ul>
+            <h3>Minimal ContractsLib skeleton:</h3>
+            <pre><code class="language-typescript">import { App } from 'aws-cdk-lib';
+import {
+  OndemandContracts, GithubRepo, GithubReposCentralView,
+  AccountsCentralView, OdmdBuildContractsLib, OdmdEnverContractsLib, SRC_Rev_REF
+} from '@ondemandenv.dev/contracts-lib-base';
 
-            <h3>Example Usage:</h3>
-            <pre><code class="language-typescript">// Example usage of the base library
-import { Construct } from 'constructs';
-import { OdmdContracts, OdmdBuild, OdmdEnverCdk, Product, Consumer } from '@ondemandenv/odmd-contracts-base';
+type MyRepos = GithubReposCentralView & { orderManager: GithubRepo; };
+type MyAccounts = AccountsCentralView & { workspace1: string; };
 
-export class MyServiceContracts extends OdmdContracts {
-  constructor(scope: Construct, id: string) {
-    super(scope, id);
+export class MyOrgContracts extends OndemandContracts&lt;MyAccounts, MyRepos, OdmdBuildContractsLib&lt;any, any&gt;&gt; {
+  constructor(app: App) { super(app, 'MyOrgContracts'); }
 
-    const myServiceBuild = new OdmdBuild<OdmdEnverCdk>(this, 'MyServiceBuild', {
-      githubRepoAlias: 'my-service-repo',
-      buildType: 'cdk',
-      sourcePath: 'infra/',
-    });
-
-    const myServiceDev = new OdmdEnverCdk(this, 'MyServiceDev', {
-      build: myServiceBuild,
-      targetAccountAlias: 'workspace0',
-      targetRegion: 'us-east-1',
-      immutable: false,
-      outputsProduct: new Product(this, 'Outputs'),
-    });
-
-    const myServiceProd = new OdmdEnverCdk(this, 'MyServiceProd', {
-      build: myServiceBuild,
-      targetAccountAlias: 'workspace0',
-      targetRegion: 'us-east-1',
-      immutable: true,
-      outputsProduct: new Product(this, 'Outputs'),
-    });
+  get accounts(): MyAccounts {
+    return { central: '111111111111', workspace0: '222222222222', workspace1: '333333333333' };
   }
-}
-</code></pre>
+  get githubRepos(): MyRepos {
+    const ghAppInstallID = 12345678;
+    return {
+      githubAppId: '123456',
+      __contracts: { owner: 'my-org', name: 'contracts-lib', ghAppInstallID },
+      orderManager: { owner: 'my-org', name: 'order-manager', ghAppInstallID },
+    };
+  }
+}</code></pre>
         </section>
 
         <section class="doc-section" id="explore-code">
@@ -1130,7 +993,7 @@ export class MyServiceContracts extends OdmdContracts {
                     authentication service that the console would rely on, see the <a
                             href="https://github.com/ondemandenv/odmd-contracts-sandbox/blob/main/lib/repos/_user-auth/OdmdBuildUserAuthSbx.ts"
                             target="_blank"><code>OdmdBuildUserAuthSbx.ts</code> example</a> in the sandbox contracts.
-                    This example file typically extends a base authentication contract class (e.g., <a href="https://github.com/ondemandenv/odmd-contracts-base/blob/main/lib/repos/__user-auth/odmd-build-user-auth.ts" target="_blank" rel="noopener noreferrer"><code>odmd-build-user-auth.ts</code></a>) from the <code>@ondemandenv/odmd-contracts-base</code> library, demonstrating how your specific console authentication setup connects with the central platform logic, often involving services like AWS AppSync.
+                    This example file typically extends a base authentication contract class (e.g., <a href="https://github.com/ondemandenv/odmd-contracts-base/blob/main/lib/repos/__user-auth/odmd-build-user-auth.ts" target="_blank" rel="noopener noreferrer"><code>odmd-build-user-auth.ts</code></a>) from the <code>@ondemandenv.dev/contracts-lib-base</code> library, demonstrating how your specific console authentication setup connects with the central platform logic, often involving services like AWS AppSync.
                 </li>
                     </ul>
             <p>Proper configuration of these OAuth credentials and their integration into your <code>contractsLib</code>

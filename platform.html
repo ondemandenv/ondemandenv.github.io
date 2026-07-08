@@ -1,116 +1,349 @@
 ---
 layout: default
-title: The ONDEMANDENV Platform | Semantic Projection Engine
-description: Learn how the ONDEMANDENV platform works. Explore core components like contractsLib, Envers, and Constellations that make Semantic Engineering a practical reality.
-keywords: ondemandenv, platform, contractsLib, enver, constellation, semantic projection, application-centric infrastructure
+title: The ONDEMANDENV Platform | How It Works
+description: Learn how ONDEMANDENV works. ContractsLib as a legislature, Envers as phase-collapsed deployments, Producer/Consumer contracts enforced at compile time, and Constellations that emerge from wiring.
+keywords: ondemandenv, platform, contractsLib, enver, constellation, producer, consumer, contract-first, application-centric infrastructure, phases
 ---
 
 <section class="hero-enhanced">
     <h1>The ONDEMANDENV Platform</h1>
-    <p style="font-size: 1.3rem; margin-bottom: 2rem;">This is the **Semantic Projection Engine**—the practical, end-to-end workflow that transforms your living semantic models into running, evolvable, and verifiable systems.</p>
+    <p style="font-size: 1.3rem; margin-bottom: 2rem;">A contract-orchestration layer for distributed systems on AWS. Services declare their interfaces as typed code. The platform proves compatibility at compile time — not at runtime, not in staging.</p>
+    <p>This is where the <a href="philosophy.html">Semantic Engineering</a> thesis stops being a claim and becomes a build step: the "living model" is the <code>contractsLib</code>, and every mechanism below — Envers, Producer/Consumer edges, Constellations — is how that model gets enforced, not just described.</p>
 </section>
 
-<section class="paradigm-shift">
-    <h2>From Abstract to Concrete: The Core Components</h2>
-    <p>A philosophy is only as good as its implementation. ONDEMANDENV provides the concrete tools and concepts to make semantic engineering a reality. These are the building blocks of the projection engine.</p>
+<!-- THE INVERSION -->
+<section class="paradigm-shift" id="inversion">
+    <h2>The CI/CD Inversion</h2>
+    <p>Conventional CI/CD versions <em>artifacts</em> — container images, Lambda zips, Helm charts — and discovers whether a new version is compatible with its neighbors by running them together. Staging is a compatibility-discovery mechanism dressed up as a QA gate.</p>
+    <p><strong>ONDEMANDENV inverts this.</strong> The <code>contractsLib</code> versions the <em>interfaces</em>, and artifacts are derived from them. Services do not generate contracts; contracts generate the constraints that services must satisfy.</p>
+
+    <div class="comparison-grid" style="margin-top: 2rem;">
+        <div class="trap-side">
+            <h3>❌ Conventional CI/CD</h3>
+            <ul>
+                <li><strong>Unit of versioning:</strong> Service artifact (image/zip)</li>
+                <li><strong>Contract between services:</strong> Implicit, in READMEs</li>
+                <li><strong>Compatibility discovered:</strong> At runtime in staging</li>
+                <li><strong>Phase / environment:</strong> Separate axes that drift</li>
+                <li><strong>Promotion model:</strong> Promote a bag across stages</li>
+                <li><strong>Blue/green:</strong> Per environment, not per edge</li>
+            </ul>
+        </div>
+        <div class="prevention-side">
+            <h3>✅ ONDEMANDENV</h3>
+            <ul>
+                <li><strong>Unit of versioning:</strong> Interface (ContractsLib package)</li>
+                <li><strong>Contract between services:</strong> Typed <code>OdmdCrossRefProducer</code> / <code>Consumer</code> with schema artifact</li>
+                <li><strong>Compatibility discovered:</strong> At <code>tsc</code> / <code>odmdValidate()</code> — synth time</li>
+                <li><strong>Phase / environment:</strong> <strong>Collapsed</strong>: phase = enver = revision</li>
+                <li><strong>Promotion model:</strong> Add new graph nodes; consumers migrate per edge</li>
+                <li><strong>Blue/green:</strong> Per producer/consumer edge — traffic shifts per edge, not per environment</li>
+            </ul>
+        </div>
+    </div>
+
+    <div style="margin-top: 2rem; background: rgba(255,255,255,0.07); padding: 1.5rem; border-radius: 8px;">
+        <p><strong>What the inversion unlocks:</strong></p>
+        <ul>
+            <li><strong>Compatibility is deductive, not observational.</strong> If the graph validates and every service compiled against its generated types, every producer/consumer pair is provably compatible. You don't need to run them together to find out.</li>
+            <li><strong>Constellations coexist.</strong> Many constellations (<code>mock</code>, <code>dev</code>, <code>main-v1</code>, <code>main-v2</code>) can live in the same AWS accounts simultaneously. Cloning a constellation for a feature branch is cheap.</li>
+            <li><strong>Contract errors surface early.</strong> Wrong cross-ref, missing schema, cross-region edge — <code>odmdValidate()</code> throws at synth, before any CloudFormation stack moves.</li>
+        </ul>
+        <p style="margin-top: 1rem; font-style: italic;">The cost is real: all distributed-systems complexity migrates into the ContractsLib. You are trading <em>runtime surprise</em> for <em>design-time rigor</em>.</p>
+    </div>
 </section>
 
+<!-- COMPONENT 1: CONTRACTSLIB -->
 <section class="concept-section" id="contractslib">
-    <h2>1. The Contracts Library (`contractsLib`): The Semantic Anchor</h2>
-    <p>The <span class="concept-term">contractsLib</span> is the heart of the system. It's where the abstract logic of your semantic model is first codified into a machine-readable format. It's a version-controlled TypeScript library that defines the behavioral guarantees and data contracts between all components of your system.</p>
+    <h2>1. The ContractsLib: A Legislature, Not a Registry</h2>
+    <p>The <span class="concept-term">contractsLib</span> is a version-controlled TypeScript library that declares every service, every deployable version of every service, and every producer/consumer edge between them — with schema artifacts attached as children of the edges. This is the "living model" from the philosophy made literal: not a diagram of intent, but a compiled artifact that <em>is</em> the intent, and that fails to publish if the intent is inconsistent.</p>
+
+    <p>Think of it as the <strong>congress of your distributed system</strong>, not a service registry:</p>
     <ul>
-        <li><strong>The Single Source of Architectural Truth:</strong> It transforms architectural knowledge from diagrams and documents into version-controlled, executable assets.</li>
-        <li><strong>Proactive Governance:</strong> It acts as a "forcing function" that prevents integration failures, security gaps, and configuration drift before they happen.</li>
-        <li><strong>Enables Collective Learning:</strong> Changes to the `contractsLib` via Pull Requests create a shared, evolving understanding of the system's architecture across all teams.</li>
+        <li><strong>Services send representatives:</strong> Each service's <code>OdmdBuild</code>, its <code>OdmdEnver</code> instances, and the producers/consumers each enver declares.</li>
+        <li><strong>Cross-ref edges are enacted law:</strong> Once wired, they define an obligation each side must implement. A producer owes its consumers a stable address and a schema-valid payload.</li>
+        <li><strong><code>tsc</code> + <code>odmdValidate()</code> is the constitutional court:</strong> If the graph has a forbidden edge, the build fails. The ContractsLib package does not publish.</li>
+        <li><strong>Services are compelled to conform:</strong> At build time, a consumer downloads its upstream producer's schema artifact, generates types into <code>__generated__/</code>, and compiles against them. A handler that doesn't match its declared contract fails to compile — not at runtime, not in staging.</li>
     </ul>
+
+    <p>A service registry is passive: it records what services say about themselves. A legislature is active: it's where services negotiate, enact, and are bound. Your PRs to ContractsLib are legislation; its compiled output is law.</p>
+
+    <div style="background: rgba(255,255,255,0.07); padding: 1.5rem; border-radius: 8px; margin-top: 1.5rem;">
+        <p><strong>Hard constraints — enforced at construction, no opt-outs:</strong></p>
+        <ul>
+            <li>A build <strong>cannot consume from itself</strong> — intra-service coupling is plain TypeScript, not a producer/consumer pair.</li>
+            <li><strong>ContractsLib envers cannot be consumers</strong> — the legislature cannot depend on the services whose laws it writes.</li>
+            <li><strong>Cross-region consumers are forbidden</strong> — cross-region communication is modeled as distinct producers per region.</li>
+            <li><strong>Container-image envers cannot be consumers</strong> — image-build envers are producer-only (they export an ECR image reference).</li>
+            <li><strong>Every build and enver must have doc paths that resolve</strong> — <code>odmdValidate()</code> fails if <code>serviceOverviewMD</code>, <code>serviceContextMD</code>, or <code>enverContextMD</code> point to missing files. Docs are part of the contract.</li>
+        </ul>
+    </div>
 </section>
 
-<section class="concept-section" id="application-centric">
-    <h2>2. Application-Centric Infrastructure: Projecting Boundaries</h2>
-    <p>ONDEMANDENV rejects the traditional, layered approach to infrastructure. Instead, it uses an <span class="concept-term">Application-Centric</span> model that projects the boundaries defined in `contractsLib` into a complete, vertical slice of business functionality.</p>
-    <ul>
-        <li><strong>Cohesive Bounded Contexts:</strong> A service's entire stack—containers, databases, security policies, and networking—is managed as a single, atomic unit.</li>
-        <li><strong>Aligned with Business Value:</strong> Ownership aligns with business capabilities, not technology layers, empowering teams to innovate within their domain.</li>
-        <li><strong>The Ideal Foundation for AI:</strong> These well-defined boundaries provide the perfect guardrails for AI-assisted development, preventing architectural decay.</li>
-    </ul>
-</section>
-
+<!-- COMPONENT 2: ENVER / PHASES = ENVERS -->
 <section class="concept-section" id="enver">
-    <h2>3. Enver (Environment Version): The Unit of Evolution</h2>
-    <p>An <span class="concept-term">Enver</span> is an isolated, versioned, service-level deployment. It is the concrete, running manifestation of a specific version of a service's Bounded Context. It is the unit of evolution and selection.</p>
+    <h2>2. Enver (Environment Version): Phases Collapsed onto One Axis</h2>
+    <p>An <span class="concept-term">Enver</span> is a complete, deployable version of a service's bounded context — its entire stack: infrastructure, dependencies, build pipeline, and monitoring. It is the unit of evolution: where the model, once compiled, becomes a running, disposable projection instead of a document about a system.</p>
+
+    <p><strong>The core insight: development phases and deployment environments are the same axis.</strong> There is no separate "environment" concept. An enver <em>is</em> a phase.</p>
+
+    <div style="margin: 1.5rem 0; background: rgba(255,255,255,0.07); padding: 1.5rem; border-radius: 8px; overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.2);">
+                    <th style="text-align:left; padding: 0.5rem 1rem;">Phase</th>
+                    <th style="text-align:left; padding: 0.5rem 1rem;">Enver (branch)</th>
+                    <th style="text-align:left; padding: 0.5rem 1rem;">Purpose</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                    <td style="padding: 0.5rem 1rem;"><strong>Phase 0</strong></td>
+                    <td style="padding: 0.5rem 1rem;"><code>mock</code></td>
+                    <td style="padding: 0.5rem 1rem;">Contract verification — mocked responses, BDD validation, schema publishing. No real business logic.</td>
+                </tr>
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                    <td style="padding: 0.5rem 1rem;"><strong>Phase 1</strong></td>
+                    <td style="padding: 0.5rem 1rem;"><code>dev</code></td>
+                    <td style="padding: 0.5rem 1rem;">MVP — real domain logic, cross-service integration, data persistence.</td>
+                </tr>
+                <tr>
+                    <td style="padding: 0.5rem 1rem;"><strong>Phase 2</strong></td>
+                    <td style="padding: 0.5rem 1rem;"><code>main</code></td>
+                    <td style="padding: 0.5rem 1rem;">Production — security hardening, observability, load testing, compliance.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <p>Canonical progression: <code>mock → dev → main</code>. No forward references — a <code>mock</code> enver never consumes a <code>dev</code> producer.</p>
+
+    <p><strong>Two kinds of enver:</strong></p>
     <ul>
-        <li><strong>Fearless Experimentation:</strong> Each Git branch can have its own `Enver`, allowing developers to innovate and test in complete isolation without fear of breaking shared environments.</li>
-        <li><strong>Evolutionary Selection:</strong> Envers are candidates for survival. Successful ones are promoted to become new stable baselines, while others are discarded. This creates an evolutionary model where only the best adaptations thrive.</li>
-        <li><strong>Capturing Collective Intelligence:</strong> Each Enver locks in a set of validated dependency versions, creating a "known-good" snapshot of the ecosystem's collective intelligence.</li>
+        <li><strong>Branch envers</strong> — dynamic, update when their branch is pushed or a dependency changes. Used for <code>mock</code>, <code>dev</code>, and feature branches.</li>
+        <li><strong>Tag envers</strong> — immutable, fixed point-in-time. Used for production releases.</li>
     </ul>
+
+    <p>Each enver provides a complete SDLC context: unique endpoints, isolated infrastructure, automated build and deploy, built-in BDD, and per-enver monitoring. Clone one with a single commit message to get a full isolated copy for a feature branch.</p>
 </section>
 
+<!-- COMPONENT 3: PRODUCER / CONSUMER + SCHEMA -->
+<section class="concept-section" id="producer-consumer">
+    <h2>3. Producer / Consumer: Typed Edges with Schema Artifacts</h2>
+    <p>Services declare what they publish and what they depend on using <span class="concept-term">OdmdCrossRefProducer</span> and <span class="concept-term">OdmdCrossRefConsumer</span> in ContractsLib. These are the edges of the contract graph.</p>
+
+    <div style="background: rgba(255,255,255,0.07); padding: 1.5rem; border-radius: 8px; margin-top: 1.5rem; margin-bottom: 1.5rem;">
+        <pre style="margin: 0; font-size: 0.85rem; overflow-x: auto;"><code>// In ContractsLib — producer declares a base URL + schema artifact child
+export class OrderEnver extends OdmdEnverCdk {
+  readonly orderApiBaseUrl = new OdmdCrossRefProducer(
+    this, 'orderApiBaseUrl',
+    { children: [{ pathPart: 'schema-url', s3artifact: true }] }
+  );
+}
+
+// Consumer declares its dependency on the producer
+export class PaymentEnver extends OdmdEnverCdk {
+  readonly orderApiBaseUrl = new OdmdCrossRefConsumer(
+    this, 'orderApiBaseUrl', orderEnver.orderApiBaseUrl
+  );
+}</code></pre>
+    </div>
+
+    <p><strong>At deploy time:</strong> Producers publish their base URL and schema artifact via <code>OdmdShareOut</code> (backed by AWS SSM Parameter Store). Consumers read them via <code>OdmdShareIn</code> or <code>getSharedValue()</code> during CDK synth.</p>
+
+    <p><strong>Schema artifacts</strong> are the mechanism that makes compatibility deductive. A producer attaches an OpenAPI 3.1 or AsyncAPI 2.x document as a child of its base URL producer. At build time, a consumer's <code>build.sh</code>:</p>
+    <ol>
+        <li>Downloads the upstream schema artifact from S3 via a <code>SchemaTypeLoader</code> utility (a platform-documented pattern your ContractsLib implements, not a class shipped in the base library).</li>
+        <li>Generates Zod types into <code>lib/handlers/src/__generated__/</code> via <code>json-schema-to-zod</code>.</li>
+        <li>Compiles the handler against the generated types.</li>
+    </ol>
+    <p>If the handler doesn't conform to the declared contract, <code>tsc</code> fails. The incompatibility is caught before any deployment.</p>
+
+    <div style="background: rgba(255,255,255,0.07); padding: 1.5rem; border-radius: 8px; margin-top: 1.5rem;">
+        <p><strong>Schema artifact kinds:</strong></p>
+        <ul>
+            <li><strong>OpenAPI 3.1</strong> — for REST-style APIs; includes <code>paths</code> and <code>components.schemas</code>. Consumers generate typed route helpers from <code>operationId</code>.</li>
+            <li><strong>AsyncAPI 2.x</strong> — for topics, queues, and streams; includes <code>channels</code> and message schemas. Consumers generate typed channel helpers.</li>
+            <li><strong>ODMD Bundle</strong> — a small envelope referencing multiple artifacts (e.g., <code>{ http: &lt;openapi-url&gt;, events: &lt;asyncapi-url&gt; }</code>) while keeping a single <code>schema-url</code> address.</li>
+        </ul>
+        <p>Consumers detect the artifact kind via a top-level discriminator: <code>odmdKind: 'openapi' | 'asyncapi' | 'bundle'</code>.</p>
+    </div>
+</section>
+
+<!-- COMPONENT 4: CONSTELLATION -->
 <section class="concept-section" id="constellation">
-    <h2>4. Constellation: The Verifiable System</h2>
-    <p>A <span class="concept-term">Constellation</span> is the emergent, end-to-end representation of your entire distributed system. It is formed by connecting individual `Envers` together through their shared understanding of the `contractsLib`.</p>
-    <ul>
-        <li><strong>Dynamic System View:</strong> It provides a living, breathing view of your architecture, composed of specific, versioned components.</li>
-        <li><strong>Fearless End-to-End Testing:</strong> Within its Constellation, developers—human or AI—can perform true end-to-end validation without any risk of system-wide disruption.</li>
-        <li><strong>Validating the Model:</strong> The ultimate test of the semantic model's integrity happens here, where the projected system is validated as a whole.</li>
-    </ul>
+    <h2>4. Constellation: Emergent, Not Declared</h2>
+    <p>A <span class="concept-term">Constellation</span> is the subgraph of envers reachable by following producer/consumer edges from any starting enver. Constellations are <strong>emergent</strong> — they come into existence when ContractsLib wiring is enacted, not when anything is declared. They have no names, no registry, no enumeration. This is the closest thing on the platform to the model "coming alive": a constellation is what the living model looks like once it's running, and it is provably consistent because every edge in it already compiled.</p>
+
+    <p><strong>How a constellation forms:</strong></p>
+    <ol>
+        <li>Each service declares one or more envers in ContractsLib (<code>mock</code>, <code>dev</code>, <code>main</code>).</li>
+        <li>Each enver declares producers and consumers.</li>
+        <li>ContractsLib wires consumers to specific upstream producers (typically same-revision to same-revision).</li>
+        <li>The transitive closure of those edges <em>is</em> a constellation.</li>
+    </ol>
+
+    <p>"Mock constellation" is informal shorthand for <em>the constellation rooted at mock-revision envers</em>. It is not a class, type, or stack-name token. Multiple constellations coexist in the same AWS accounts, distinguished only by their <code>SRC_Rev_REF</code> (branch or tag).</p>
+
+    <div style="background: rgba(255,255,255,0.07); padding: 1.5rem; border-radius: 8px; margin-top: 1.5rem;">
+        <p><strong>Constellation rules:</strong></p>
+        <ul>
+            <li><strong>No forward references.</strong> <code>mock</code> never consumes <code>dev</code>; <code>dev</code> never consumes <code>main</code>.</li>
+            <li><strong>Account-agnostic.</strong> Revision→account mapping is an organizational choice, not part of the graph. The same constellation semantics work whether your org has one workspace account or ten.</li>
+            <li><strong>Platform vs. application envers.</strong> Platform envers (<code>__contracts</code>, <code>__user-auth</code>, <code>__networking</code>) expose a single enver consumed across all constellations — one identity provider, one networking layer, shared. Application envers participate per-revision and evolve independently.</li>
+            <li><strong>Do not encode revision labels in stack names.</strong> <code>mock</code>/<code>dev</code>/<code>main</code> belong to the enver's <code>SRC_Rev_REF</code>, not to resource names or stack IDs.</li>
+        </ul>
+    </div>
 </section>
 
-<section class="forcing-function">
+<!-- HOW IT WORKS: QUICKSTART SEQUENCE -->
+<section class="forcing-function" id="how-it-works">
+    <h2>How It Works: The Contract-First Sequence</h2>
+    <p style="font-size: 1.1rem; margin-bottom: 2rem;">Bringing a new service onto the platform follows a contract-first sequence. Contracts are defined before a single line of implementation is written.</p>
+
+    <div class="next-steps-enhanced">
+        <div class="next-step-card">
+            <h3>Step 1: ContractsLib</h3>
+            <p>Define the service's <code>OdmdBuild</code> and envers (<code>mock</code>, <code>dev</code>, <code>main</code>). Declare each enver's producers (base URL + schema-url child) and consumers (upstream dependencies). Wire cross-build couplings after all builds exist.</p>
+            <p><em>Output: a compiled, validated contract graph. Every edge is type-checked. No service can deploy without a place in the graph.</em></p>
+        </div>
+
+        <div class="next-step-card">
+            <h3>Step 2: Service Scaffold</h3>
+            <p>Each service repo initializes ContractsLib and resolves its target enver via <code>ODMD_build_id</code> + <code>ODMD_rev_ref</code> env vars. CDK stack names come from <code>enver.getRevStackNames()</code> — stable, revision-label-free. The stack publishes its base URL and schema via <code>OdmdShareOut</code>; it reads upstream values via <code>OdmdShareIn</code>.</p>
+        </div>
+
+        <div class="next-step-card">
+            <h3>Step 3: Build Orchestration</h3>
+            <p>The platform runs <code>.scripts/build.sh</code> per repo. For consumers: download upstream schema artifacts → generate Zod types into <code>__generated__/</code> → compile handler against generated types → build CDK stack. If the handler doesn't match its declared contract, <code>tsc</code> fails here, before any deployment.</p>
+        </div>
+
+        <div class="next-step-card">
+            <h3>Step 4: BDD Verification</h3>
+            <p>Each enver ships a BDD stack deployed after the app stack. A Step Functions state machine calls service APIs using the master mock dataset and asserts schema-valid responses. An optional Playwright runner validates browser flows. BDD results are published via <code>OdmdShareOut</code> and gate promotion.</p>
+        </div>
+
+        <div class="next-step-card">
+            <h3>Step 5: Deployment Order</h3>
+            <p>The platform deploys stacks in the order returned by <code>getRevStackNames()</code>. Producers deploy before consumers so SSM parameters are populated. Dependency changes automatically trigger downstream enver rebuilds — event-driven, not scheduled pipelines.</p>
+        </div>
+
+        <div class="next-step-card">
+            <h3>Phase Promotion</h3>
+            <p>When <code>mock</code> contracts are verified, the service promotes to <code>dev</code> (real business logic). When MVP is validated, it promotes to <code>main</code> (production hardening). Each promotion is a graph evolution — new nodes added, consumers migrate per edge, old nodes retired when they have no remaining consumers.</p>
+        </div>
+    </div>
+</section>
+
+<!-- DYNAMIC CLONING -->
+<section class="concept-section" id="cloning">
+    <h2>Dynamic Cloning: Full Environments on Demand</h2>
+    <p>Every feature branch can have its own complete, isolated enver — a full SDLC clone with unique endpoints, dedicated infrastructure, and independent lifecycle. Creating one requires a single commit message:</p>
+
+    <div style="background: rgba(255,255,255,0.07); padding: 1.5rem; border-radius: 8px; margin-top: 1.5rem; margin-bottom: 1.5rem;">
+        <pre style="margin: 0; font-size: 0.9rem; overflow-x: auto;"><code>git commit -m "feat: new recommendation engine
+
+odmd: create@dev"</code></pre>
+        <p style="margin-top: 1rem; font-size: 0.9rem;">The platform provisions a complete isolated environment. To tear it down: commit with <code>odmd: delete</code>.</p>
+    </div>
+
+    <p>Each cloned enver is resource-isolated — unique naming prevents conflicts. Static envers (<code>mock</code>, <code>dev</code>, <code>main</code>) are unaffected. Multiple developers and AI agents can run parallel experiments simultaneously, each with full infrastructure control, without shared-environment coordination.</p>
+
+    <p>A complete environment — VPC, database, load balancing, monitoring — provisions automatically from the graph, with no manual setup. The cost of experimentation drops to near zero.</p>
+</section>
+
+<!-- PATTERNS IN PRACTICE -->
+<section class="forcing-function" id="patterns">
     <h2>Patterns in Practice</h2>
-    <p style="font-size: 1.2rem; margin-bottom: 2rem;">These components enable powerful patterns for solving real-world distributed systems challenges.</p>
+    <p style="font-size: 1.2rem; margin-bottom: 2rem;">The platform's mechanics enable concrete solutions to recurring distributed-systems problems.</p>
 </section>
 
-<section class="pattern-section" id="isolated-testing">
-    <h3>Pattern: Isolated Full SDLC Environments per Branch</h3>
+<section class="pattern-section" id="isolated-sdlc">
+    <h3>Pattern: Per-Branch Full SDLC Environments</h3>
     <div class="problem-statement">
-        <p><strong>Problem:</strong> Shared dev/QA environments create bottlenecks, contention, and configuration drift, preventing true parallel development of complex features.</p>
+        <p><strong>Problem:</strong> Shared dev/QA environments create bottlenecks, contention, and configuration drift. Developers block each other. Integration failures are discovered late — in shared staging, where they affect everyone.</p>
     </div>
     <div class="solution-statement">
-        <p><strong>ONDEMANDENV Solution:</strong> With a single commit message (`odmd: create@dev`), a developer can provision a complete, high-fidelity SDLC clone for their feature branch. This `Enver` is a fully isolated Bounded Context, enabling deep, meaningful branching strategies and fearless testing.</p>
+        <p><strong>ONDEMANDENV Solution:</strong> Branch envers give each developer a complete, isolated copy of the system. Contracts are validated at <code>tsc</code> time — before anything is deployed — so integration failures surface on the developer's machine, not in shared staging. Staging becomes optional (or a dedicated performance-test environment), not the integration-discovery gate.</p>
     </div>
 </section>
 
-<section class="pattern-section" id="shared-networking">
-    <h3>Pattern: Governed Sharing of Core Infrastructure</h3>
+<section class="pattern-section" id="governed-sharing">
+    <h3>Pattern: Governed Sharing of Platform Infrastructure</h3>
     <div class="problem-statement">
-        <p><strong>Problem:</strong> Central teams (e.g., networking) manage core resources, but application teams need to consume them securely and consistently across multiple accounts, a scenario where most IaC tools fail.</p>
+        <p><strong>Problem:</strong> Central teams manage shared infrastructure — VPCs, EKS clusters, transit gateways. Application teams need to consume these resources consistently across multiple accounts, but most IaC tools have no formal contract mechanism. Consumption is ad hoc, undocumented, and fragile.</p>
     </div>
     <div class="solution-statement">
-        <p><strong>ONDEMANDENV Solution:</strong> The shared resource (e.g., a VPC or EKS cluster) is defined as a platform `Enver` that publishes its capabilities as a formal `Product` in `contractsLib`. Application `Envers` consume this `Product` via an explicit, version-aware `Consumer` contract, transforming chaotic sharing into a stable, governed platform utility.</p>
+        <p><strong>ONDEMANDENV Solution:</strong> Platform envers (<code>__networking</code>, <code>_default-vpc-rds</code>, <code>_default-kube-eks</code>) publish their capabilities as formal <code>OdmdCrossRefProducer</code> outputs. Application envers declare typed <code>OdmdCrossRefConsumer</code> edges. The contract graph makes every dependency explicit and version-aware. When platform infrastructure changes, the graph identifies every affected consumer; the platform triggers their rebuilds automatically.</p>
     </div>
 </section>
 
-<section class="pattern-section" id="ai-assisted-development">
-    <h3>Pattern: AI-Assisted Development within Bounded Contexts</h3>
+<section class="pattern-section" id="ai-assisted">
+    <h3>Pattern: AI Agents as First-Class Evolution Partners</h3>
     <div class="problem-statement">
-        <p><strong>Problem:</strong> AI code generators, lacking architectural context, often produce code that violates domain boundaries and creates accidental complexity.</p>
+        <p><strong>Problem:</strong> AI code generators, lacking architectural context, produce code that violates domain boundaries, creates accidental cross-service coupling, and decays architectural integrity. Shared environments make AI experiments risky — a bad change can break everyone.</p>
     </div>
     <div class="solution-statement">
-        <p><strong>ONDEMANDENV Solution:</strong> The `contractsLib` provides the perfect specification to guide AI. By giving the AI the architectural context of the `Enver` and its `Product`/`Consumer` contracts, it can generate code that is not only functionally correct but also architecturally compliant, maintainable, and aligned with DDD principles.</p>
+        <p><strong>ONDEMANDENV Solution:</strong> The ContractsLib provides complete architectural context: declared interfaces, schema artifacts, hard constraints, and per-enver documentation paths (<code>serviceContextMD</code>, <code>enverContextMD</code>). Each AI agent gets its own cloned enver — full infrastructure isolation, no shared-environment risk. The platform enforces contracts at compile time regardless of who wrote the code. Successful experiments are promoted; failed ones are deleted. The graph retains the validated results.</p>
     </div>
 </section>
 
+<section class="pattern-section" id="blue-green">
+    <h3>Pattern: Per-Edge Blue/Green Without Environment Rebuilds</h3>
+    <div class="problem-statement">
+        <p><strong>Problem:</strong> Traditional blue/green swaps an entire environment — every consumer gets the new version simultaneously. A breaking change requires coordinating all consumers before cutover, or spinning up a full parallel environment at significant cost.</p>
+    </div>
+    <div class="solution-statement">
+        <p><strong>ONDEMANDENV Solution:</strong> Interface versions are graph nodes, not states of a node. A service that needs a breaking API change publishes a new producer alongside the old one. Old consumers keep consuming the old producer; new consumers wire to the new one. Both run in the same account simultaneously. Traffic shifts <em>per edge</em>, not per environment. The old producer is retired only when no consumers point to it — retirement is visible in the graph.</p>
+    </div>
+</section>
+
+<!-- VISUALIZING THE PLATFORM -->
 <section class="forcing-function">
     <h2>Visualizing the Platform</h2>
-    <p style="font-size: 1.2rem; margin-bottom: 2rem;">These abstract concepts are best understood visually. Explore these diagrams to see how the components and patterns fit together.</p>
+    <p style="font-size: 1.2rem; margin-bottom: 2rem;">These diagrams show the key structural contrasts and patterns in action.</p>
 
     <div class="next-steps-enhanced">
         <div class="next-step-card">
             <h3>Domain-First vs. X-Ops Flat World</h3>
-            <p>This diagram contrasts the organized, domain-driven structure enabled by ONDEMANDENV with the chaotic, tool-centric "flat world" of traditional ops.</p>
+            <p>The organized, domain-driven structure enabled by ONDEMANDENV contrasted with the chaotic, tool-centric "flat world" of traditional ops where every team manages its own pipeline silo.</p>
             <a href="mmd-render.html?mmd=diagrams/xops-flat-vs-domain-dag.mmd" class="btn btn-primary btn-enhanced" target="_blank">View Diagram</a>
         </div>
 
         <div class="next-step-card">
             <h3>The Branch Ecology</h3>
-            <p>See the "Walking on Many Feet" pattern in action. This shows how multiple `Envers` can evolve in parallel from a stable base, enabling safe, concurrent development.</p>
+            <p>The "Walking on Many Feet" pattern — multiple envers evolving in parallel from a stable base, enabling safe concurrent development by humans and AI agents simultaneously.</p>
             <a href="mmd-render.html?mmd=diagrams/walking-on-many-feet-branch-ecology.mmd" class="btn btn-primary btn-enhanced" target="_blank">View Diagram</a>
         </div>
 
         <div class="next-step-card">
             <h3>Multi-Account Network Architecture</h3>
-            <p>Explore the governed sharing pattern for core infrastructure. This diagram shows how a central Transit Gateway can be safely consumed by multiple application accounts.</p>
+            <p>The governed sharing pattern for platform infrastructure — a central Transit Gateway published as a formal producer and consumed by application envers across multiple accounts via explicit contracts.</p>
             <a href="mmd-render.html?mmd=diagrams/multi-account-network-architecture.mmd" class="btn btn-primary btn-enhanced" target="_blank">View Diagram</a>
+        </div>
+    </div>
+</section>
+
+<!-- WHERE TO GO NEXT -->
+<section id="next-steps">
+    <h2>Where to Go Next?</h2>
+    <div class="next-steps-enhanced">
+        <div class="next-step-card">
+            <h3>Explore the Philosophy</h3>
+            <p>Understand why interface-first, contract-enforced development is the right foundation for AI-native enterprises — and why the code-first era is ending.</p>
+            <a href="philosophy.html" class="btn btn-primary btn-enhanced">Read the Vision</a>
+        </div>
+
+        <div class="next-step-card">
+            <h3>Read the Articles</h3>
+            <p>Deep dives on specific topics: the CI/CD inversion, application-centric infrastructure, domain-driven design at the infrastructure layer, and the mathematical foundations of partitioning.</p>
+            <a href="articles.html" class="btn btn-primary btn-enhanced">Browse the Library</a>
+        </div>
+
+        <div class="next-step-card">
+            <h3>Get Started</h3>
+            <p>The quickstart sequence: set up your ContractsLib, scaffold your first service, publish your first schema artifact, and run your first BDD verification against the mock constellation.</p>
+            <a href="https://github.com/ondemandenv" class="btn btn-secondary btn-enhanced" target="_blank">View on GitHub</a>
         </div>
     </div>
 </section>
