@@ -1,6 +1,16 @@
+---
+layout: article
+title: "Routing Is Atomic. Deployment Is Not."
+description: "Part 5 of \"Why Kubernetes Infrastructure Rots.\" When the deployment pipeline can't express that two versions coexist, teams smuggle version branching into application code via feature flags that never get removed — and the failure unit an enterprise capability needs is never a container."
+permalink: /articles/k8s-staging-mindset-kills-migration/
+date: 2026-07-10
+author: "Gary Yang"
+tags: ["kubernetes", "blue-green", "feature-flags", "migration", "distributed-systems", "platform-engineering"]
+---
+
 # Routing Is Atomic. Deployment Is Not.
 
-*Part 5 of "Why Kubernetes Infrastructure Rots." The previous articles examined how the operator mindset fragments domains ([Part 1](article-k8s-operator-mindset-vs-domain-modeling.md)), fails to abstract them ([Parts 2–3](article-k8s-cargo-cult-centralization.md)), and produces distributed monoliths with no dependency graph ([Part 4](article-k8s-gitops-distributed-monolith.md)). This article examines a downstream consequence: when the deployment pipeline can't express that two versions coexist, teams smuggle version branching into application code via feature flags — and the flags never get removed.*
+*Part 5 of "Why Kubernetes Infrastructure Rots." The previous articles examined how the operator mindset fragments domains ([Part 1](/articles/k8s-operator-mindset-vs-domain-modeling/)), fails to abstract them ([Parts 2–3](/articles/k8s-cargo-cult-centralization/)), and produces distributed monoliths with no dependency graph ([Part 4](/articles/k8s-gitops-distributed-monolith/)). This article examines a downstream consequence: when the deployment pipeline can't express that two versions coexist, teams smuggle version branching into application code via feature flags — and the flags never get removed.*
 
 ---
 
@@ -332,7 +342,7 @@ Why? Because:
 
 1. **The routing decision maker is the thing being upgraded.** You can't canary the component that *implements* canary. There is no layer above Istio that can split traffic between "old Istio" and "new Istio" at the request level.
 2. **Envoy proxies share a single xDS push, not a versioned one.** istiod distributes config to all connected proxies over ADS (Aggregated Discovery Service); there is no per-subset xDS versioning. When istiod pushes a new config, every connected proxy converges to it. You can't tell it "push this config to 1% of sidecars" — the discovery stream has no notion of a canary cohort.
-3. **The storage version, not "no coexistence," is the real schema constraint.** It's a common misconception that "two versions of a CRD can't coexist — one schema per GVK." They can: a CRD declares `spec.versions[]`, several can be `served: true` at once, and exactly one is `storage: true`, with a conversion webhook translating between them (reproduced live in [Verify It Yourself §"CRD Versions Do Coexist"](article-k8s-verify-it-yourself.md#part-5--crd-versions-do-coexist-one-storage-version-conversion-on-read)). So the CRD layer is *not* where coexistence dies. What bites a mesh upgrade is narrower: every object is persisted at the single **storage version**, so a schema change forces a conversion path and a storage migration, and — combined with points 1 and 2 — the *runtime* (xDS) and the *routing authority* (the mesh itself) still flip atomically even though the API could serve both schemas. The atomicity is in the data plane and the upgrade's authority, not a CRD-versioning limitation.
+3. **The storage version, not "no coexistence," is the real schema constraint.** It's a common misconception that "two versions of a CRD can't coexist — one schema per GVK." They can: a CRD declares `spec.versions[]`, several can be `served: true` at once, and exactly one is `storage: true`, with a conversion webhook translating between them (reproduced live in [Verify It Yourself §"CRD Versions Do Coexist"](/articles/k8s-verify-it-yourself/#part-5--crd-versions-do-coexist-one-storage-version-conversion-on-read)). So the CRD layer is *not* where coexistence dies. What bites a mesh upgrade is narrower: every object is persisted at the single **storage version**, so a schema change forces a conversion path and a storage migration, and — combined with points 1 and 2 — the *runtime* (xDS) and the *routing authority* (the mesh itself) still flip atomically even though the API could serve both schemas. The atomicity is in the data plane and the upgrade's authority, not a CRD-versioning limitation.
 
 This creates a perverse inversion:
 
@@ -372,7 +382,7 @@ Real enterprise applications are almost never scoped to a container. The unit th
 
 ### The Backdoor This Closes: "But K8s Is Fine for Pods"
 
-The [Synthesis piece](article-k8s-thermostat-not-a-deployment-engine.md#the-ceiling-nobody-sees) names the ceiling as a **category error** in Kubernetes' computational model — and grants the platform one safe harbor: *"Every one of these concepts works at pod level because pods are the unit Kubernetes was designed around."* Blue/green, canary, self-healing, immutable — all break at the infrastructure level, but all supposedly hold at pod level. The defense of Kubernetes always retreats to that harbor: "fine, don't use it to provision CloudFront — but for running a container, it's exactly right."
+The [Synthesis piece](/articles/k8s-thermostat-not-a-deployment-engine/#the-ceiling-nobody-sees) names the ceiling as a **category error** in Kubernetes' computational model — and grants the platform one safe harbor: *"Every one of these concepts works at pod level because pods are the unit Kubernetes was designed around."* Blue/green, canary, self-healing, immutable — all break at the infrastructure level, but all supposedly hold at pod level. The defense of Kubernetes always retreats to that harbor: "fine, don't use it to provision CloudFront — but for running a container, it's exactly right."
 
 This Redis incident is inside the harbor, and it still sank.
 
@@ -410,14 +420,28 @@ If your traffic is partitionable and your routing layer can see the key, the mig
 
 ### Series: Why Kubernetes Infrastructure Rots
 
-- **Part 1: [The Operator Mindset](article-k8s-operator-mindset-vs-domain-modeling.md)** — Why one domain becomes six repositories.
-- **Part 2: [The Cargo Cult](article-k8s-cargo-cult-centralization.md)** — Why shared repos and better tools don't fix it.
-- **Part 3: [The Abstraction Instinct](article-k8s-abstraction-instinct.md)** — What no tool can provide.
-- **Part 4: [The Distributed Monolith](article-k8s-gitops-distributed-monolith.md)** — Five repos, five teams, zero transactional boundary.
-- **Part 5: [The Staging Mindset](article-k8s-staging-mindset-kills-migration.md)** — Why feature flags are what happens when infrastructure can't express version coexistence. *(this article)*
-- **Part 6: [The Shared Mutable State](article-k8s-cr-shared-mutable-state.md)** — The CR as shared mutable state between controllers.
-- **Aside: [Operator Stockholm Syndrome](article-k8s-operator-stockholm-syndrome.md)** — When the K8s control plane becomes the universe.
-- **Aside: [The Auto-Approve](article-k8s-auto-approve-swallows-the-gate.md)** — When the reconcile loop swallows `terraform plan`.
-- **Aside: [You Can't Front-Run the Composition Gap](article-k8s-front-run-composition-gap.md)** — Why correct first-principles reasoning must crash once before it can diagnose.
-- **Lab: [Verify It Yourself](article-k8s-verify-it-yourself.md)** — Copy-pasteable reproductions of every cluster mechanism the series cites.
-- **Synthesis: [The Thermostat That Ate Infrastructure](article-k8s-thermostat-not-a-deployment-engine.md)** — How a container self-healing pattern became a deployment engine.
+- **Part 1: [The Operator Mindset](/articles/k8s-operator-mindset-vs-domain-modeling/)** — Why one domain becomes six repositories. The repo-per-problem anti-pattern as a consequence of thinking in procedures instead of models.
+
+- **Part 2: [The Cargo Cult](/articles/k8s-cargo-cult-centralization/)** — Why shared repos and better tools don't fix it. The failed abstraction phase.
+
+- **Part 3: [The Abstraction Instinct](/articles/k8s-abstraction-instinct/)** — What no tool can provide. CDK in the hands of an operator is still operator thinking.
+
+- **Part 4: [The Distributed Monolith](/articles/k8s-gitops-distributed-monolith/)** — Why your GitOps is a monolith wearing a microservices costume. Five repos, five teams, zero transactional boundary, and six incidents in four weeks.
+
+- **Part 5: [The Staging Mindset](/articles/k8s-staging-mindset-kills-migration/)** — Routing is atomic. Deployment is not. Why feature flags are what happens when the infrastructure can't express version coexistence. *(this article)*
+
+- **Part 6: [The Shared Mutable State](/articles/k8s-cr-shared-mutable-state/)** — The CR is a database table with no foreign keys, shared between controllers with no ownership model. Silent data loss as a design consequence.
+
+- **Aside: [Operator Stockholm Syndrome](/articles/k8s-operator-stockholm-syndrome/)** — When the K8s control plane becomes the universe. Routing every cloud API through a cluster CR even when the cluster has no semantic role.
+
+- **Aside: [The Cron and the Gate](/articles/k8s-cron-and-gate/)** — When the operator models itself instead of the domain. One `Reconcile()` hook, triggered identically by create/resync/requeue, becomes the only place policy can live.
+
+- **Aside: [The Configuration Problem](/articles/k8s-tribal-knowledge/)** — One business rule sliced across Helm, ConfigMap, Flux substitution, and Calico's dataplane — zero cohesion, load-bearing tribal knowledge.
+
+- **Aside: [The Auto-Approve](/articles/k8s-auto-approve-swallows-the-gate/)** — When the reconcile loop swallows `terraform plan`. Wrapping a tool with a human-in-the-loop gate in a loop that structurally can't hold one.
+
+- **Aside: [You Can't Front-Run the Composition Gap](/articles/k8s-front-run-composition-gap/)** — Why correct first-principles reasoning must crash once before it can diagnose.
+
+- **Lab: [Verify It Yourself](/articles/k8s-verify-it-yourself/)** — Copy-pasteable, real-output reproductions of every cluster mechanism the series cites (foreign keys, CEL scope, ownerRefs, SSA, PUT-strips-fields, resourceVersion, CRD versioning, kstatus).
+
+- **Synthesis: [The Thermostat That Ate Infrastructure](/articles/k8s-thermostat-not-a-deployment-engine/)** — How a container self-healing pattern became a deployment engine. The missing DAG from node boot to infrastructure blue/green.
