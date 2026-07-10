@@ -36,6 +36,7 @@ Helm's job is parameterization. It doesn't know what a network policy is. It doe
 
 ### Tool 2: Kubernetes ConfigMap — Transport
 
+{% raw %}
 ```yaml
 # helm/templates/configmap.yaml
 apiVersion: v1
@@ -46,6 +47,7 @@ data:
   allow_networking_namespaces: {{ $.Values.configMapValues.allow_networking_namespaces }}
   # ... 80+ other keys riding the same bus
 ```
+{% endraw %}
 
 The ConfigMap is a flat key-value transport layer. It carries this value from Helm-land to Flux-land alongside 80+ unrelated keys — resource limits, feature flags, version numbers. They're all structurally identical: just strings in a bag. The ConfigMap has no concept that some of these strings are namespace lists, some are memory quantities, and some are boolean flags. It's an untyped data bus.
 

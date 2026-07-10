@@ -130,6 +130,7 @@ The Kubernetes ecosystem's core toolchain supports exactly one abstraction: **YA
 
 When Helm templates need conditional logic — say, different config values per deployment ring and cluster type — you get this:
 
+{% raw %}
 ```go-template
 {{- $ring := .Values.global.infra.ring }}
 {{- $cluster := .Values.global.infra.cluster.name }}
@@ -153,6 +154,7 @@ When Helm templates need conditional logic — say, different config values per 
   {{- $_ := set .Values.configValues "gateway_memory" "8Gi" }}
 {{- end }}
 ```
+{% endraw %}
 
 This is a function: `(ring, clusterType, region) → Map<String, String>`. But it's expressed as Go template syntax mutating a map in place (`$_` discards the return value — a hack to use a function for its side effect). No parameter types. No return type. No way to unit test. Duplicated across every GitOps stack because Go templates have no import mechanism across charts.
 
