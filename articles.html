@@ -99,6 +99,70 @@ title: Articles | ONDEMANDENV.dev
             <p><em>A nine-part series exposing the hidden costs of Kubernetes. It deconstructs the foundational myths, vendor ecosystems, and cultural damage wrought by choosing complexity over simplicity.</em></p>
         </li>
         <li>
+            <h3>🧊 <strong>WHY KUBERNETES INFRASTRUCTURE ROTS</strong> (New)</h3>
+            <p><em>A series grounded in one mismatch: Kubernetes models, schedules, health-checks, and rolls back exactly one unit — the container — while every unit an enterprise application cares about (a capability, a contract, a domain boundary, a failure unit) is a composition it has no object for. Each part is that mismatch on a different axis, drawn from real incidents and design debates.</em></p>
+        </li>
+        <li>
+            <h3><a href="/articles/k8s-operator-mindset-vs-domain-modeling/">The Operator Mindset: Why One Domain Becomes Six Repositories</a> <a href="https://github.com/ondemandenv/ondemandenv.github.io/commits/main/articles/k8s-operator-mindset-vs-domain-modeling.md" class="source-history-link" title="View source history">[📝]</a></h3>
+            <p><strong>🧩 Part 1:</strong> How the operator mindset fragments one domain into six near-identical CRDs in six repos — and the mechanism (no foreign keys, one-object admission) that lets it rot silently.</p>
+        </li>
+        <li>
+            <h3><a href="/articles/k8s-cargo-cult-centralization/">Why Neither Shared Repos Nor Better Tools Fix Infrastructure Rot</a> <a href="https://github.com/ondemandenv/ondemandenv.github.io/commits/main/articles/k8s-cargo-cult-centralization.md" class="source-history-link" title="View source history">[📝]</a></h3>
+            <p><strong>🏗️ Parts 2–3:</strong> The failed-abstraction phase — shared-scripts repos and CDK both fail because the tool's unit of grouping isn't the domain's unit of cohesion.</p>
+        </li>
+        <li>
+            <h3><a href="/articles/k8s-abstraction-instinct/">The Abstraction Instinct: What No Tool Can Provide</a> <a href="https://github.com/ondemandenv/ondemandenv.github.io/commits/main/articles/k8s-abstraction-instinct.md" class="source-history-link" title="View source history">[📝]</a></h3>
+            <p><strong>🧠 Part 3:</strong> The problem was never YAML vs CDK. Concrete artifacts and their missing classes look identical to the operator mind; no tool injects the instinct to see the difference.</p>
+        </li>
+        <li>
+            <h3><a href="/articles/k8s-gitops-distributed-monolith/">Why Your GitOps Is a Distributed Monolith</a> <a href="https://github.com/ondemandenv/ondemandenv.github.io/commits/main/articles/k8s-gitops-distributed-monolith.md" class="source-history-link" title="View source history">[📝]</a></h3>
+            <p><strong>🕸️ Part 4:</strong> Five repos, five teams, six reconciliation layers, zero transactional boundary. CI stays green while the cluster fails in slow motion, one reconciliation interval at a time.</p>
+        </li>
+        <li>
+            <h3><a href="/articles/k8s-staging-mindset-kills-migration/">Routing Is Atomic. Deployment Is Not.</a> <a href="https://github.com/ondemandenv/ondemandenv.github.io/commits/main/articles/k8s-staging-mindset-kills-migration.md" class="source-history-link" title="View source history">[📝]</a></h3>
+            <p><strong>🔀 Part 5:</strong> When the pipeline can't express version coexistence, teams smuggle it into code via feature flags that never die — and the failure unit an enterprise capability needs is never a container.</p>
+        </li>
+        <li>
+            <h3><a href="/articles/k8s-cr-shared-mutable-state/">The CR Is Shared Mutable State</a> <a href="https://github.com/ondemandenv/ondemandenv.github.io/commits/main/articles/k8s-cr-shared-mutable-state.md" class="source-history-link" title="View source history">[📝]</a></h3>
+            <p><strong>🩸 Part 6:</strong> One controller adds fields, another watching the same CR overwrites the whole spec every reconcile. No error, no log, no alert — silent data loss as a design consequence.</p>
+        </li>
+        <li>
+            <h3><a href="/articles/k8s-thermostat-not-a-deployment-engine/">The Thermostat That Ate Infrastructure</a> <a href="https://github.com/ondemandenv/ondemandenv.github.io/commits/main/articles/k8s-thermostat-not-a-deployment-engine.md" class="source-history-link" title="View source history">[📝]</a></h3>
+            <p><strong>🌡️ Synthesis:</strong> Kubernetes' only unit is the container; the industry pressed a container self-healing loop into being a deployment engine. The verdict: the computational model is wrong for the problem.</p>
+        </li>
+        <li>
+            <h3><a href="/articles/k8s-verify-it-yourself/">Verify It Yourself: The Cluster Mechanisms Behind Why K8s Infrastructure Rots</a> <a href="https://github.com/ondemandenv/ondemandenv.github.io/commits/main/articles/k8s-verify-it-yourself.md" class="source-history-link" title="View source history">[📝]</a></h3>
+            <p><strong>🧪 Lab:</strong> Copy-pasteable, real-output reproductions of every cluster mechanism the series cites — foreign keys, CEL scope, ownerRefs, server-side apply, kstatus — run on a throwaway k3d cluster.</p>
+        </li>
+        <li>
+            <h3><a href="/articles/k8s-operator-stockholm-syndrome/">Operator Stockholm Syndrome: When the K8s Control Plane Becomes the Universe</a> <a href="https://github.com/ondemandenv/ondemandenv.github.io/commits/main/articles/k8s-operator-stockholm-syndrome.md" class="source-history-link" title="View source history">[📝]</a></h3>
+            <p><strong>🔗 Aside:</strong> Routing every cloud API through a cluster CR — five layers to do what is mechanically three SDK calls — even when the cluster has no semantic role in the interaction.</p>
+        </li>
+        <li>
+            <h3><a href="/articles/k8s-cron-and-gate/">The Cron and the Gate: When the Operator Models Itself Instead of the Domain</a> <a href="https://github.com/ondemandenv/ondemandenv.github.io/commits/main/articles/k8s-cron-and-gate.md" class="source-history-link" title="View source history">[📝]</a></h3>
+            <p><strong>⏰ Aside:</strong> A one-line acceptance criterion produced four commits and two reverts — because an operator's single Reconcile() hook, triggered identically by create/resync/requeue, is the only place policy can live.</p>
+        </li>
+        <li>
+            <h3><a href="/articles/k8s-tribal-knowledge/">The Kubernetes Configuration Problem: Cross-Cutting Business Logic Across Tool Boundaries</a> <a href="https://github.com/ondemandenv/ondemandenv.github.io/commits/main/articles/k8s-tribal-knowledge.md" class="source-history-link" title="View source history">[📝]</a></h3>
+            <p><strong>🧵 Aside:</strong> One business rule sliced across Helm, ConfigMap, Flux substitution, and the network dataplane — zero cohesion, load-bearing tribal knowledge, boundaries drawn by tool instead of domain.</p>
+        </li>
+        <li>
+            <h3><a href="/articles/k8s-auto-approve-swallows-the-gate/">The Auto-Approve: When the Reconcile Loop Swallows terraform plan</a> <a href="https://github.com/ondemandenv/ondemandenv.github.io/commits/main/articles/k8s-auto-approve-swallows-the-gate.md" class="source-history-link" title="View source history">[📝]</a></h3>
+            <p><strong>🚦 Aside:</strong> Wrapping Terraform in a reconcile loop forces approvePlan:auto, disableDriftDetection:true, forceUnlock:auto — three reasonable flags that together delete every safety mechanism Terraform brought.</p>
+        </li>
+        <li>
+            <h3><a href="/articles/k8s-front-run-composition-gap/">You Can't Front-Run the Composition Gap</a> <a href="https://github.com/ondemandenv/ondemandenv.github.io/commits/main/articles/k8s-front-run-composition-gap.md" class="source-history-link" title="View source history">[📝]</a></h3>
+            <p><strong>🎯 Aside:</strong> Correct first-principles reasoning spots the anti-pattern and still loses, because the fact that would let it win up front is exactly the fact the composition gap withholds until the crash.</p>
+        </li>
+        <li>
+            <h3><a href="/articles/llms-pick-the-median/">LLMs Pick the Median. In Broken Domains, the Median IS the Problem.</a> <a href="https://github.com/ondemandenv/ondemandenv.github.io/commits/main/articles/llms-pick-the-median.md" class="source-history-link" title="View source history">[📝]</a></h3>
+            <p><strong>🤖 Related essay:</strong> An LLM given an under-specified task samples the median of its training data. When the domain's median solution is the disease, the LLM just makes the mediocre fix faster and harder to question.</p>
+        </li>
+        <li>
+            <h3><a href="/articles/ai-framework-unification-kills-craft/">When the Framework Becomes the Emperor: How Centralizing AI Tooling Kills Engineering Craft</a> <a href="https://github.com/ondemandenv/ondemandenv.github.io/commits/main/articles/ai-framework-unification-kills-craft.md" class="source-history-link" title="View source history">[📝]</a></h3>
+            <p><strong>👑 Related essay:</strong> An org ships a unified AI framework to standardize hundreds of engineers. The dashboards look great — but the part where engineers think has been standardized away.</p>
+        </li>
+        <li>
             <h3>🧭 <strong>X‑OPS FLAT WORLDVIEW SERIES</strong> (New)</h3>
             <p><em>A six‑part series exposing the root cause behind the “x‑ops flat worldview,” cataloging its anti‑patterns, and laying out a practical governance method centered on domain‑first design and the Domain Dependency Graph (DAG).</em></p>
         </li>
