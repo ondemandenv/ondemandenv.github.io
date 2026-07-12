@@ -21,3 +21,7 @@ pnpm-debug.log*
 
 # macOS-specific files
 .DS_Store
+
+# local agent workspace artifacts & opencode config (not for the published site)
+_claude_out_arts/
+opencode.json
