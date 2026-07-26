@@ -332,6 +332,15 @@ article ul li {
     margin-bottom: 0.5rem;
 }
 
+/* Images must never exceed the text column. Without this, any illustration
+   wider than the article container overflows it and forces horizontal page
+   scrolling on desktop — the mobile-only `img { max-width: 100% }` rule
+   further down applies below 768px only. */
+article img {
+    max-width: 100%;
+    height: auto;
+}
+
 section {
     max-width: 1200px;
     margin: 0 auto;

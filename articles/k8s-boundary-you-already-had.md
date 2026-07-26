@@ -10,6 +10,10 @@ tags: ["kubernetes", "domain-driven-design", "boundaries", "isolation", "distrib
 
 # Topology First: Why Ops Cuts Operations in the Wrong Place
 
+![Cartoon of an office in meltdown: an exhausted on-call engineer wrestles a bundle of red cables that used to be a single local function call; a manager hand-stuffs envelopes into per-ring mailboxes that were already routing correctly on their own; hand-copied address books, a coordinate table, and sync-loop robots crowd the whiteboard, which is headed "Draw the boundary before the boxes"; teams sit sealed inside separate glass snow globes, unable to reach each other.](/images/k8s-topology-first-draw-the-boundary.png)
+
+*Everything in that picture is the four backlog stories below. Note the speech bubble coming out of the mailboxes — "I already route by ring!" — because that is the punchline: the platform was doing the job the stories were built to do.*
+
 *A team had one small routing operation that worked fine. A scaling problem forced a move, and the operation came out the other side as four backlog stories — a message queue, a database, an addressing scheme, a sync job — none of which delivered anything a customer could see. Then someone noticed the message queue they'd built all of it on had already solved the exact problem the four stories were solving. This is the most common way Kubernetes infrastructure rots, and it has a fingerprint you can learn to spot in a design review. It comes from a single blind spot: an inability to see the isolation boundaries the system hands you for free — a ring, a branch, an environment. You can't see them, so you collapse them and rebuild their effect by hand. By the end you'll have a one-line test that catches it.*
 
 *This is Part 7 of "Why Kubernetes Infrastructure Rots." [Part 1](/articles/k8s-operator-mindset-vs-domain-modeling/) established the two mental models; [Part 4](/articles/k8s-gitops-distributed-monolith/) showed one capability smeared across five repos. Read those first if you want the theory; this part starts with a story and derives the theory from it.*
