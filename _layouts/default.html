@@ -248,10 +248,17 @@
                 mermaid.run().then(() => {
                     // After Mermaid renders, normalize each inline diagram's SVG for full visibility
                     document.querySelectorAll('.mermaid svg').forEach(svg => normalizeSvg(svg));
-                    // Initialize enhanced functionality after mermaid renders
-                    if (window.MermaidEnhanced) {
-                        window.MermaidEnhanced.enhanceAllDiagrams();
-                    }
+                    // Deliberately NOT calling MermaidEnhanced.enhanceAllDiagrams() here.
+                    // svg-pan-zoom rewrites the SVG into its own viewport and drops the
+                    // viewBox; combined with normalizeSvg's width:100%/height:auto the SVG
+                    // then has no intrinsic aspect ratio and collapses to the browser's
+                    // 150px default, clipping the diagram. Embedded diagrams keep their
+                    // natural height instead — same policy as the external-diagram path.
+                    afterNextPaint(() => {
+                        document.querySelectorAll('.mermaid svg').forEach(svg => normalizeSvg(svg));
+                        document.querySelectorAll('.mermaid').forEach(el => el.setAttribute('data-diagram-ready', 'true'));
+                        document.dispatchEvent(new CustomEvent('mermaid:diagramReady', { detail: { containerId: null } }));
+                    });
                 });
             }
             

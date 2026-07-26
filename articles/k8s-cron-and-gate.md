@@ -80,7 +80,6 @@ Look closely at what got conflated. `runRotation(ctx, mode)` does two things:
 These are not the same operation. One is **idempotent and observational**; the other is **mutating and transactional**. They share a function only because the cron driver triggers both at the same time. In a domain-modeled version they wouldn't share anything except the `Inventory` they both read.
 
 ```mermaid
-%%{init: {'theme':'dark'}}%%
 flowchart TD
     subgraph BEFORE["Before — one function, two jobs, one knob"]
         direction TB
@@ -95,7 +94,6 @@ flowchart TD
 ```
 
 ```mermaid
-%%{init: {'theme':'dark'}}%%
 flowchart TD
     subgraph AFTER["After — two jobs, two types, one obvious knob"]
         direction TB
