@@ -149,6 +149,8 @@ An LLM system based on the semantic model will respond immediately, but not by g
 
 The developer's job is to answer these questions and make decisions jointly with the system. Each Q&A is a precise "anchoring" of the semantic model. This process brings logical vulnerabilities, requirement ambiguities, and architectural conflicts that would only be exposed in later stages of traditional development to the forefront of development. Through this interactive semantic construction, the system's logic correctness and completeness are highly guaranteed before being "coded." The final generated code is just a natural outflow of this rigorously inferred logical model.
 
+The converse defines the failure mode, and it is the more common one: the system can only raise a conflict that the model is able to express. If no assertion in the model states that a given operation must stay whole, no amount of dialogue will produce that objection. The intent gets implemented — correctly, efficiently, and on the wrong structure — with every generated component passing its own review. The worked example in Chapter Eight is exactly this case.
+
 ### Chapter Four: Testing as Context Engineering
 
 #### Beyond Code-Level Testing
@@ -287,6 +289,14 @@ The value of future top technical talents will no longer be measured by coding s
 3. **Logical Reasoning and Language Precision**: Interaction with LLMs is essentially a logical dialogue. Semantic modelers must be able to express complex logical concepts using precise, unambiguous language like lawyers or philosophers. They need to identify fuzzy areas in natural language and transform them into clear assertions and rules in the model. This ability requires extremely strong logical reasoning and language mastery.
 4. **AI Collaboration and Context Engineering**: Semantic modelers are partners working side by side with AI. They need to deeply understand the working principles, capability boundaries, and common "failure modes" of LLMs (such as hallucinations, biases). They must be experts in context engineering, knowing how to guide AI toward correct, consistent logical states by providing appropriate background information, examples, and constraints, and effectively validate and filter AI outputs[^38].
 
+#### A Worked Example: The Boundary That Was Never in the Model
+
+The claim that a semantic modeler's value lies in what the LLM cannot supply is easy to assert and hard to see. Here it is as a specimen.
+
+A platform had one operation — provision a customer route — carried out by two components sitting in the same cluster: one local call. A scaling constraint forced one of the two to be split into one instance per deployment ring. The placement was decided first, by what each component *is*: the edge component moves to the edge clusters, the central service stays central. That placement ran straight through the middle of the operation, and rejoining the two halves took four backlog stories — a queue responder, a publisher, an addressing scheme, and a database of component locations with a job to populate it. Not one of the four was visible to a customer. Two of them rebuilt, in application code, routing the message queue was already performing for free: its per-ring mailboxes cannot deliver across rings, but a single central component connected to all of them erases that distinction.
+
+Note precisely where the failure sits. Every one of the four stories is locally correct, well specified, and testable against its own inputs — which is exactly the shape an LLM produces flawlessly and fast. What no model in that organization contained was one assertion: *provisioning a route is a single operation and must stay whole within a ring.* Because that boundary lived only in the topology and not in any model, nothing in the process could object to a placement that violated it — five migration options were evaluated, and all five varied only where the component goes. The reconnection code is precisely what an appreciating semantic model would have made unnecessary; a depreciating codebase is what accumulates when the boundary exists nowhere but in the diagram of where things run. That gap is the semantic modeler's job description in one instance — and, as the [full case study](/articles/k8s-boundary-you-already-had/) argues, it is the half of the work that gets *faster* rather than safer once implementation becomes free.
+
 #### The Future of Technical Talents
 
 The rise of this role poses brand new requirements for enterprise technical talent strategies. Organizations must start now to consciously cultivate and seek talents with these comprehensive abilities.
@@ -359,6 +369,7 @@ In summary, the ultimate goal of the semantic engineering revolution is to build
 - [From RDS-Centric to Distributed Systems: An Evolution Through Architectural Phases](/articles/from-rds-to-distributed-phases-evolution-enhanced/)
 - [The K-D Tree of Software: Why Partition Sequence Determines System Complexity](/articles/kd-tree-software-partition-sequence/)
 - [The 'Merge Hell' myth: How Ops Incompetence Manufactured a Crisis](/articles/merge-hell-myth-x-ops-contamination/)
+- [Topology First: Why Ops Cuts Operations in the Wrong Place](/articles/k8s-boundary-you-already-had/)
 
 ### References
 
