@@ -1,0 +1,35 @@
+flowchart LR
+    req([provision request]) --> M
+
+    subgraph CENTRAL["Central cluster"]
+        M["Manager"]
+        ADDR{{"② which operator<br/>do I address?"}}
+        DB[("Address DB<br/>+ backfill job")]
+        M -->|"① compute destination"| ADDR
+        ADDR -.->|"② look up"| DB
+    end
+
+    subgraph BUS["Message queue"]
+        MBA["ring A mailbox"]
+        MBB["ring B mailbox"]
+    end
+
+    subgraph RINGA["Edge cluster · ring A"]
+        OA["Operator A"] --> CRA["route object A"]
+    end
+    subgraph RINGB["Edge cluster · ring B"]
+        OB["Operator B"] --> CRB["route object B"]
+    end
+
+    ADDR ==>|"③ publish — the hop that<br/>used to be a local call"| MBA
+    ADDR ==>|"③ publish"| MBB
+    MBA ==> OA
+    MBB ==> OB
+
+    linkStyle 0 stroke:#666
+    linkStyle 1 stroke:#c92a2a,stroke-width:2px
+    linkStyle 2 stroke:#c92a2a,stroke-width:1px,stroke-dasharray:4
+    linkStyle 5 stroke:#c92a2a,stroke-width:2px
+    linkStyle 6 stroke:#c92a2a,stroke-width:2px
+    linkStyle 7 stroke:#c92a2a,stroke-width:2px
+    linkStyle 8 stroke:#c92a2a,stroke-width:2px

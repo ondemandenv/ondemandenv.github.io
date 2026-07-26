@@ -440,6 +440,8 @@ k3d cluster delete rot-demo
 
 - **Part 6: [The Shared Mutable State](/articles/k8s-cr-shared-mutable-state/)** — The CR is a database table with no foreign keys, shared between controllers with no ownership model. Silent data loss as a design consequence.
 
+- **Part 7: [Topology First](/articles/k8s-boundary-you-already-had/)** — Why ops cuts operations in the wrong place, then pays a backlog to rejoin them. Placement drawn before the boundary, and the free isolation it destroys.
+
 - **Aside: [Operator Stockholm Syndrome](/articles/k8s-operator-stockholm-syndrome/)** — When the K8s control plane becomes the universe. Routing every cloud API through a cluster CR even when the cluster has no semantic role.
 
 - **Aside: [The Cron and the Gate](/articles/k8s-cron-and-gate/)** — When the operator models itself instead of the domain. One `Reconcile()` hook, triggered identically by create/resync/requeue, becomes the only place policy can live.
