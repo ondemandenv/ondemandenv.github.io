@@ -356,6 +356,26 @@ title: Articles | ONDEMANDENV.dev
     <p>Deeper dives into the specific mechanics and philosophical underpinnings of the ONDEMANDENV platform and the Semantic Engineering approach.</p>
     <ul class="articles-list">
         <li>
+            <h3>🔬 <strong>SCOPE DISSOLUTION IN DISTRIBUTED SOFTWARE ENGINEERING</strong> (New)</h3>
+            <p><em>A four-part paper on one narrow claim: software engineering's verification guarantees were, with a single exception, intra-process. Distribution dissolved every checker's scope, and nothing was rebuilt at the new scope. The one checker that had crossed a process boundary — the interface definition language — was discarded by software engineers themselves; a second, with working compilers, was never adopted at all, for a reason its own literature states. Load-bearing claims carry verified citations; unverified ones are marked inline; each part states its own falsification conditions.</em></p>
+        </li>
+        <li>
+            <h3><a href="/articles/scope-dissolution-checker-never-caught/">The Checker That Was Never Caught: Scope Dissolution in Distributed Software Engineering</a> <a href="https://github.com/ondemandenv/ondemandenv.github.io/commits/main/articles/scope-dissolution-checker-never-caught.md" class="source-history-link" title="View source history">[📝]</a></h3>
+            <p><strong>🔍 Part 1:</strong> Every checker software engineering relied on — compiler, refactoring engine, debugger, transaction manager — had a scope that ended at the process boundary. Two cross-boundary checkers existed: one was discarded, one was never picked up. That reframes the question from "what formalism do we need" to "why was an available formalism not adoptable".</p>
+        </li>
+        <li>
+            <h3><a href="/articles/scope-dissolution-no-place-for-a-promise/">No Place to Put a Promise: Four Categories the Prevailing Model Cannot Express</a> <a href="https://github.com/ondemandenv/ondemandenv.github.io/commits/main/articles/scope-dissolution-no-place-for-a-promise.md" class="source-history-link" title="View source history">[📝]</a></h3>
+            <p><strong>🤝 Part 2:</strong> The dominant model's relation primitive is a runtime query over mutable strings, which has no position in it for a promise. Expressiveness and cost are both refuted as explanations. The keystone: the boundary at which typing dies is exactly the boundary along which loose coupling lives.</p>
+        </li>
+        <li>
+            <h3><a href="/articles/scope-dissolution-accident-of-scheduling/">An Accident of Scheduling: Symptoms, Coping Disciplines, and Why the Defect Is Invisible</a> <a href="https://github.com/ondemandenv/ondemandenv.github.io/commits/main/articles/scope-dissolution-accident-of-scheduling.md" class="source-history-link" title="View source history">[📝]</a></h3>
+            <p><strong>🗓️ Part 3:</strong> The per-repository pipeline displaced the stack as the unit binding ownership, order and consistency boundary — so the deployed system is an accident of scheduling. Review becomes social rather than evidential, better proposals cannot be shown, and the defect is structurally exempt from the organisation's own diagnostics.</p>
+        </li>
+        <li>
+            <h3><a href="/articles/scope-dissolution-world-is-a-value/">A World Is a Value: What the Remedy Requires, and What It Cannot Do</a> <a href="https://github.com/ondemandenv/ondemandenv.github.io/commits/main/articles/scope-dissolution-world-is-a-value.md" class="source-history-link" title="View source history">[📝]</a></h3>
+            <p><strong>🌍 Part 4:</strong> Named singletons become a type with instantiation; cross-service wiring becomes a compile-time type; the intent of a divergence becomes declarable. With the quantifier argument for why no downstream layer substitutes for a cheap universal one — and an explicit list of what remains irreducible.</p>
+        </li>
+        <li>
             <h3><a href="articles/architectural-prevention-paradigm/">🏛️ The Architectural Prevention Paradigm: How contractsLib Eliminates the Fragmentation Trap</a> <a href="https://github.com/ondemandenv/ondemandenv.github.io/commits/main/articles/architectural-prevention-paradigm-contractslib.md" class="source-history-link" title="View source history">[📝]</a></h3>
             <p>The definitive guide to architectural prevention - a paradigm shift from reactive governance to proactive elimination of failure classes using `contractsLib`.</p>
         </li>
